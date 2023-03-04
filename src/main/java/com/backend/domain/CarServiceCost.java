@@ -12,19 +12,19 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "USERS")
-public class User {
+@Table(name = "CARS_SERVICES_COSTS")
+public class CarServiceCost {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "cost")
+    private Long cost;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "make_multiplier")
+    private Long makeMultiplier;
 
     @OneToOne(fetch = FetchType.EAGER)
-    private Customer customer;
+    private CarService carService;
 }
