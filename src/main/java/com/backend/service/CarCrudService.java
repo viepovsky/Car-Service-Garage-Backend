@@ -10,15 +10,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerCarCrudService {
+public class CarCrudService {
     private final CarRepository carRepository;
 
     public List<Car> getAllCustomerCars(){
         return carRepository.findAll();
     }
 
-    public Car getCustomerCar(Long id) throws CarNotFoundException {
-        return carRepository.findById(id).orElseThrow(CarNotFoundException::new);
+    public Car getCustomerCar(Long carId) throws CarNotFoundException {
+        return carRepository.findById(carId).orElseThrow(CarNotFoundException::new);
     }
 
     public Car saveCustomerCar(Car car) {
@@ -33,9 +33,9 @@ public class CustomerCarCrudService {
         }
     }
 
-    public void deleteCustomerCar(Long id) throws CarNotFoundException {
-        if (carRepository.findById(id).isPresent()) {
-            carRepository.deleteById(id);
+    public void deleteCustomerCar(Long carId) throws CarNotFoundException {
+        if (carRepository.findById(carId).isPresent()) {
+            carRepository.deleteById(carId);
         } else {
             throw new CarNotFoundException();
         }
