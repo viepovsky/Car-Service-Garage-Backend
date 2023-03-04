@@ -9,7 +9,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "CARS")
+@Entity
+@Table(name = "CARS")
 public class Car {
     @Id
     @GeneratedValue
@@ -22,6 +23,9 @@ public class Car {
     private int year;
     @Column(name = "engine")
     private String engine;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
     @OneToMany(targetEntity = CarService.class, mappedBy = "customerCar", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CarService> carServicesList;
 }
