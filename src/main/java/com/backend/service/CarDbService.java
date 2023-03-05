@@ -1,6 +1,7 @@
 package com.backend.service;
 
 import com.backend.domain.Car;
+import com.backend.domain.Customer;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.CarRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +11,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CarCrudService {
+public class CarDbService {
     private final CarRepository carRepository;
+    private final CustomerDbService customerDbService;
 
     public List<Car> getAllCustomerCars(){
         return carRepository.findAll();
@@ -21,7 +23,8 @@ public class CarCrudService {
         return carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
     }
 
-    public Car saveCustomerCar(Car car) {
+    public Car saveCustomerCar(Car car, Long customerId) throws MyEntityNotFoundException {
+        car.setCustomer(customerDbService.getCustomer(customerId));
         return carRepository.save(car);
     }
 

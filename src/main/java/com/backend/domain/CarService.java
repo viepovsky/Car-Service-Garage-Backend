@@ -41,7 +41,15 @@ public class CarService {
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
-    @OneToOne(mappedBy = "carService", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_services_costs_id")
     private CarServiceCost carServiceCost;
+
+    public CarService(Long id, String name, String description, Long cost, Time repairTime) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.cost = cost;
+        this.repairTime = repairTime;
+    }
 }

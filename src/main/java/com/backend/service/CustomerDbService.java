@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerCrudService {
+public class CustomerDbService {
     private final CustomerRepository customerRepository;
 
     public List<Customer> getAllCustomers() {

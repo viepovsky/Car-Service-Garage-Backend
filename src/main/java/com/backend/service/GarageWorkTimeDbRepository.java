@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GarageWorkTimeCrudRepository {
-    private GarageWorkTimeRepository garageWorkTimeRepository;
+public class GarageWorkTimeDbRepository {
+    private final GarageWorkTimeRepository garageWorkTimeRepository;
 
     public List<GarageWorkTime> getAllGarageWorkTimes(){
         return garageWorkTimeRepository.findAll();

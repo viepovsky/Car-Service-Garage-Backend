@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CarServiceCostCrudService {
-    private CarServiceCostRepository carServiceCostRepository;
+public class CarServiceCostDbService {
+    private final CarServiceCostRepository carServiceCostRepository;
 
     public List<CarServiceCost> getAllCarServiceCosts(){
         return carServiceCostRepository.findAll();

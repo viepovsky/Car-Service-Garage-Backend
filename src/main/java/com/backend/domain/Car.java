@@ -40,4 +40,12 @@ public class Car {
             fetch = FetchType.LAZY
     )
     private List<CarService> carServicesList;
+
+    public Car(Long id, String make, String model, int year, String engine) {
+        this.id = id;
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.engine = engine;
+    }
 }

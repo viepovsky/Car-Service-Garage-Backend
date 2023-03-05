@@ -11,5 +11,5 @@ public class GarageDto {
     private Long id;
     private String name;
     private String description;
-    private List<BookingDto> bookingDtoList;
+    //private List<BookingDto> bookingDtoList;
 }

@@ -11,4 +11,5 @@ public class CarDto {
     private String model;
     private int year;
     private String engine;
+    private Long customerId;
 }

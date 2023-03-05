@@ -10,8 +10,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserCrudService {
-    private UserRepository userRepository;
+public class UserDbService {
+    private final UserRepository userRepository;
+    private final CustomerDbService customerDbService;
+
 
     public List<User> getAllUsers(){
         return userRepository.findAll();
@@ -21,7 +23,8 @@ public class UserCrudService {
         return userRepository.findById(userId).orElseThrow(() -> new MyEntityNotFoundException("User", userId));
     }
 
-    public User saveUser(User user) {
+    public User saveUser(User user, Long customerId) throws MyEntityNotFoundException {
+        user.setCustomer(customerDbService.getCustomer(customerId));
         return userRepository.save(user);
     }
 

@@ -15,6 +15,6 @@ public class CustomerDto {
     private String email;
     private String phoneNumber;
     private LocalDate createdDate;
-    private List<CarDto> carDtoList;
-    private List<CarServiceDto> carServiceDtoList;
+    //private List<CarDto> carDtoList;
+    //private List<CarServiceDto> carServiceDtoList;
 }

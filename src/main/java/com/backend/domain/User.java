@@ -27,4 +27,10 @@ public class User {
 
     @OneToOne(fetch = FetchType.EAGER)
     private Customer customer;
+
+    public User(Long id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
 }

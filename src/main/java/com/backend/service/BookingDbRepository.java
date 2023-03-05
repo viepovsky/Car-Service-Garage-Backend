@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookingCrudRepository {
-    private BookingRepository bookingRepository;
+public class BookingDbRepository {
+    private final BookingRepository bookingRepository;
 
     public List<Booking> getAllBookings(){
         return bookingRepository.findAll();

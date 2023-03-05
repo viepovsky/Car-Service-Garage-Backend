@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GarageCrudService {
-    private GarageRepository garageRepository;
+public class GarageDbService {
+    private final GarageRepository garageRepository;
 
     public List<Garage> getAllGarages(){
         return garageRepository.findAll();
