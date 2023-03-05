@@ -1,7 +1,7 @@
 package com.backend.service;
 
 import com.backend.domain.Customer;
-import com.backend.exceptions.CustomerNotFoundException;
+import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,27 +17,27 @@ public class CustomerCrudService {
         return customerRepository.findAll();
     }
 
-    public Customer getCustomer(Long customerId) throws CustomerNotFoundException {
-        return customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
+    public Customer getCustomer(Long customerId) throws MyEntityNotFoundException {
+        return customerRepository.findById(customerId).orElseThrow(() -> new MyEntityNotFoundException("Customer", customerId));
     }
 
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
 
-    public Customer updateCustomer(Customer customer) throws CustomerNotFoundException {
+    public Customer updateCustomer(Customer customer) throws MyEntityNotFoundException {
         if(customerRepository.findById(customer.getId()).isPresent()) {
             return customerRepository.save(customer);
         } else {
-            throw new CustomerNotFoundException();
+            throw new MyEntityNotFoundException("Customer", customer.getId());
         }
     }
 
-    public void deleteCustomer(Long customerId) throws CustomerNotFoundException {
+    public void deleteCustomer(Long customerId) throws MyEntityNotFoundException {
         if(customerRepository.findById(customerId).isPresent()) {
             customerRepository.deleteById(customerId);
         } else {
-            throw new CustomerNotFoundException();
+            throw new MyEntityNotFoundException("Customer", customerId);
         }
     }
 }

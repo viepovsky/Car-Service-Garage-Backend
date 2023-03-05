@@ -1,7 +1,7 @@
 package com.backend.service;
 
 import com.backend.domain.User;
-import com.backend.exceptions.UserNotFoundException;
+import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,27 +17,27 @@ public class UserCrudService {
         return userRepository.findAll();
     }
 
-    public User getUser(Long userId) throws UserNotFoundException {
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    public User getUser(Long userId) throws MyEntityNotFoundException {
+        return userRepository.findById(userId).orElseThrow(() -> new MyEntityNotFoundException("User", userId));
     }
 
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-    public User updateUser(User user) throws UserNotFoundException {
+    public User updateUser(User user) throws MyEntityNotFoundException {
         if (userRepository.findById(user.getId()).isPresent()) {
             return userRepository.save(user);
         } else {
-            throw new UserNotFoundException();
+            throw new MyEntityNotFoundException("User", user.getId());
         }
     }
 
-    public void deleteUser(Long userId) throws UserNotFoundException {
+    public void deleteUser(Long userId) throws MyEntityNotFoundException {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
         } else {
-            throw new UserNotFoundException();
+            throw new MyEntityNotFoundException("User", userId);
         }
     }
 }

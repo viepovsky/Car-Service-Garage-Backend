@@ -1,7 +1,7 @@
 package com.backend.service;
 
 import com.backend.domain.Booking;
-import com.backend.exceptions.BookingNotFoundException;
+import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,27 +17,27 @@ public class BookingCrudRepository {
         return bookingRepository.findAll();
     }
 
-    public Booking getBooking(Long bookingId) throws BookingNotFoundException {
-        return bookingRepository.findById(bookingId).orElseThrow(BookingNotFoundException::new);
+    public Booking getBooking(Long bookingId) throws MyEntityNotFoundException {
+        return bookingRepository.findById(bookingId).orElseThrow(() -> new MyEntityNotFoundException("Booking", bookingId));
     }
 
     public Booking saveBooking(Booking booking) {
         return bookingRepository.save(booking);
     }
 
-    public Booking updateBooking(Booking booking) throws BookingNotFoundException {
+    public Booking updateBooking(Booking booking) throws MyEntityNotFoundException {
         if (bookingRepository.findById(booking.getId()).isPresent()) {
             return bookingRepository.save(booking);
         } else {
-            throw new BookingNotFoundException();
+            throw new MyEntityNotFoundException("Booking", booking.getId());
         }
     }
 
-    public void deleteBooking(Long bookingId) throws BookingNotFoundException {
+    public void deleteBooking(Long bookingId) throws MyEntityNotFoundException {
         if (bookingRepository.findById(bookingId).isPresent()) {
             bookingRepository.deleteById(bookingId);
         } else {
-            throw new BookingNotFoundException();
+            throw new MyEntityNotFoundException("Booking", bookingId);
         }
     }
 }

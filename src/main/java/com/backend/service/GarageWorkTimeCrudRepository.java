@@ -1,9 +1,7 @@
 package com.backend.service;
 
 import com.backend.domain.GarageWorkTime;
-import com.backend.domain.User;
-import com.backend.exceptions.GarageWorkTimeNotFoundException;
-import com.backend.exceptions.UserNotFoundException;
+import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.GarageWorkTimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,27 +17,27 @@ public class GarageWorkTimeCrudRepository {
         return garageWorkTimeRepository.findAll();
     }
 
-    public GarageWorkTime getGarageWorkTime(Long garageWorkTimeId) throws GarageWorkTimeNotFoundException {
-        return garageWorkTimeRepository.findById(garageWorkTimeId).orElseThrow(GarageWorkTimeNotFoundException::new);
+    public GarageWorkTime getGarageWorkTime(Long garageWorkTimeId) throws MyEntityNotFoundException {
+        return garageWorkTimeRepository.findById(garageWorkTimeId).orElseThrow(() -> new MyEntityNotFoundException("GarageWorkTime", garageWorkTimeId));
     }
 
     public GarageWorkTime saveGarageWorkTime(GarageWorkTime garageWorkTime) {
         return garageWorkTimeRepository.save(garageWorkTime);
     }
 
-    public GarageWorkTime updateGarageWorkTime(GarageWorkTime garageWorkTime) throws GarageWorkTimeNotFoundException {
+    public GarageWorkTime updateGarageWorkTime(GarageWorkTime garageWorkTime) throws MyEntityNotFoundException {
         if (garageWorkTimeRepository.findById(garageWorkTime.getId()).isPresent()) {
             return garageWorkTimeRepository.save(garageWorkTime);
         } else {
-            throw new GarageWorkTimeNotFoundException();
+            throw new MyEntityNotFoundException("GarageWorkTime", garageWorkTime.getId());
         }
     }
 
-    public void deleteGarageWorkTime(Long garageWorkTimeId) throws GarageWorkTimeNotFoundException {
+    public void deleteGarageWorkTime(Long garageWorkTimeId) throws MyEntityNotFoundException {
         if (garageWorkTimeRepository.findById(garageWorkTimeId).isPresent()) {
             garageWorkTimeRepository.deleteById(garageWorkTimeId);
         } else {
-            throw new GarageWorkTimeNotFoundException();
+            throw new MyEntityNotFoundException("GarageWorkTime", garageWorkTimeId);
         }
     }
 }
