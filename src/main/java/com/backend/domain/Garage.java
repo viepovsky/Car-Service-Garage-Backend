@@ -42,4 +42,12 @@ public class Garage {
             fetch = FetchType.LAZY
     )
     private List<GarageWorkTime> garageWorkTimeList = new ArrayList<>();
+
+    @OneToMany(
+            targetEntity = AvailableCarService.class,
+            mappedBy = "garage",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<AvailableCarService> availableCarServiceList = new ArrayList<>();
 }

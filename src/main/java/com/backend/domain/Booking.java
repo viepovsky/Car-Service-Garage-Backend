@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,16 +23,16 @@ public class Booking {
     private Long id;
 
     @Column(name = "status")
-    private String status;
+    private BookingStatus status;
 
     @Column(name = "start_date")
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     @Column(name = "end_date")
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @Column(name = "created")
-    private LocalDate created;
+    private LocalDateTime created;
 
     @OneToMany(
             targetEntity = CarService.class,

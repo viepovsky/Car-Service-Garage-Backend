@@ -13,7 +13,7 @@ public class CarServiceMapper {
                 carService.getName(),
                 carService.getDescription(),
                 carService.getCost(),
-                carService.getRepairTime()
+                carService.getRepairTimeInMinutes()
         );
     }
 
@@ -23,7 +23,7 @@ public class CarServiceMapper {
                 carServiceDto.getName(),
                 carServiceDto.getDescription(),
                 carServiceDto.getCost(),
-                carServiceDto.getRepairTime()
+                carServiceDto.getRepairTimeInMinutes()
         );
     }
 }

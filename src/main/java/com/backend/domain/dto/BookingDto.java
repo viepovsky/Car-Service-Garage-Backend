@@ -3,15 +3,17 @@ package com.backend.domain.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class BookingDto {
     private Long id;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private LocalDate created;
+    private String status;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private LocalDateTime created;
     private List<CarServiceDto> carServiceDtoList;
 }

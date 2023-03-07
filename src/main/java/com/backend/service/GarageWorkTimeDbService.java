@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import com.backend.domain.Garage;
 import com.backend.domain.GarageWorkTime;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.GarageWorkTimeRepository;
@@ -10,8 +11,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GarageWorkTimeDbRepository {
+public class GarageWorkTimeDbService {
     private final GarageWorkTimeRepository garageWorkTimeRepository;
+    private final GarageDbService garageDbService;
 
     public List<GarageWorkTime> getAllGarageWorkTimes(){
         return garageWorkTimeRepository.findAll();
@@ -21,8 +23,10 @@ public class GarageWorkTimeDbRepository {
         return garageWorkTimeRepository.findById(garageWorkTimeId).orElseThrow(() -> new MyEntityNotFoundException("GarageWorkTime", garageWorkTimeId));
     }
 
-    public GarageWorkTime saveGarageWorkTime(GarageWorkTime garageWorkTime) {
-        return garageWorkTimeRepository.save(garageWorkTime);
+    public void saveGarageWorkTime(GarageWorkTime garageWorkTime, Long garageId) throws MyEntityNotFoundException {
+        Garage garage = garageDbService.getGarage(garageId);
+        garage.getGarageWorkTimeList().add(garageWorkTime);
+        garageDbService.saveGarage(garage);
     }
 
     public GarageWorkTime updateGarageWorkTime(GarageWorkTime garageWorkTime) throws MyEntityNotFoundException {

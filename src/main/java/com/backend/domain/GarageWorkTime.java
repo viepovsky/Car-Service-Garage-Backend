@@ -33,4 +33,14 @@ public class GarageWorkTime {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
+    public GarageWorkTime(Long id, String day, Time starHour, Time endHour) {
+        this.id = id;
+        try {
+            this.day = WorkDays.valueOf(day);
+        } catch (IllegalArgumentException exception) {
+            throw new IllegalArgumentException("Invalid day value: " + day, exception);
+        }
+        this.starHour = starHour;
+        this.endHour = endHour;
+    }
 }

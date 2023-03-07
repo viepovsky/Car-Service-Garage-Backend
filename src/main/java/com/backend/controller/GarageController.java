@@ -6,7 +6,6 @@ import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.mapper.GarageMapper;
 import com.backend.service.GarageDbService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

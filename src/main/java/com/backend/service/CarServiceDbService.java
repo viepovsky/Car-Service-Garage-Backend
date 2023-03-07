@@ -2,7 +2,7 @@ package com.backend.service;
 
 import com.backend.domain.Car;
 import com.backend.domain.CarService;
-import com.backend.domain.CarServiceCost;
+import com.backend.domain.AvailableCarService;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.CarServiceRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,13 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CarServiceDbService {
     private final CarServiceRepository carServiceRepository;
-    private final CarServiceCostDbService carServiceCostDbService;
+    private final AvailableCarServiceDbService availableCarServiceDbService;
     private final CarDbService carDbService;
     public List<CarService> getAllCarService(){
         return carServiceRepository.findAll();
@@ -31,21 +30,21 @@ public class CarServiceDbService {
     }
 
     public void saveCarService(List<Long> selectedServices, Long carId, Long bookingId) throws MyEntityNotFoundException {
-        List<CarServiceCost> carServiceCostList = new ArrayList<>();
+        List<AvailableCarService> availableCarServiceList = new ArrayList<>();
         selectedServices.forEach(serviceId -> {
             try {
-                carServiceCostList.add(carServiceCostDbService.getCarServiceCost(serviceId));
+                availableCarServiceList.add(availableCarServiceDbService.getAvailableCarService(serviceId));
             } catch (MyEntityNotFoundException e) {
                 throw new RuntimeException(e);
             }
         });
-        List<CarService> carServiceList = carServiceCostList.stream()
+        List<CarService> carServiceList = availableCarServiceList.stream()
                 .map(selectedService -> new CarService(
                 selectedService.getId(),
                 selectedService.getName(),
                 selectedService.getDescription(),
                 selectedService.getCost(),
-                selectedService.getRepairTime()
+                selectedService.getRepairTimeInMinutes()
             ))
             .toList();
         Car car  = carDbService.getCustomerCar(carId);

@@ -27,9 +27,12 @@ public class CarServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addCarService(@RequestParam List<Long> selectedServices, @RequestParam Long carId, @RequestParam Long bookingId) throws MyEntityNotFoundException {
-        carServiceDbService.saveCarService(selectedServices, carId, bookingId);
+    public ResponseEntity<Void> addCarService(
+            @RequestParam(name = "service-id") List<Long> selectedServicesIdList,
+            @RequestParam(name = "car-id") Long carId,
+            @RequestParam(name = "booking-id") Long bookingId
+    ) throws MyEntityNotFoundException {
+        carServiceDbService.saveCarService(selectedServicesIdList, carId, bookingId);
         return ResponseEntity.ok().build();
     }
-
 }

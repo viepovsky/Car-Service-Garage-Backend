@@ -1,9 +1,7 @@
 package com.backend.domain;
 
 import lombok.*;
-
 import javax.persistence.*;
-import java.sql.Time;
 
 @Getter
 @Setter
@@ -27,7 +25,7 @@ public class CarService {
     private Long cost;
 
     @Column(name = "repair_time")
-    private Time repairTime;
+    private int repairTimeInMinutes;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id", nullable = false)
@@ -41,15 +39,11 @@ public class CarService {
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "car_services_costs_id")
-    private CarServiceCost carServiceCost;
-
-    public CarService(Long id, String name, String description, Long cost, Time repairTime) {
+    public CarService(Long id, String name, String description, Long cost, int repairTimeInMinutes) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.cost = cost;
-        this.repairTime = repairTime;
+        this.repairTimeInMinutes = repairTimeInMinutes;
     }
 }
