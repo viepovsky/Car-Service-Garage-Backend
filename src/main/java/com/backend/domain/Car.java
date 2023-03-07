@@ -3,6 +3,7 @@ package com.backend.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,13 +18,13 @@ public class Car {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "make", nullable = false)
+    @Column(name = "make")
     private String make;
 
-    @Column(name = "model", nullable = false)
+    @Column(name = "model")
     private String model;
 
-    @Column(name = "production_year", nullable = false)
+    @Column(name = "production_year")
     private int year;
 
     @Column(name = "engine")
@@ -39,7 +40,7 @@ public class Car {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<CarService> carServicesList;
+    private List<CarService> carServicesList = new ArrayList<>();
 
     public Car(Long id, String make, String model, int year, String engine) {
         this.id = id;

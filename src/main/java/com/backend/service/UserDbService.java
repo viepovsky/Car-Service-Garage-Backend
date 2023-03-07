@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import com.backend.domain.Customer;
 import com.backend.domain.User;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.UserRepository;
@@ -24,7 +25,9 @@ public class UserDbService {
     }
 
     public User saveUser(User user, Long customerId) throws MyEntityNotFoundException {
-        user.setCustomer(customerDbService.getCustomer(customerId));
+        Customer customer = customerDbService.getCustomer(customerId);
+        customer.setUser(user);
+        user.setCustomer(customer);
         return userRepository.save(user);
     }
 

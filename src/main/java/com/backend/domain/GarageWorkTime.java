@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -20,27 +20,27 @@ public class GarageWorkTime {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "day")
+    @Column(name = "work_day")
     private WorkDays day;
 
     @Column(name = "start_hour")
-    private Time starHour;
+    private LocalTime startHour;
 
     @Column(name = "end_hour")
-    private Time endHour;
+    private LocalTime endHour;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    public GarageWorkTime(Long id, String day, Time starHour, Time endHour) {
+    public GarageWorkTime(Long id, String day, LocalTime startHour, LocalTime endHour) {
         this.id = id;
         try {
             this.day = WorkDays.valueOf(day);
         } catch (IllegalArgumentException exception) {
             throw new IllegalArgumentException("Invalid day value: " + day, exception);
         }
-        this.starHour = starHour;
+        this.startHour = startHour;
         this.endHour = endHour;
     }
 }

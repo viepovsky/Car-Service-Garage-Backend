@@ -19,6 +19,7 @@ public class BookingMapper {
                 booking.getStartDate(),
                 booking.getEndDate(),
                 booking.getCreated(),
+                booking.getTotalCost(),
                 booking.getCarServiceList().stream()
                         .map(carServiceMapper::mapToCarServiceDto)
                         .toList()

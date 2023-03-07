@@ -27,6 +27,10 @@ public class BookingDbService {
         return bookingRepository.findById(bookingId).orElseThrow(() -> new MyEntityNotFoundException("Booking", bookingId));
     }
 
+    public void saveBooking(Booking booking) {
+        bookingRepository.save(booking);
+    }
+
     public void saveBooking(List<Long> carServiceIdList, LocalDateTime startDate, Long garageId) throws MyEntityNotFoundException {
         Booking booking = new Booking();
         booking.setGarage(garageDbService.getGarage(garageId));

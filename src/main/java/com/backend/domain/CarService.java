@@ -2,6 +2,7 @@ package com.backend.domain;
 
 import lombok.*;
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class CarService {
     private String description;
 
     @Column(name = "cost")
-    private Long cost;
+    private BigDecimal cost;
 
     @Column(name = "repair_time")
     private int repairTimeInMinutes;
@@ -39,7 +40,7 @@ public class CarService {
     @JoinColumn(name = "booking_id")
     private Booking booking;
 
-    public CarService(Long id, String name, String description, Long cost, int repairTimeInMinutes) {
+    public CarService(Long id, String name, String description, BigDecimal cost, int repairTimeInMinutes) {
         this.id = id;
         this.name = name;
         this.description = description;
