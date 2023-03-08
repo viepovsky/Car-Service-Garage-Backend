@@ -64,7 +64,7 @@ public class CarApiClient {
         }
     }
 
-    public List<ApiCarDto> getCarModel(int year, String make, String type) {
+    public List<ApiCarDto> getCarModels(int year, String make, String type) {
         URI url = UriComponentsBuilder.fromHttpUrl(carApiConfig.getCarApiEndpoint())
                 .queryParam("limit", 20)
                 .queryParam("page", 0)

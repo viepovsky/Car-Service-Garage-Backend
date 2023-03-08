@@ -53,7 +53,7 @@ class CarApiClientTestSuite {
 //    @Test
 //    public void testGetCarModels() throws InterruptedException {
 //        Thread.sleep(1100); // free Api version supports only one request per second
-//        List<ApiCarDto> carModels = carApiClient.getCarModel(2020, "BMW", "Sedan");
+//        List<ApiCarDto> carModels = carApiClient.getCarModels(2020, "BMW", "Sedan");
 //        LOGGER.info("Car models list size: " + carModels.size());
 //        try {
 //            LOGGER.info("Received first model: " + carModels.get(0).getModel());
