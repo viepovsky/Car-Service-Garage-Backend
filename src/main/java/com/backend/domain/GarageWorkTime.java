@@ -43,4 +43,13 @@ public class GarageWorkTime {
         this.startHour = startHour;
         this.endHour = endHour;
     }
+    public GarageWorkTime(String day, LocalTime startHour, LocalTime endHour) {
+        try {
+            this.day = WorkDays.valueOf(day);
+        } catch (IllegalArgumentException exception) {
+            throw new IllegalArgumentException("Invalid day value: " + day, exception);
+        }
+        this.startHour = startHour;
+        this.endHour = endHour;
+    }
 }

@@ -2,7 +2,9 @@ package com.backend.service;
 
 import com.backend.domain.Garage;
 import com.backend.domain.GarageWorkTime;
+import com.backend.domain.WorkDays;
 import com.backend.exceptions.MyEntityNotFoundException;
+import com.backend.repository.GarageRepository;
 import com.backend.repository.GarageWorkTimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GarageWorkTimeDbService {
     private final GarageWorkTimeRepository garageWorkTimeRepository;
-    private final GarageDbService garageDbService;
+    private final GarageRepository garageRepository;
 
     public List<GarageWorkTime> getAllGarageWorkTimes(){
         return garageWorkTimeRepository.findAll();
@@ -24,9 +26,10 @@ public class GarageWorkTimeDbService {
     }
 
     public void saveGarageWorkTime(GarageWorkTime garageWorkTime, Long garageId) throws MyEntityNotFoundException {
-        Garage garage = garageDbService.getGarage(garageId);
+        Garage garage = garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
+        garageWorkTime.setGarage(garage);
         garage.getGarageWorkTimeList().add(garageWorkTime);
-        garageDbService.saveGarage(garage);
+        garageRepository.save(garage);
     }
 
     public GarageWorkTime updateGarageWorkTime(GarageWorkTime garageWorkTime) throws MyEntityNotFoundException {

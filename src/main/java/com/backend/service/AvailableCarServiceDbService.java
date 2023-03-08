@@ -1,8 +1,10 @@
 package com.backend.service;
 
 import com.backend.domain.AvailableCarService;
+import com.backend.domain.Garage;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.AvailableCarServiceRepository;
+import com.backend.repository.GarageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AvailableCarServiceDbService {
     private final AvailableCarServiceRepository availableCarServiceRepository;
+    private final GarageRepository garageRepository;
 
     public List<AvailableCarService> getAllAvailableCarService(){
         return availableCarServiceRepository.findAll();
@@ -21,8 +24,11 @@ public class AvailableCarServiceDbService {
         return availableCarServiceRepository.findById(availableCarServiceId).orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", availableCarServiceId));
     }
 
-    public AvailableCarService saveAvailableCarService(AvailableCarService availableCarService) {
-        return availableCarServiceRepository.save(availableCarService);
+    public void saveAvailableCarService(AvailableCarService availableCarService, Long garageId) throws MyEntityNotFoundException {
+        Garage garage = garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
+        availableCarService.setGarage(garage);
+        garage.getAvailableCarServiceList().add(availableCarService);
+        garageRepository.save(garage);
     }
 
     public AvailableCarService updateAvailableCarService(AvailableCarService availableCarService) throws MyEntityNotFoundException {

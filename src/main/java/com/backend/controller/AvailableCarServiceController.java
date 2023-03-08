@@ -28,9 +28,9 @@ public class AvailableCarServiceController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createAvailableCarService(@RequestBody AvailableCarServiceDto availableCarServiceDto) {
+    public ResponseEntity<Void> createAvailableCarService(@RequestBody AvailableCarServiceDto availableCarServiceDto, @RequestParam(name = "garage-id") Long garageId) throws MyEntityNotFoundException {
         AvailableCarService availableCarService = availableCarServiceMapper.mapToAvailableCarService(availableCarServiceDto);
-        availableCarServiceDbService.saveAvailableCarService(availableCarService);
+        availableCarServiceDbService.saveAvailableCarService(availableCarService, garageId);
         return ResponseEntity.ok().build();
     }
 

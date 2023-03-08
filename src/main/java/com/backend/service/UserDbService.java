@@ -1,8 +1,10 @@
 package com.backend.service;
 
 import com.backend.domain.Customer;
+import com.backend.domain.Garage;
 import com.backend.domain.User;
 import com.backend.exceptions.MyEntityNotFoundException;
+import com.backend.repository.CustomerRepository;
 import com.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDbService {
     private final UserRepository userRepository;
-    private final CustomerDbService customerDbService;
+    private final CustomerRepository customerRepository;
 
 
     public List<User> getAllUsers(){
@@ -24,11 +26,11 @@ public class UserDbService {
         return userRepository.findById(userId).orElseThrow(() -> new MyEntityNotFoundException("User", userId));
     }
 
-    public User saveUser(User user, Long customerId) throws MyEntityNotFoundException {
-        Customer customer = customerDbService.getCustomer(customerId);
-        customer.setUser(user);
+    public void saveUser(User user, Long customerId) throws MyEntityNotFoundException {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new MyEntityNotFoundException("Customer", customerId));
         user.setCustomer(customer);
-        return userRepository.save(user);
+        customer.setUser(user);
+        customerRepository.save(customer);
     }
 
     public User updateUser(User user) throws MyEntityNotFoundException {

@@ -6,6 +6,7 @@ import com.backend.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,8 +22,11 @@ public class CustomerDbService {
         return customerRepository.findById(customerId).orElseThrow(() -> new MyEntityNotFoundException("Customer", customerId));
     }
 
-    public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public void saveCustomer(Customer customer) {
+        if (customer.getCreatedDate() == null) {
+            customer.setCreatedDate(LocalDateTime.now());
+        }
+        customerRepository.save(customer);
     }
 
     public Customer updateCustomer(Customer customer) throws MyEntityNotFoundException {

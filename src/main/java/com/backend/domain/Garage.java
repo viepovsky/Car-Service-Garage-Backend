@@ -50,4 +50,14 @@ public class Garage {
             fetch = FetchType.LAZY
     )
     private List<AvailableCarService> availableCarServiceList = new ArrayList<>();
+
+    public Garage(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+    public Garage(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

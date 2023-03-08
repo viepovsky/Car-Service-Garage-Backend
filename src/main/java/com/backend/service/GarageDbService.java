@@ -21,8 +21,8 @@ public class GarageDbService {
         return garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
     }
 
-    public Garage saveGarage(Garage garage) {
-        return garageRepository.save(garage);
+    public void saveGarage(Garage garage) {
+        garageRepository.save(garage);
     }
 
     public Garage updateGarage(Garage garage) throws MyEntityNotFoundException {
