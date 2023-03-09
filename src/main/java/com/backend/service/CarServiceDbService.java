@@ -1,9 +1,6 @@
 package com.backend.service;
 
-import com.backend.domain.Car;
-import com.backend.domain.CarService;
-import com.backend.domain.AvailableCarService;
-import com.backend.domain.Customer;
+import com.backend.domain.*;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.AvailableCarServiceRepository;
 import com.backend.repository.CarRepository;
@@ -81,5 +78,14 @@ public class CarServiceDbService {
         } else {
             throw new MyEntityNotFoundException("CarService", carServiceId);
         }
+    }
+
+    public void deleteServicesNotAssignedToBooking(Long carId) throws MyEntityNotFoundException {
+        Car car = carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
+        List<Long> serviceIdList = car.getCarServicesList().stream()
+                .filter(carService -> carService.getStatus().equals(NOT_ASSIGNED))
+                .map(CarService::getId)
+                .toList();
+        serviceIdList.forEach(carRepository::deleteById);
     }
 }

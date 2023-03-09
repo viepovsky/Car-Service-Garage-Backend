@@ -8,12 +8,16 @@ import com.backend.service.CustomerDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/v1/customers")
 @RequiredArgsConstructor
+@Validated
 public class CustomerController {
     private final CustomerDbService customerDbService;
     private final CustomerMapper customerMapper;
@@ -25,8 +29,14 @@ public class CustomerController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createCustomer(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<Void> createCustomer(@Valid @RequestBody CustomerDto customerDto) {
         customerDbService.saveCustomer(customerMapper.mapToCustomer(customerDto));
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(path = "/{customerId}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long customerId) throws MyEntityNotFoundException {
+        customerDbService.deleteCustomer(customerId);
         return ResponseEntity.ok().build();
     }
 }

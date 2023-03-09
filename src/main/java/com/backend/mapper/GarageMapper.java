@@ -13,4 +13,11 @@ public class GarageMapper {
                 garage.getDescription()
         );
     }
+
+    public Garage mapToGarage(GarageDto garageDto) {
+        return new Garage(
+                garageDto.getName(),
+                garageDto.getDescription()
+        );
+    }
 }

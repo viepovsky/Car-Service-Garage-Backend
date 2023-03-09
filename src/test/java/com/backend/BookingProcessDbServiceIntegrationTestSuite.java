@@ -2,7 +2,7 @@ package com.backend;
 
 import com.backend.domain.*;
 import com.backend.exceptions.MyEntityNotFoundException;
-import com.backend.exceptions.WrongInputAdminException;
+import com.backend.exceptions.WrongInputDataException;
 import com.backend.service.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     private CarServiceDbService carServiceDbService;
 
     @Test
-    public void testBookingProcess() throws MyEntityNotFoundException, WrongInputAdminException {
+    public void testBookingProcess() throws MyEntityNotFoundException, WrongInputDataException {
         //Given
         initGarageWithWorkTimesAndAvailableCarServices();
         initCustomerAndUser();
@@ -86,7 +86,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     }
 
     @Test
-    public void testInitMethods() throws MyEntityNotFoundException, WrongInputAdminException {
+    public void testInitMethods() throws MyEntityNotFoundException, WrongInputDataException {
         //Given
         initGarageWithWorkTimesAndAvailableCarServices();
         initCustomerAndUser();
@@ -192,7 +192,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         carDbService.saveCar(car, customer.getId());
     }
 
-    private void initAvailableBookings() throws WrongInputAdminException, MyEntityNotFoundException {
+    private void initAvailableBookings() throws WrongInputDataException, MyEntityNotFoundException {
         Garage garage = garageDbService.getAllGarages().get(0);
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(365);
@@ -202,7 +202,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
             GarageWorkTime garageWorkTime = garageWorkTimeList.stream()
                     .filter(workTime -> workTime.getDay().toString().equals(finalDateForLoop.getDayOfWeek().toString()))
                     .findFirst()
-                    .orElseThrow(() -> new WrongInputAdminException("GarageWorkTime not found for day: " + finalDateForLoop.getDayOfWeek().toString()));
+                    .orElseThrow(() -> new WrongInputDataException("GarageWorkTime not found for day: " + finalDateForLoop.getDayOfWeek().toString()));
             bookingDbService.saveBooking(date, garageWorkTime.getStartHour(), garageWorkTime.getEndHour(), garage.getId());
         }
     }

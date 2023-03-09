@@ -31,7 +31,7 @@ class CarApiClientTestSuite {
 //        assertTrue(carMakes.size()!=0);
 //        assertTrue(carMakes.contains("BMW"));
 //    }
-
+//
 //    @Test
 //    public void testGetCarYears() throws InterruptedException {
 //        Thread.sleep(1100); // free Api version supports only one request per second
@@ -40,7 +40,7 @@ class CarApiClientTestSuite {
 //        assertTrue(carYears.size()!=0);
 //        assertTrue(carYears.contains(2020));
 //    }
-
+//
 //    @Test
 //    public void testGetCarTypes() throws InterruptedException {
 //        Thread.sleep(1100); // free Api version supports only one request per second
@@ -49,7 +49,7 @@ class CarApiClientTestSuite {
 //        assertTrue(carTypes.size()!=0);
 //        assertTrue(carTypes.contains("Sedan"));
 //    }
-
+//
 //    @Test
 //    public void testGetCarModels() throws InterruptedException {
 //        Thread.sleep(1100); // free Api version supports only one request per second

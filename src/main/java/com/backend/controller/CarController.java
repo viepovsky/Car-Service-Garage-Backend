@@ -8,12 +8,16 @@ import com.backend.service.CarDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/v1/cars")
 @RequiredArgsConstructor
+@Validated
 public class CarController {
 
     private final CarDbService carDbService;
@@ -26,7 +30,7 @@ public class CarController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createCar(@RequestBody CarDto carDto) throws MyEntityNotFoundException {
+    public ResponseEntity<Void> createCar(@Valid @RequestBody CarDto carDto) throws MyEntityNotFoundException {
         Car car = carMapper.mapToCar(carDto);
         carDbService.saveCar(car, carDto.getCustomerId());
         return ResponseEntity.ok().build();

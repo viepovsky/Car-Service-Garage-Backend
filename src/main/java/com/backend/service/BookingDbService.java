@@ -5,7 +5,7 @@ import com.backend.domain.BookingStatus;
 import com.backend.domain.CarService;
 import com.backend.domain.Garage;
 import com.backend.exceptions.MyEntityNotFoundException;
-import com.backend.exceptions.WrongInputAdminException;
+import com.backend.exceptions.WrongInputDataException;
 import com.backend.repository.BookingRepository;
 import com.backend.repository.CarServiceRepository;
 import com.backend.repository.GarageRepository;
@@ -30,34 +30,34 @@ public class BookingDbService {
         return bookingRepository.findAll();
     }
 
-    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndCarServices(LocalDate date, List<Long> carServiceIdList, Long garageId) throws WrongInputAdminException, MyEntityNotFoundException {
-        if (carServiceIdList.isEmpty()) {
-            throw new WrongInputAdminException("Given CarService list is empty");
-        }
+    public List<Booking> getAllBookingsForGivenCustomer(Long customerId) {
+        return bookingRepository.findBookingsByCarServiceListCustomerId(customerId);
+    }
 
+    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndCarServices(LocalDate date, List<Long> carServiceIdList, Long garageId) throws MyEntityNotFoundException {
         List<CarService> carServiceList = new ArrayList<>();
         for (Long id : carServiceIdList) {
             CarService carService = carServiceRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("CarService", id));
             carServiceList.add(carService);
         }
 
-        int repairTimeInMinutes = carServiceList.stream().mapToInt(CarService::getRepairTimeInMinutes).sum();
+        int repairDuration = carServiceList.stream().mapToInt(CarService::getRepairTimeInMinutes).sum();
 
         List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
         if (bookingList.size() == 0) {
             return new ArrayList<>();
         }
 
-        Booking workTimeBookingRecord = bookingList.stream()
+        Booking garageWorkTime = bookingList.stream()
                         .filter(booking -> booking.getStatus() == BookingStatus.AVAILABLE)
                         .findFirst()
                         .orElse(null);
-        if (workTimeBookingRecord == null) {
+        if (garageWorkTime == null) {
             return  new ArrayList<>();
         }
 
-        LocalTime openTime = workTimeBookingRecord.getStartHour();
-        LocalTime closeTime = workTimeBookingRecord.getEndHour();
+        LocalTime openTime = garageWorkTime.getStartHour();
+        LocalTime closeTime = garageWorkTime.getEndHour();
 
         List<Booking> unavailableBookingTimeList = bookingList.stream()
                 .filter(booking -> booking.getStatus() == BookingStatus.UNAVAILABLE || booking.getStatus() == BookingStatus.WAITING_FOR_CUSTOMER)
@@ -66,18 +66,15 @@ public class BookingDbService {
         List<LocalTime> availableTimeList = new ArrayList<>();
         LocalTime currentTime = openTime;
 
-        while (!currentTime.plusMinutes(repairTimeInMinutes).isAfter(closeTime)) {
+        while (!currentTime.plusMinutes(repairDuration).isAfter(closeTime)) {
             boolean isAvailable = true;
             for (Booking booking : unavailableBookingTimeList) {
-                if (booking.getStartHour().isBefore(currentTime) && booking.getEndHour().isAfter(currentTime)){
-                    isAvailable = false;
-                    break;
-                } else if (currentTime.plusMinutes(repairTimeInMinutes).isAfter(booking.getStartHour())) {
+                if (currentTime.plusMinutes(repairDuration).isAfter(booking.getStartHour()) && booking.getEndHour().isAfter(currentTime)) {
                     isAvailable = false;
                     break;
                 }
             }
-            if (currentTime.plusMinutes(repairTimeInMinutes).isBefore(closeTime) && isAvailable) {
+            if (currentTime.plusMinutes(repairDuration).isBefore(closeTime) && isAvailable) {
                 availableTimeList.add(currentTime);
             }
             currentTime = currentTime.plusMinutes(10);
@@ -93,7 +90,7 @@ public class BookingDbService {
         return bookingRepository.findById(bookingId).orElseThrow(() -> new MyEntityNotFoundException("Booking", bookingId));
     }
 
-    public void saveBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) throws WrongInputAdminException, MyEntityNotFoundException {
+    public void saveBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) throws WrongInputDataException, MyEntityNotFoundException {
         Garage garage = garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
         List<Booking> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, BookingStatus.AVAILABLE, garageId);
         if (bookingList.size() == 0) {
@@ -107,16 +104,8 @@ public class BookingDbService {
             );
             bookingRepository.save(booking);
         } else {
-            List<Long> bookingId = new ArrayList<>();
-            for (Booking booking : bookingList) {
-                if (booking.getTotalCost() == null && booking.getCarServiceList() == null) {
-                    bookingId.add(booking.getId());
-                }
-            }
-            if (bookingId.size() > 0){
-                throw new WrongInputAdminException("Work times of given date: " + date + ", are already declared. To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingId);
-            }
-            throw new WrongInputAdminException("Work times of given date: " + date + ", are not declared. But there are bookings for given date, check bookings of given date.");
+            List<Long> bookingId = bookingList.stream().map(Booking::getId).toList();
+            throw new WrongInputDataException("Work times of given date: " + date + ", are already declared. To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingId);
         }
     }
 
@@ -129,17 +118,17 @@ public class BookingDbService {
         booking.setCreated(LocalDateTime.now());
         booking.setStatus(BookingStatus.WAITING_FOR_CUSTOMER);
         List<CarService> carServiceList = new ArrayList<>();
-        int repairTimeInMinutes = 0;
+        int totalRepairDuration = 0;
         BigDecimal totalCost = BigDecimal.ZERO;
         for (Long id : carServiceIdList) {
             CarService carService = carServiceRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("CarService", id));
-            repairTimeInMinutes += carService.getRepairTimeInMinutes();
+            totalRepairDuration += carService.getRepairTimeInMinutes();
             totalCost = totalCost.add(carService.getCost());
             carServiceList.add(carService);
             carService.setBooking(booking);
             carServiceRepository.save(carService);
         }
-        booking.setEndHour(startHour.plusMinutes(repairTimeInMinutes));
+        booking.setEndHour(startHour.plusMinutes(totalRepairDuration));
         booking.setTotalCost(totalCost);
         booking.setCarServiceList(carServiceList);
         bookingRepository.save(booking);
