@@ -27,6 +27,9 @@ public class Car {
     @Column(name = "production_year")
     private int year;
 
+    @Column(name = "type")
+    private String type;
+
     @Column(name = "engine")
     private String engine;
 
@@ -36,16 +39,25 @@ public class Car {
 
     @OneToMany(
             targetEntity = CarService.class,
-            mappedBy = "customerCar",
+            mappedBy = "car",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     private List<CarService> carServicesList = new ArrayList<>();
 
-    public Car(Long id, String make, String model, int year, String engine) {
+    public Car(Long id, String make, String model, String type, int year, String engine) {
         this.id = id;
         this.make = make;
         this.model = model;
+        this.type = type;
+        this.year = year;
+        this.engine = engine;
+    }
+
+    public Car(String make, String model, String type, int year, String engine) {
+        this.make = make;
+        this.model = model;
+        this.type = type;
         this.year = year;
         this.engine = engine;
     }

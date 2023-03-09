@@ -7,8 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -26,11 +27,14 @@ public class Booking {
     @Column(name = "status")
     private BookingStatus status;
 
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
+    @Column(name = "date")
+    private LocalDate date;
 
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
+    @Column(name = "start_hour")
+    private LocalTime startHour;
+
+    @Column(name = "end_hour")
+    private LocalTime endHour;
 
     @Column(name = "created")
     private LocalDateTime created;
@@ -49,4 +53,13 @@ public class Booking {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "garage_id")
     private Garage garage;
+
+    public Booking(BookingStatus status, LocalDate date, LocalTime startHour, LocalTime endHour, LocalDateTime created, Garage garage) {
+        this.status = status;
+        this.date = date;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.created = created;
+        this.garage = garage;
+    }
 }

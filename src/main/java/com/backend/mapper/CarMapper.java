@@ -12,6 +12,7 @@ public class CarMapper {
                 car.getId(),
                 car.getMake(),
                 car.getModel(),
+                car.getType(),
                 car.getYear(),
                 car.getEngine(),
                 car.getCustomer().getId()
@@ -23,6 +24,7 @@ public class CarMapper {
                 carDto.getId(),
                 carDto.getMake(),
                 carDto.getModel(),
+                carDto.getType(),
                 carDto.getYear(),
                 carDto.getEngine()
         );

@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface CarServiceRepository extends CrudRepository<CarService, Long> {
     List<CarService> findAll();
     Optional<CarService> findById(Long id);
+    List<CarService> findCarServicesByCarIdAndStatus(Long carId, String status);
 }

@@ -21,20 +21,20 @@ public class CarController {
 
     @GetMapping(path = "/{carId}")
     public ResponseEntity<CarDto> getCar(@PathVariable Long carId) throws MyEntityNotFoundException {
-        Car car = carDbService.getCustomerCar(carId);
+        Car car = carDbService.getCar(carId);
         return ResponseEntity.ok(carMapper.mapToCarDto(car));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createCar(@RequestBody CarDto carDto) throws MyEntityNotFoundException {
         Car car = carMapper.mapToCar(carDto);
-        carDbService.saveCustomerCar(car, carDto.getCustomerId());
+        carDbService.saveCar(car, carDto.getCustomerId());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(path = "/{carId}")
     public ResponseEntity<Void> deleteCar(@PathVariable Long carId) throws MyEntityNotFoundException {
-        carDbService.deleteCustomerCar(carId);
+        carDbService.deleteCar(carId);
         return ResponseEntity.ok().build();
     }
 }

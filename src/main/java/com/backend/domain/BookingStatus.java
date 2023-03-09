@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BookingStatus {
 
-    AWAITING("Awaiting customer"),
-    ABSENCE("Customer absence"),
-    COMPLETED("Service completed");
+    WAITING_FOR_CUSTOMER("Waiting for customer"),
+    CUSTOMER_ABSENCE("Customer absence"),
+    COMPLETED("Completed"),
+    AVAILABLE("Available"),
+    UNAVAILABLE("Unavailable");
 
     private final String statusName;
 }

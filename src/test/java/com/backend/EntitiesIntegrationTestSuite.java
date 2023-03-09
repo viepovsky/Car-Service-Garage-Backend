@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -49,8 +50,8 @@ public class EntitiesIntegrationTestSuite {
         customerRepository.save(customer);
         customer = customerRepository.findAll().get(0);
 
-        Car car1 = new Car(1L, "BMW", "3", 2020, "diesel");
-        Car car2 = new Car(2L, "BMW", "5", 2005, "diesel");
+        Car car1 = new Car(1L, "BMW", "3", "Sedan", 2020, "diesel");
+        Car car2 = new Car(2L, "BMW", "5","Sedan", 2005, "diesel");
         car1.setCustomer(customer);
         car2.setCustomer(customer);
         customer.getCarList().add(car1);
@@ -74,13 +75,13 @@ public class EntitiesIntegrationTestSuite {
         garageRepository.save(garageToUpdate);
         garage = garageRepository.findAll().get(0);
 
-        CarService carService = new CarService(1L, availableCarService1.getName(), availableCarService1.getDescription(), availableCarService1.getCost(), availableCarService1.getRepairTimeInMinutes(), null, null, null);
-        carService.setCustomerCar(car1);
+        CarService carService = new CarService(1L, availableCarService1.getName(), availableCarService1.getDescription(), availableCarService1.getCost(), availableCarService1.getRepairTimeInMinutes(), null, null, null, null);
+        carService.setCar(car1);
         carService.setCustomer(customer);
         carServiceRepository.save(carService);
         carService = carServiceRepository.findAll().get(0);
 
-        Booking booking = new Booking(1L, BookingStatus.AWAITING, LocalDateTime.of(2023, 3, 20, 8, 0), LocalDateTime.of(2023, 3, 20, 8, 30), LocalDateTime.now(),BigDecimal.valueOf(0), new ArrayList<>(), null);
+        Booking booking = new Booking(1L, BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.of(2023,3,20),LocalTime.of(8,0),LocalTime.of(8,30), LocalDateTime.now(),BigDecimal.valueOf(0), new ArrayList<>(), null);
         booking.getCarServiceList().add(carService);
         booking.setGarage(garage);
         booking.setTotalCost(carService.getCost());
@@ -111,15 +112,15 @@ public class EntitiesIntegrationTestSuite {
         assertEquals("BMW", retrievedCustomer.getCarList().get(0).getMake());
         assertEquals(30, retrievedCustomer.getServicesList().get(0).getRepairTimeInMinutes());
         assertEquals(30, retrievedCustomer.getCarList().get(0).getCarServicesList().get(0).getRepairTimeInMinutes());
-        assertEquals(LocalDateTime.of(2023,3,20,8,30), retrievedCustomer.getCarList().get(0).getCarServicesList().get(0).getBooking().getEndDate());
+        assertEquals(LocalTime.of(8,30), retrievedCustomer.getCarList().get(0).getCarServicesList().get(0).getBooking().getEndHour());
         assertEquals("Speed Garage", retrievedCustomer.getCarList().get(0).getCarServicesList().get(0).getBooking().getGarage().getName());
         assertEquals(carService.getName(), retrievedCarService.getName());
         assertEquals(carService.getBooking(), retrievedCarService.getBooking());
         assertEquals(carService.getBooking().getGarage(), retrievedCarService.getBooking().getGarage());
         assertEquals("Speed Garage", retrievedGarage.getName());
-        assertEquals(BookingStatus.AWAITING, retrievedGarage.getBookingList().get(0).getStatus());
+        assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, retrievedGarage.getBookingList().get(0).getStatus());
         assertEquals(30, retrievedGarage.getBookingList().get(0).getCarServiceList().get(0).getRepairTimeInMinutes());
-        assertEquals(BookingStatus.AWAITING, retrievedBooking.getStatus());
+        assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, retrievedBooking.getStatus());
         assertEquals(30, retrievedBooking.getCarServiceList().get(0).getRepairTimeInMinutes());
     }
 }

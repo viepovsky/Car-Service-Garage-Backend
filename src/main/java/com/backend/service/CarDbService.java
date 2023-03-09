@@ -4,6 +4,7 @@ import com.backend.domain.Car;
 import com.backend.domain.Customer;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.CarRepository;
+import com.backend.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,22 +14,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarDbService {
     private final CarRepository carRepository;
-    private final CustomerDbService customerDbService;
+    private final CustomerRepository customerRepository;
 
-    public List<Car> getAllCustomerCars(){
+    public List<Car> getAllCars(){
         return carRepository.findAll();
     }
 
-    public Car getCustomerCar(Long carId) throws MyEntityNotFoundException {
+    public Car getCar(Long carId) throws MyEntityNotFoundException {
         return carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
     }
 
-    public Car saveCustomerCar(Car car, Long customerId) throws MyEntityNotFoundException {
-        car.setCustomer(customerDbService.getCustomer(customerId));
-        return carRepository.save(car);
+    public void saveCar(Car car, Long customerId) throws MyEntityNotFoundException {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new MyEntityNotFoundException("Customer", customerId));
+        car.setCustomer(customer);
+        customer.getCarList().add(car);
+        customerRepository.save(customer);
     }
 
-    public Car updateCustomerCar(Car car) throws MyEntityNotFoundException {
+    public Car updateCar(Car car) throws MyEntityNotFoundException {
         if (carRepository.findById(car.getId()).isPresent()) {
             return carRepository.save(car);
         } else {
@@ -36,7 +39,7 @@ public class CarDbService {
         }
     }
 
-    public void deleteCustomerCar(Long carId) throws MyEntityNotFoundException {
+    public void deleteCar(Long carId) throws MyEntityNotFoundException {
         if (carRepository.findById(carId).isPresent()) {
             carRepository.deleteById(carId);
         } else {

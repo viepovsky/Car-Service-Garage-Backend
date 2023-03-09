@@ -3,8 +3,12 @@ package com.backend.service;
 import com.backend.domain.Car;
 import com.backend.domain.CarService;
 import com.backend.domain.AvailableCarService;
+import com.backend.domain.Customer;
 import com.backend.exceptions.MyEntityNotFoundException;
+import com.backend.repository.AvailableCarServiceRepository;
+import com.backend.repository.CarRepository;
 import com.backend.repository.CarServiceRepository;
+import com.backend.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +18,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CarServiceDbService {
+    private final static String NOT_ASSIGNED = "Not assigned to booking table.";
     private final CarServiceRepository carServiceRepository;
-    private final AvailableCarServiceDbService availableCarServiceDbService;
-    private final CarDbService carDbService;
+    private final AvailableCarServiceRepository availableCarServiceRepository;
+    private final CarRepository carRepository;
+    private final CustomerRepository customerRepository;
     public List<CarService> getAllCarService(){
         return carServiceRepository.findAll();
+    }
+
+    public List<CarService> getAllCarServiceWithGivenCarIdAndNotAssignedStatus(Long carId){
+        return carServiceRepository.findCarServicesByCarIdAndStatus(carId, NOT_ASSIGNED);
     }
 
     public CarService getCarService(Long carServiceId) throws MyEntityNotFoundException {
@@ -29,29 +39,31 @@ public class CarServiceDbService {
         return carServiceRepository.save(carService);
     }
 
-    public void saveCarService(List<Long> selectedServices, Long carId, Long bookingId) throws MyEntityNotFoundException {
+    public void saveCarService(List<Long> selectedServices, Long carId) throws MyEntityNotFoundException {
+        Car car  = carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
+        Customer customer = customerRepository.findById(car.getCustomer().getId()).orElseThrow(() -> new MyEntityNotFoundException("Customer", car.getCustomer().getId()));
         List<AvailableCarService> availableCarServiceList = new ArrayList<>();
-        selectedServices.forEach(serviceId -> {
-            try {
-                availableCarServiceList.add(availableCarServiceDbService.getAvailableCarService(serviceId));
-            } catch (MyEntityNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        for (Long serviceId : selectedServices) {
+            AvailableCarService service = availableCarServiceRepository.findById(serviceId).orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", serviceId));
+            availableCarServiceList.add(service);
+        }
         List<CarService> carServiceList = availableCarServiceList.stream()
                 .map(selectedService -> new CarService(
-                selectedService.getId(),
                 selectedService.getName(),
                 selectedService.getDescription(),
                 selectedService.getCost(),
-                selectedService.getRepairTimeInMinutes()
+                selectedService.getRepairTimeInMinutes(),
+                        car,
+                        customer,
+                        NOT_ASSIGNED
             ))
             .toList();
-        Car car  = carDbService.getCustomerCar(carId);
-        car.setCarServicesList(carServiceList);
-        carDbService.updateCustomerCar(car);
-
-        //MUST NOT FORGET TO IMPLEMENT BOOKING !!!
+        customer.getCarList().stream()
+                .filter(car1 -> car1.getId() == carId)
+                .findFirst()
+                .ifPresent(car1 -> car1.getCarServicesList().addAll(carServiceList));
+        customer.getServicesList().addAll(carServiceList);
+        customerRepository.save(customer);
     }
 
     public CarService updateCarService(CarService carService) throws MyEntityNotFoundException {

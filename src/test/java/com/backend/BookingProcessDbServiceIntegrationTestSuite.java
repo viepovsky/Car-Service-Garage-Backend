@@ -2,6 +2,7 @@ package com.backend;
 
 import com.backend.domain.*;
 import com.backend.exceptions.MyEntityNotFoundException;
+import com.backend.exceptions.WrongInputAdminException;
 import com.backend.service.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,15 +11,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@DisplayName("Entities Integration Test Suites")
+@DisplayName("Booking Process Db Services Integration Test Suite")
 public class BookingProcessDbServiceIntegrationTestSuite {
     @Autowired
     private GarageDbService garageDbService;
@@ -35,38 +39,82 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     @Autowired
     private UserDbService userDbService;
 
+    @Autowired
+    private CarDbService carDbService;
+
+    @Autowired
+    private BookingDbService bookingDbService;
+
+    @Autowired
+    private CarServiceDbService carServiceDbService;
+
     @Test
-    public void testBookingProcess() throws MyEntityNotFoundException {
+    public void testBookingProcess() throws MyEntityNotFoundException, WrongInputAdminException {
         //Given
-        initGarageWithWorkTimesAndAvailableCarServices();
-        initCustomerAndUser();
+//        initGarageWithWorkTimesAndAvailableCarServices();
+//        initCustomerAndUser();
+//        initCar();
+//        initAvailableBookings();
+//        initAddingCarService();
         //When
         //Then
     }
 
     @Test
-    public void testInitMethods() throws MyEntityNotFoundException {
+    public void testInitMethods() throws MyEntityNotFoundException, WrongInputAdminException {
         //Given
         initGarageWithWorkTimesAndAvailableCarServices();
         initCustomerAndUser();
+        initCar();
+        initAvailableBookings();
+        initAddingCarService();
         //When
         List<GarageWorkTime> garageWorkTimeList = garageWorkTimeDbService.getAllGarageWorkTimes();
         List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService();
 
         List<Customer> customerList = customerDbService.getAllCustomers();
         List<User> userList = userDbService.getAllUsers();
-        //Then
-        assertEquals("Monday", garageWorkTimeList.get(0).getDay().getDayName());
-        assertEquals(LocalTime.of(0,0), garageWorkTimeList.get(6).getEndHour());
-        assertEquals("Garage test name", garageWorkTimeList.get(0).getGarage().getName());
-        assertEquals(5, availableCarServiceList.size());
-        assertEquals("Test car service #1", availableCarServiceList.get(0).getName());
-        assertEquals("Garage test name", availableCarServiceList.get(0).getGarage().getName());
 
-        assertEquals("Test name", customerList.get(0).getFirstName());
-        assertEquals("Testusername", customerList.get(0).getUser().getUsername());
-        assertEquals("Testpassword123", userList.get(0).getPassword());
-        assertEquals("test@test.com", userList.get(0).getCustomer().getEmail());
+        List<Car> carList = carDbService.getAllCars();
+
+        List<Booking> bookingList = bookingDbService.getAllBookings();
+
+        Car car = carDbService.getAllCars().get(0);
+        List<CarService> carServiceList = carServiceDbService.getAllCarServiceWithGivenCarIdAndNotAssignedStatus(car.getId());
+        Garage garage = garageDbService.getAllGarages().get(0);
+        List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(LocalDate.of(2023,8,10), carServiceList, garage.getId());
+        //Then
+        assertAll("Garage with work times and car services",
+                () -> assertEquals("Monday", garageWorkTimeList.get(0).getDay().getDayName()),
+                () -> assertEquals(LocalTime.of(0,0), garageWorkTimeList.get(6).getEndHour()),
+                () -> assertEquals("Garage test name", garageWorkTimeList.get(0).getGarage().getName()),
+                () -> assertEquals(5, availableCarServiceList.size()),
+                () -> assertEquals("Test car service #1", availableCarServiceList.get(0).getName()),
+                () -> assertEquals("Garage test name", availableCarServiceList.get(0).getGarage().getName())
+                );
+
+        assertAll("Customer and user",
+                () -> assertEquals("Test name", customerList.get(0).getFirstName()),
+                () -> assertEquals("Testusername", customerList.get(0).getUser().getUsername()),
+                () -> assertEquals("Testpassword123", userList.get(0).getPassword()),
+                () -> assertEquals("test@test.com", userList.get(0).getCustomer().getEmail())
+        );
+
+        assertAll("Car",
+                () -> assertEquals(2, carList.size()),
+                () -> assertEquals("Test name", carList.get(0).getCustomer().getFirstName()),
+                () -> assertEquals("diesel", carList.get(0).getEngine())
+                );
+
+        assertAll("Available bookings",
+                () -> assertEquals(365, bookingList.size()),
+                () -> assertEquals(BookingStatus.AVAILABLE, bookingList.get(0).getStatus())
+                );
+        assertAll("Car service added, possible bookings check",
+                () -> assertEquals(3, carServiceList.size()),
+                () -> assertEquals(LocalTime.of(7,0), availableTimeToBookList.get(0)),
+                () -> assertEquals(32, availableTimeToBookList.size())
+        );
     }
 
     private void initGarageWithWorkTimesAndAvailableCarServices() throws MyEntityNotFoundException {
@@ -107,5 +155,38 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         customer = customerDbService.getAllCustomers().get(0);
         User user = new User("Testusername","Testpassword123");
         userDbService.saveUser(user, customer.getId());
+    }
+
+    private void initCar() throws MyEntityNotFoundException {
+        Car car = new Car("BMW","Series 3", "Sedan", 2020, "diesel");
+        Customer customer = customerDbService.getAllCustomers().get(0);
+        carDbService.saveCar(car, customer.getId());
+        car = new Car("AUDI","A6", "Sedan", 2020, "diesel");
+        carDbService.saveCar(car, customer.getId());
+    }
+
+    private void initAvailableBookings() throws WrongInputAdminException, MyEntityNotFoundException {
+        Garage garage = garageDbService.getAllGarages().get(0);
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusDays(365);
+        List<GarageWorkTime> garageWorkTimeList = garageWorkTimeDbService.getAllGarageWorkTimes();
+        for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
+            LocalDate finalDateForLoop = date;
+            GarageWorkTime garageWorkTime = garageWorkTimeList.stream()
+                    .filter(workTime -> workTime.getDay().toString().equals(finalDateForLoop.getDayOfWeek().toString()))
+                    .findFirst()
+                    .orElseThrow(() -> new WrongInputAdminException("GarageWorkTime not found for day: " + finalDateForLoop.getDayOfWeek().toString()));
+            bookingDbService.saveBooking(date, garageWorkTime.getStartHour(), garageWorkTime.getEndHour(), garage.getId());
+        }
+    }
+
+    private void initAddingCarService() throws MyEntityNotFoundException {
+        List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService();
+        List<Long> carServicesIdList = new ArrayList<>();
+        carServicesIdList.add(availableCarServiceList.get(0).getId());
+        carServicesIdList.add(availableCarServiceList.get(2).getId());
+        carServicesIdList.add(availableCarServiceList.get(3).getId());
+        Car car = carDbService.getAllCars().get(0);
+        carServiceDbService.saveCarService(carServicesIdList, car.getId());
     }
 }

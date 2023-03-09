@@ -16,14 +16,4 @@ public class CarServiceMapper {
                 carService.getRepairTimeInMinutes()
         );
     }
-
-    public CarService mapToCarService(CarServiceDto carServiceDto) {
-        return new CarService(
-                carServiceDto.getId(),
-                carServiceDto.getName(),
-                carServiceDto.getDescription(),
-                carServiceDto.getCost(),
-                carServiceDto.getRepairTimeInMinutes()
-        );
-    }
 }

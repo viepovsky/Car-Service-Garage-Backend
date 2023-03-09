@@ -9,6 +9,7 @@ public class CarDto {
     private Long id;
     private String make;
     private String model;
+    private String type;
     private int year;
     private String engine;
     private Long customerId;

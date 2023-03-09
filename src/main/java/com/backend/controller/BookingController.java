@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -30,10 +32,11 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<Void> createBooking(
             @RequestParam(name = "service-id") List<Long> orderedServiceIdList,
-            @RequestParam(name = "start-date") LocalDateTime startDate,
+            @RequestParam(name = "date") LocalDate startDate,
+            @RequestParam(name = "start-hour") LocalTime startHour,
             @RequestParam(name = "garage-id") Long garageId
     ) throws MyEntityNotFoundException {
-        bookingDbService.saveBooking(orderedServiceIdList, startDate, garageId);
+        bookingDbService.saveBooking(orderedServiceIdList, startDate, startHour, garageId);
         return ResponseEntity.ok().build();
     }
 }

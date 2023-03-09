@@ -16,8 +16,9 @@ public class BookingMapper {
         return new BookingDto(
                 booking.getId(),
                 booking.getStatus().toString(),
-                booking.getStartDate(),
-                booking.getEndDate(),
+                booking.getDate(),
+                booking.getStartHour(),
+                booking.getEndHour(),
                 booking.getCreated(),
                 booking.getTotalCost(),
                 booking.getCarServiceList().stream()

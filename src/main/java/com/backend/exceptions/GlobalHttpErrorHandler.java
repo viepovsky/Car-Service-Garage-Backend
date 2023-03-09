@@ -14,4 +14,9 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exception.getText() + " record with given id: " + exception.getRecordId() + " doesn't exist", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(WrongInputAdminException.class)
+    public ResponseEntity<Object> handleWrongInputAdminException(WrongInputAdminException exception){
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
