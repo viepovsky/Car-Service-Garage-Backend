@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +60,7 @@ public class CarServiceDbService {
             ))
             .toList();
         customer.getCarList().stream()
-                .filter(car1 -> car1.getId() == carId)
+                .filter(car1 -> Objects.equals(car1.getId(), carId))
                 .findFirst()
                 .ifPresent(car1 -> car1.getCarServicesList().addAll(carServiceList));
         customer.getServicesList().addAll(carServiceList);

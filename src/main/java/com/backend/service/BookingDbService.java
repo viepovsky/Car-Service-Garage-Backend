@@ -12,12 +12,12 @@ import com.backend.repository.GarageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +30,15 @@ public class BookingDbService {
         return bookingRepository.findAll();
     }
 
-    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndCarServices(LocalDate date, List<CarService> carServiceList, Long garageId) throws WrongInputAdminException {
-        if (carServiceList.isEmpty()) {
+    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndCarServices(LocalDate date, List<Long> carServiceIdList, Long garageId) throws WrongInputAdminException, MyEntityNotFoundException {
+        if (carServiceIdList.isEmpty()) {
             throw new WrongInputAdminException("Given CarService list is empty");
+        }
+
+        List<CarService> carServiceList = new ArrayList<>();
+        for (Long id : carServiceIdList) {
+            CarService carService = carServiceRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("CarService", id));
+            carServiceList.add(carService);
         }
 
         int repairTimeInMinutes = carServiceList.stream().mapToInt(CarService::getRepairTimeInMinutes).sum();
@@ -79,6 +85,10 @@ public class BookingDbService {
         return availableTimeList;
     }
 
+    public Booking getBookingOfGivenDateStartHourStatusAndGarageId (LocalDate date, LocalTime startHour, Long garageId, BookingStatus status) {
+        return bookingRepository.findBookingByDateAndStartHourAndGarageIdAndStatus(date, startHour, garageId, status);
+    }
+
     public Booking getBooking(Long bookingId) throws MyEntityNotFoundException {
         return bookingRepository.findById(bookingId).orElseThrow(() -> new MyEntityNotFoundException("Booking", bookingId));
     }
@@ -120,12 +130,17 @@ public class BookingDbService {
         booking.setStatus(BookingStatus.WAITING_FOR_CUSTOMER);
         List<CarService> carServiceList = new ArrayList<>();
         int repairTimeInMinutes = 0;
+        BigDecimal totalCost = BigDecimal.ZERO;
         for (Long id : carServiceIdList) {
             CarService carService = carServiceRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("CarService", id));
             repairTimeInMinutes += carService.getRepairTimeInMinutes();
+            totalCost = totalCost.add(carService.getCost());
             carServiceList.add(carService);
+            carService.setBooking(booking);
+            carServiceRepository.save(carService);
         }
         booking.setEndHour(startHour.plusMinutes(repairTimeInMinutes));
+        booking.setTotalCost(totalCost);
         booking.setCarServiceList(carServiceList);
         bookingRepository.save(booking);
     }

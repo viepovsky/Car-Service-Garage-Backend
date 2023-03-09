@@ -11,8 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @DisplayName("Booking Process Db Services Integration Test Suite")
 public class BookingProcessDbServiceIntegrationTestSuite {
     @Autowired
@@ -51,13 +52,37 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     @Test
     public void testBookingProcess() throws MyEntityNotFoundException, WrongInputAdminException {
         //Given
-//        initGarageWithWorkTimesAndAvailableCarServices();
-//        initCustomerAndUser();
-//        initCar();
-//        initAvailableBookings();
-//        initAddingCarService();
+        initGarageWithWorkTimesAndAvailableCarServices();
+        initCustomerAndUser();
+        initCar();
+        initAvailableBookings();
+        initAddingCarService();
+        Car car = carDbService.getAllCars().get(0);
+        List<CarService> carServiceList = carServiceDbService.getAllCarServiceWithGivenCarIdAndNotAssignedStatus(car.getId());
+        List<Long> carServiceIdList = carServiceList.stream().map(CarService::getId).toList();
+        Garage garage = garageDbService.getAllGarages().get(0);
+        LocalDate date = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+        List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(date, carServiceIdList, garage.getId());
+        LocalTime startHour = availableTimeToBookList.get(1);
         //When
+        bookingDbService.saveBooking(carServiceIdList, date, startHour, garage.getId());
+        Customer customer = customerDbService.getAllCustomers().get(0);
+        Booking booking = bookingDbService.getBookingOfGivenDateStartHourStatusAndGarageId(date, startHour, garage.getId(), BookingStatus.WAITING_FOR_CUSTOMER);
         //Then
+        assertAll("Getting booking values through car entity, from customer",
+                () -> assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, customer.getCarList().get(0).getCarServicesList().get(0).getBooking().getStatus()),
+                () -> assertEquals(LocalTime.of(7,10), customer.getCarList().get(0).getCarServicesList().get(0).getBooking().getStartHour()),
+                () -> assertEquals(BigDecimal.valueOf(590), customer.getCarList().get(0).getCarServicesList().get(0).getBooking().getTotalCost())
+                );
+        assertAll("Getting booking values directly through car service, from customer",
+                () -> assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, customer.getServicesList().get(0).getBooking().getStatus()),
+                () -> assertEquals(LocalTime.of(7,10), customer.getServicesList().get(0).getBooking().getStartHour()),
+                () -> assertEquals(BigDecimal.valueOf(590), customer.getServicesList().get(0).getBooking().getTotalCost())
+        );
+        assertAll("Getting customer and car values directly through car service, from booking",
+                () -> assertEquals("test@test.com", booking.getCarServiceList().get(0).getCustomer().getEmail()),
+                () -> assertEquals("BMW", booking.getCarServiceList().get(0).getCar().getMake())
+        );
     }
 
     @Test
@@ -81,8 +106,10 @@ public class BookingProcessDbServiceIntegrationTestSuite {
 
         Car car = carDbService.getAllCars().get(0);
         List<CarService> carServiceList = carServiceDbService.getAllCarServiceWithGivenCarIdAndNotAssignedStatus(car.getId());
+        List<Long> carServiceIdList = carServiceList.stream().map(CarService::getId).toList();
         Garage garage = garageDbService.getAllGarages().get(0);
-        List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(LocalDate.of(2023,8,10), carServiceList, garage.getId());
+        LocalDate date = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+        List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(date, carServiceIdList, garage.getId());
         //Then
         assertAll("Garage with work times and car services",
                 () -> assertEquals("Monday", garageWorkTimeList.get(0).getDay().getDayName()),
