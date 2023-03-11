@@ -16,7 +16,6 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class CarServiceDbService {
-    private final static String NOT_ASSIGNED = "Not assigned to booking table.";
     private final CarServiceRepository carServiceRepository;
     private final AvailableCarServiceRepository availableCarServiceRepository;
     private final CarRepository carRepository;
@@ -26,7 +25,7 @@ public class CarServiceDbService {
     }
 
     public List<CarService> getAllCarServiceWithGivenCarIdAndNotAssignedStatus(Long carId){
-        return carServiceRepository.findCarServicesByCarIdAndStatus(carId, NOT_ASSIGNED);
+        return carServiceRepository.findCarServicesByCarIdAndStatus(carId, ServiceStatus.NOT_ASSIGNED);
     }
 
     public CarService getCarService(Long carServiceId) throws MyEntityNotFoundException {
@@ -53,7 +52,7 @@ public class CarServiceDbService {
                 selectedService.getRepairTimeInMinutes(),
                         car,
                         customer,
-                        NOT_ASSIGNED
+                        ServiceStatus.NOT_ASSIGNED
             ))
             .toList();
         customer.getCarList().stream()
@@ -83,7 +82,7 @@ public class CarServiceDbService {
     public void deleteServicesNotAssignedToBooking(Long carId) throws MyEntityNotFoundException {
         Car car = carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
         List<Long> serviceIdList = car.getCarServicesList().stream()
-                .filter(carService -> carService.getStatus().equals(NOT_ASSIGNED))
+                .filter(carService -> carService.getStatus().equals(ServiceStatus.NOT_ASSIGNED))
                 .map(CarService::getId)
                 .toList();
         serviceIdList.forEach(carRepository::deleteById);

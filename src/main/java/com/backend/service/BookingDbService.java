@@ -1,9 +1,6 @@
 package com.backend.service;
 
-import com.backend.domain.Booking;
-import com.backend.domain.BookingStatus;
-import com.backend.domain.CarService;
-import com.backend.domain.Garage;
+import com.backend.domain.*;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.exceptions.WrongInputDataException;
 import com.backend.repository.BookingRepository;
@@ -126,6 +123,7 @@ public class BookingDbService {
             totalCost = totalCost.add(carService.getCost());
             carServiceList.add(carService);
             carService.setBooking(booking);
+            carService.setStatus(ServiceStatus.ASSIGNED);
             carServiceRepository.save(carService);
         }
         booking.setEndHour(startHour.plusMinutes(totalRepairDuration));

@@ -41,9 +41,9 @@ public class CarService {
     private Booking booking;
 
     @Column(name = "service_status")
-    private String status;
+    private ServiceStatus status;
 
-    public CarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, Customer customer, String status) {
+    public CarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, Customer customer, ServiceStatus status) {
         this.name = name;
         this.description = description;
         this.cost = cost;

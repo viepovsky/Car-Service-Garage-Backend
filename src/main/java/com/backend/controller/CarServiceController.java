@@ -6,7 +6,6 @@ import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.mapper.CarServiceMapper;
 import com.backend.service.CarServiceDbService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
