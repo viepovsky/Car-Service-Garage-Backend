@@ -1,6 +1,5 @@
 package com.backend.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "CUSTOMERS")
 public class Customer {
@@ -34,12 +32,17 @@ public class Customer {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "role")
+    private UserRole role;
+
     @Column(name = "created_date")
     private LocalDateTime createdDate;
-
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @OneToMany(
             targetEntity = Car.class,
@@ -57,10 +60,50 @@ public class Customer {
     )
     private List<CarService> servicesList = new ArrayList<>();
 
+    public Customer(String firstName, String lastName, String email, String phoneNumber, String username, String password, UserRole role, LocalDateTime createdDate, List<Car> carList, List<CarService> servicesList) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.createdDate = createdDate;
+        this.carList = carList;
+        this.servicesList = servicesList;
+    }
+
     public Customer(String firstName, String lastName, String email, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+
+    public Customer(Long id, String username, String password, UserRole role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public Customer(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.createdDate = createdDate;
+    }
+
+    public Customer(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate, List<Car> carList, List<CarService> servicesList) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.createdDate = createdDate;
+        this.carList = carList;
+        this.servicesList = servicesList;
     }
 }

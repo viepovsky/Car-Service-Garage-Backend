@@ -43,6 +43,17 @@ public class CarService {
     @Column(name = "service_status")
     private ServiceStatus status;
 
+    public CarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, Customer customer, Booking booking, ServiceStatus status) {
+        this.name = name;
+        this.description = description;
+        this.cost = cost;
+        this.repairTimeInMinutes = repairTimeInMinutes;
+        this.car = car;
+        this.customer = customer;
+        this.booking = booking;
+        this.status = status;
+    }
+
     public CarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, Customer customer, ServiceStatus status) {
         this.name = name;
         this.description = description;

@@ -11,7 +11,10 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MyEntityNotFoundException.class)
     public ResponseEntity<Object> handleMyEntityNotFoundException(MyEntityNotFoundException exception){
-        return new ResponseEntity<>(exception.getText() + " record with given id: " + exception.getRecordId() + " doesn't exist", HttpStatus.NOT_FOUND);
+        if (exception.getRecordId() != null) {
+            return new ResponseEntity<>(exception.getText() + " record with given id: " + exception.getRecordId() + " doesn't exist", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(exception.getText() + " doesn't exist in database.", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(WrongInputDataException.class)

@@ -60,4 +60,12 @@ public class Garage {
         this.name = name;
         this.description = description;
     }
+
+    public Garage(String name, String description, List<Booking> bookingList, List<GarageWorkTime> garageWorkTimeList, List<AvailableCarService> availableCarServiceList) {
+        this.name = name;
+        this.description = description;
+        this.bookingList = bookingList;
+        this.garageWorkTimeList = garageWorkTimeList;
+        this.availableCarServiceList = availableCarServiceList;
+    }
 }

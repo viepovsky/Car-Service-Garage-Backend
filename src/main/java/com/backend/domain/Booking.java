@@ -54,6 +54,17 @@ public class Booking {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
+    public Booking(BookingStatus status, LocalDate date, LocalTime startHour, LocalTime endHour, LocalDateTime created, BigDecimal totalCost, List<CarService> carServiceList, Garage garage) {
+        this.status = status;
+        this.date = date;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.created = created;
+        this.totalCost = totalCost;
+        this.carServiceList = carServiceList;
+        this.garage = garage;
+    }
+
     public Booking(BookingStatus status, LocalDate date, LocalTime startHour, LocalTime endHour, LocalDateTime created, Garage garage) {
         this.status = status;
         this.date = date;

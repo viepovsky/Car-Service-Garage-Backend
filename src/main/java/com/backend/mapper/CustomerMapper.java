@@ -27,10 +27,25 @@ public class CustomerMapper {
                 customerDto.getLastName(),
                 customerDto.getEmail(),
                 customerDto.getPhoneNumber(),
-                customerDto.getCreatedDate(),
-                null,
-                new ArrayList<>(),
-                new ArrayList<>()
+                customerDto.getCreatedDate()
+        );
+    }
+
+    public Customer mapToCustomerLogin(CustomerDto customerDto) {
+        return new Customer(
+                customerDto.getId(),
+                customerDto.getUsername(),
+                customerDto.getPassword(),
+                customerDto.getRole()
+        );
+    }
+
+    public CustomerDto mapToCustomerDtoLogin(Customer customer) {
+        return new CustomerDto(
+                customer.getId(),
+                customer.getUsername(),
+                customer.getPassword(),
+                customer.getRole()
         );
     }
 }

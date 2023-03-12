@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -36,9 +37,6 @@ public class BookingProcessDbServiceIntegrationTestSuite {
 
     @Autowired
     private CustomerDbService customerDbService;
-
-    @Autowired
-    private UserDbService userDbService;
 
     @Autowired
     private CarDbService carDbService;
@@ -98,7 +96,6 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService();
 
         List<Customer> customerList = customerDbService.getAllCustomers();
-        List<User> userList = userDbService.getAllUsers();
 
         List<Car> carList = carDbService.getAllCars();
 
@@ -122,9 +119,9 @@ public class BookingProcessDbServiceIntegrationTestSuite {
 
         assertAll("Customer and user",
                 () -> assertEquals("Test name", customerList.get(0).getFirstName()),
-                () -> assertEquals("Testusername", customerList.get(0).getUser().getUsername()),
-                () -> assertEquals("Testpassword123", userList.get(0).getPassword()),
-                () -> assertEquals("test@test.com", userList.get(0).getCustomer().getEmail())
+                () -> assertEquals("Testusername", customerList.get(0).getUsername()),
+                () -> assertEquals("Testpassword123", customerList.get(0).getPassword()),
+                () -> assertEquals("test@test.com", customerList.get(0).getEmail())
         );
 
         assertAll("Car",
@@ -177,11 +174,8 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     }
 
     private void initCustomerAndUser() throws MyEntityNotFoundException {
-        Customer customer = new Customer("Test name", "Test lastname", "test@test.com", "+48777777777");
+        Customer customer = new Customer("Test name", "Test lastname", "test@test.com", "+48777777777", "Testusername", "Testpassword123", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
         customerDbService.saveCustomer(customer);
-        customer = customerDbService.getAllCustomers().get(0);
-        User user = new User("Testusername","Testpassword123");
-        userDbService.saveUser(user, customer.getId());
     }
 
     private void initCar() throws MyEntityNotFoundException {

@@ -28,9 +28,15 @@ public class CustomerController {
         return ResponseEntity.ok(customerMapper.mapToCustomerDto(customer));
     }
 
+    @GetMapping
+    public ResponseEntity<CustomerDto> getCustomer(@RequestParam String username) throws MyEntityNotFoundException {
+        Customer customer = customerDbService.getCustomer(username);
+        return ResponseEntity.ok(customerMapper.mapToCustomerDtoLogin(customer));
+    }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createCustomer(@Valid @RequestBody CustomerDto customerDto) {
-        customerDbService.saveCustomer(customerMapper.mapToCustomer(customerDto));
+        customerDbService.saveCustomer(customerMapper.mapToCustomerLogin(customerDto));
         return ResponseEntity.ok().build();
     }
 

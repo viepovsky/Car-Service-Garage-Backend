@@ -11,4 +11,10 @@ public class MyEntityNotFoundException extends Exception {
         this.recordId = recordId;
         this.text = text;
     }
+
+    public MyEntityNotFoundException(String text) {
+        super(text);
+        this.text = text;
+    }
+
 }

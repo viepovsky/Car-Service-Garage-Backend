@@ -40,18 +40,12 @@ public class EntitiesIntegrationTestSuite {
     @Test
     public void testBookingServiceForNewCustomer() throws MyEntityNotFoundException {
         //Given
-        Customer customer = new Customer(1L, "Oskar", "Raj", "testmail@gmail.com", "+48756756756", LocalDateTime.now(), null, new ArrayList<>(), new ArrayList<>());
+        Customer customer = new Customer("Oskar", "Raj", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
         customerRepository.save(customer);
         customer = customerRepository.findAll().get(0);
 
-        User user = new User(1L, "viepovsky", "password123");
-        user.setCustomer(customer);
-        customer.setUser(user);
-        customerRepository.save(customer);
-        customer = customerRepository.findAll().get(0);
-
-        Car car1 = new Car(1L, "BMW", "3", "Sedan", 2020, "diesel");
-        Car car2 = new Car(2L, "BMW", "5","Sedan", 2005, "diesel");
+        Car car1 = new Car("BMW", "3", "Sedan", 2020, "diesel");
+        Car car2 = new Car("BMW", "5","Sedan", 2005, "diesel");
         car1.setCustomer(customer);
         car2.setCustomer(customer);
         customer.getCarList().add(car1);
@@ -60,28 +54,28 @@ public class EntitiesIntegrationTestSuite {
         customer = customerRepository.findAll().get(0);
         car1 = carRepository.findAll().get(0);
 
-        Garage garage = new Garage(1L, "Speed Garage", "Garage description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Garage garage = new Garage("Speed Garage", "Garage description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         garageRepository.save(garage);
         Garage garageToUpdate = garageRepository.findAll().get(0);
 
-        GarageWorkTime garageWorkTime1 = new GarageWorkTime(1L, WorkDays.MONDAY, LocalTime.of(8, 0), LocalTime.of(16, 0), garageToUpdate);
-        GarageWorkTime garageWorkTime2 = new GarageWorkTime(2L, WorkDays.TUESDAY, LocalTime.of(8, 0), LocalTime.of(16, 0), garageToUpdate);
+        GarageWorkTime garageWorkTime1 = new GarageWorkTime(WorkDays.MONDAY, LocalTime.of(8, 0), LocalTime.of(16, 0), garageToUpdate);
+        GarageWorkTime garageWorkTime2 = new GarageWorkTime(WorkDays.TUESDAY, LocalTime.of(8, 0), LocalTime.of(16, 0), garageToUpdate);
         garageToUpdate.getGarageWorkTimeList().add(garageWorkTime1);
         garageToUpdate.getGarageWorkTimeList().add(garageWorkTime2);
-        AvailableCarService availableCarService1 = new AvailableCarService(1L, "Oil change", "Description of oil change", BigDecimal.valueOf(50), 30, "BMW, AUDI", BigDecimal.valueOf(1.2), garageToUpdate);
-        AvailableCarService availableCarService2 = new AvailableCarService(2L, "Suspension check", "Description of suspension check", BigDecimal.valueOf(30), 10, "BMW, AUDI", BigDecimal.valueOf(1.2), garageToUpdate);
+        AvailableCarService availableCarService1 = new AvailableCarService("Oil change", "Description of oil change", BigDecimal.valueOf(50), 30, "BMW, AUDI", BigDecimal.valueOf(1.2), garageToUpdate);
+        AvailableCarService availableCarService2 = new AvailableCarService("Suspension check", "Description of suspension check", BigDecimal.valueOf(30), 10, "BMW, AUDI", BigDecimal.valueOf(1.2), garageToUpdate);
         garageToUpdate.getAvailableCarServiceList().add(availableCarService1);
         garageToUpdate.getAvailableCarServiceList().add(availableCarService2);
         garageRepository.save(garageToUpdate);
         garage = garageRepository.findAll().get(0);
 
-        CarService carService = new CarService(1L, availableCarService1.getName(), availableCarService1.getDescription(), availableCarService1.getCost(), availableCarService1.getRepairTimeInMinutes(), null, null, null, null);
+        CarService carService = new CarService(availableCarService1.getName(), availableCarService1.getDescription(), availableCarService1.getCost(), availableCarService1.getRepairTimeInMinutes(), null, null, null, null);
         carService.setCar(car1);
         carService.setCustomer(customer);
         carServiceRepository.save(carService);
         carService = carServiceRepository.findAll().get(0);
 
-        Booking booking = new Booking(1L, BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.of(2023,3,20),LocalTime.of(8,0),LocalTime.of(8,30), LocalDateTime.now(),BigDecimal.valueOf(0), new ArrayList<>(), null);
+        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.of(2023,3,20),LocalTime.of(8,0),LocalTime.of(8,30), LocalDateTime.now(),BigDecimal.valueOf(0), new ArrayList<>(), null);
         booking.getCarServiceList().add(carService);
         booking.setGarage(garage);
         booking.setTotalCost(carService.getCost());

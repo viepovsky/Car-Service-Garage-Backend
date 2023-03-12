@@ -22,6 +22,10 @@ public class CustomerDbService {
         return customerRepository.findById(customerId).orElseThrow(() -> new MyEntityNotFoundException("Customer", customerId));
     }
 
+    public Customer getCustomer(String username) throws MyEntityNotFoundException {
+        return customerRepository.findByUsername(username ).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
+    }
+
     public void saveCustomer(Customer customer) {
         if (customer.getCreatedDate() == null) {
             customer.setCreatedDate(LocalDateTime.now());

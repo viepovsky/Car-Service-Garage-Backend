@@ -24,7 +24,7 @@ class CustomerTestSuite {
     @Test
     public void testSaveAndRetrieveCustomer() throws MyEntityNotFoundException {
         //Given
-        Customer customer = new Customer(1L, "Oskar", "Raj", "testmail@gmail.com", "+48756756756", LocalDateTime.now(), null, new ArrayList<>(), new ArrayList<>());
+        Customer customer = new Customer("Oskar", "Raj", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
         customerDbService.saveCustomer(customer);
         //When
         List<Customer> customerList = customerDbService.getAllCustomers();
@@ -40,7 +40,7 @@ class CustomerTestSuite {
     @Test
     public void testUpdateAndDeleteCustomer() throws MyEntityNotFoundException {
         //Given
-        Customer customer = new Customer(1L, "Mariusz", "Raj", "h2base@gmail.com", "+48756756756", LocalDateTime.now(), null, new ArrayList<>(), new ArrayList<>());
+        Customer customer = new Customer("Oskar", "Raj", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
         customerDbService.saveCustomer(customer);
         List<Customer> customerList = customerDbService.getAllCustomers();
         Customer customerToUpdate = customerList.get(0);

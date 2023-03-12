@@ -42,6 +42,16 @@ public class AvailableCarService {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
+    public AvailableCarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, String premiumMakes, BigDecimal makeMultiplier, Garage garage) {
+        this.name = name;
+        this.description = description;
+        this.cost = cost;
+        this.repairTimeInMinutes = repairTimeInMinutes;
+        this.premiumMakes = premiumMakes;
+        this.makeMultiplier = makeMultiplier;
+        this.garage = garage;
+    }
+
     public AvailableCarService(Long id, String name, String description, BigDecimal cost, int repairTimeInMinutes, String premiumMakes, BigDecimal makeMultiplier) {
         this.id = id;
         this.name = name;

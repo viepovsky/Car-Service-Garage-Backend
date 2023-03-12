@@ -33,6 +33,13 @@ public class GarageWorkTime {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
+    public GarageWorkTime(WorkDays day, LocalTime startHour, LocalTime endHour, Garage garage) {
+        this.day = day;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.garage = garage;
+    }
+
     public GarageWorkTime(Long id, String day, LocalTime startHour, LocalTime endHour) {
         this.id = id;
         try {

@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/v1/booking")
+@RequestMapping("/v1/bookings")
 @RequiredArgsConstructor
 @Validated
 public class BookingController {
