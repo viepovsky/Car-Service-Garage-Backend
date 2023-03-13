@@ -33,8 +33,8 @@ public class CarService {
     private Car car;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "booking_id")
@@ -43,24 +43,24 @@ public class CarService {
     @Column(name = "service_status")
     private ServiceStatus status;
 
-    public CarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, Customer customer, Booking booking, ServiceStatus status) {
+    public CarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, User user, Booking booking, ServiceStatus status) {
         this.name = name;
         this.description = description;
         this.cost = cost;
         this.repairTimeInMinutes = repairTimeInMinutes;
         this.car = car;
-        this.customer = customer;
+        this.user = user;
         this.booking = booking;
         this.status = status;
     }
 
-    public CarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, Customer customer, ServiceStatus status) {
+    public CarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, User user, ServiceStatus status) {
         this.name = name;
         this.description = description;
         this.cost = cost;
         this.repairTimeInMinutes = repairTimeInMinutes;
         this.car = car;
-        this.customer = customer;
+        this.user = user;
         this.status = status;
     }
 }

@@ -15,7 +15,7 @@ public class CarMapper {
                 car.getType(),
                 car.getYear(),
                 car.getEngine(),
-                car.getCustomer().getId()
+                car.getUser().getId()
         );
     }
 

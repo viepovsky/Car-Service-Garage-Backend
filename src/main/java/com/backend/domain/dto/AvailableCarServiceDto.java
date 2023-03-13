@@ -29,4 +29,6 @@ public class AvailableCarServiceDto {
 
     @NotNull
     private BigDecimal makeMultiplier;
+
+    private Long garageId;
 }

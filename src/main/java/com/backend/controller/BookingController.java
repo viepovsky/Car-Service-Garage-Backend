@@ -30,8 +30,8 @@ public class BookingController {
     private final AdminConfig adminConfig;
 
     @GetMapping
-    public ResponseEntity<List<BookingDto>> getBookings(@RequestParam(name = "customer-id") @NotNull Long customerId) {
-        List<Booking> bookingList = bookingDbService.getAllBookingsForGivenCustomer(customerId);
+    public ResponseEntity<List<BookingDto>> getBookings(@RequestParam(name = "userId") @NotNull Long userId) {
+        List<Booking> bookingList = bookingDbService.getAllBookingsForGivenUser(userId);
         return ResponseEntity.ok(bookingMapper.mapToBookingDtoList(bookingList));
     }
 
@@ -45,7 +45,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createBookingForCustomerCar(
+    public ResponseEntity<Void> createBookingForUserCar(
             @RequestParam(name = "service-id") @NotEmpty List<Long> orderedServiceIdList,
             @RequestParam(name = "date") @NotNull LocalDate date,
             @RequestParam(name = "start-hour") @NotNull LocalTime startHour,

@@ -13,8 +13,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "CUSTOMERS")
-public class Customer {
+@Table(name = "USERS")
+public class User {
 
     @Id
     @GeneratedValue
@@ -46,7 +46,7 @@ public class Customer {
 
     @OneToMany(
             targetEntity = Car.class,
-            mappedBy = "customer",
+            mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
@@ -54,13 +54,13 @@ public class Customer {
 
     @OneToMany(
             targetEntity = CarService.class,
-            mappedBy = "customer",
+            mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     private List<CarService> servicesList = new ArrayList<>();
 
-    public Customer(String firstName, String lastName, String email, String phoneNumber, String username, String password, UserRole role, LocalDateTime createdDate, List<Car> carList, List<CarService> servicesList) {
+    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password, UserRole role, LocalDateTime createdDate, List<Car> carList, List<CarService> servicesList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -73,21 +73,21 @@ public class Customer {
         this.servicesList = servicesList;
     }
 
-    public Customer(String firstName, String lastName, String email, String phoneNumber) {
+    public User(String firstName, String lastName, String email, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
-    public Customer(Long id, String username, String password, UserRole role) {
+    public User(Long id, String username, String password, UserRole role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
     }
 
-    public Customer(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate) {
+    public User(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -96,7 +96,7 @@ public class Customer {
         this.createdDate = createdDate;
     }
 
-    public Customer(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate, List<Car> carList, List<CarService> servicesList) {
+    public User(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate, List<Car> carList, List<CarService> servicesList) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

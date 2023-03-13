@@ -36,7 +36,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     private AvailableCarServiceDbService availableCarServiceDbService;
 
     @Autowired
-    private CustomerDbService customerDbService;
+    private UserDbService userDbService;
 
     @Autowired
     private CarDbService carDbService;
@@ -51,7 +51,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     public void testBookingProcess() throws MyEntityNotFoundException, WrongInputDataException {
         //Given
         initGarageWithWorkTimesAndAvailableCarServices();
-        initCustomerAndUser();
+        initUser();
         initCar();
         initAvailableBookings();
         initAddingCarService();
@@ -64,21 +64,21 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         LocalTime startHour = availableTimeToBookList.get(1);
         //When
         bookingDbService.saveBooking(carServiceIdList, date, startHour, garage.getId());
-        Customer customer = customerDbService.getAllCustomers().get(0);
+        User user = userDbService.getAllUsers().get(0);
         Booking booking = bookingDbService.getBookingOfGivenDateStartHourStatusAndGarageId(date, startHour, garage.getId(), BookingStatus.WAITING_FOR_CUSTOMER);
         //Then
-        assertAll("Getting booking values through car entity, from customer",
-                () -> assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, customer.getCarList().get(0).getCarServicesList().get(0).getBooking().getStatus()),
-                () -> assertEquals(LocalTime.of(7,10), customer.getCarList().get(0).getCarServicesList().get(0).getBooking().getStartHour()),
-                () -> assertEquals(BigDecimal.valueOf(590), customer.getCarList().get(0).getCarServicesList().get(0).getBooking().getTotalCost())
+        assertAll("Getting booking values through car entity, from user",
+                () -> assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, user.getCarList().get(0).getCarServicesList().get(0).getBooking().getStatus()),
+                () -> assertEquals(LocalTime.of(7,10), user.getCarList().get(0).getCarServicesList().get(0).getBooking().getStartHour()),
+                () -> assertEquals(BigDecimal.valueOf(590), user.getCarList().get(0).getCarServicesList().get(0).getBooking().getTotalCost())
                 );
-        assertAll("Getting booking values directly through car service, from customer",
-                () -> assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, customer.getServicesList().get(0).getBooking().getStatus()),
-                () -> assertEquals(LocalTime.of(7,10), customer.getServicesList().get(0).getBooking().getStartHour()),
-                () -> assertEquals(BigDecimal.valueOf(590), customer.getServicesList().get(0).getBooking().getTotalCost())
+        assertAll("Getting booking values directly through car service, from user",
+                () -> assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, user.getServicesList().get(0).getBooking().getStatus()),
+                () -> assertEquals(LocalTime.of(7,10), user.getServicesList().get(0).getBooking().getStartHour()),
+                () -> assertEquals(BigDecimal.valueOf(590), user.getServicesList().get(0).getBooking().getTotalCost())
         );
-        assertAll("Getting customer and car values directly through car service, from booking",
-                () -> assertEquals("test@test.com", booking.getCarServiceList().get(0).getCustomer().getEmail()),
+        assertAll("Getting user and car values directly through car service, from booking",
+                () -> assertEquals("test@test.com", booking.getCarServiceList().get(0).getUser().getEmail()),
                 () -> assertEquals("BMW", booking.getCarServiceList().get(0).getCar().getMake())
         );
     }
@@ -87,7 +87,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     public void testInitMethods() throws MyEntityNotFoundException, WrongInputDataException {
         //Given
         initGarageWithWorkTimesAndAvailableCarServices();
-        initCustomerAndUser();
+        initUser();
         initCar();
         initAvailableBookings();
         initAddingCarService();
@@ -95,7 +95,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         List<GarageWorkTime> garageWorkTimeList = garageWorkTimeDbService.getAllGarageWorkTimes();
         List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService();
 
-        List<Customer> customerList = customerDbService.getAllCustomers();
+        List<User> userList = userDbService.getAllUsers();
 
         List<Car> carList = carDbService.getAllCars();
 
@@ -117,16 +117,16 @@ public class BookingProcessDbServiceIntegrationTestSuite {
                 () -> assertEquals("Garage test name", availableCarServiceList.get(0).getGarage().getName())
                 );
 
-        assertAll("Customer and user",
-                () -> assertEquals("Test name", customerList.get(0).getFirstName()),
-                () -> assertEquals("Testusername", customerList.get(0).getUsername()),
-                () -> assertEquals("Testpassword123", customerList.get(0).getPassword()),
-                () -> assertEquals("test@test.com", customerList.get(0).getEmail())
+        assertAll("User",
+                () -> assertEquals("Test name", userList.get(0).getFirstName()),
+                () -> assertEquals("Testusername", userList.get(0).getUsername()),
+                () -> assertEquals("Testpassword123", userList.get(0).getPassword()),
+                () -> assertEquals("test@test.com", userList.get(0).getEmail())
         );
 
         assertAll("Car",
                 () -> assertEquals(2, carList.size()),
-                () -> assertEquals("Test name", carList.get(0).getCustomer().getFirstName()),
+                () -> assertEquals("Test name", carList.get(0).getUser().getFirstName()),
                 () -> assertEquals("diesel", carList.get(0).getEngine())
                 );
 
@@ -161,11 +161,11 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         garageWorkTimeDbService.saveGarageWorkTime(workDay6, garage.getId());
         garageWorkTimeDbService.saveGarageWorkTime(workDay7, garage.getId());
 
-        AvailableCarService availableCarService1 = new AvailableCarService( "Test car service #1", "Test description car service #1", BigDecimal.valueOf(50), 40, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2));
-        AvailableCarService availableCarService2 = new AvailableCarService( "Test car service #2", "Test description car service #2", BigDecimal.valueOf(170), 80, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2));
-        AvailableCarService availableCarService3 = new AvailableCarService( "Test car service #3", "Test description car service #3", BigDecimal.valueOf(500), 110, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2));
-        AvailableCarService availableCarService4 = new AvailableCarService( "Test car service #4", "Test description car service #4", BigDecimal.valueOf(40), 15, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2));
-        AvailableCarService availableCarService5 = new AvailableCarService( "Test car service #5", "Test description car service #5", BigDecimal.valueOf(55), 30, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2));
+        AvailableCarService availableCarService1 = new AvailableCarService( "Test car service #1", "Test description car service #1", BigDecimal.valueOf(50), 40, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2), null);
+        AvailableCarService availableCarService2 = new AvailableCarService( "Test car service #2", "Test description car service #2", BigDecimal.valueOf(170), 80, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2), null);
+        AvailableCarService availableCarService3 = new AvailableCarService( "Test car service #3", "Test description car service #3", BigDecimal.valueOf(500), 110, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2), null);
+        AvailableCarService availableCarService4 = new AvailableCarService( "Test car service #4", "Test description car service #4", BigDecimal.valueOf(40), 15, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2), null);
+        AvailableCarService availableCarService5 = new AvailableCarService( "Test car service #5", "Test description car service #5", BigDecimal.valueOf(55), 30, "BMW, AUDI, MERCEDES", BigDecimal.valueOf(1.2), null);
         availableCarServiceDbService.saveAvailableCarService(availableCarService1, garage.getId());
         availableCarServiceDbService.saveAvailableCarService(availableCarService2, garage.getId());
         availableCarServiceDbService.saveAvailableCarService(availableCarService3, garage.getId());
@@ -173,17 +173,17 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         availableCarServiceDbService.saveAvailableCarService(availableCarService5, garage.getId());
     }
 
-    private void initCustomerAndUser() throws MyEntityNotFoundException {
-        Customer customer = new Customer("Test name", "Test lastname", "test@test.com", "+48777777777", "Testusername", "Testpassword123", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
-        customerDbService.saveCustomer(customer);
+    private void initUser() throws MyEntityNotFoundException {
+        User user = new User("Test name", "Test lastname", "test@test.com", "+48777777777", "Testusername", "Testpassword123", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
+        userDbService.saveUser(user);
     }
 
     private void initCar() throws MyEntityNotFoundException {
         Car car = new Car("BMW","Series 3", "Sedan", 2020, "diesel");
-        Customer customer = customerDbService.getAllCustomers().get(0);
-        carDbService.saveCar(car, customer.getId());
+        User user = userDbService.getAllUsers().get(0);
+        carDbService.saveCar(car, user.getId());
         car = new Car("AUDI","A6", "Sedan", 2020, "diesel");
-        carDbService.saveCar(car, customer.getId());
+        carDbService.saveCar(car, user.getId());
     }
 
     private void initAvailableBookings() throws WrongInputDataException, MyEntityNotFoundException {

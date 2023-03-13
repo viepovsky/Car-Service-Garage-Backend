@@ -6,15 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerDto {
+public class UserDto {
     private Long id;
 
     @NotBlank
@@ -40,7 +37,7 @@ public class CustomerDto {
 
     private LocalDateTime createdDate;
 
-    public CustomerDto(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate) {
+    public UserDto(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -49,7 +46,7 @@ public class CustomerDto {
         this.createdDate = createdDate;
     }
 
-    public CustomerDto(Long id, String username, String password, UserRole role) {
+    public UserDto(Long id, String username, String password, UserRole role) {
         this.id = id;
         this.username = username;
         this.password = password;

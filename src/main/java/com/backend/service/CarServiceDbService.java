@@ -5,7 +5,7 @@ import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.AvailableCarServiceRepository;
 import com.backend.repository.CarRepository;
 import com.backend.repository.CarServiceRepository;
-import com.backend.repository.CustomerRepository;
+import com.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class CarServiceDbService {
     private final CarServiceRepository carServiceRepository;
     private final AvailableCarServiceRepository availableCarServiceRepository;
     private final CarRepository carRepository;
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
     public List<CarService> getAllCarService(){
         return carServiceRepository.findAll();
     }
@@ -38,7 +38,7 @@ public class CarServiceDbService {
 
     public void saveCarService(List<Long> selectedServices, Long carId) throws MyEntityNotFoundException {
         Car car  = carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
-        Customer customer = customerRepository.findById(car.getCustomer().getId()).orElseThrow(() -> new MyEntityNotFoundException("Customer", car.getCustomer().getId()));
+        User user = userRepository.findById(car.getUser().getId()).orElseThrow(() -> new MyEntityNotFoundException("User", car.getUser().getId()));
         List<AvailableCarService> availableCarServiceList = new ArrayList<>();
         for (Long serviceId : selectedServices) {
             AvailableCarService service = availableCarServiceRepository.findById(serviceId).orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", serviceId));
@@ -51,16 +51,16 @@ public class CarServiceDbService {
                 selectedService.getCost(),
                 selectedService.getRepairTimeInMinutes(),
                         car,
-                        customer,
+                        user,
                         ServiceStatus.NOT_ASSIGNED
             ))
             .toList();
-        customer.getCarList().stream()
+        user.getCarList().stream()
                 .filter(car1 -> Objects.equals(car1.getId(), carId))
                 .findFirst()
                 .ifPresent(car1 -> car1.getCarServicesList().addAll(carServiceList));
-        customer.getServicesList().addAll(carServiceList);
-        customerRepository.save(customer);
+        user.getServicesList().addAll(carServiceList);
+        userRepository.save(user);
     }
 
     public CarService updateCarService(CarService carService) throws MyEntityNotFoundException {

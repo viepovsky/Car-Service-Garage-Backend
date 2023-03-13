@@ -1,10 +1,10 @@
 package com.backend.service;
 
 import com.backend.domain.Car;
-import com.backend.domain.Customer;
+import com.backend.domain.User;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.CarRepository;
-import com.backend.repository.CustomerRepository;
+import com.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CarDbService {
     private final CarRepository carRepository;
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
 
     public List<Car> getAllCars(){
         return carRepository.findAll();
@@ -24,11 +24,11 @@ public class CarDbService {
         return carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
     }
 
-    public void saveCar(Car car, Long customerId) throws MyEntityNotFoundException {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new MyEntityNotFoundException("Customer", customerId));
-        car.setCustomer(customer);
-        customer.getCarList().add(car);
-        customerRepository.save(customer);
+    public void saveCar(Car car, Long userId) throws MyEntityNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new MyEntityNotFoundException("User", userId));
+        car.setUser(user);
+        user.getCarList().add(car);
+        userRepository.save(user);
     }
 
     public Car updateCar(Car car) throws MyEntityNotFoundException {

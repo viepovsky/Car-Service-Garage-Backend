@@ -51,22 +51,4 @@ public class AvailableCarService {
         this.makeMultiplier = makeMultiplier;
         this.garage = garage;
     }
-
-    public AvailableCarService(Long id, String name, String description, BigDecimal cost, int repairTimeInMinutes, String premiumMakes, BigDecimal makeMultiplier) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.cost = cost;
-        this.repairTimeInMinutes = repairTimeInMinutes;
-        this.premiumMakes = premiumMakes;
-        this.makeMultiplier = makeMultiplier;
-    }
-    public AvailableCarService(String name, String description, BigDecimal cost, int repairTimeInMinutes, String premiumMakes, BigDecimal makeMultiplier) {
-        this.name = name;
-        this.description = description;
-        this.cost = cost;
-        this.repairTimeInMinutes = repairTimeInMinutes;
-        this.premiumMakes = premiumMakes;
-        this.makeMultiplier = makeMultiplier;
-    }
 }

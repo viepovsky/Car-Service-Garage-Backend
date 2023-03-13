@@ -27,5 +27,5 @@ public class CarDto {
     private String engine;
 
     @NotNull
-    private Long customerId;
+    private Long userId;
 }

@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("Entities Integration Test Suites")
 public class EntitiesIntegrationTestSuite {
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private GarageRepository garageRepository;
@@ -38,20 +38,20 @@ public class EntitiesIntegrationTestSuite {
     private BookingRepository bookingRepository;
 
     @Test
-    public void testBookingServiceForNewCustomer() throws MyEntityNotFoundException {
+    public void testBookingServiceForNewUser() throws MyEntityNotFoundException {
         //Given
-        Customer customer = new Customer("Oskar", "Raj", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
-        customerRepository.save(customer);
-        customer = customerRepository.findAll().get(0);
+        User user = new User("Oskar", "Raj", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
+        userRepository.save(user);
+        user = userRepository.findAll().get(0);
 
         Car car1 = new Car("BMW", "3", "Sedan", 2020, "diesel");
         Car car2 = new Car("BMW", "5","Sedan", 2005, "diesel");
-        car1.setCustomer(customer);
-        car2.setCustomer(customer);
-        customer.getCarList().add(car1);
-        customer.getCarList().add(car2);
-        customerRepository.save(customer);
-        customer = customerRepository.findAll().get(0);
+        car1.setUser(user);
+        car2.setUser(user);
+        user.getCarList().add(car1);
+        user.getCarList().add(car2);
+        userRepository.save(user);
+        user = userRepository.findAll().get(0);
         car1 = carRepository.findAll().get(0);
 
         Garage garage = new Garage("Speed Garage", "Garage description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
@@ -71,7 +71,7 @@ public class EntitiesIntegrationTestSuite {
 
         CarService carService = new CarService(availableCarService1.getName(), availableCarService1.getDescription(), availableCarService1.getCost(), availableCarService1.getRepairTimeInMinutes(), null, null, null, null);
         carService.setCar(car1);
-        carService.setCustomer(customer);
+        carService.setUser(user);
         carServiceRepository.save(carService);
         carService = carServiceRepository.findAll().get(0);
 
@@ -86,8 +86,8 @@ public class EntitiesIntegrationTestSuite {
         carServiceRepository.save(carService);
         carService = carServiceRepository.findAll().get(0);
 
-        customer.getServicesList().add(carService);
-        customerRepository.save(customer);
+        user.getServicesList().add(carService);
+        userRepository.save(user);
 
         car1.getCarServicesList().add(carService);
         carRepository.save(car1);
@@ -96,18 +96,18 @@ public class EntitiesIntegrationTestSuite {
         garageRepository.save(garage);
 
         //When
-        Customer retrievedCustomer = customerRepository.findAll().get(0);
+        User retrievedUser = userRepository.findAll().get(0);
         CarService retrievedCarService = carServiceRepository.findAll().get(0);
         Garage retrievedGarage = garageRepository.findAll().get(0);
         Booking retrievedBooking = bookingRepository.findAll().get(0);
 
         //Then
-        assertEquals(customer.getFirstName(), retrievedCustomer.getFirstName());
-        assertEquals("BMW", retrievedCustomer.getCarList().get(0).getMake());
-        assertEquals(30, retrievedCustomer.getServicesList().get(0).getRepairTimeInMinutes());
-        assertEquals(30, retrievedCustomer.getCarList().get(0).getCarServicesList().get(0).getRepairTimeInMinutes());
-        assertEquals(LocalTime.of(8,30), retrievedCustomer.getCarList().get(0).getCarServicesList().get(0).getBooking().getEndHour());
-        assertEquals("Speed Garage", retrievedCustomer.getCarList().get(0).getCarServicesList().get(0).getBooking().getGarage().getName());
+        assertEquals(user.getFirstName(), retrievedUser.getFirstName());
+        assertEquals("BMW", retrievedUser.getCarList().get(0).getMake());
+        assertEquals(30, retrievedUser.getServicesList().get(0).getRepairTimeInMinutes());
+        assertEquals(30, retrievedUser.getCarList().get(0).getCarServicesList().get(0).getRepairTimeInMinutes());
+        assertEquals(LocalTime.of(8,30), retrievedUser.getCarList().get(0).getCarServicesList().get(0).getBooking().getEndHour());
+        assertEquals("Speed Garage", retrievedUser.getCarList().get(0).getCarServicesList().get(0).getBooking().getGarage().getName());
         assertEquals(carService.getName(), retrievedCarService.getName());
         assertEquals(carService.getBooking(), retrievedCarService.getBooking());
         assertEquals(carService.getBooking().getGarage(), retrievedCarService.getBooking().getGarage());

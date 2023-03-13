@@ -17,7 +17,8 @@ public class AvailableCarServiceMapper {
                 availableCarService.getCost(),
                 availableCarService.getRepairTimeInMinutes(),
                 availableCarService.getPremiumMakes(),
-                availableCarService.getMakeMultiplier()
+                availableCarService.getMakeMultiplier(),
+                availableCarService.getGarage().getId()
         );
     }
 
@@ -29,7 +30,8 @@ public class AvailableCarServiceMapper {
                 availableCarServiceDto.getCost(),
                 availableCarServiceDto.getRepairTimeInMinutes(),
                 availableCarServiceDto.getPremiumMakes(),
-                availableCarServiceDto.getMakeMultiplier()
+                availableCarServiceDto.getMakeMultiplier(),
+                null
         );
     }
 

@@ -34,8 +34,8 @@ public class Car {
     private String engine;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(
             targetEntity = CarService.class,

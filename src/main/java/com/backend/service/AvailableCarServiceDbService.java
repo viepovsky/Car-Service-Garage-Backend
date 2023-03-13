@@ -20,8 +20,8 @@ public class AvailableCarServiceDbService {
         return availableCarServiceRepository.findAll();
     }
 
-    public AvailableCarService getAvailableCarService(Long availableCarServiceId) throws MyEntityNotFoundException {
-        return availableCarServiceRepository.findById(availableCarServiceId).orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", availableCarServiceId));
+    public AvailableCarService getAvailableCarService(Long serviceId) throws MyEntityNotFoundException {
+        return availableCarServiceRepository.findById(serviceId).orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", serviceId));
     }
 
     public void saveAvailableCarService(AvailableCarService availableCarService, Long garageId) throws MyEntityNotFoundException {
@@ -39,11 +39,11 @@ public class AvailableCarServiceDbService {
         }
     }
 
-    public void deleteAvailableCarService(Long availableCarServiceId) throws MyEntityNotFoundException {
-        if (availableCarServiceRepository.findById(availableCarServiceId).isPresent()) {
-            availableCarServiceRepository.deleteById(availableCarServiceId);
+    public void deleteAvailableCarService(Long serviceId) throws MyEntityNotFoundException {
+        if (availableCarServiceRepository.findById(serviceId).isPresent()) {
+            availableCarServiceRepository.deleteById(serviceId);
         } else {
-            throw new MyEntityNotFoundException("AvailableCarService", availableCarServiceId);
+            throw new MyEntityNotFoundException("AvailableCarService", serviceId);
         }
     }
 }
