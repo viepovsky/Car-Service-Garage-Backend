@@ -33,6 +33,10 @@ public class UserController {
         User user = userDbService.getUser(username);
         return ResponseEntity.ok(userMapper.mapToUserDtoLogin(user));
     }
+    @GetMapping(path = "/is-registered")
+    public ResponseEntity<Boolean> isUserRegistered(@RequestParam String username) {
+        return ResponseEntity.ok(userDbService.isUserInDatabase(username));
+    }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserDto userDto) {

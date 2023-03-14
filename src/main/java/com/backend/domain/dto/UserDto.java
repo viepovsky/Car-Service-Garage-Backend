@@ -32,7 +32,6 @@ public class UserDto {
     @NotBlank
     private String password;
 
-    @NotBlank
     private UserRole role;
 
     private LocalDateTime createdDate;

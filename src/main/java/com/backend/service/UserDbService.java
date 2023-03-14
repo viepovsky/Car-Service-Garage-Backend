@@ -1,6 +1,7 @@
 package com.backend.service;
 
 import com.backend.domain.User;
+import com.backend.domain.UserRole;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,16 @@ public class UserDbService {
         return userRepository.findByUsername(username ).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
     }
 
+    public Boolean isUserInDatabase(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
     public void saveUser(User user) {
         if (user.getCreatedDate() == null) {
             user.setCreatedDate(LocalDateTime.now());
+        }
+        if (user.getRole() == null) {
+            user.setRole(UserRole.USER);
         }
         userRepository.save(user);
     }

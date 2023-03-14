@@ -73,18 +73,13 @@ public class User {
         this.servicesList = servicesList;
     }
 
-    public User(String firstName, String lastName, String email, String phoneNumber) {
+    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-    }
-
-    public User(Long id, String username, String password, UserRole role) {
-        this.id = id;
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
     public User(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate) {
@@ -94,16 +89,5 @@ public class User {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.createdDate = createdDate;
-    }
-
-    public User(Long id, String firstName, String lastName, String email, String phoneNumber, LocalDateTime createdDate, List<Car> carList, List<CarService> servicesList) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.createdDate = createdDate;
-        this.carList = carList;
-        this.servicesList = servicesList;
     }
 }

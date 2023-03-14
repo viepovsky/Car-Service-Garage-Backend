@@ -31,10 +31,12 @@ public class UserMapper {
 
     public User mapToUserLogin(UserDto userDto) {
         return new User(
-                userDto.getId(),
+                userDto.getFirstName(),
+                userDto.getLastName(),
+                userDto.getEmail(),
+                userDto.getPhoneNumber(),
                 userDto.getUsername(),
-                userDto.getPassword(),
-                userDto.getRole()
+                userDto.getPassword()
         );
     }
 
