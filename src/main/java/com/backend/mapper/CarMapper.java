@@ -4,6 +4,8 @@ import com.backend.domain.Car;
 import com.backend.domain.dto.CarDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CarMapper {
 
@@ -28,5 +30,11 @@ public class CarMapper {
                 carDto.getYear(),
                 carDto.getEngine()
         );
+    }
+
+    public List<CarDto> mapToCarDtoList(List<Car> carList) {
+        return carList.stream()
+                .map(this::mapToCarDto)
+                .toList();
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -27,6 +29,11 @@ public class CarController {
     public ResponseEntity<CarDto> getCar(@PathVariable Long carId) throws MyEntityNotFoundException {
         Car car = carDbService.getCar(carId);
         return ResponseEntity.ok(carMapper.mapToCarDto(car));
+    }
+    @GetMapping
+    public ResponseEntity<List<CarDto>> getCarsForGivenUsername(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
+        List<Car> carList = carDbService.getAllCarsForGivenUsername(username);
+        return ResponseEntity.ok(carMapper.mapToCarDtoList(carList));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

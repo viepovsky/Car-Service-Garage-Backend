@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @RestController
 @CrossOrigin("*")
@@ -29,12 +30,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserDto> getUser(@RequestParam String username) throws MyEntityNotFoundException {
+    public ResponseEntity<UserDto> getUser(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
         User user = userDbService.getUser(username);
         return ResponseEntity.ok(userMapper.mapToUserDtoLogin(user));
     }
     @GetMapping(path = "/is-registered")
-    public ResponseEntity<Boolean> isUserRegistered(@RequestParam String username) {
+    public ResponseEntity<Boolean> isUserRegistered(@RequestParam @NotBlank String username) {
         return ResponseEntity.ok(userDbService.isUserInDatabase(username));
     }
 

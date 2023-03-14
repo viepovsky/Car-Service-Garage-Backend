@@ -24,7 +24,7 @@ public class UserDbService {
     }
 
     public User getUser(String username) throws MyEntityNotFoundException {
-        return userRepository.findByUsername(username ).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
+        return userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
     }
 
     public Boolean isUserInDatabase(String username) {

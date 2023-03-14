@@ -15,19 +15,23 @@ public class CarApiService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CarApiClient.class);
     private final CarApiClient carApiClient;
 
-    public List<String> getCarMakes() {
+    public List<String> getCarMakes() throws InterruptedException {
+        Thread.sleep(1000);
         return carApiClient.getCarMakes();
     }
 
-    public List<String> getCarTypes() {
+    public List<String> getCarTypes() throws InterruptedException {
+        Thread.sleep(1000);
         return carApiClient.getCarTypes();
     }
 
-    public List<Integer> getCarYears() {
+    public List<Integer> getCarYears() throws InterruptedException {
+        Thread.sleep(1000);
         return carApiClient.getCarYears();
     }
 
-    public List<String> getCarModels(int year, String make, String type) {
+    public List<String> getCarModels(int year, String make, String type) throws InterruptedException {
+        Thread.sleep(1000);
         List<ApiCarDto> apiCarDtoList = carApiClient.getCarModels(year, make, type);
         return apiCarDtoList.stream()
                 .map(ApiCarDto::getModel)
