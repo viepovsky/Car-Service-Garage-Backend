@@ -14,5 +14,5 @@ public class GarageDto {
     private String name;
 
     @NotBlank
-    private String description;
+    private String address;
 }

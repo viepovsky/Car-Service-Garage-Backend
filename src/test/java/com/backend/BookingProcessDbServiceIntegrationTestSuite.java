@@ -142,7 +142,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     }
 
     private void initGarageWithWorkTimesAndAvailableCarServices() throws MyEntityNotFoundException {
-        Garage garage = new Garage("Garage test name", "Garage test description");
+        Garage garage = new Garage("Garage test name", "Garage test adress");
         garageDbService.saveGarage(garage);
         garage = garageDbService.getAllGarages().get(0);
 

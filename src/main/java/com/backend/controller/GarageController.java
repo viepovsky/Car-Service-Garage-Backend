@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -29,6 +30,12 @@ public class GarageController {
     public ResponseEntity<GarageDto> getGarage(@PathVariable Long garageId) throws MyEntityNotFoundException {
         Garage garage = garageDbService.getGarage(garageId);
         return ResponseEntity.ok(garageMapper.mapToGarageDto(garage));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<GarageDto>> getGarages() throws MyEntityNotFoundException {
+        List<Garage> garageList = garageDbService.getAllGarages();
+        return ResponseEntity.ok(garageMapper.mapToGarageDtoList(garageList));
     }
 
     @PostMapping(path = "/admin", consumes = MediaType.APPLICATION_JSON_VALUE)

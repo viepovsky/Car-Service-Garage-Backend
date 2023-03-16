@@ -1,7 +1,6 @@
 package com.backend;
 
 import com.backend.domain.*;
-import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ public class EntitiesIntegrationTestSuite {
     private BookingRepository bookingRepository;
 
     @Test
-    public void testBookingServiceForNewUser() throws MyEntityNotFoundException {
+    public void testBookingServiceForNewUser(){
         //Given
         User user = new User("Oskar", "Raj", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
         userRepository.save(user);
@@ -54,7 +53,7 @@ public class EntitiesIntegrationTestSuite {
         user = userRepository.findAll().get(0);
         car1 = carRepository.findAll().get(0);
 
-        Garage garage = new Garage("Speed Garage", "Garage description", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        Garage garage = new Garage("Speed Garage", "Garage address", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         garageRepository.save(garage);
         Garage garageToUpdate = garageRepository.findAll().get(0);
 

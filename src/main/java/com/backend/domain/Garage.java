@@ -24,8 +24,8 @@ public class Garage {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "address")
+    private String address;
 
     @OneToMany(
             targetEntity = Booking.class,
@@ -51,19 +51,19 @@ public class Garage {
     )
     private List<AvailableCarService> availableCarServiceList = new ArrayList<>();
 
-    public Garage(Long id, String name, String description) {
+    public Garage(Long id, String name, String address) {
         this.id = id;
         this.name = name;
-        this.description = description;
+        this.address = address;
     }
-    public Garage(String name, String description) {
+    public Garage(String name, String address) {
         this.name = name;
-        this.description = description;
+        this.address = address;
     }
 
-    public Garage(String name, String description, List<Booking> bookingList, List<GarageWorkTime> garageWorkTimeList, List<AvailableCarService> availableCarServiceList) {
+    public Garage(String name, String address, List<Booking> bookingList, List<GarageWorkTime> garageWorkTimeList, List<AvailableCarService> availableCarServiceList) {
         this.name = name;
-        this.description = description;
+        this.address = address;
         this.bookingList = bookingList;
         this.garageWorkTimeList = garageWorkTimeList;
         this.availableCarServiceList = availableCarServiceList;
