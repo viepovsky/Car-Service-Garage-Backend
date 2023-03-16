@@ -93,7 +93,8 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         initAddingCarService();
         //When
         List<GarageWorkTime> garageWorkTimeList = garageWorkTimeDbService.getAllGarageWorkTimes();
-        List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService();
+        Garage garage = garageDbService.getAllGarages().get(0);
+        List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService(garage.getId());
 
         List<User> userList = userDbService.getAllUsers();
 
@@ -104,7 +105,7 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         Car car = carDbService.getAllCars().get(0);
         List<CarService> carServiceList = carServiceDbService.getAllCarServiceWithGivenCarIdAndNotAssignedStatus(car.getId());
         List<Long> carServiceIdList = carServiceList.stream().map(CarService::getId).toList();
-        Garage garage = garageDbService.getAllGarages().get(0);
+        garage = garageDbService.getAllGarages().get(0);
         LocalDate date = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY));
         List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(date, carServiceIdList, garage.getId());
         //Then
@@ -202,7 +203,8 @@ public class BookingProcessDbServiceIntegrationTestSuite {
     }
 
     private void initAddingCarService() throws MyEntityNotFoundException {
-        List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService();
+        Garage garage = garageDbService.getAllGarages().get(0);
+        List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService(garage.getId());
         List<Long> carServicesIdList = new ArrayList<>();
         carServicesIdList.add(availableCarServiceList.get(0).getId());
         carServicesIdList.add(availableCarServiceList.get(2).getId());

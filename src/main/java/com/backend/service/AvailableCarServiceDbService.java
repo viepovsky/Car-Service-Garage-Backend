@@ -16,8 +16,8 @@ public class AvailableCarServiceDbService {
     private final AvailableCarServiceRepository availableCarServiceRepository;
     private final GarageRepository garageRepository;
 
-    public List<AvailableCarService> getAllAvailableCarService(){
-        return availableCarServiceRepository.findAll();
+    public List<AvailableCarService> getAllAvailableCarService(Long garageId){
+        return availableCarServiceRepository.findAllByGarageId(garageId);
     }
 
     public AvailableCarService getAvailableCarService(Long serviceId) throws MyEntityNotFoundException {

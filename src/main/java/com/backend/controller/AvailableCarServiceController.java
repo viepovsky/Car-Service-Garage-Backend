@@ -28,9 +28,9 @@ public class AvailableCarServiceController {
     private final AvailableCarServiceMapper availableCarServiceMapper;
     private final AdminConfig adminConfig;
 
-    @GetMapping
-    public ResponseEntity<List<AvailableCarServiceDto>> getAvailableCarServices() {
-        List<AvailableCarService> availableCarServiceList= availableCarServiceDbService.getAllAvailableCarService();
+    @GetMapping(path = "/{garageId}")
+    public ResponseEntity<List<AvailableCarServiceDto>> getAvailableCarServices(@PathVariable Long garageId) {
+        List<AvailableCarService> availableCarServiceList= availableCarServiceDbService.getAllAvailableCarService(garageId);
         return ResponseEntity.ok(availableCarServiceMapper.mapToAvailableCarServiceDtoList(availableCarServiceList));
     }
 
