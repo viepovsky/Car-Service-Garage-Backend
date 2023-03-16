@@ -2,12 +2,14 @@ package com.backend.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CarDto {
     private Long id;
 
@@ -26,6 +28,5 @@ public class CarDto {
     @NotNull
     private String engine;
 
-    @NotNull
     private Long userId;
 }

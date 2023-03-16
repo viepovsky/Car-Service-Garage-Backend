@@ -36,12 +36,17 @@ public class CarDbService {
         userRepository.save(user);
     }
 
-    public Car updateCar(Car car) throws MyEntityNotFoundException {
-        if (carRepository.findById(car.getId()).isPresent()) {
-            return carRepository.save(car);
-        } else {
-            throw new MyEntityNotFoundException("Car", car.getId());
-        }
+    public void saveCar(Car car, String username) throws MyEntityNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
+        car.setUser(user);
+        user.getCarList().add(car);
+        userRepository.save(user);
+    }
+
+    public void updateCar(Car car) throws MyEntityNotFoundException {
+        Car retrievedCar = carRepository.findById(car.getId()).orElseThrow(() -> new MyEntityNotFoundException("Car", car.getId()));
+        car.setUser(retrievedCar.getUser());
+        carRepository.save(car);
     }
 
     public void deleteCar(Long carId) throws MyEntityNotFoundException {

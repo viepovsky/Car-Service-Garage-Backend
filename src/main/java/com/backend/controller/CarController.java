@@ -37,9 +37,18 @@ public class CarController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createCar(@Valid @RequestBody CarDto carDto) throws MyEntityNotFoundException {
+    public ResponseEntity<Void> createCar(
+            @Valid @RequestBody CarDto carDto,
+            @RequestParam(name = "username") @NotBlank String username
+    ) throws MyEntityNotFoundException {
         Car car = carMapper.mapToCar(carDto);
-        carDbService.saveCar(car, carDto.getUserId());
+        carDbService.saveCar(car, username);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateCar(@Valid @RequestBody CarDto carDto) throws MyEntityNotFoundException {
+        carDbService.updateCar(carMapper.mapToCar(carDto));
         return ResponseEntity.ok().build();
     }
 
