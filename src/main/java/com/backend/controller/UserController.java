@@ -23,14 +23,14 @@ public class UserController {
     private final UserDbService userDbService;
     private final UserMapper userMapper;
 
-    @GetMapping(path = "/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long userId) throws MyEntityNotFoundException {
-        User user = userDbService.getUser(userId);
+    @GetMapping(path = "/information")
+    public ResponseEntity<UserDto> getUser(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
+        User user = userDbService.getUser(username);
         return ResponseEntity.ok(userMapper.mapToUserDto(user));
     }
 
     @GetMapping
-    public ResponseEntity<UserDto> getUser(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
+    public ResponseEntity<UserDto> getUserToLogin(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
         User user = userDbService.getUser(username);
         return ResponseEntity.ok(userMapper.mapToUserDtoLogin(user));
     }

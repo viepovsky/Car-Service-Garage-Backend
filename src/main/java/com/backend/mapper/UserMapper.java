@@ -14,18 +14,8 @@ public class UserMapper {
                 user.getLastName(),
                 user.getEmail(),
                 user.getPhoneNumber(),
+                user.getUsername(),
                 user.getCreatedDate()
-        );
-    }
-
-    public User mapToUser(UserDto userDto) {
-        return new User(
-                userDto.getId(),
-                userDto.getFirstName(),
-                userDto.getLastName(),
-                userDto.getEmail(),
-                userDto.getPhoneNumber(),
-                userDto.getCreatedDate()
         );
     }
 
