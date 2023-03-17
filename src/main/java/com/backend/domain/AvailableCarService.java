@@ -51,4 +51,14 @@ public class AvailableCarService {
         this.makeMultiplier = makeMultiplier;
         this.garage = garage;
     }
+    public AvailableCarService(AvailableCarService availableCarService) {
+        this.id = availableCarService.getId();
+        this.name = availableCarService.getName();
+        this.description = availableCarService.getDescription();
+        this.cost = availableCarService.getCost();
+        this.repairTimeInMinutes = availableCarService.getRepairTimeInMinutes();
+        this.premiumMakes = availableCarService.getPremiumMakes();
+        this.makeMultiplier = availableCarService.getMakeMultiplier();
+        this.garage = availableCarService.getGarage();
+    }
 }

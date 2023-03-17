@@ -8,7 +8,12 @@ import lombok.RequiredArgsConstructor;
 public enum ServiceStatus {
     NOT_ASSIGNED("Not assigned to booking table."),
     ASSIGNED("Assigned to booking table."),
+    AWAITING("Awaiting customer"),
+    NOT_STARTED("Service not started"),
+    STARTED("Service started"),
+    IN_PROGRESS("Service in progress"),
     COMPLETED("Service completed."),
-    NOT_COMPLETED("Service not completed.");
+    SUSPENDED("Suspended - awaiting customer decision"),
+    CANCELLED("Service cancelled");
     private final String serviceStatus;
 }

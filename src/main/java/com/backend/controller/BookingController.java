@@ -59,13 +59,15 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createBookingForUserCar(
-            @RequestParam(name = "service-id") @NotEmpty List<Long> orderedServiceIdList,
-            @RequestParam(name = "date") @NotNull LocalDate date,
+    public ResponseEntity<Void> createBooking(
+            @RequestParam(name = "service-id") @NotEmpty List<Long> selectedServiceIdList,
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam(name = "start-hour") @NotNull LocalTime startHour,
-            @RequestParam(name = "garage-id") @NotNull Long garageId
-    ) throws MyEntityNotFoundException {
-        bookingDbService.saveBooking(orderedServiceIdList, date, startHour, garageId);
+            @RequestParam(name = "garage-id") @NotNull Long garageId,
+            @RequestParam(name = "car-id") @NotNull Long carId,
+            @RequestParam(name = "repair-duration") @NotNull int repairDuration
+    ) throws MyEntityNotFoundException, WrongInputDataException {
+        bookingDbService.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
         return ResponseEntity.ok().build();
     }
 
