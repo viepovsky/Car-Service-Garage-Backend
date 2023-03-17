@@ -8,6 +8,9 @@ import com.backend.exceptions.WrongInputDataException;
 import com.backend.mapper.BookingMapper;
 import com.backend.service.BookingDbService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class BookingController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BookingController.class);
     private final BookingDbService bookingDbService;
     private final BookingMapper bookingMapper;
     private final AdminConfig adminConfig;
@@ -35,13 +39,23 @@ public class BookingController {
         return ResponseEntity.ok(bookingMapper.mapToBookingDtoList(bookingList));
     }
 
+//    @GetMapping(path = "/available-times")
+//    public ResponseEntity<List<LocalTime>> getAvailableBookingTimes(
+//            @RequestParam(name = "date") @NotNull LocalDate date,
+//            @RequestParam(name = "service-id") @NotEmpty List<Long> carServiceList,
+//            @RequestParam(name = "garage-id") @NotNull Long garageId
+//    ) throws MyEntityNotFoundException {
+//        return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(date, carServiceList, garageId));
+//    }
+
     @GetMapping(path = "/available-times")
     public ResponseEntity<List<LocalTime>> getAvailableBookingTimes(
-            @RequestParam(name = "date") @NotNull LocalDate date,
-            @RequestParam(name = "service-id") @NotEmpty List<Long> carServiceList,
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+            @RequestParam(name = "repair-duration") @NotNull int repairDuration,
             @RequestParam(name = "garage-id") @NotNull Long garageId
     ) throws MyEntityNotFoundException {
-        return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(date, carServiceList, garageId));
+        LOGGER.info("Endpoint GET getAvailableBookingTimes used.");
+        return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId));
     }
 
     @PostMapping

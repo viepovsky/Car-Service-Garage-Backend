@@ -1,5 +1,6 @@
 package com.backend.service;
 
+import com.backend.controller.BookingController;
 import com.backend.domain.*;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.exceptions.WrongInputDataException;
@@ -7,6 +8,8 @@ import com.backend.repository.BookingRepository;
 import com.backend.repository.CarServiceRepository;
 import com.backend.repository.GarageRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,6 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BookingDbService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BookingDbService.class);
     private final BookingRepository bookingRepository;
     private final GarageRepository garageRepository;
     private final CarServiceRepository carServiceRepository;
@@ -72,6 +76,47 @@ public class BookingDbService {
                 }
             }
             if (currentTime.plusMinutes(repairDuration).isBefore(closeTime) && isAvailable) {
+                availableTimeList.add(currentTime);
+            }
+            currentTime = currentTime.plusMinutes(10);
+        }
+        return availableTimeList;
+    }
+
+    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) throws MyEntityNotFoundException {
+        LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
+        List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
+        if (bookingList.size() == 0) {
+            return new ArrayList<>();
+        }
+
+        Booking garageWorkTime = bookingList.stream()
+                .filter(booking -> booking.getStatus() == BookingStatus.AVAILABLE)
+                .findFirst()
+                .orElse(null);
+        if (garageWorkTime == null) {
+            return  new ArrayList<>();
+        }
+
+        LocalTime openTime = garageWorkTime.getStartHour();
+        LocalTime closeTime = garageWorkTime.getEndHour();
+
+        List<Booking> unavailableBookingTimeList = bookingList.stream()
+                .filter(booking -> booking.getStatus() == BookingStatus.UNAVAILABLE || booking.getStatus() == BookingStatus.WAITING_FOR_CUSTOMER)
+                .toList();
+
+        List<LocalTime> availableTimeList = new ArrayList<>();
+        LocalTime currentTime = openTime;
+
+        while (!currentTime.plusMinutes(repairDuration).isAfter(closeTime)) {
+            boolean isAvailable = true;
+            for (Booking booking : unavailableBookingTimeList) {
+                if (currentTime.plusMinutes(repairDuration).isAfter(booking.getStartHour()) && booking.getEndHour().isAfter(currentTime)) {
+                    isAvailable = false;
+                    break;
+                }
+            }
+            if (isAvailable) {
                 availableTimeList.add(currentTime);
             }
             currentTime = currentTime.plusMinutes(10);
