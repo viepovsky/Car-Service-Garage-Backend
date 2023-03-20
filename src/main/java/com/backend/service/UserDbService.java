@@ -31,6 +31,10 @@ public class UserDbService {
         return userRepository.findByUsername(username).isPresent();
     }
 
+    public String getUserPass(String username) throws MyEntityNotFoundException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username)).getPassword();
+    }
+
     public void saveUser(User user) {
         if (user.getCreatedDate() == null) {
             user.setCreatedDate(LocalDateTime.now());
@@ -41,11 +45,17 @@ public class UserDbService {
         userRepository.save(user);
     }
 
-    public User updateUser(User user) throws MyEntityNotFoundException {
-        if(userRepository.findById(user.getId()).isPresent()) {
-            return userRepository.save(user);
+    public void updateUser(User user) throws MyEntityNotFoundException {
+        User userToUpdate = userRepository.findByUsername(user.getUsername()).orElseThrow(() -> new MyEntityNotFoundException("Username: " + user.getUsername()));
+        userToUpdate.setFirstName(user.getFirstName());
+        userToUpdate.setLastName(user.getLastName());
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setPhoneNumber(user.getPhoneNumber());
+        if (user.getPassword() != null) {
+            userToUpdate.setPassword(user.getPassword());
+            userRepository.save(userToUpdate);
         } else {
-            throw new MyEntityNotFoundException("User", user.getId());
+            userRepository.save(userToUpdate);
         }
     }
 

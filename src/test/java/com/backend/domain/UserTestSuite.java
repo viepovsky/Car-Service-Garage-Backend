@@ -48,7 +48,7 @@ class UserTestSuite {
         userToUpdate.setEmail("tested@gmail.com");
         //When
         userDbService.updateUser(userToUpdate);
-        User updatedUser = userDbService.updateUser(userToUpdate);
+        User updatedUser = userDbService.getUser(userToUpdate.getUsername());
         userDbService.deleteUser(updatedUser.getId());
         //Then
         assertEquals(userToUpdate.getId(), updatedUser.getId());

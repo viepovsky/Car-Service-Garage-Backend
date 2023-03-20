@@ -1,6 +1,7 @@
 package com.backend.controller;
 
 import com.backend.domain.User;
+import com.backend.domain.dto.PasswordDto;
 import com.backend.domain.dto.UserDto;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.mapper.UserMapper;
@@ -39,9 +40,21 @@ public class UserController {
         return ResponseEntity.ok(userDbService.isUserInDatabase(username));
     }
 
+    @GetMapping(path = "/pass")
+    public ResponseEntity<PasswordDto> getUserPass(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
+        PasswordDto passwordDto = new PasswordDto(userDbService.getUserPass(username));
+        return ResponseEntity.ok(passwordDto);
+    }
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserDto userDto) {
         userDbService.saveUser(userMapper.mapToUserLogin(userDto));
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateUser(@Valid @RequestBody UserDto userDto) throws MyEntityNotFoundException {
+        userDbService.updateUser(userMapper.mapToUserLogin(userDto));
         return ResponseEntity.ok().build();
     }
 
