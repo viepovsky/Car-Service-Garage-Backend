@@ -10,10 +10,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "CARS_SERVICES")
+@SequenceGenerator(name="seq", initialValue=5000, allocationSize=100)
 public class CarService {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
     private Long id;
 
     @Column(name = "name", nullable = false)

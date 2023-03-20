@@ -14,10 +14,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "AVAILABLE_CAR_SERVICE")
+@SequenceGenerator(name="seq", initialValue=5000, allocationSize=100)
+
 public class AvailableCarService {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
     private Long id;
 
     @Column(name = "name", nullable = false)

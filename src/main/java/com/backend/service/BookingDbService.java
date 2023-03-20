@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -100,6 +101,11 @@ public class BookingDbService {
         }
 
         LocalTime openTime = garageWorkTime.getStartHour();
+        if (date.isEqual(LocalDate.now()) && LocalTime.now().isAfter(openTime)) {
+            int minutes = LocalTime.now().getMinute() + LocalTime.now().getHour() * 60;
+            minutes = ((minutes+10) / 10) * 10;
+            openTime = LocalTime.of(minutes / 60, minutes % 60);
+        }
         LocalTime closeTime = garageWorkTime.getEndHour();
 
         List<Booking> unavailableBookingTimeList = bookingList.stream()

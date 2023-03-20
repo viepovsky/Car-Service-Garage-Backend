@@ -14,10 +14,11 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "GARAGE_WORK_TIMES")
+@SequenceGenerator(name="seq", initialValue=5000, allocationSize=100)
 public class GarageWorkTime {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
     private Long id;
 
     @Column(name = "work_day")

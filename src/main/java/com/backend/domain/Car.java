@@ -12,10 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "CARS")
+@SequenceGenerator(name="seq", initialValue=5000, allocationSize=100)
 public class Car {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
     private Long id;
 
     @Column(name = "make")

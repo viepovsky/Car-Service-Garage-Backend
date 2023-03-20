@@ -105,6 +105,8 @@ INSERT INTO "BOOKING" (id, status, date, garage_id) VALUES
 (NEXTVAL('bookings_seq'), 3 , DATEADD(day, NEXTVAL('date_seq'), CURRENT_DATE), 1),
 (NEXTVAL('bookings_seq'), 3 , DATEADD(day, NEXTVAL('date_seq'), CURRENT_DATE), 1),
 (NEXTVAL('bookings_seq'), 3 , DATEADD(day, NEXTVAL('date_seq'), CURRENT_DATE), 1),
+(NEXTVAL('bookings_seq'), 3 , DATEADD(day, NEXTVAL('date_seq'), CURRENT_DATE), 1),
+(NEXTVAL('bookings_seq'), 3 , DATEADD(day, NEXTVAL('date2_seq'), CURRENT_DATE), 2),
 (NEXTVAL('bookings_seq'), 3 , DATEADD(day, NEXTVAL('date2_seq'), CURRENT_DATE), 2),
 (NEXTVAL('bookings_seq'), 3 , DATEADD(day, NEXTVAL('date2_seq'), CURRENT_DATE), 2),
 (NEXTVAL('bookings_seq'), 3 , DATEADD(day, NEXTVAL('date2_seq'), CURRENT_DATE), 2),
@@ -180,5 +182,16 @@ UPDATE "BOOKING" SET end_hour = '16:00:00' WHERE DAYOFWEEK(date) < 6 AND garage_
 UPDATE "BOOKING" SET end_hour = '12:00:00' WHERE DAYOFWEEK(date) = 6 AND garage_id = 2;
 UPDATE "BOOKING" SET end_hour = '00:00:00' WHERE DAYOFWEEK(date) = 7 AND garage_id = 2;
 
+INSERT INTO "BOOKING" (id, status, date, start_hour, end_hour, created, total_cost, garage_id) VALUES
+(123, 0, DATEADD(day, 5, CURRENT_DATE), '07:50:00', '09:20:00', CURRENT_TIMESTAMP, 320.00, 1),
+(124, 0, DATEADD(day, 9, CURRENT_DATE), '09:40:00', '12:40:00', CURRENT_TIMESTAMP, 1700.00, 2),
+(125, 2, DATEADD(day, -10, CURRENT_DATE), '12:20:00', '15:20:00', DATEADD(month, -1, CURRENT_TIMESTAMP), 2100.00, 2);
 
+UPDATE "BOOKING" SET date = DATEADD(day, 7, CURRENT_DATE) WHERE DAYOFWEEK(date) >= 6 AND status = 0;
+UPDATE "BOOKING" SET date = DATEADD(day, -12, CURRENT_DATE) WHERE DAYOFWEEK(date) >= 6 AND status = 2;
 
+INSERT INTO "CARS_SERVICES" (id, name, description, cost, repair_time, car_id, user_id, booking_id, service_status) VALUES
+(1, 'Oil change', 'Oil change description', 120.00, 30, 1, 1, 123, 2),
+(2, 'Tire change', 'Tire change description', 200.00, 50, 1, 1, 123, 2),
+(3, 'Timing belt change', 'Timing belt change description', 1700.00, 180, 2, 1, 124, 2),
+(4, 'Timing belt change', 'Timing belt change description', 2100.00, 180, 1, 1, 125, 6);

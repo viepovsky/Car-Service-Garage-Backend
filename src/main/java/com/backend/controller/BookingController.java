@@ -54,7 +54,7 @@ public class BookingController {
             @RequestParam(name = "repair-duration") @NotNull int repairDuration,
             @RequestParam(name = "garage-id") @NotNull Long garageId
     ) throws MyEntityNotFoundException {
-        LOGGER.info("Endpoint GET getAvailableBookingTimes used.");
+        LOGGER.info("GET Endpoint getAvailableBookingTimes used.");
         return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId));
     }
 
