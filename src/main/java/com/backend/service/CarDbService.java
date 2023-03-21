@@ -22,6 +22,7 @@ public class CarDbService {
 
     public List<Car> getAllCarsForGivenUsername(String username) throws MyEntityNotFoundException {
         Long userId = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username)).getId();
+
         return carRepository.findCarsByUserId(userId);
     }
 

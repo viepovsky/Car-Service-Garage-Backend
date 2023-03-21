@@ -31,7 +31,7 @@ public class CarController {
         return ResponseEntity.ok(carMapper.mapToCarDto(car));
     }
     @GetMapping
-    public ResponseEntity<List<CarDto>> getCarsForGivenUsername(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
+    public ResponseEntity<List<CarDto>> getCarsForGivenUsername(@RequestParam(name = "username") @NotBlank String username) throws MyEntityNotFoundException {
         List<Car> carList = carDbService.getAllCarsForGivenUsername(username);
         return ResponseEntity.ok(carMapper.mapToCarDtoList(carList));
     }
