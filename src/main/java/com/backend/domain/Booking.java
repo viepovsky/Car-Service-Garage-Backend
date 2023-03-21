@@ -46,7 +46,6 @@ public class Booking {
     @OneToMany(
             targetEntity = CarService.class,
             mappedBy = "booking",
-            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
     private List<CarService> carServiceList;

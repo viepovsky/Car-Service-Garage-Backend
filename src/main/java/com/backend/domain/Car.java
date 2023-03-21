@@ -41,7 +41,7 @@ public class Car {
     @OneToMany(
             targetEntity = CarService.class,
             mappedBy = "car",
-            cascade = CascadeType.ALL,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY
     )
     private List<CarService> carServicesList = new ArrayList<>();
