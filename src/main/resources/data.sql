@@ -34,11 +34,11 @@ INSERT INTO "GARAGE_WORK_TIMES" (id, work_day, start_hour, end_hour, garage_id) 
 (14, 6, TIME '00:00:00', TIME '00:00:00', 2);
 
 INSERT INTO "USERS" (id, first_name, last_name, email, phone_number, username, password, role, created_date) VALUES
-(1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser6', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 0, CURRENT_TIMESTAMP);
+(1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 0, CURRENT_TIMESTAMP);
 
 INSERT INTO "CARS" (id, make, model, production_year, type, engine, user_id) VALUES
 (1, 'BMW', '3 Series', 2014, 'Sedan', 'diesel', 1),
-(2, 'Volvo', 'V40', 2018, 'Hatchback', 'diesel', 1);
+(2, 'Volvo', 'XC60', 2018, 'SUV', 'diesel', 1);
 
 CREATE SEQUENCE bookings_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE date_seq START WITH 0 INCREMENT BY 1;
