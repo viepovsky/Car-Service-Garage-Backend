@@ -1,4 +1,4 @@
-INSERT INTO "GARAGE" VALUES
+INSERT INTO "GARAGE" (id, name, address) VALUES
 (1, 'Fast Furious Garage', 'Posen 62-222, Jana street'),
 (2, 'Prestige Car Garage', 'Warsaw 60-333, Halna street');
 

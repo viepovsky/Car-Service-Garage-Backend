@@ -2,6 +2,7 @@ package com.backend.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class BookingDto {
     private Long id;
     private String status;
@@ -19,5 +21,6 @@ public class BookingDto {
     private LocalTime endHour;
     private LocalDateTime created;
     private BigDecimal totalCost;
-    private List<CarServiceDto> carServiceDtoList;
+    private List<Long> carServiceDtoIdList;
+    private GarageDto garageDto;
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -27,6 +28,12 @@ public class CarServiceController {
     public ResponseEntity<CarServiceDto> getCarService(@PathVariable Long carServiceId) throws MyEntityNotFoundException {
         CarService carService = carServiceDbService.getCarService(carServiceId);
         return ResponseEntity.ok(carServiceMapper.mapToCarServiceDto(carService));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CarServiceDto>> getCarServices(@RequestParam @NotEmpty String username) throws MyEntityNotFoundException {
+        List<CarService> carServiceList = carServiceDbService.getCarServices(username);
+        return ResponseEntity.ok(carServiceMapper.mapToCarServiceDtoList(carServiceList));
     }
 
     @PostMapping

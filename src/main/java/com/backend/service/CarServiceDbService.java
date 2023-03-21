@@ -24,6 +24,11 @@ public class CarServiceDbService {
         return carServiceRepository.findAll();
     }
 
+    public List<CarService> getCarServices(String username) throws MyEntityNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username:" + username));
+        return carServiceRepository.findCarServicesByUserId(user.getId());
+    }
+
     public List<CarService> getAllCarServiceWithGivenCarIdAndNotAssignedStatus(Long carId){
         return carServiceRepository.findCarServicesByCarIdAndStatus(carId, ServiceStatus.NOT_ASSIGNED);
     }

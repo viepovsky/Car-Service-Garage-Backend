@@ -1,17 +1,19 @@
 package com.backend.mapper;
 
 import com.backend.domain.Booking;
+import com.backend.domain.CarService;
+import com.backend.domain.Garage;
 import com.backend.domain.dto.BookingDto;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class BookingMapper {
-    private final CarServiceMapper carServiceMapper;
-
+    private GarageMapper garageMapper;
     public BookingDto mapToBookingDto(Booking booking) {
         return new BookingDto(
                 booking.getId(),
@@ -22,8 +24,9 @@ public class BookingMapper {
                 booking.getCreated(),
                 booking.getTotalCost(),
                 booking.getCarServiceList().stream()
-                        .map(carServiceMapper::mapToCarServiceDto)
-                        .toList()
+                        .map(CarService::getId)
+                        .toList(),
+                garageMapper.mapToGarageDto(booking.getGarage())
         );
     }
 
