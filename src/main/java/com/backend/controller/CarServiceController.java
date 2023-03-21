@@ -45,12 +45,6 @@ public class CarServiceController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(path = "/car")
-    public ResponseEntity<Void> deleteServicesNotAssignedToBooking(@NotNull @RequestParam Long carId) throws MyEntityNotFoundException {
-        carServiceDbService.deleteServicesNotAssignedToBooking(carId);
-        return ResponseEntity.ok().build();
-    }
-
     @DeleteMapping(path = "/{carServiceId}")
     public ResponseEntity<Void> deleteCarService(@PathVariable Long carServiceId) throws MyEntityNotFoundException {
         carServiceDbService.deleteCarService(carServiceId);

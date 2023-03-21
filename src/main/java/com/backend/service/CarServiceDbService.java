@@ -2,13 +2,12 @@ package com.backend.service;
 
 import com.backend.domain.*;
 import com.backend.exceptions.MyEntityNotFoundException;
-import com.backend.repository.AvailableCarServiceRepository;
-import com.backend.repository.CarRepository;
-import com.backend.repository.CarServiceRepository;
-import com.backend.repository.UserRepository;
+import com.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +19,7 @@ public class CarServiceDbService {
     private final AvailableCarServiceRepository availableCarServiceRepository;
     private final CarRepository carRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
     public List<CarService> getAllCarService(){
         return carServiceRepository.findAll();
     }
@@ -77,10 +77,23 @@ public class CarServiceDbService {
     }
 
     public void deleteCarService(Long carServiceId) throws MyEntityNotFoundException {
-        if (carServiceRepository.findById(carServiceId).isPresent()) {
-            carServiceRepository.deleteById(carServiceId);
+        CarService carService  = carServiceRepository.findById(carServiceId).orElseThrow(() -> new MyEntityNotFoundException("CarService", carServiceId));
+        Booking booking = carService.getBooking();
+        if (booking.getCarServiceList().size() > 1) {
+            LocalTime endHour = booking.getEndHour();
+            endHour = endHour.minusMinutes(carService.getRepairTimeInMinutes());
+            booking.setEndHour(endHour);
+
+            BigDecimal totalCost = booking.getTotalCost();
+            totalCost = totalCost.subtract(carService.getCost());
+            booking.setTotalCost(totalCost);
+
+            booking.getCarServiceList().remove(carService);
+            carServiceRepository.delete(carService);
+            bookingRepository.save(booking);
         } else {
-            throw new MyEntityNotFoundException("CarService", carServiceId);
+            carServiceRepository.delete(carService);
+            bookingRepository.delete(booking);
         }
     }
 

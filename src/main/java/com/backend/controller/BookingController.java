@@ -41,21 +41,27 @@ public class BookingController {
 
 //    @GetMapping(path = "/available-times")
 //    public ResponseEntity<List<LocalTime>> getAvailableBookingTimes(
-//            @RequestParam(name = "date") @NotNull LocalDate date,
-//            @RequestParam(name = "service-id") @NotEmpty List<Long> carServiceList,
+//            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+//            @RequestParam(name = "repair-duration") @NotNull int repairDuration,
 //            @RequestParam(name = "garage-id") @NotNull Long garageId
 //    ) throws MyEntityNotFoundException {
-//        return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(date, carServiceList, garageId));
+//        LOGGER.info("GET Endpoint getAvailableBookingTimes used.");
+//        return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId));
 //    }
 
     @GetMapping(path = "/available-times")
     public ResponseEntity<List<LocalTime>> getAvailableBookingTimes(
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(name = "repair-duration") @NotNull int repairDuration,
-            @RequestParam(name = "garage-id") @NotNull Long garageId
+            @RequestParam(name = "repair-duration", required = false, defaultValue = "0") int repairDuration,
+            @RequestParam(name = "garage-id", required = false, defaultValue = "0") Long garageId,
+            @RequestParam(name = "car-service-id", required = false, defaultValue = "0") Long carServiceId
     ) throws MyEntityNotFoundException {
         LOGGER.info("GET Endpoint getAvailableBookingTimes used.");
-        return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId));
+        if (carServiceId != 0L) {
+            return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, carServiceId));
+        } else {
+            return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId));
+        }
     }
 
     @PostMapping
@@ -85,5 +91,16 @@ public class BookingController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
         }
+    }
+
+    @PutMapping(path = "/{bookingId}")
+    public ResponseEntity<Void> updateBooking(
+            @PathVariable Long bookingId,
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+            @RequestParam(name = "start-hour") @NotNull LocalTime startHour
+    ) throws MyEntityNotFoundException {
+        LOGGER.info("PUT Endpoint getAvailableBookingTimes used.");
+        bookingDbService.updateBooking(bookingId, date, startHour);
+        return ResponseEntity.ok().build();
     }
 }

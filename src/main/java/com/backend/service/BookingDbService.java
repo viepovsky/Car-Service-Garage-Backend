@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -85,7 +86,60 @@ public class BookingDbService {
         return availableTimeList;
     }
 
-    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) throws MyEntityNotFoundException {
+    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, Long serviceId) throws MyEntityNotFoundException {
+        CarService carService = carServiceRepository.findById(serviceId).orElseThrow(() -> new MyEntityNotFoundException("CarService" + serviceId));
+        Booking bookedService = bookingRepository.findById(carService.getBooking().getId()).orElseThrow(() -> new MyEntityNotFoundException("Booking" + carService.getBooking().getId()));
+        int repairDuration = bookedService.getCarServiceList().stream().mapToInt(CarService::getRepairTimeInMinutes).sum();
+        Long garageId = bookedService.getGarage().getId();
+
+        LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
+        List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
+        bookingList.remove(bookedService);
+        if (bookingList.size() == 0) {
+            return new ArrayList<>();
+        }
+
+        Booking garageWorkTime = bookingList.stream()
+                .filter(booking -> booking.getStatus() == BookingStatus.AVAILABLE)
+                .findFirst()
+                .orElse(null);
+        if (garageWorkTime == null) {
+            return  new ArrayList<>();
+        }
+
+        LocalTime openTime = garageWorkTime.getStartHour();
+        if (date.isEqual(LocalDate.now()) && LocalTime.now().isAfter(openTime)) {
+            int minutes = LocalTime.now().getMinute() + LocalTime.now().getHour() * 60;
+            minutes = ((minutes+10) / 10) * 10;
+            openTime = LocalTime.of(minutes / 60, minutes % 60);
+        }
+        LocalTime closeTime = garageWorkTime.getEndHour();
+
+        List<Booking> unavailableBookingTimeList = bookingList.stream()
+                .filter(booking -> booking.getStatus() == BookingStatus.UNAVAILABLE || booking.getStatus() == BookingStatus.WAITING_FOR_CUSTOMER)
+                .toList();
+
+        List<LocalTime> availableTimeList = new ArrayList<>();
+        LocalTime currentTime = openTime;
+
+        while (!currentTime.plusMinutes(repairDuration).isAfter(closeTime)) {
+            boolean isAvailable = true;
+            for (Booking booking : unavailableBookingTimeList) {
+                if (currentTime.plusMinutes(repairDuration).isAfter(booking.getStartHour()) && booking.getEndHour().isAfter(currentTime)) {
+                    isAvailable = false;
+                    break;
+                }
+            }
+            if (isAvailable) {
+                availableTimeList.add(currentTime);
+            }
+            currentTime = currentTime.plusMinutes(10);
+        }
+        availableTimeList.remove(bookedService.getStartHour());
+        return availableTimeList;
+    }
+
+    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
         LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
         List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
         if (bookingList.size() == 0) {
@@ -186,12 +240,14 @@ public class BookingDbService {
         bookingRepository.save(booking);
     }
 
-    public Booking updateBooking(Booking booking) throws MyEntityNotFoundException {
-        if (bookingRepository.findById(booking.getId()).isPresent()) {
-            return bookingRepository.save(booking);
-        } else {
-            throw new MyEntityNotFoundException("Booking", booking.getId());
-        }
+    public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) throws MyEntityNotFoundException {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
+        booking.setDate(date);
+        int repairTime = (int)Duration.between(booking.getStartHour(), booking.getEndHour()).toMinutes();
+        booking.setStartHour(startHour);
+        booking.setEndHour(startHour.plusMinutes(repairTime));
+        LOGGER.info("Updated booking with values, date: " + date + ", time: " + startHour);
+        bookingRepository.save(booking);
     }
 
     public void deleteBooking(Long bookingId) throws MyEntityNotFoundException {
