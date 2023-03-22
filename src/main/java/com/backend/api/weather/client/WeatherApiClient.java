@@ -3,7 +3,6 @@ package com.backend.api.weather.client;
 import com.backend.api.weather.config.WeatherApiConfig;
 import com.backend.api.weather.domain.ForecastDto;
 import com.backend.api.weather.domain.LocationDto;
-import com.backend.scheduler.ApplicationScheduler;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static java.util.Optional.ofNullable;
 

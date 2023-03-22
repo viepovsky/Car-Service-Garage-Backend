@@ -1,9 +1,7 @@
 package com.backend.api.weather.controller;
 
 import com.backend.api.weather.domain.CityForecastDto;
-import com.backend.api.weather.mapper.ForecastMapper;
 import com.backend.api.weather.service.WeatherApiService;
-import com.backend.controller.BookingController;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

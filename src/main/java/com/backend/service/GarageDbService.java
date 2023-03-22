@@ -29,14 +29,6 @@ public class GarageDbService {
         garageRepository.save(garage);
     }
 
-    public Garage updateGarage(Garage garage) throws MyEntityNotFoundException {
-        if (garageRepository.findById(garage.getId()).isPresent()) {
-            return garageRepository.save(garage);
-        } else {
-            throw new MyEntityNotFoundException("Garage", garage.getId());
-        }
-    }
-
     public void deleteGarage(Long garageId) throws MyEntityNotFoundException {
         if (garageRepository.findById(garageId).isPresent()) {
             garageRepository.deleteById(garageId);

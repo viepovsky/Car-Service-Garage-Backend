@@ -37,10 +37,6 @@ public class CarServiceDbService {
         return carServiceRepository.findById(carServiceId).orElseThrow(() -> new MyEntityNotFoundException("CarService", carServiceId));
     }
 
-    public CarService saveCarService(CarService carService) {
-        return carServiceRepository.save(carService);
-    }
-
     public void saveCarService(List<Long> selectedServices, Long carId) throws MyEntityNotFoundException {
         Car car  = carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
         User user = userRepository.findById(car.getUser().getId()).orElseThrow(() -> new MyEntityNotFoundException("User", car.getUser().getId()));
@@ -68,14 +64,6 @@ public class CarServiceDbService {
         userRepository.save(user);
     }
 
-    public CarService updateCarService(CarService carService) throws MyEntityNotFoundException {
-        if (carServiceRepository.findById(carService.getId()).isPresent()) {
-            return carServiceRepository.save(carService);
-        } else {
-            throw new MyEntityNotFoundException("CarService", carService.getId());
-        }
-    }
-
     public void deleteCarService(Long carServiceId) throws MyEntityNotFoundException {
         CarService carService  = carServiceRepository.findById(carServiceId).orElseThrow(() -> new MyEntityNotFoundException("CarService", carServiceId));
         Booking booking = carService.getBooking();
@@ -95,14 +83,5 @@ public class CarServiceDbService {
             carServiceRepository.delete(carService);
             bookingRepository.delete(booking);
         }
-    }
-
-    public void deleteServicesNotAssignedToBooking(Long carId) throws MyEntityNotFoundException {
-        Car car = carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
-        List<Long> serviceIdList = car.getCarServicesList().stream()
-                .filter(carService -> carService.getStatus().equals(ServiceStatus.NOT_ASSIGNED))
-                .map(CarService::getId)
-                .toList();
-        serviceIdList.forEach(carRepository::deleteById);
     }
 }

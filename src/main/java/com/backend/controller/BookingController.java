@@ -39,16 +39,6 @@ public class BookingController {
         return ResponseEntity.ok(bookingMapper.mapToBookingDtoList(bookingList));
     }
 
-//    @GetMapping(path = "/available-times")
-//    public ResponseEntity<List<LocalTime>> getAvailableBookingTimes(
-//            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-//            @RequestParam(name = "repair-duration") @NotNull int repairDuration,
-//            @RequestParam(name = "garage-id") @NotNull Long garageId
-//    ) throws MyEntityNotFoundException {
-//        LOGGER.info("GET Endpoint getAvailableBookingTimes used.");
-//        return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId));
-//    }
-
     @GetMapping(path = "/available-times")
     public ResponseEntity<List<LocalTime>> getAvailableBookingTimes(
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,

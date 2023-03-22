@@ -22,7 +22,7 @@ class UserTestSuite {
     private UserDbService userDbService;
 
     @Test
-    public void testSaveAndRetrieveUser() throws MyEntityNotFoundException {
+    public void testSaveAndRetrieveUser() {
         //Given
         User user = new User("Oskar", "Raj", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
         userDbService.saveUser(user);
@@ -59,7 +59,7 @@ class UserTestSuite {
     }
 
     @Test
-    public void testThrowsMyEntityNotFoundException() throws MyEntityNotFoundException {
+    public void testThrowsMyEntityNotFoundException() {
         //Given & When & Then
         MyEntityNotFoundException exception = assertThrows(MyEntityNotFoundException.class, () -> userDbService.getUser(1L));
         assertEquals("User of id: 1", exception.getMessage());

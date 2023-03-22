@@ -1,7 +1,6 @@
 package com.backend.api.weather.mapper;
 
 import com.backend.api.weather.domain.CityForecastDto;
-import com.backend.api.weather.domain.ForecastDto;
 import com.backend.api.weather.domain.ForecastsDto;
 import com.backend.api.weather.domain.StoredForecast;
 import org.springframework.stereotype.Service;
