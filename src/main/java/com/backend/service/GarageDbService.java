@@ -17,20 +17,16 @@ public class GarageDbService {
         return garageRepository.findAll();
     }
 
+    public List<String> getAllGarageCities() {
+        return garageRepository.findAll().stream().map(n -> n.getAddress().substring(0, n.getAddress().indexOf(" "))).toList();
+    }
+
     public Garage getGarage(Long garageId) throws MyEntityNotFoundException {
         return garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
     }
 
     public void saveGarage(Garage garage) {
         garageRepository.save(garage);
-    }
-
-    public Garage updateGarage(Garage garage) throws MyEntityNotFoundException {
-        if (garageRepository.findById(garage.getId()).isPresent()) {
-            return garageRepository.save(garage);
-        } else {
-            throw new MyEntityNotFoundException("Garage", garage.getId());
-        }
     }
 
     public void deleteGarage(Long garageId) throws MyEntityNotFoundException {

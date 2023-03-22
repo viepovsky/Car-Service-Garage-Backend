@@ -33,7 +33,7 @@ public class GarageController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GarageDto>> getGarages() throws MyEntityNotFoundException {
+    public ResponseEntity<List<GarageDto>> getGarages() {
         List<Garage> garageList = garageDbService.getAllGarages();
         return ResponseEntity.ok(garageMapper.mapToGarageDtoList(garageList));
     }

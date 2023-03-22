@@ -15,15 +15,15 @@ public class CarApiController {
     private final CarApiService carApiService;
 
     @GetMapping(path = "/makes")
-    public ResponseEntity<List<String>> getCarMakes() throws InterruptedException {
+    public ResponseEntity<List<String>> getCarMakes() {
         return ResponseEntity.ok(carApiService.getCarMakes());
     }
     @GetMapping(path = "/types")
-    public ResponseEntity<List<String>> getCarTypes() throws InterruptedException {
+    public ResponseEntity<List<String>> getCarTypes() {
         return ResponseEntity.ok(carApiService.getCarTypes());
     }
     @GetMapping(path = "/years")
-    public ResponseEntity<List<Integer>> getCarYears() throws InterruptedException {
+    public ResponseEntity<List<Integer>> getCarYears() {
         return ResponseEntity.ok(carApiService.getCarYears());
     }
     @GetMapping

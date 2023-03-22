@@ -14,7 +14,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -189,10 +188,6 @@ public class BookingDbService {
         return bookingRepository.findBookingByDateAndStartHourAndGarageIdAndStatus(date, startHour, garageId, status);
     }
 
-    public Booking getBooking(Long bookingId) throws MyEntityNotFoundException {
-        return bookingRepository.findById(bookingId).orElseThrow(() -> new MyEntityNotFoundException("Booking", bookingId));
-    }
-
     public void saveBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) throws WrongInputDataException, MyEntityNotFoundException {
         Garage garage = garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
         List<Booking> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, BookingStatus.AVAILABLE, garageId);
@@ -250,14 +245,6 @@ public class BookingDbService {
         bookingRepository.save(booking);
     }
 
-    public void deleteBooking(Long bookingId) throws MyEntityNotFoundException {
-        if (bookingRepository.findById(bookingId).isPresent()) {
-            bookingRepository.deleteById(bookingId);
-        } else {
-            throw new MyEntityNotFoundException("Booking", bookingId);
-        }
-    }
-
     public void createBooking(List<Long> selectedServiceIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) throws MyEntityNotFoundException, WrongInputDataException {
         Garage garage = garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
         Car car = carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
@@ -280,6 +267,7 @@ public class BookingDbService {
             throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another date.");
         }
     }
+
     private void saveBookingAndServicesForGivenCarAndUser(List<Long> selectedServiceIdList, Car car, User user, Booking booking) throws MyEntityNotFoundException {
         List<AvailableCarService> availableCarServiceList = new ArrayList<>();
         BigDecimal totalCost = BigDecimal.ZERO;
