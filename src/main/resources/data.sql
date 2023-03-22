@@ -1,5 +1,5 @@
 INSERT INTO "GARAGE" (id, name, address) VALUES
-(1, 'Fast Furious Garage', 'Posen 62-222, Jana street'),
+(1, 'Fast Furious Garage', 'Poznan 62-222, Jana street'),
 (2, 'Prestige Car Garage', 'Warsaw 60-333, Halna street');
 
 INSERT INTO "AVAILABLE_CAR_SERVICE" (id, name, description, cost, repair_time, premium_make_list, make_multiplier, garage_id) VALUES

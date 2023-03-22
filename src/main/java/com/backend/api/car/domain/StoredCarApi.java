@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "CARS_API")
-public class StoredCarApiDto {
+public class StoredCarApi {
     @Id
     @GeneratedValue
     private Long id;
@@ -30,7 +30,7 @@ public class StoredCarApiDto {
     @Column(name = "date")
     private LocalDate dateFetched;
 
-    public StoredCarApiDto(List<Integer> carYearsList, List<String> carMakesList, List<String> carTypesList, LocalDate dateFetched) {
+    public StoredCarApi(List<Integer> carYearsList, List<String> carMakesList, List<String> carTypesList, LocalDate dateFetched) {
         this.carYearsList = carYearsList;
         this.carMakesList = carMakesList;
         this.carTypesList = carTypesList;

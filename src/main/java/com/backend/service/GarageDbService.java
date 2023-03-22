@@ -17,6 +17,10 @@ public class GarageDbService {
         return garageRepository.findAll();
     }
 
+    public List<String> getAllGarageCities() {
+        return garageRepository.findAll().stream().map(n -> n.getAddress().substring(0, n.getAddress().indexOf(" "))).toList();
+    }
+
     public Garage getGarage(Long garageId) throws MyEntityNotFoundException {
         return garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
     }

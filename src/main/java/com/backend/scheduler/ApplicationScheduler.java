@@ -1,8 +1,10 @@
 package com.backend.scheduler;
 
 import com.backend.api.car.service.CarApiService;
-import com.backend.api.car.domain.StoredCarApiDto;
+import com.backend.api.car.domain.StoredCarApi;
 import com.backend.api.car.repository.StoredCarApiRepository;
+import com.backend.api.weather.service.WeatherApiService;
+import com.backend.service.GarageDbService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,8 @@ import java.util.List;
 public class ApplicationScheduler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationScheduler.class);
     private final CarApiService carApiService;
-    private final StoredCarApiRepository storedCarApiRepository;
+    private final WeatherApiService weatherApiService;
+    private final GarageDbService garageDbService;
 
     @Scheduled(fixedRate = 24 * 60 * 60 * 1000, initialDelay = 500)
     public void fetchDataFromCarApi() throws InterruptedException {
@@ -26,15 +29,15 @@ public class ApplicationScheduler {
         LocalDate localDate = timeKeeper.getCurrentDate();
         LOGGER.info("TimeKeeper set to: " + timeKeeper.getCurrentDate());
 
-        List<Integer>  carYearsList = carApiService.getCarYearsToDb();
-        LOGGER.info("Received car years list with size of: " + carYearsList.size());
-        List<String>  carMakesList = carApiService.getCarMakesToDb();
-        LOGGER.info("Received car makes list with size of: " + carMakesList.size());
-        List<String>  carTypesList = carApiService.getCarTypesToDb();
-        LOGGER.info("Received car types list with size of: " + carTypesList.size());
+        carApiService.getAndSaveCarYearsMakesTypes(localDate);
+    }
 
-        StoredCarApiDto storedCarApiDto = new StoredCarApiDto(carYearsList, carMakesList, carTypesList, localDate);
-        storedCarApiRepository.save(storedCarApiDto);
-        LOGGER.info("Saved CarApiDto.");
+    @Scheduled(fixedRate = 24 * 60 * 60 * 1000, initialDelay = 500)
+    public void fetchDataFromWeatherApi() {
+        List<String> cities = garageDbService.getAllGarageCities();
+        LOGGER.info("Received cities list: " + cities);
+        for (String city : cities) {
+            weatherApiService.getAndStore14DaysForecast(city);
+        }
     }
 }

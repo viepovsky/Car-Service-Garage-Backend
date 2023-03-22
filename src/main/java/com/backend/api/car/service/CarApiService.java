@@ -2,6 +2,7 @@ package com.backend.api.car.service;
 
 import com.backend.api.car.client.CarApiClient;
 import com.backend.api.car.domain.CarApiDto;
+import com.backend.api.car.domain.StoredCarApi;
 import com.backend.api.car.repository.StoredCarApiRepository;
 import com.backend.scheduler.TimeKeeper;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,19 +37,20 @@ public class CarApiService {
         return storedCarApiRepository.findByDateFetched(timeKeeper.getCurrentDate()).getCarYearsList();
     }
 
-    public List<String> getCarMakesToDb() throws InterruptedException {
-        Thread.sleep(1000);
-        return carApiClient.getCarMakes();
-    }
-
-    public List<String> getCarTypesToDb() throws InterruptedException {
-        Thread.sleep(1000);
-        return carApiClient.getCarTypes();
-    }
-
-    public List<Integer> getCarYearsToDb() throws InterruptedException {
-        Thread.sleep(1000);
-        return carApiClient.getCarYears();
+    public void getAndSaveCarYearsMakesTypes(LocalDate localDate) throws InterruptedException {
+//        Thread.sleep(1000);
+//        List<Integer> carYearsList = carApiClient.getCarYears();
+//        LOGGER.info("Received car years list with size of: " + carYearsList.size());
+//        Thread.sleep(1000);
+//        List<String> carMakesList = carApiClient.getCarMakes();
+//        LOGGER.info("Received car makes list with size of: " + carMakesList.size());
+//        Thread.sleep(1000);
+//        List<String> carTypesList = carApiClient.getCarTypes();
+//        LOGGER.info("Received car types list with size of: " + carTypesList.size());
+//
+//        StoredCarApi storedCarApi = new StoredCarApi(carYearsList, carMakesList, carTypesList, localDate);
+//        storedCarApiRepository.save(storedCarApi);
+        LOGGER.info("Saved CarApiDto.");
     }
 
     public List<String> getCarModels(int year, String make, String type) throws InterruptedException {
