@@ -1,7 +1,7 @@
 package com.backend.api.car.client;
 
 import com.backend.api.car.config.CarApiConfig;
-import com.backend.api.car.domain.ApiCarDto;
+import com.backend.api.car.domain.CarApiDto;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ public class CarApiClient {
         }
     }
 
-    public List<ApiCarDto> getCarModels(int year, String make, String type) {
+    public List<CarApiDto> getCarModels(int year, String make, String type) {
         URI url = UriComponentsBuilder.fromHttpUrl(carApiConfig.getCarApiEndpoint())
                 .queryParam("limit", 20)
                 .queryParam("page", 0)
@@ -77,8 +77,8 @@ public class CarApiClient {
         HttpHeaders headers = headersBuild();
         HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
         try {
-            ResponseEntity<ApiCarDto[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, ApiCarDto[].class);
-            return Arrays.asList(ofNullable(responseEntity.getBody()).orElse(new ApiCarDto[0]));
+            ResponseEntity<CarApiDto[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, CarApiDto[].class);
+            return Arrays.asList(ofNullable(responseEntity.getBody()).orElse(new CarApiDto[0]));
         } catch (RestClientException e) {
             LOGGER.error("Error while getting car models. " + e.getMessage(), e);
             return Collections.emptyList();

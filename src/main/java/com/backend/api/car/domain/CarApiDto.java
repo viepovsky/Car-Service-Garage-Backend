@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ApiCarDto {
+public class CarApiDto {
     @JsonProperty("model")
     private String model;
 }
