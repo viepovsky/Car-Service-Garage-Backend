@@ -1,9 +1,7 @@
 package com.backend.api.weather.service;
 
 import com.backend.api.weather.client.WeatherApiClient;
-import com.backend.api.weather.domain.ForecastDto;
-import com.backend.api.weather.domain.LocationDto;
-import com.backend.api.weather.domain.StoredForecast;
+import com.backend.api.weather.domain.*;
 import com.backend.api.weather.mapper.ForecastMapper;
 import com.backend.api.weather.repository.StoredForecastRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,11 +24,19 @@ public class WeatherApiService {
         if (storedForecastRepository.findAllByCity(city).size() != 0) {
             storedForecastRepository.deleteAllByCity(city);
         }
-        List<LocationDto> locationDtoList = weatherApiClient.getIdForCityName(city);
-        int cityId = locationDtoList.get(0).getLocations().get(0).getCityId();
-        List<ForecastDto> forecastDtoList = weatherApiClient.get14DaysForecast(cityId);
-        List<StoredForecast> storedForecastList = forecastMapper.mapToStoredForecastList(forecastDtoList, city);
+        LocationDto locationDto = weatherApiClient.getIdForCityName(city);
+        int cityId = locationDto.getLocations().get(0).getCityId();
+        ForecastDto forecastDto = weatherApiClient.get14DaysForecast(cityId);
+        List<ForecastsDto> forecastsDtoList = forecastDto.getForecasts();
+        List<StoredForecast> storedForecastList = forecastMapper.mapToStoredForecastList(forecastsDtoList, city);
         storedForecastRepository.saveAll(storedForecastList);
         LOGGER.info("Stored 14 days forecast for city: " + city);
+    }
+
+    public CityForecastDto getForecastForCityAndDate(String city, LocalDate date) {
+        StoredForecast storedForecast = storedForecastRepository.findByDateAndCity(date, city);
+        CityForecastDto cityForecastDto = forecastMapper.mapToCityForecastDto(storedForecast);
+        LOGGER.info("Retrieved city forecast: " + cityForecastDto);
+        return cityForecastDto;
     }
 }

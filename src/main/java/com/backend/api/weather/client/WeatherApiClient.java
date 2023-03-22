@@ -30,7 +30,7 @@ public class WeatherApiClient {
     private final RestTemplate restTemplate;
     private final WeatherApiConfig weatherApiConfig;
 
-    public List<ForecastDto> get14DaysForecast(int cityId) {
+    public ForecastDto get14DaysForecast(int cityId) {
         HttpHeaders headers = createHeader();
         HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
 
@@ -44,15 +44,15 @@ public class WeatherApiClient {
                 .encode()
                 .toUri();
         try {
-            ResponseEntity<ForecastDto[]> response = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, ForecastDto[].class);
-            return Arrays.asList(ofNullable(response.getBody()).orElse(new ForecastDto[0]));
+            ResponseEntity<ForecastDto> response = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, ForecastDto.class);
+            return ofNullable(response.getBody()).orElse(new ForecastDto());
         } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
-            return new ArrayList<>();
+            return new ForecastDto();
         }
     }
 
-    public List<LocationDto> getIdForCityName(String cityName) {
+    public LocationDto getIdForCityName(String cityName) {
         HttpHeaders headers = createHeader();
         HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
 
@@ -63,11 +63,11 @@ public class WeatherApiClient {
                 .encode()
                 .toUri();
         try {
-            ResponseEntity<LocationDto[]> response = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, LocationDto[].class);
-            return Arrays.asList(ofNullable(response.getBody()).orElse(new LocationDto[0]));
+            ResponseEntity<LocationDto> response = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, LocationDto.class);
+            return ofNullable(response.getBody()).orElse(new LocationDto());
         } catch (RestClientException e) {
             LOGGER.error(e.getMessage(), e);
-            return new ArrayList<>();
+            return new LocationDto();
         }
     }
     private HttpHeaders createHeader() {

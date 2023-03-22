@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "CARS_API")
+@Table(name = "FORECAST")
 public class StoredForecast {
     @Id
     @GeneratedValue

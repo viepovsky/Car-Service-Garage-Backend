@@ -38,18 +38,18 @@ public class CarApiService {
     }
 
     public void getAndSaveCarYearsMakesTypes(LocalDate localDate) throws InterruptedException {
-//        Thread.sleep(1000);
-//        List<Integer> carYearsList = carApiClient.getCarYears();
-//        LOGGER.info("Received car years list with size of: " + carYearsList.size());
-//        Thread.sleep(1000);
-//        List<String> carMakesList = carApiClient.getCarMakes();
-//        LOGGER.info("Received car makes list with size of: " + carMakesList.size());
-//        Thread.sleep(1000);
-//        List<String> carTypesList = carApiClient.getCarTypes();
-//        LOGGER.info("Received car types list with size of: " + carTypesList.size());
-//
-//        StoredCarApi storedCarApi = new StoredCarApi(carYearsList, carMakesList, carTypesList, localDate);
-//        storedCarApiRepository.save(storedCarApi);
+        Thread.sleep(1000);
+        List<Integer> carYearsList = carApiClient.getCarYears();
+        LOGGER.info("Received car years list with size of: " + carYearsList.size());
+        Thread.sleep(1000);
+        List<String> carMakesList = carApiClient.getCarMakes();
+        LOGGER.info("Received car makes list with size of: " + carMakesList.size());
+        Thread.sleep(1000);
+        List<String> carTypesList = carApiClient.getCarTypes();
+        LOGGER.info("Received car types list with size of: " + carTypesList.size());
+
+        StoredCarApi storedCarApi = new StoredCarApi(carYearsList, carMakesList, carTypesList, localDate);
+        storedCarApiRepository.save(storedCarApi);
         LOGGER.info("Saved CarApiDto.");
     }
 
