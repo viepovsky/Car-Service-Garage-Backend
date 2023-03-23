@@ -1,11 +1,9 @@
 package com.backend.controller;
 
-import com.backend.domain.User;
 import com.backend.domain.dto.PasswordDto;
 import com.backend.domain.dto.UserDto;
 import com.backend.exceptions.MyEntityNotFoundException;
-import com.backend.mapper.UserMapper;
-import com.backend.service.UserDbService;
+import com.backend.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,46 +19,37 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 @Validated
 public class UserController {
-    private final UserDbService userDbService;
-    private final UserMapper userMapper;
+    private final UserFacade userFacade;
 
     @GetMapping(path = "/information")
     public ResponseEntity<UserDto> getUser(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
-        User user = userDbService.getUser(username);
-        return ResponseEntity.ok(userMapper.mapToUserDto(user));
+        return ResponseEntity.ok(userFacade.getUserByUsername(username));
     }
 
     @GetMapping
     public ResponseEntity<UserDto> getUserToLogin(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
-        User user = userDbService.getUser(username);
-        return ResponseEntity.ok(userMapper.mapToUserDtoLogin(user));
+        return ResponseEntity.ok(userFacade.getUserByUsernameToLogin(username));
     }
+
     @GetMapping(path = "/is-registered")
     public ResponseEntity<Boolean> isUserRegistered(@RequestParam @NotBlank String username) {
-        return ResponseEntity.ok(userDbService.isUserInDatabase(username));
+        return ResponseEntity.ok(userFacade.isUserRegistered(username));
     }
 
     @GetMapping(path = "/pass")
     public ResponseEntity<PasswordDto> getUserPass(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
-        PasswordDto passwordDto = new PasswordDto(userDbService.getUserPass(username));
-        return ResponseEntity.ok(passwordDto);
+        return ResponseEntity.ok(userFacade.getUserPass(username));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserDto userDto) {
-        userDbService.saveUser(userMapper.mapToUserLogin(userDto));
+        userFacade.createUser(userDto);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateUser(@Valid @RequestBody UserDto userDto) throws MyEntityNotFoundException {
-        userDbService.updateUser(userMapper.mapToUserLogin(userDto));
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping(path = "/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) throws MyEntityNotFoundException {
-        userDbService.deleteUser(userId);
+        userFacade.updateUser(userDto);
         return ResponseEntity.ok().build();
     }
 }

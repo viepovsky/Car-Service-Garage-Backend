@@ -7,8 +7,8 @@ Additionally, the application utilizes two external APIs - Car API and Weather A
 
 ## Frameworks
 
-The application uses popular frameworks such as Spring Boot, Spring Data JPA, Spring Security, Hibernate, Validation-API, H2 database.
-The application's frontend was developed with Vaadin and designed primarily to show capabilities of the backend. 
+The application uses popular frameworks such as Spring Boot, Spring Data JPA, Spring Security, Spring Validation, Hibernate, H2 database.
+The application's frontend was developed with Vaadin and designed just only to show capabilities of the backend. 
 In result the visual design may not be as good as other parts of the application. 
 
 ## Here is backend, link to frontend
