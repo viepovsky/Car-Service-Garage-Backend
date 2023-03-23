@@ -196,4 +196,4 @@ INSERT INTO "CARS_SERVICES" (id, name, description, cost, repair_time, car_id, u
 (2, 'Tire change', 'Tire change description', 200.00, 50, 1, 1, 123, 2),
 (3, 'Timing belt change', 'Timing belt change description', 1700.00, 180, 2, 1, 124, 2),
 (4, 'Timing belt change', 'Timing belt change description', 2100.00, 180, 1, 1, 125, 6),
-(5, 'Individual repair', 'Individual repair description', 5500.00, 1230, 2, 1, 126, 5);
+(5, 'Individual repair', 'Individual repair description', 5500.00, 1230, 1, 1, 126, 5);
