@@ -26,11 +26,6 @@ public class CarServiceFacade {
         return carServiceMapper.mapToCarServiceDtoList(carServiceList);
     }
 
-    public void addCarService(List<Long> selectedServicesIdList, @Min(1) Long carId) throws MyEntityNotFoundException {
-        LOGGER.info("POST Endpoint used.");
-        carServiceDbService.saveCarService(selectedServicesIdList, carId);
-    }
-
     public void deleteCarService(Long carServiceId) throws MyEntityNotFoundException {
         LOGGER.info("DELETE Endpoint used.");
         carServiceDbService.deleteCarService(carServiceId);

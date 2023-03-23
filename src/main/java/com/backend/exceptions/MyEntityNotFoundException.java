@@ -16,5 +16,4 @@ public class MyEntityNotFoundException extends Exception {
         super(text);
         this.text = text;
     }
-
 }

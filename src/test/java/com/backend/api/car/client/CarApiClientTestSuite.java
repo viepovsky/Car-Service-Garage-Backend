@@ -20,6 +20,7 @@ class CarApiClientTestSuite {
 
     @Autowired
     RestTemplate restTemplate;
+
     @Autowired
     CarApiClient carApiClient;
     //Tests are commented out due to numbered limit of requests,
