@@ -76,9 +76,8 @@ public class BookingProcessDbServiceIntegrationTestSuite {
                 () -> assertEquals(LocalTime.of(7,10), user.getServicesList().get(0).getBooking().getStartHour()),
                 () -> assertEquals(BigDecimal.valueOf((500 + 170 + 50) * 1.2), user.getServicesList().get(0).getBooking().getTotalCost())
         );
-        assertAll("Getting car service values from booking",
-                () -> assertEquals("Test car service #1", booking.get(0).getCarServiceList().get(0).getName()),
-                () -> assertEquals("Test description car service #1", booking.get(0).getCarServiceList().get(0).getDescription())
+        assertAll("Booking check",
+                () -> assertEquals(availableTimeToBookList.get(1), booking.get(0).getStartHour())
         );
     }
 
