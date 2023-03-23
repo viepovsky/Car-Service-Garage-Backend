@@ -1,20 +1,16 @@
 package com.backend.controller;
 
-import com.backend.config.AdminConfig;
-import com.backend.domain.GarageWorkTime;
 import com.backend.domain.dto.GarageWorkTimeDto;
 import com.backend.exceptions.MyEntityNotFoundException;
-import com.backend.mapper.GarageWorkTimeMapper;
-import com.backend.service.GarageWorkTimeDbService;
+import com.backend.facade.GarageWorkTimeFacade;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @RestController
 @CrossOrigin("*")
@@ -22,38 +18,22 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class GarageWorkTimeController {
-    private final GarageWorkTimeDbService garageWorkTimeDbService;
-    private final GarageWorkTimeMapper garageWorkTimeMapper;
-    private final AdminConfig adminConfig;
-
-    @GetMapping
-    public ResponseEntity<List<GarageWorkTimeDto>> getGarageWorkTimes() {
-        List<GarageWorkTime> garageWorkTimeList = garageWorkTimeDbService.getAllGarageWorkTimes();
-        return ResponseEntity.ok(garageWorkTimeMapper.mapToGarageWorkTimeDtoList(garageWorkTimeList));
-    }
+    private final GarageWorkTimeFacade garageWorkTimeFacade;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/admin/{garageId}")
     public ResponseEntity<String> createGarageWorkTime(
             @Valid @RequestBody GarageWorkTimeDto garageWorkTimeDto,
-            @PathVariable Long garageId,
-            @RequestHeader("api-key") String apiKey
+            @PathVariable @Min(1) Long garageId,
+            @RequestHeader("api-key") @NotBlank String apiKey
     ) throws MyEntityNotFoundException {
-        if(apiKey.equals(adminConfig.getAdminApiKey())){
-            GarageWorkTime garageWorkTime = garageWorkTimeMapper.mapToGarageWorkTime(garageWorkTimeDto);
-            garageWorkTimeDbService.saveGarageWorkTime(garageWorkTime, garageId);
-            return ResponseEntity.ok().build();
-        }  else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
-        }
+        return garageWorkTimeFacade.createGarageWorkTime(garageWorkTimeDto, garageId, apiKey);
     }
 
     @DeleteMapping(path = "/admin/{garageWorkTimeId}")
-    public ResponseEntity<String> deleteGarageWorkTime(@PathVariable Long garageWorkTimeId, @RequestHeader("api-key") String apiKey) throws MyEntityNotFoundException {
-        if(apiKey.equals(adminConfig.getAdminApiKey())){
-            garageWorkTimeDbService.deleteGarageWorkTime(garageWorkTimeId);
-            return ResponseEntity.ok().build();
-        }  else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
-        }
+    public ResponseEntity<String> deleteGarageWorkTime(
+            @PathVariable @Min(1) Long garageWorkTimeId,
+            @RequestHeader("api-key") @NotBlank String apiKey
+    ) throws MyEntityNotFoundException {
+        return garageWorkTimeFacade.deleteGarageWorkTime(garageWorkTimeId, apiKey);
     }
 }

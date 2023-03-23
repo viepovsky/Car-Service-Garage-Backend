@@ -1,21 +1,17 @@
 package com.backend.controller;
 
-import com.backend.config.AdminConfig;
-import com.backend.domain.Booking;
 import com.backend.domain.dto.BookingDto;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.exceptions.WrongInputDataException;
-import com.backend.mapper.BookingMapper;
-import com.backend.service.BookingDbService;
+import com.backend.facade.BookingFacade;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -28,15 +24,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class BookingController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BookingController.class);
-    private final BookingDbService bookingDbService;
-    private final BookingMapper bookingMapper;
-    private final AdminConfig adminConfig;
+    private final BookingFacade bookingFacade;
 
     @GetMapping
-    public ResponseEntity<List<BookingDto>> getBookings(@RequestParam(name = "userId") @NotNull Long userId) {
-        List<Booking> bookingList = bookingDbService.getAllBookingsForGivenUser(userId);
-        return ResponseEntity.ok(bookingMapper.mapToBookingDtoList(bookingList));
+    public ResponseEntity<List<BookingDto>> getBookings(@RequestParam(name = "name") @NotBlank String username) throws MyEntityNotFoundException {
+        return ResponseEntity.ok(bookingFacade.getBookingsForGivenUsername(username));
     }
 
     @GetMapping(path = "/available-times")
@@ -46,12 +38,7 @@ public class BookingController {
             @RequestParam(name = "garage-id", required = false, defaultValue = "0") Long garageId,
             @RequestParam(name = "car-service-id", required = false, defaultValue = "0") Long carServiceId
     ) throws MyEntityNotFoundException {
-        LOGGER.info("GET Endpoint getAvailableBookingTimes used.");
-        if (carServiceId != 0L) {
-            return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, carServiceId));
-        } else {
-            return ResponseEntity.ok(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId));
-        }
+        return ResponseEntity.ok(bookingFacade.getAvailableBookingTimes(date, repairDuration, garageId, carServiceId));
     }
 
     @PostMapping
@@ -59,11 +46,11 @@ public class BookingController {
             @RequestParam(name = "service-id") @NotEmpty List<Long> selectedServiceIdList,
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam(name = "start-hour") @NotNull LocalTime startHour,
-            @RequestParam(name = "garage-id") @NotNull Long garageId,
-            @RequestParam(name = "car-id") @NotNull Long carId,
+            @RequestParam(name = "garage-id") @Min(1) Long garageId,
+            @RequestParam(name = "car-id") @Min(1) Long carId,
             @RequestParam(name = "repair-duration") @NotNull int repairDuration
     ) throws MyEntityNotFoundException, WrongInputDataException {
-        bookingDbService.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
+        bookingFacade.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
         return ResponseEntity.ok().build();
     }
 
@@ -72,25 +59,19 @@ public class BookingController {
             @RequestParam(name = "date") @NotNull LocalDate date,
             @RequestParam(name = "start-hour") @NotNull LocalTime startHour,
             @RequestParam(name = "end-hour") @NotNull LocalTime endHour,
-            @RequestParam(name = "garage-id") @NotNull Long garageId,
-            @RequestHeader("api-key") String apiKey
+            @RequestParam(name = "garage-id") @Min(1) Long garageId,
+            @RequestHeader("api-key") @NotBlank String apiKey
     ) throws MyEntityNotFoundException, WrongInputDataException {
-        if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            bookingDbService.saveBooking(date, startHour, endHour, garageId);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
-        }
+        return bookingFacade.createAvailableBookingDays(date, startHour, endHour, garageId, apiKey);
     }
 
     @PutMapping(path = "/{bookingId}")
     public ResponseEntity<Void> updateBooking(
-            @PathVariable Long bookingId,
+            @PathVariable @NotNull Long bookingId,
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam(name = "start-hour") @NotNull LocalTime startHour
     ) throws MyEntityNotFoundException {
-        LOGGER.info("PUT Endpoint getAvailableBookingTimes used.");
-        bookingDbService.updateBooking(bookingId, date, startHour);
+        bookingFacade.updateBooking(bookingId, date, startHour);
         return ResponseEntity.ok().build();
     }
 }

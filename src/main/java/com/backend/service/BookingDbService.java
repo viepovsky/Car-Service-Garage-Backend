@@ -33,8 +33,9 @@ public class BookingDbService {
         return bookingRepository.findAll();
     }
 
-    public List<Booking> getAllBookingsForGivenUser(Long userId) {
-        return bookingRepository.findBookingsByCarServiceListUserId(userId);
+    public List<Booking> getAllBookingsForGivenUser(String username) throws MyEntityNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
+        return bookingRepository.findBookingsByCarServiceListUserId(user.getId());
     }
 
     public List<LocalTime> getAvailableBookingTimesForSelectedDayAndCarServices(LocalDate date, List<Long> carServiceIdList, Long garageId) throws MyEntityNotFoundException {
