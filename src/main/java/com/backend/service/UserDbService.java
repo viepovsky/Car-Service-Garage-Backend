@@ -15,14 +15,6 @@ import java.util.List;
 public class UserDbService {
     private final UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public User getUser(Long userId) throws MyEntityNotFoundException {
-        return userRepository.findById(userId).orElseThrow(() -> new MyEntityNotFoundException("User", userId));
-    }
-
     public User getUser(String username) throws MyEntityNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
     }

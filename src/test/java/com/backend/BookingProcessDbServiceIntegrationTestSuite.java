@@ -54,32 +54,31 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         initUser();
         initCar();
         initAvailableBookings();
-        initAddingCarService();
-        Car car = carDbService.getAllCars().get(0);
-        List<CarService> carServiceList = carServiceDbService.getAllCarServiceWithGivenCarIdAndNotAssignedStatus(car.getId());
-        List<Long> carServiceIdList = carServiceList.stream().map(CarService::getId).toList();
+        List<Long> availableCarServiceIdList = initAddingAvailableCarService();
+        Car car = carDbService.getAllCarsForGivenUsername("Testusername").get(0);
+        int repairTime = 230;
         Garage garage = garageDbService.getAllGarages().get(0);
         LocalDate date = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-        List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(date, carServiceIdList, garage.getId());
+        List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairTime, garage.getId());
         LocalTime startHour = availableTimeToBookList.get(1);
         //When
-        bookingDbService.saveBooking(carServiceIdList, date, startHour, garage.getId());
-        User user = userDbService.getAllUsers().get(0);
-        Booking booking = bookingDbService.getBookingOfGivenDateStartHourStatusAndGarageId(date, startHour, garage.getId(), BookingStatus.WAITING_FOR_CUSTOMER);
+        bookingDbService.createBooking(availableCarServiceIdList, date, startHour, garage.getId(), car.getId(), repairTime);
+        User user = userDbService.getUser("Testusername");
+        List<Booking> booking = bookingDbService.getAllBookingsForGivenUser(user.getUsername());
         //Then
         assertAll("Getting booking values through car entity, from user",
                 () -> assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, user.getCarList().get(0).getCarServicesList().get(0).getBooking().getStatus()),
                 () -> assertEquals(LocalTime.of(7,10), user.getCarList().get(0).getCarServicesList().get(0).getBooking().getStartHour()),
-                () -> assertEquals(BigDecimal.valueOf(590), user.getCarList().get(0).getCarServicesList().get(0).getBooking().getTotalCost())
+                () -> assertEquals(BigDecimal.valueOf((500 + 170 + 50) * 1.2), user.getCarList().get(0).getCarServicesList().get(0).getBooking().getTotalCost())
                 );
         assertAll("Getting booking values directly through car service, from user",
                 () -> assertEquals(BookingStatus.WAITING_FOR_CUSTOMER, user.getServicesList().get(0).getBooking().getStatus()),
                 () -> assertEquals(LocalTime.of(7,10), user.getServicesList().get(0).getBooking().getStartHour()),
-                () -> assertEquals(BigDecimal.valueOf(590), user.getServicesList().get(0).getBooking().getTotalCost())
+                () -> assertEquals(BigDecimal.valueOf((500 + 170 + 50) * 1.2), user.getServicesList().get(0).getBooking().getTotalCost())
         );
-        assertAll("Getting user and car values directly through car service, from booking",
-                () -> assertEquals("test@test.com", booking.getCarServiceList().get(0).getUser().getEmail()),
-                () -> assertEquals("BMW", booking.getCarServiceList().get(0).getCar().getMake())
+        assertAll("Getting car service values from booking",
+                () -> assertEquals("Test car service #1", booking.get(0).getCarServiceList().get(0).getName()),
+                () -> assertEquals("Test description car service #1", booking.get(0).getCarServiceList().get(0).getDescription())
         );
     }
 
@@ -90,24 +89,18 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         initUser();
         initCar();
         initAvailableBookings();
-        initAddingCarService();
         //When
-        List<GarageWorkTime> garageWorkTimeList = garageWorkTimeDbService.getAllGarageWorkTimes();
         Garage garage = garageDbService.getAllGarages().get(0);
+
+        List<GarageWorkTime> garageWorkTimeList = garageWorkTimeDbService.getAllGarageWorkTimes();
+
         List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService(garage.getId());
 
-        List<User> userList = userDbService.getAllUsers();
+        User user = userDbService.getUser("Testusername");
 
-        List<Car> carList = carDbService.getAllCars();
+        List<Car> carList = carDbService.getAllCarsForGivenUsername("Testusername");
 
         List<Booking> bookingList = bookingDbService.getAllBookings();
-
-        Car car = carDbService.getAllCars().get(0);
-        List<CarService> carServiceList = carServiceDbService.getAllCarServiceWithGivenCarIdAndNotAssignedStatus(car.getId());
-        List<Long> carServiceIdList = carServiceList.stream().map(CarService::getId).toList();
-        garage = garageDbService.getAllGarages().get(0);
-        LocalDate date = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-        List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndCarServices(date, carServiceIdList, garage.getId());
         //Then
         assertAll("Garage with work times and car services",
                 () -> assertEquals("Monday", garageWorkTimeList.get(0).getDay().getDayName()),
@@ -119,10 +112,10 @@ public class BookingProcessDbServiceIntegrationTestSuite {
                 );
 
         assertAll("User",
-                () -> assertEquals("Test name", userList.get(0).getFirstName()),
-                () -> assertEquals("Testusername", userList.get(0).getUsername()),
-                () -> assertEquals("Testpassword123", userList.get(0).getPassword()),
-                () -> assertEquals("test@test.com", userList.get(0).getEmail())
+                () -> assertEquals("Test name", user.getFirstName()),
+                () -> assertEquals("Testusername", user.getUsername()),
+                () -> assertEquals("Testpassword123", user.getPassword()),
+                () -> assertEquals("test@test.com", user.getEmail())
         );
 
         assertAll("Car",
@@ -135,15 +128,10 @@ public class BookingProcessDbServiceIntegrationTestSuite {
                 () -> assertEquals(365, bookingList.size()),
                 () -> assertEquals(BookingStatus.AVAILABLE, bookingList.get(0).getStatus())
                 );
-        assertAll("Car service added, possible bookings check",
-                () -> assertEquals(3, carServiceList.size()),
-                () -> assertEquals(LocalTime.of(7,0), availableTimeToBookList.get(0)),
-                () -> assertEquals(32, availableTimeToBookList.size())
-        );
     }
 
     private void initGarageWithWorkTimesAndAvailableCarServices() throws MyEntityNotFoundException {
-        Garage garage = new Garage("Garage test name", "Garage test adress");
+        Garage garage = new Garage("Garage test name", "Warszawa test adress");
         garageDbService.saveGarage(garage);
         garage = garageDbService.getAllGarages().get(0);
 
@@ -174,17 +162,17 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         availableCarServiceDbService.saveAvailableCarService(availableCarService5, garage.getId());
     }
 
-    private void initUser() throws MyEntityNotFoundException {
+    private void initUser() {
         User user = new User("Test name", "Test lastname", "test@test.com", "+48777777777", "Testusername", "Testpassword123", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
         userDbService.saveUser(user);
     }
 
     private void initCar() throws MyEntityNotFoundException {
         Car car = new Car("BMW","Series 3", "Sedan", 2020, "diesel");
-        User user = userDbService.getAllUsers().get(0);
-        carDbService.saveCar(car, user.getId());
+        User user = userDbService.getUser("Testusername");
+        carDbService.saveCar(car, user.getUsername());
         car = new Car("AUDI","A6", "Sedan", 2020, "diesel");
-        carDbService.saveCar(car, user.getId());
+        carDbService.saveCar(car, user.getUsername());
     }
 
     private void initAvailableBookings() throws WrongInputDataException, MyEntityNotFoundException {
@@ -202,14 +190,13 @@ public class BookingProcessDbServiceIntegrationTestSuite {
         }
     }
 
-    private void initAddingCarService() throws MyEntityNotFoundException {
+    private List<Long> initAddingAvailableCarService() throws MyEntityNotFoundException {
         Garage garage = garageDbService.getAllGarages().get(0);
         List<AvailableCarService> availableCarServiceList = availableCarServiceDbService.getAllAvailableCarService(garage.getId());
-        List<Long> carServicesIdList = new ArrayList<>();
-        carServicesIdList.add(availableCarServiceList.get(0).getId());
-        carServicesIdList.add(availableCarServiceList.get(2).getId());
-        carServicesIdList.add(availableCarServiceList.get(3).getId());
-        Car car = carDbService.getAllCars().get(0);
-        carServiceDbService.saveCarService(carServicesIdList, car.getId());
+        List<Long> availableCarServiceIdList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            availableCarServiceIdList.add(availableCarServiceList.get(i).getId());
+        }
+        return availableCarServiceIdList;
     }
 }

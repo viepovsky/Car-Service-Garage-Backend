@@ -22,28 +22,26 @@ class UserTestSuite {
     private UserDbService userDbService;
 
     @Test
-    public void testSaveAndRetrieveUser() {
+    public void testSaveAndRetrieveUser() throws MyEntityNotFoundException {
         //Given
-        User user = new User("Oskar", "Raj", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
+        User user = new User("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
         userDbService.saveUser(user);
         //When
-        List<User> userList = userDbService.getAllUsers();
-        User retrievedUser = userList.get(0);
+        User retrievedUser = userDbService.getUser("testusername");
         //Then
         assertEquals(user.getFirstName(), retrievedUser.getFirstName());
         assertEquals(user.getEmail(), retrievedUser.getEmail());
         assertEquals(user.getCreatedDate(), retrievedUser.getCreatedDate());
-        assertDoesNotThrow(() -> userDbService.getUser(retrievedUser.getId()));
+        assertDoesNotThrow(() -> userDbService.getUser(retrievedUser.getUsername()));
         System.out.println(retrievedUser.getId());
     }
 
     @Test
     public void testUpdateAndDeleteUser() throws MyEntityNotFoundException {
         //Given
-        User user = new User("Oskar", "Raj", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
+        User user = new User("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
         userDbService.saveUser(user);
-        List<User> userList = userDbService.getAllUsers();
-        User userToUpdate = userList.get(0);
+        User userToUpdate = userDbService.getUser("testusername");
         userToUpdate.setFirstName("Wiktor");
         userToUpdate.setEmail("tested@gmail.com");
         //When
@@ -54,15 +52,15 @@ class UserTestSuite {
         assertEquals(userToUpdate.getId(), updatedUser.getId());
         assertEquals("Wiktor", updatedUser.getFirstName());
         assertEquals("tested@gmail.com", updatedUser.getEmail());
-        assertThrows(MyEntityNotFoundException.class, () -> userDbService.getUser(updatedUser.getId()));
+        assertThrows(MyEntityNotFoundException.class, () -> userDbService.getUser(updatedUser.getUsername()));
         System.out.println(updatedUser.getId());
     }
 
     @Test
     public void testThrowsMyEntityNotFoundException() {
         //Given & When & Then
-        MyEntityNotFoundException exception = assertThrows(MyEntityNotFoundException.class, () -> userDbService.getUser(1L));
-        assertEquals("User of id: 1", exception.getMessage());
-        assertEquals(1L, exception.getRecordId());
+        MyEntityNotFoundException exception = assertThrows(MyEntityNotFoundException.class, () -> userDbService.getUser("testusername"));
+        assertEquals("Username: testusername", exception.getMessage());
+        assertNull(exception.getRecordId());
     }
 }

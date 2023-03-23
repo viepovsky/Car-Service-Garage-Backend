@@ -16,25 +16,9 @@ public class CarDbService {
     private final CarRepository carRepository;
     private final UserRepository userRepository;
 
-    public List<Car> getAllCars(){
-        return carRepository.findAll();
-    }
-
     public List<Car> getAllCarsForGivenUsername(String username) throws MyEntityNotFoundException {
         Long userId = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username)).getId();
-
         return carRepository.findCarsByUserId(userId);
-    }
-
-    public Car getCar(Long carId) throws MyEntityNotFoundException {
-        return carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
-    }
-
-    public void saveCar(Car car, Long userId) throws MyEntityNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new MyEntityNotFoundException("User", userId));
-        car.setUser(user);
-        user.getCarList().add(car);
-        userRepository.save(user);
     }
 
     public void saveCar(Car car, String username) throws MyEntityNotFoundException {

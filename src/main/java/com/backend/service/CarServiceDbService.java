@@ -20,21 +20,10 @@ public class CarServiceDbService {
     private final CarRepository carRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
-    public List<CarService> getAllCarService(){
-        return carServiceRepository.findAll();
-    }
 
     public List<CarService> getCarServices(String username) throws MyEntityNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username:" + username));
         return carServiceRepository.findCarServicesByUserId(user.getId());
-    }
-
-    public List<CarService> getAllCarServiceWithGivenCarIdAndNotAssignedStatus(Long carId){
-        return carServiceRepository.findCarServicesByCarIdAndStatus(carId, ServiceStatus.NOT_ASSIGNED);
-    }
-
-    public CarService getCarService(Long carServiceId) throws MyEntityNotFoundException {
-        return carServiceRepository.findById(carServiceId).orElseThrow(() -> new MyEntityNotFoundException("CarService", carServiceId));
     }
 
     public void saveCarService(List<Long> selectedServices, Long carId) throws MyEntityNotFoundException {
