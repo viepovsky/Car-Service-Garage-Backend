@@ -1,7 +1,6 @@
 package com.backend.service;
 
-import com.backend.domain.CarService;
-import com.backend.domain.User;
+import com.backend.domain.*;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.repository.*;
 import org.junit.jupiter.api.DisplayName;
@@ -11,17 +10,18 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.transaction.Transactional;
-
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@Transactional
 @DisplayName("Car Service Db Service Test Suite")
 class CarServiceDbServiceTestSuite {
     @InjectMocks
@@ -29,12 +29,6 @@ class CarServiceDbServiceTestSuite {
 
     @Mock
     private CarServiceRepository carServiceRepository;
-
-    @Mock
-    private AvailableCarServiceRepository availableCarServiceRepository;
-
-    @Mock
-    private CarRepository carRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -59,7 +53,44 @@ class CarServiceDbServiceTestSuite {
     }
 
     @Test
-    void testSaveCarService() {
+    void testDeleteCarServiceMoreThanOneService() throws MyEntityNotFoundException {
+        //Given
+        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10,0), LocalTime.of(12,0), LocalDateTime.now(), BigDecimal.valueOf(300), new ArrayList<>(), null);
+        CarService carService = new CarService("Testname","Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, ServiceStatus.AWAITING);
+        CarService carService2 = new CarService("Testname2","Testdescription2", BigDecimal.valueOf(250), 90, null, null, booking, ServiceStatus.AWAITING);
+        booking.getCarServiceList().add(carService);
+        booking.getCarServiceList().add(carService2);
 
+        when(carServiceRepository.findById(1L)).thenReturn(Optional.of(carService));
+        doNothing().when(carServiceRepository).delete(carService);
+        when(bookingRepository.save(booking)).thenReturn(booking);
+        //When
+        carServiceDbService.deleteCarService(1L);
+        //Then
+        assertDoesNotThrow(() -> new MyEntityNotFoundException("CarService", 1L));
+        assertEquals(1, booking.getCarServiceList().size());
+        assertEquals(BigDecimal.valueOf(250), booking.getTotalCost());
+        assertEquals(LocalTime.of(10, 0), booking.getStartHour());
+        assertEquals(LocalTime.of(11, 30), booking.getEndHour());
+        verify(carServiceRepository, times(1)).delete(carService);
+        verify(bookingRepository, times(1)).save(booking);
+    }
+
+    @Test
+    void testDeleteCarServiceOnlyOneService() throws MyEntityNotFoundException {
+        //Given
+        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10,0), LocalTime.of(10,30), LocalDateTime.now(), BigDecimal.valueOf(50), new ArrayList<>(), null);
+        CarService carService = new CarService("Testname","Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, ServiceStatus.AWAITING);
+        booking.getCarServiceList().add(carService);
+
+        when(carServiceRepository.findById(1L)).thenReturn(Optional.of(carService));
+        doNothing().when(carServiceRepository).delete(carService);
+        doNothing().when(bookingRepository).delete(booking);
+        //When
+        carServiceDbService.deleteCarService(1L);
+        //Then
+        assertDoesNotThrow(() -> new MyEntityNotFoundException("CarService", 1L));
+        verify(carServiceRepository, times(1)).delete(carService);
+        verify(bookingRepository, times(1)).delete(booking);
     }
 }

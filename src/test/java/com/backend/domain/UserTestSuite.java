@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -47,7 +46,7 @@ class UserTestSuite {
         //When
         userDbService.updateUser(userToUpdate);
         User updatedUser = userDbService.getUser(userToUpdate.getUsername());
-        userDbService.deleteUser(updatedUser.getId());
+        userDbService.deleteUser("testusername");
         //Then
         assertEquals(userToUpdate.getId(), updatedUser.getId());
         assertEquals("Wiktor", updatedUser.getFirstName());

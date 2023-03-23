@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,11 +50,8 @@ public class UserDbService {
         }
     }
 
-    public void deleteUser(Long userId) throws MyEntityNotFoundException {
-        if(userRepository.findById(userId).isPresent()) {
-            userRepository.deleteById(userId);
-        } else {
-            throw new MyEntityNotFoundException("User", userId);
-        }
+    public void deleteUser(String username) throws MyEntityNotFoundException {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
+        userRepository.deleteById(user.getId());
     }
 }

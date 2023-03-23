@@ -26,15 +26,6 @@ public class CarServiceController {
         return ResponseEntity.ok(carServiceFacade.getCarServices(username));
     }
 
-    @PostMapping
-    public ResponseEntity<Void> addCarService(
-            @RequestParam(name = "service-id") @NotEmpty List<Long> selectedServicesIdList,
-            @RequestParam(name = "car-id") @Min(1) Long carId
-    ) throws MyEntityNotFoundException {
-        carServiceFacade.addCarService(selectedServicesIdList, carId);
-        return ResponseEntity.ok().build();
-    }
-
     @DeleteMapping(path = "/{carServiceId}")
     public ResponseEntity<Void> deleteCarService(@PathVariable @Min(1) Long carServiceId) throws MyEntityNotFoundException {
         carServiceFacade.deleteCarService(carServiceId);
