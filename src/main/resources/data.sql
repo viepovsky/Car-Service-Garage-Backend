@@ -37,8 +37,8 @@ INSERT INTO "USERS" (id, first_name, last_name, email, phone_number, username, p
 (1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 0, CURRENT_TIMESTAMP);
 
 INSERT INTO "CARS" (id, make, model, production_year, type, engine, user_id) VALUES
-(1, 'BMW', '3 Series', 2014, 'Sedan', 'diesel', 1),
-(2, 'Volvo', 'XC60', 2018, 'SUV', 'diesel', 1);
+(1, 'BMW', '3 Series', 2014, 'Sedan', 'Diesel', 1),
+(2, 'Volvo', 'XC60', 2018, 'SUV', 'Diesel', 1);
 
 CREATE SEQUENCE bookings_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE date_seq START WITH 0 INCREMENT BY 1;
