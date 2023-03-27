@@ -1,14 +1,12 @@
 package com.backend.controller;
 
-import com.backend.domain.AvailableCarService;
 import com.backend.domain.dto.AvailableCarServiceDto;
-import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.facade.AvailableCarServiceFacade;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +25,9 @@ import static org.mockito.Mockito.when;
 @SpringJUnitWebConfig
 @WebMvcTest(AvailableCarServiceController.class)
 class AvailableCarServiceControllerTestSuite {
+    @Value("${admin.api.key}")
+    private String adminApiKey;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -65,11 +66,11 @@ class AvailableCarServiceControllerTestSuite {
     void testShouldCreateAvailableCarService() throws Exception {
         //Given
         AvailableCarServiceDto availableCarServiceDto = new AvailableCarServiceDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
-        when(availableCarServiceFacade.createAvailableCarService(availableCarServiceDto, 22L, "582token22key22")).thenReturn(ResponseEntity.ok().build());
+        when(availableCarServiceFacade.createAvailableCarService(availableCarServiceDto, 22L, adminApiKey)).thenReturn(ResponseEntity.ok().build());
         Gson gson = new Gson();
         String jsonContent = gson.toJson(availableCarServiceDto);
         HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", "582token22key22");
+        headers.set("api-key", adminApiKey);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/available-car-service/admin")
@@ -84,9 +85,9 @@ class AvailableCarServiceControllerTestSuite {
     @Test
     void shouldDeleteAvailableCarService() throws Exception {
         //Given
-        when(availableCarServiceFacade.deleteAvailableCarService(20L, "582token22key22")).thenReturn(ResponseEntity.ok().build());
+        when(availableCarServiceFacade.deleteAvailableCarService(20L, adminApiKey)).thenReturn(ResponseEntity.ok().build());
         HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", "582token22key22");
+        headers.set("api-key", adminApiKey);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/available-car-service/admin/20")

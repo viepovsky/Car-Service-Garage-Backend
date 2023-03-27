@@ -2,7 +2,6 @@ package com.backend.controller;
 
 import com.backend.domain.BookingStatus;
 import com.backend.domain.dto.BookingDto;
-import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.facade.BookingFacade;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -31,6 +30,7 @@ import static org.mockito.Mockito.when;
 class BookingControllerTestSuite {
     @Value("${admin.api.key}")
     private String adminApiKey;
+
     @Autowired
     private MockMvc mockMvc;
 

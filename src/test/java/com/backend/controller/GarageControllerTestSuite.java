@@ -9,6 +9,7 @@ import com.google.gson.JsonDeserializer;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,9 @@ import static org.mockito.Mockito.when;
 @SpringJUnitWebConfig
 @WebMvcTest(GarageController.class)
 class GarageControllerTestSuite {
+    @Value("${admin.api.key}")
+    private String adminApiKey;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -72,14 +76,14 @@ class GarageControllerTestSuite {
     void shouldCreateGarage() throws Exception {
         //Given
         GarageDto garageDto = new GarageDto(1L, "Test garage", "Test address", null);
-        when(garageFacade.createGarage(garageDto, "582token22key22")).thenReturn(ResponseEntity.ok().build());
+        when(garageFacade.createGarage(garageDto, adminApiKey)).thenReturn(ResponseEntity.ok().build());
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, type, jsonDeserializationContext) ->
                 ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalTime()).create();
         String jsonContent = gson.toJson(garageDto);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", "582token22key22");
+        headers.set("api-key", adminApiKey);
 
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
@@ -95,10 +99,10 @@ class GarageControllerTestSuite {
     @Test
     void shouldDeleteGarage() throws Exception {
         //Given
-        when(garageFacade.deleteGarage(1L, "582token22key22")).thenReturn(ResponseEntity.ok().build());
+        when(garageFacade.deleteGarage(1L, adminApiKey)).thenReturn(ResponseEntity.ok().build());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", "582token22key22");
+        headers.set("api-key", adminApiKey);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/garages/admin/1")
