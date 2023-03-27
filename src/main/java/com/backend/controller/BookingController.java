@@ -45,7 +45,7 @@ public class BookingController {
     public ResponseEntity<Void> createBooking(
             @RequestParam(name = "service-id") @NotEmpty List<Long> selectedServiceIdList,
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(name = "start-hour") @NotNull LocalTime startHour,
+            @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour,
             @RequestParam(name = "garage-id") @Min(1) Long garageId,
             @RequestParam(name = "car-id") @Min(1) Long carId,
             @RequestParam(name = "repair-duration") @NotNull int repairDuration
@@ -56,9 +56,9 @@ public class BookingController {
 
     @PostMapping(path = "/admin")
     public ResponseEntity<String> createAvailableBooking(
-            @RequestParam(name = "date") @NotNull LocalDate date,
-            @RequestParam(name = "start-hour") @NotNull LocalTime startHour,
-            @RequestParam(name = "end-hour") @NotNull LocalTime endHour,
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+            @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour,
+            @RequestParam(name = "end-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime endHour,
             @RequestParam(name = "garage-id") @Min(1) Long garageId,
             @RequestHeader("api-key") @NotBlank String apiKey
     ) throws MyEntityNotFoundException, WrongInputDataException {
@@ -67,9 +67,9 @@ public class BookingController {
 
     @PutMapping(path = "/{bookingId}")
     public ResponseEntity<Void> updateBooking(
-            @PathVariable @NotNull Long bookingId,
+            @PathVariable @Min(1) Long bookingId,
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(name = "start-hour") @NotNull LocalTime startHour
+            @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour
     ) throws MyEntityNotFoundException {
         bookingFacade.updateBooking(bookingId, date, startHour);
         return ResponseEntity.ok().build();
