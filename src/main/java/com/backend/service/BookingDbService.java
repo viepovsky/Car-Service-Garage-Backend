@@ -47,46 +47,8 @@ public class BookingDbService {
         LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
         List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
         bookingList.remove(bookedService);
-        if (bookingList.size() == 0) {
-            return new ArrayList<>();
-        }
 
-        Booking garageWorkTime = bookingList.stream()
-                .filter(booking -> booking.getStatus() == BookingStatus.AVAILABLE)
-                .findFirst()
-                .orElse(null);
-        if (garageWorkTime == null) {
-            return  new ArrayList<>();
-        }
-
-        LocalTime openTime = garageWorkTime.getStartHour();
-        if (date.isEqual(LocalDate.now()) && LocalTime.now().isAfter(openTime)) {
-            int minutes = LocalTime.now().getMinute() + LocalTime.now().getHour() * 60;
-            minutes = ((minutes+10) / 10) * 10;
-            openTime = LocalTime.of(minutes / 60, minutes % 60);
-        }
-        LocalTime closeTime = garageWorkTime.getEndHour();
-
-        List<Booking> unavailableBookingTimeList = bookingList.stream()
-                .filter(booking -> booking.getStatus() == BookingStatus.UNAVAILABLE || booking.getStatus() == BookingStatus.WAITING_FOR_CUSTOMER)
-                .toList();
-
-        List<LocalTime> availableTimeList = new ArrayList<>();
-        LocalTime currentTime = openTime;
-
-        while (!currentTime.plusMinutes(repairDuration).isAfter(closeTime)) {
-            boolean isAvailable = true;
-            for (Booking booking : unavailableBookingTimeList) {
-                if (currentTime.plusMinutes(repairDuration).isAfter(booking.getStartHour()) && booking.getEndHour().isAfter(currentTime)) {
-                    isAvailable = false;
-                    break;
-                }
-            }
-            if (isAvailable) {
-                availableTimeList.add(currentTime);
-            }
-            currentTime = currentTime.plusMinutes(10);
-        }
+        List<LocalTime> availableTimeList = checkAvailableTimes(bookingList, date, repairDuration);
         availableTimeList.remove(bookedService.getStartHour());
         return availableTimeList;
     }
@@ -94,6 +56,10 @@ public class BookingDbService {
     public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
         LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
         List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
+        return checkAvailableTimes(bookingList, date, repairDuration);
+    }
+
+    private List<LocalTime> checkAvailableTimes(List<Booking> bookingList, LocalDate date, int repairDuration) {
         if (bookingList.size() == 0) {
             return new ArrayList<>();
         }
@@ -153,8 +119,8 @@ public class BookingDbService {
             );
             bookingRepository.save(booking);
         } else {
-            List<Long> bookingId = bookingList.stream().map(Booking::getId).toList();
-            throw new WrongInputDataException("Work times of given date: " + date + ", are already declared. To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingId);
+            List<Long> bookingIdList = bookingList.stream().map(Booking::getId).toList();
+            throw new WrongInputDataException("Work times of given date: " + date + ", are already declared. To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingIdList);
         }
     }
 
