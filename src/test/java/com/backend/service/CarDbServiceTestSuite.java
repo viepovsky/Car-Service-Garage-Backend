@@ -7,9 +7,11 @@ import com.backend.repository.CarRepository;
 import com.backend.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @DisplayName("Car Db Service Test Suite")
 class CarDbServiceTestSuite {
 
@@ -68,17 +70,17 @@ class CarDbServiceTestSuite {
     @Test
     void testUpdateCar() throws MyEntityNotFoundException {
         //Given
-        Car mockedCar = Mockito.mock(Car.class);
-        Car mockedCarToUpdate = Mockito.mock(Car.class);
+        Car car = new Car(1L, "BMW", "3 Series", 2010, "Sedan", "diesel", null, new ArrayList<>());
 
-        when(mockedCar.getId()).thenReturn(1L);
-        when(carRepository.findById(1L)).thenReturn(Optional.of(mockedCarToUpdate));
-        when(carRepository.save(mockedCarToUpdate)).thenReturn(mockedCarToUpdate);
+        Car carToUpdate = new Car(1L, "BMW", "3 Series", 2010, "Sedan", "diesel", new User(), new ArrayList<>());
+
+        when(carRepository.findById(1L)).thenReturn(Optional.of(carToUpdate));
+        when(carRepository.save(car)).thenReturn(car);
         //When
-        carDbService.updateCar(mockedCar);
+        carDbService.updateCar(car);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Car", 1L));
-        verify(carRepository, times(1)).save(mockedCar);
+        verify(carRepository, times(1)).save(car);
     }
 
     @Test

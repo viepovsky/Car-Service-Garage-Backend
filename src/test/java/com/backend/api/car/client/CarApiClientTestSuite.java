@@ -1,67 +1,126 @@
 package com.backend.api.car.client;
 
+import com.backend.api.car.config.CarApiConfig;
 import com.backend.api.car.domain.CarApiDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class CarApiClientTestSuite {
+    @InjectMocks
+    private CarApiClient carApiClient;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CarApiClientTestSuite.class);
+    @Mock
+    private RestTemplate restTemplate;
 
-    @Autowired
-    RestTemplate restTemplate;
+    @Mock
+    private CarApiConfig carApiConfig;
 
-    @Autowired
-    CarApiClient carApiClient;
-    //Tests are commented out due to numbered limit of requests,
-//    @Test
-//    public void testGetCarMakes() throws InterruptedException {
-//        Thread.sleep(1100); // free Api version supports only one request per second
-//        List<String> carMakes = carApiClient.getCarMakes();
-//        LOGGER.info("Car makes list size: " + carMakes.size());
-//        assertTrue(carMakes.size() != 0);
-//        assertTrue(carMakes.contains("BMW"));
-//    }
-//
-//    @Test
-//    public void testGetCarYears() throws InterruptedException {
-//        Thread.sleep(1100); // free Api version supports only one request per second
-//        List<Integer> carYears = carApiClient.getCarYears();
-//        LOGGER.info("Car years list size: " + carYears.size());
-//        assertTrue(carYears.size() != 0);
-//        assertTrue(carYears.contains(2020));
-//    }
-//
-//    @Test
-//    public void testGetCarTypes() throws InterruptedException {
-//        Thread.sleep(1100); // free Api version supports only one request per second
-//        List<String> carTypes = carApiClient.getCarTypes();
-//        LOGGER.info("Car types list size: " + carTypes.size());
-//        assertTrue(carTypes.size() != 0);
-//        assertTrue(carTypes.contains("Sedan"));
-//    }
-//
-//    @Test
-//    public void testGetCarModels() throws InterruptedException {
-//        Thread.sleep(1100); // free Api version supports only one request per second
-//        List<CarApiDto> carModels = carApiClient.getCarModels(2020, "BMW", "Sedan");
-//        LOGGER.info("Car models list size: " + carModels.size());
-//        try {
-//            LOGGER.info("Received first model: " + carModels.get(0).getModel());
-//        } catch (IndexOutOfBoundsException e) {
-//            LOGGER.info("List is empty. " + e.getMessage());
-//        }
-//        assertTrue(carModels.size() != 0);
-//        assertNotNull(carModels.get(0).getModel());
-//    }
+    @BeforeEach
+    void beforeEach() {
+        when(carApiConfig.getCarApiEndpoint()).thenReturn("https://test.com");
+        when(carApiConfig.getCarApiKey()).thenReturn("testkey");
+        when(carApiConfig.getCarApiHost()).thenReturn("testhost");
+    }
+
+    @Test
+    public void testGetCarMakes() throws URISyntaxException {
+        //Given
+        List<String> makeList = List.of("AUDI", "BMW", "OPEL", "PEUGEOT");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-RapidAPI-Key", carApiConfig.getCarApiKey());
+        headers.set("X-RapidAPI-Host", carApiConfig.getCarApiHost());
+        HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
+
+        ResponseEntity<List<String>> response = new ResponseEntity<>(makeList, HttpStatus.OK);
+
+        URI url = new URI("https://test.com/makes");
+        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<List<String>>(){})).thenReturn(response);
+        //When
+        List<String> retrievedList = carApiClient.getCarMakes();
+        //Then
+        assertTrue(retrievedList.size() != 0);
+        assertTrue(retrievedList.contains("BMW"));
+    }
+
+    @Test
+    public void testGetCarYears() throws URISyntaxException {
+        //Given
+        List<Integer> yearList = List.of(2022, 2021, 2020, 2019);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-RapidAPI-Key", carApiConfig.getCarApiKey());
+        headers.set("X-RapidAPI-Host", carApiConfig.getCarApiHost());
+        HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
+
+        ResponseEntity<List<Integer>> response = new ResponseEntity<>(yearList, HttpStatus.OK);
+
+        URI url = new URI("https://test.com/years");
+        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<List<Integer>>(){})).thenReturn(response);
+        //When
+        List<Integer> retrievedList = carApiClient.getCarYears();
+        //Then
+        assertTrue(retrievedList.size() != 0);
+        assertTrue(retrievedList.contains(2020));
+    }
+
+    @Test
+    public void testGetCarTypes() throws URISyntaxException {
+        //Given
+        List<String> typeList = List.of("Sedan", "Suv", "Hatchback", "Coupe");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-RapidAPI-Key", carApiConfig.getCarApiKey());
+        headers.set("X-RapidAPI-Host", carApiConfig.getCarApiHost());
+        HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
+
+        ResponseEntity<List<String>> response = new ResponseEntity<>(typeList, HttpStatus.OK);
+
+        URI url = new URI("https://test.com/types");
+        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<List<String>>(){})).thenReturn(response);
+        //When
+        List<String> retrievedList = carApiClient.getCarTypes();
+        //Then
+        assertTrue(retrievedList.size() != 0);
+        assertTrue(retrievedList.contains("Suv"));
+    }
+
+    @Test
+    public void testGetCarModels() throws URISyntaxException {
+        //Given
+        CarApiDto[] modelTable = new CarApiDto[2];
+        modelTable[0] = new CarApiDto("3 Series");
+        modelTable[1] = new CarApiDto("5 Series");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-RapidAPI-Key", carApiConfig.getCarApiKey());
+        headers.set("X-RapidAPI-Host", carApiConfig.getCarApiHost());
+        HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
+
+        ResponseEntity<CarApiDto[]> response = new ResponseEntity<>(modelTable, HttpStatus.OK);
+
+        URI url = new URI("https://test.com?limit=20&page=0&year=2020&make=BMW&type=Sedan");
+        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, CarApiDto[].class)).thenReturn(response);
+        //When
+        List<CarApiDto> retrievedList = carApiClient.getCarModels(2020, "BMW", "Sedan");
+        //Then
+        assertTrue(retrievedList.size() != 0);
+        assertEquals("3 Series", retrievedList.get(0).getModel());
+        assertEquals("5 Series", retrievedList.get(1).getModel());
+    }
 }

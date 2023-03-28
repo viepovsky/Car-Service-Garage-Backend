@@ -5,6 +5,7 @@ import com.backend.api.weather.domain.ForecastDto;
 import com.backend.api.weather.domain.ForecastsDto;
 import com.backend.api.weather.domain.LocationDto;
 import com.backend.api.weather.domain.LocationsDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,13 +33,16 @@ class WeatherApiClientTestSuite {
     @Mock
     private WeatherApiConfig weatherApiConfig;
 
-    @Test
-    void testGet14DaysForecast() throws URISyntaxException {
-        //Given
+    @BeforeEach
+    void beforeEach() {
         when(weatherApiConfig.getWeatherApiEndpoint()).thenReturn("https://test.com");
         when(weatherApiConfig.getWeatherApiKey()).thenReturn("testkey");
         when(weatherApiConfig.getWeatherApiHost()).thenReturn("testhost");
+    }
 
+    @Test
+    void testGet14DaysForecast() throws URISyntaxException {
+        //Given
         ForecastDto forecastDto = new ForecastDto();
         ForecastsDto forecastsDto = new ForecastsDto(LocalDate.of(2022, 10, 15), "R20", "Raining", 8, 2, 30);
         forecastDto.setForecasts(List.of(forecastsDto));
@@ -65,10 +69,6 @@ class WeatherApiClientTestSuite {
     @Test
     void testGetIdForCityName() throws URISyntaxException {
         //Given
-        when(weatherApiConfig.getWeatherApiEndpoint()).thenReturn("https://test.com");
-        when(weatherApiConfig.getWeatherApiKey()).thenReturn("testkey");
-        when(weatherApiConfig.getWeatherApiHost()).thenReturn("testhost");
-
         LocationDto locationDto = new LocationDto();
         LocationsDto locationsDto = new LocationsDto(12050);
         locationDto.setLocations(List.of(locationsDto));
