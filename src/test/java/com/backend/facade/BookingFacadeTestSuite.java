@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @MockBean(ApplicationScheduler.class)
-class BookingFacadeTest {
+class BookingFacadeTestSuite {
     @InjectMocks
     private BookingFacade bookingFacade;
 
