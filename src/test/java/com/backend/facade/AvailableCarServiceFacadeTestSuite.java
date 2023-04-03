@@ -5,6 +5,7 @@ import com.backend.domain.AvailableCarService;
 import com.backend.domain.dto.AvailableCarServiceDto;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.mapper.AvailableCarServiceMapper;
+import com.backend.scheduler.ApplicationScheduler;
 import com.backend.service.AvailableCarServiceDbService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -21,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@MockBean(ApplicationScheduler.class)
 class AvailableCarServiceFacadeTestSuite {
     @InjectMocks
     private AvailableCarServiceFacade availableCarServiceFacade;

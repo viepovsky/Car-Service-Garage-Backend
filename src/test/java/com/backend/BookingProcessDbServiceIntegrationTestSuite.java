@@ -3,11 +3,13 @@ package com.backend;
 import com.backend.domain.*;
 import com.backend.exceptions.MyEntityNotFoundException;
 import com.backend.exceptions.WrongInputDataException;
+import com.backend.scheduler.ApplicationScheduler;
 import com.backend.service.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -23,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@MockBean(ApplicationScheduler.class)
 @Transactional
 @DisplayName("Booking Process Db Services Integration Test Suite")
 public class BookingProcessDbServiceIntegrationTestSuite {

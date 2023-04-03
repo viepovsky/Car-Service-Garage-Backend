@@ -2,10 +2,12 @@ package com.backend;
 
 import com.backend.domain.*;
 import com.backend.repository.*;
+import com.backend.scheduler.ApplicationScheduler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@MockBean(ApplicationScheduler.class)
 @Transactional
 @DisplayName("Entities Integration Test Suites")
 public class EntitiesIntegrationTestSuite {
