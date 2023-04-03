@@ -2,7 +2,7 @@
 
 ## 1. Description
 
-Car Service Garage is an intuitive application that allows users to book appointments for car repairs or services at various automotive workshops located in different cities. Users can easily select the workshop of their choice and the specific service they want to have performed on their car. 
+Car Service Garage is an intuitive **RESTful** application that allows users to book appointments for car repairs or services at various automotive workshops located in different cities. Users can easily select the workshop of their choice and the specific service they want to have performed on their car. 
 The application offers a convenient way to browse the history of reserved services and make changes to existing reservations.
 The backend version of the application provides all necessary components, including classes for data storage, services, and endpoints. 
 
@@ -54,3 +54,7 @@ To log in as provided user, use the username: `testuser` and the password: `test
 
 Next, I will develop an ADMIN view for the application, which will allow administrators to add new garage locations and update the current status of customer cars during repairs and services.
 In addition, the view will enable administrators to manage customer accounts and their associated cars, allowing them to make changes at the customer's request.
+
+## 8. Database schema:
+
+![Database schema screenshot](src/main/resources/screenshots/database_schema.png)
