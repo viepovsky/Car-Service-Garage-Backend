@@ -13,16 +13,6 @@ public class CarServiceMapper {
     private CarMapper carMapper;
     private BookingMapper bookingMapper;
 
-    public CarServiceDto mapToCarServiceDto(CarService carService) {
-        return new CarServiceDto (
-                carService.getId(),
-                carService.getName(),
-                carService.getDescription(),
-                carService.getCost(),
-                carService.getRepairTimeInMinutes()
-        );
-    }
-
     public List<CarServiceDto> mapToCarServiceDtoList(List<CarService> carServiceList) {
         return carServiceList.stream()
                 .map(n -> new CarServiceDto(
