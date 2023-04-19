@@ -6,7 +6,7 @@ Car Service Garage is an intuitive **RESTful** application that allows users to 
 The application offers a convenient way to browse the history of reserved services and make changes to existing reservations.
 The backend version of the application provides all necessary components, including classes for data storage, services, and endpoints. 
 
-## 2. Here is backend, link to frontend
+## 2. This is backend repository, link to frontend
 
 This repository contains the backend of Car Service Garage.
 It can run as a standalone version, which can be tested with Postman. However, it is designed to run with the frontend version, which can be found here: [**GitHub**](https://github.com/viepovsky/Car-Service-Garage-Frontend).
@@ -40,7 +40,7 @@ This data is then stored in a database, allowing the frontend application to qui
 
 ## 5. How to run
 
-To run whole application, you need to first run the backend by running `AppBackendApplication` class. Once that is done, to run the frontend, simply type `mvnw` (Windows) or `./mvnw` (Mac & Linux) in terminal IDE. Then, if the browser does not open automatically, you can access the application by opening http://localhost:8081 in your browser.
+To run whole application, you need to first run the backend by running `AppBackendApplication` class or simply type `./gradlew bootRun` in terminal IDE. Once that is done, to run the frontend, run `Application` class or simply type `./mvnw spring-boot:run` in terminal IDE. Then, if the browser does not open automatically, you can access the application by opening http://localhost:8081 in your browser.
 
 In case of problems on Mac with the error message `zsh: permission denied: ./mvnw`, simply type `chmod +x ./mvnw` in terminal IDE to make the file executable, and then type `./mvnw` again to start the application.
 
