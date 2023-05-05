@@ -191,7 +191,7 @@ INSERT INTO "BOOKING" (id, status, date, start_hour, end_hour, created, total_co
 UPDATE "BOOKING" SET date = DATEADD(day, 7, CURRENT_DATE) WHERE DAYOFWEEK(date) >= 6 AND status = 0;
 UPDATE "BOOKING" SET date = DATEADD(day, -12, CURRENT_DATE) WHERE DAYOFWEEK(date) >= 6 AND status = 2;
 
-INSERT INTO "CARS_SERVICES" (id, name, description, cost, repair_time, car_id, user_id, booking_id, service_status) VALUES
+INSERT INTO "CARS_REPAIRS" (id, name, description, cost, repair_time, car_id, user_id, booking_id, service_status) VALUES
 (1, 'Oil change', 'Oil change description', 120.00, 30, 1, 1, 123, 2),
 (2, 'Tire change', 'Tire change description', 200.00, 50, 1, 1, 123, 2),
 (3, 'Timing belt change', 'Timing belt change description', 1700.00, 180, 2, 1, 124, 2),

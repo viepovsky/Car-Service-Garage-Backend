@@ -1,6 +1,6 @@
 package com.viepovsky.car;
 
-import com.viepovsky.carservice.CarService;
+import com.viepovsky.carservice.CarRepair;
 import com.viepovsky.user.User;
 import lombok.*;
 
@@ -41,12 +41,12 @@ public class Car {
     private User user;
 
     @OneToMany(
-            targetEntity = CarService.class,
+            targetEntity = CarRepair.class,
             mappedBy = "car",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY
     )
-    private List<CarService> carServicesList = new ArrayList<>();
+    private List<CarRepair> carServicesList = new ArrayList<>();
 
     public Car(Long id, String make, String model, String type, int year, String engine) {
         this.id = id;

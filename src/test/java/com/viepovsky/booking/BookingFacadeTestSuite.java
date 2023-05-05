@@ -1,14 +1,9 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.booking.BookingFacade;
 import com.viepovsky.config.AdminConfig;
-import com.viepovsky.booking.Booking;
-import com.viepovsky.booking.BookingDto;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
-import com.viepovsky.booking.BookingMapper;
 import com.viepovsky.scheduler.ApplicationScheduler;
-import com.viepovsky.booking.BookingDbService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,7 +28,7 @@ class BookingFacadeTestSuite {
     private BookingFacade bookingFacade;
 
     @Mock
-    private BookingDbService bookingDbService;
+    private BookingService bookingService;
 
     @Mock
     private BookingMapper bookingMapper;
@@ -49,7 +44,7 @@ class BookingFacadeTestSuite {
         //Given
         Booking mockedBooking = Mockito.mock(Booking.class);
         BookingDto mockedBookingDto = Mockito.mock(BookingDto.class);
-        when(bookingDbService.getAllBookingsForGivenUser("username")).thenReturn(List.of(mockedBooking));
+        when(bookingService.getAllBookingsForGivenUser("username")).thenReturn(List.of(mockedBooking));
         when(bookingMapper.mapToBookingDtoList(List.of(mockedBooking))).thenReturn(List.of(mockedBookingDto));
         //When
         List<BookingDto> retrievedList = bookingFacade.getBookingsForGivenUsername("username");
@@ -62,7 +57,7 @@ class BookingFacadeTestSuite {
     void shouldGetAvailableBookingTimesTwoParams() throws MyEntityNotFoundException {
         //Given
         LocalDate date = LocalDate.now();
-        when(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, 1L)).thenReturn(List.of(LocalTime.now()));
+        when(bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, 1L)).thenReturn(List.of(LocalTime.now()));
         //When
         List<LocalTime> retrievedList = bookingFacade.getAvailableBookingTimes(date, 50, 2L, 1L);
         //Then
@@ -74,7 +69,7 @@ class BookingFacadeTestSuite {
     void shouldGetAvailableBookingTimesThreeParams() throws MyEntityNotFoundException {
         //Given
         LocalDate date = LocalDate.now();
-        when(bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, 50, 2L)).thenReturn(List.of(LocalTime.now()));
+        when(bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, 50, 2L)).thenReturn(List.of(LocalTime.now()));
         //When
         List<LocalTime> retrievedList = bookingFacade.getAvailableBookingTimes(date, 50, 2L, 0L);
         //Then
@@ -87,11 +82,11 @@ class BookingFacadeTestSuite {
         //Given
         LocalDate date = LocalDate.now();
         LocalTime start = LocalTime.now();
-        doNothing().when(bookingDbService).createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
+        doNothing().when(bookingService).createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
         //When
         bookingFacade.createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
         //Then
-        verify(bookingDbService, times(1)).createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
+        verify(bookingService, times(1)).createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
     }
 
     @Test
@@ -101,11 +96,11 @@ class BookingFacadeTestSuite {
         LocalTime start = LocalTime.now();
         LocalTime end = start.plusMinutes(50);
         when(adminConfig.getAdminApiKey()).thenReturn(adminApiKey);
-        doNothing().when(bookingDbService).saveBooking(date, start, end, 2L);
+        doNothing().when(bookingService).saveBooking(date, start, end, 2L);
         //When
         ResponseEntity<String> response = bookingFacade.createAvailableBookingDays(date, start, end, 2L, adminApiKey);
         //Then
-        verify(bookingDbService, times(1)).saveBooking(date, start, end, 2L);
+        verify(bookingService, times(1)).saveBooking(date, start, end, 2L);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -116,11 +111,11 @@ class BookingFacadeTestSuite {
         LocalTime start = LocalTime.now();
         LocalTime end = start.plusMinutes(50);
         when(adminConfig.getAdminApiKey()).thenReturn(adminApiKey);
-        doNothing().when(bookingDbService).saveBooking(date, start, end, 2L);
+        doNothing().when(bookingService).saveBooking(date, start, end, 2L);
         //When
         ResponseEntity<String> response = bookingFacade.createAvailableBookingDays(date, start, end, 2L, "55d");
         //Then
-        verify(bookingDbService, times(0)).saveBooking(date, start, end, 2L);
+        verify(bookingService, times(0)).saveBooking(date, start, end, 2L);
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
@@ -129,11 +124,11 @@ class BookingFacadeTestSuite {
         //Given
         LocalDate date = LocalDate.now();
         LocalTime start = LocalTime.now();
-        doNothing().when(bookingDbService).updateBooking(2L, date, start);
+        doNothing().when(bookingService).updateBooking(2L, date, start);
         //When
         bookingFacade.updateBooking(2L, date, start);
         //Then
-        verify(bookingDbService, times(1)).updateBooking(2L, date, start);
+        verify(bookingService, times(1)).updateBooking(2L, date, start);
     }
 
 }

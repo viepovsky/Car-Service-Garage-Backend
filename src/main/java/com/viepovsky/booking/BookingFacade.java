@@ -18,33 +18,33 @@ import java.util.List;
 @RequiredArgsConstructor
 class BookingFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingFacade.class);
-    private final BookingDbService bookingDbService;
+    private final BookingService bookingService;
     private final BookingMapper bookingMapper;
     private final AdminConfig adminConfig;
 
     public List<BookingDto> getBookingsForGivenUsername(String username) throws MyEntityNotFoundException {
-        List<Booking> bookingList = bookingDbService.getAllBookingsForGivenUser(username);
+        List<Booking> bookingList = bookingService.getAllBookingsForGivenUser(username);
         return bookingMapper.mapToBookingDtoList(bookingList);
     }
 
     public List<LocalTime> getAvailableBookingTimes(LocalDate date, int repairDuration, Long garageId, Long carServiceId) throws MyEntityNotFoundException {
         LOGGER.info("GET Endpoint getAvailableBookingTimes used.");
         if (carServiceId != 0L) {
-            return bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, carServiceId);
+            return bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, carServiceId);
         } else {
-            return bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId);
+            return bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId);
         }
     }
 
     public void createBooking(List<Long> selectedServiceIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) throws MyEntityNotFoundException, WrongInputDataException {
         LOGGER.info("POST Endpoint createBooking used.");
-        bookingDbService.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
+        bookingService.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
     }
 
     public ResponseEntity<String> createAvailableBookingDays(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId, String apiKey) throws MyEntityNotFoundException, WrongInputDataException {
         LOGGER.info("POST Endpoint createAvailableBooking used.");
         if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            bookingDbService.saveBooking(date, startHour, endHour, garageId);
+            bookingService.saveBooking(date, startHour, endHour, garageId);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
@@ -53,6 +53,6 @@ class BookingFacade {
 
     public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) throws MyEntityNotFoundException {
         LOGGER.info("PUT Endpoint getAvailableBookingTimes used.");
-        bookingDbService.updateBooking(bookingId, date, startHour);
+        bookingService.updateBooking(bookingId, date, startHour);
     }
 }

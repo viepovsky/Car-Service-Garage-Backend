@@ -1,7 +1,7 @@
 package com.viepovsky.user;
 
 import com.viepovsky.car.Car;
-import com.viepovsky.carservice.CarService;
+import com.viepovsky.carservice.CarRepair;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -56,14 +56,14 @@ public class User {
     private List<Car> carList = new ArrayList<>();
 
     @OneToMany(
-            targetEntity = CarService.class,
+            targetEntity = CarRepair.class,
             mappedBy = "user",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<CarService> servicesList = new ArrayList<>();
+    private List<CarRepair> servicesList = new ArrayList<>();
 
-    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password, UserRole role, LocalDateTime createdDate, List<Car> carList, List<CarService> servicesList) {
+    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password, UserRole role, LocalDateTime createdDate, List<Car> carList, List<CarRepair> servicesList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

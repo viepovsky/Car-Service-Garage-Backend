@@ -1,7 +1,6 @@
 package com.viepovsky.garage.worktime;
 
 import com.viepovsky.config.AdminConfig;
-import com.viepovsky.garage.worktime.*;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ class GarageWorkTimeFacadeTestSuite {
     private GarageWorkTimeFacade garageWorkTimeFacade;
 
     @Mock
-    private GarageWorkTimeDbService garageWorkTimeDbService;
+    private GarageWorkTimeService garageWorkTimeService;
 
     @Mock
     private GarageWorkTimeMapper garageWorkTimeMapper;
@@ -42,11 +41,11 @@ class GarageWorkTimeFacadeTestSuite {
         GarageWorkTime mocked = Mockito.mock(GarageWorkTime.class);
         when(adminConfig.getAdminApiKey()).thenReturn(adminApiKey);
         when(garageWorkTimeMapper.mapToGarageWorkTime(mockedDto)).thenReturn(mocked);
-        doNothing().when(garageWorkTimeDbService).saveGarageWorkTime(mocked, 1L);
+        doNothing().when(garageWorkTimeService).saveGarageWorkTime(mocked, 1L);
         //When
         ResponseEntity<String> response = garageWorkTimeFacade.createGarageWorkTime(mockedDto, 1L, adminApiKey);
         //Then
-        verify(garageWorkTimeDbService, times(1)).saveGarageWorkTime(mocked, 1L);
+        verify(garageWorkTimeService, times(1)).saveGarageWorkTime(mocked, 1L);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -57,11 +56,11 @@ class GarageWorkTimeFacadeTestSuite {
         GarageWorkTime mocked = Mockito.mock(GarageWorkTime.class);
         when(adminConfig.getAdminApiKey()).thenReturn(adminApiKey);
         when(garageWorkTimeMapper.mapToGarageWorkTime(mockedDto)).thenReturn(mocked);
-        doNothing().when(garageWorkTimeDbService).saveGarageWorkTime(mocked, 1L);
+        doNothing().when(garageWorkTimeService).saveGarageWorkTime(mocked, 1L);
         //When
         ResponseEntity<String> response = garageWorkTimeFacade.createGarageWorkTime(mockedDto, 1L, "adminApiKey");
         //Then
-        verify(garageWorkTimeDbService, times(0)).saveGarageWorkTime(mocked, 1L);
+        verify(garageWorkTimeService, times(0)).saveGarageWorkTime(mocked, 1L);
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
@@ -69,11 +68,11 @@ class GarageWorkTimeFacadeTestSuite {
     void shouldDeleteGarageWorkTime() throws MyEntityNotFoundException {
         //Given
         when(adminConfig.getAdminApiKey()).thenReturn(adminApiKey);
-        doNothing().when(garageWorkTimeDbService).deleteGarageWorkTime(1L);
+        doNothing().when(garageWorkTimeService).deleteGarageWorkTime(1L);
         //When
         ResponseEntity<String> response = garageWorkTimeFacade.deleteGarageWorkTime(1L, adminApiKey);
         //Then
-        verify(garageWorkTimeDbService, times(1)).deleteGarageWorkTime(1L);
+        verify(garageWorkTimeService, times(1)).deleteGarageWorkTime(1L);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -84,7 +83,7 @@ class GarageWorkTimeFacadeTestSuite {
         //When
         ResponseEntity<String> response = garageWorkTimeFacade.deleteGarageWorkTime(1L, "adminApiKey");
         //Then
-        verify(garageWorkTimeDbService, times(0)).deleteGarageWorkTime(1L);
+        verify(garageWorkTimeService, times(0)).deleteGarageWorkTime(1L);
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 }

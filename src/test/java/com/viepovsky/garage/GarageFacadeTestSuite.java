@@ -25,7 +25,7 @@ class GarageFacadeTestSuite {
     private GarageFacade garageFacade;
 
     @Mock
-    private GarageDbService garageDbService;
+    private GarageService garageService;
 
     @Mock
     private GarageMapper garageMapper;
@@ -41,7 +41,7 @@ class GarageFacadeTestSuite {
         //Given
         List<Garage> mockedGarageList = List.of(Mockito.mock(Garage.class));
         List<GarageDto> mockedGarageDtoList = List.of(Mockito.mock(GarageDto.class));
-        when(garageDbService.getAllGarages()).thenReturn(mockedGarageList);
+        when(garageService.getAllGarages()).thenReturn(mockedGarageList);
         when(garageMapper.mapToGarageDtoList(mockedGarageList)).thenReturn(mockedGarageDtoList);
         //When
         List<GarageDto> retrievedList = garageFacade.getAllGarages();
@@ -57,11 +57,11 @@ class GarageFacadeTestSuite {
         Garage mockedGarage = Mockito.mock(Garage.class);
         when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
         when(garageMapper.mapToGarage(mockedGarageDto)).thenReturn(mockedGarage);
-        doNothing().when(garageDbService).saveGarage(mockedGarage);
+        doNothing().when(garageService).saveGarage(mockedGarage);
         //When
         ResponseEntity<String> response = garageFacade.createGarage(mockedGarageDto, adminKey);
         //Then
-        verify(garageDbService, times(1)).saveGarage(mockedGarage);
+        verify(garageService, times(1)).saveGarage(mockedGarage);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -72,11 +72,11 @@ class GarageFacadeTestSuite {
         Garage mockedGarage = Mockito.mock(Garage.class);
         when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
         when(garageMapper.mapToGarage(mockedGarageDto)).thenReturn(mockedGarage);
-        doNothing().when(garageDbService).saveGarage(mockedGarage);
+        doNothing().when(garageService).saveGarage(mockedGarage);
         //When
         ResponseEntity<String> response = garageFacade.createGarage(mockedGarageDto, "2523ddd");
         //Then
-        verify(garageDbService, times(0)).saveGarage(mockedGarage);
+        verify(garageService, times(0)).saveGarage(mockedGarage);
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
@@ -84,11 +84,11 @@ class GarageFacadeTestSuite {
     void shouldDeleteGarage() throws MyEntityNotFoundException {
         //Given
         when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
-        doNothing().when(garageDbService).deleteGarage(1L);
+        doNothing().when(garageService).deleteGarage(1L);
         //When
         ResponseEntity<String> response = garageFacade.deleteGarage(1L, adminKey);
         //Then
-        verify(garageDbService, times(1)).deleteGarage(1L);
+        verify(garageService, times(1)).deleteGarage(1L);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -96,11 +96,11 @@ class GarageFacadeTestSuite {
     void shouldNotDeleteGarage() throws MyEntityNotFoundException {
         //Given
         when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
-        doNothing().when(garageDbService).deleteGarage(1L);
+        doNothing().when(garageService).deleteGarage(1L);
         //When
         ResponseEntity<String> response = garageFacade.deleteGarage(1L, "awdawdad");
         //Then
-        verify(garageDbService, times(0)).deleteGarage(1L);
+        verify(garageService, times(0)).deleteGarage(1L);
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 }

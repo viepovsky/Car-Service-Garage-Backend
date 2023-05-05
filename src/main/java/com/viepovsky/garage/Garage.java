@@ -1,7 +1,7 @@
 package com.viepovsky.garage;
 
 import com.viepovsky.booking.Booking;
-import com.viepovsky.garage.availableservice.AvailableCarService;
+import com.viepovsky.garage.availablerepair.AvailableCarRepair;
 import com.viepovsky.garage.worktime.GarageWorkTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,12 +48,12 @@ public class Garage {
     private List<GarageWorkTime> garageWorkTimeList = new ArrayList<>();
 
     @OneToMany(
-            targetEntity = AvailableCarService.class,
+            targetEntity = AvailableCarRepair.class,
             mappedBy = "garage",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<AvailableCarService> availableCarServiceList = new ArrayList<>();
+    private List<AvailableCarRepair> availableCarRepairList = new ArrayList<>();
 
     public Garage(Long id, String name, String address) {
         this.id = id;
@@ -66,11 +66,11 @@ public class Garage {
         this.address = address;
     }
 
-    public Garage(String name, String address, List<Booking> bookingList, List<GarageWorkTime> garageWorkTimeList, List<AvailableCarService> availableCarServiceList) {
+    public Garage(String name, String address, List<Booking> bookingList, List<GarageWorkTime> garageWorkTimeList, List<AvailableCarRepair> availableCarRepairList) {
         this.name = name;
         this.address = address;
         this.bookingList = bookingList;
         this.garageWorkTimeList = garageWorkTimeList;
-        this.availableCarServiceList = availableCarServiceList;
+        this.availableCarRepairList = availableCarRepairList;
     }
 }

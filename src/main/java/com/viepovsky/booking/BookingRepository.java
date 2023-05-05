@@ -20,5 +20,5 @@ public interface BookingRepository extends CrudRepository<Booking, Long> {
 
     Booking findBookingByDateAndStartHourAndGarageIdAndStatus(LocalDate date, LocalTime startHour, Long garageId, BookingStatus status);
 
-    List<Booking> findBookingsByCarServiceListUserId(Long userId);
+    List<Booking> findBookingsByCarRepairListUserId(Long userId);
 }

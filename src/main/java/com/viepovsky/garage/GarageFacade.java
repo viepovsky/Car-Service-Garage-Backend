@@ -15,20 +15,20 @@ import java.util.List;
 @RequiredArgsConstructor
 class GarageFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageFacade.class);
-    private final GarageDbService garageDbService;
+    private final GarageService garageService;
     private final GarageMapper garageMapper;
     private final AdminConfig adminConfig;
 
     public List<GarageDto> getAllGarages() {
         LOGGER.info("GET Endpoint used.");
-        List<Garage> garageList = garageDbService.getAllGarages();
+        List<Garage> garageList = garageService.getAllGarages();
         return garageMapper.mapToGarageDtoList(garageList);
     }
 
     public ResponseEntity<String> createGarage(GarageDto garageDto, String apiKey) {
         LOGGER.info("POST Endpoint used.");
         if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            garageDbService.saveGarage(garageMapper.mapToGarage(garageDto));
+            garageService.saveGarage(garageMapper.mapToGarage(garageDto));
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
@@ -37,7 +37,7 @@ class GarageFacade {
 
     public ResponseEntity<String> deleteGarage(Long garageId, String apiKey) throws MyEntityNotFoundException {
         if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            garageDbService.deleteGarage(garageId);
+            garageService.deleteGarage(garageId);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");

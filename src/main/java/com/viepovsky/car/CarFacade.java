@@ -12,28 +12,28 @@ import java.util.List;
 @RequiredArgsConstructor
 class CarFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(CarFacade.class);
-    private final CarDbService carDbService;
+    private final CarService carService;
     private final CarMapper carMapper;
 
     public List<CarDto> getCarsForGivenUsername(String username) throws MyEntityNotFoundException {
         LOGGER.info("GET Endpoint used.");
-        List<Car> carList = carDbService.getAllCarsForGivenUsername(username);
+        List<Car> carList = carService.getAllCarsForGivenUsername(username);
         return carMapper.mapToCarDtoList(carList);
     }
 
     public void createCar(CarDto carDto, String username) throws MyEntityNotFoundException {
         LOGGER.info("POST Endpoint used.");
         Car car = carMapper.mapToCar(carDto);
-        carDbService.saveCar(car, username);
+        carService.saveCar(car, username);
     }
 
     public void updateCar(CarDto carDto) throws MyEntityNotFoundException {
         LOGGER.info("PUT Endpoint used.");
-        carDbService.updateCar(carMapper.mapToCar(carDto));
+        carService.updateCar(carMapper.mapToCar(carDto));
     }
 
     public void deleteCar(Long carId) throws MyEntityNotFoundException {
         LOGGER.info("DELETE Endpoint used.");
-        carDbService.deleteCar(carId);
+        carService.deleteCar(carId);
     }
 }

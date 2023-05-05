@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class GarageWorkTimeFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageWorkTimeFacade.class);
-    private final GarageWorkTimeDbService garageWorkTimeDbService;
+    private final GarageWorkTimeService garageWorkTimeService;
     private final GarageWorkTimeMapper garageWorkTimeMapper;
     private final AdminConfig adminConfig;
 
@@ -21,7 +21,7 @@ class GarageWorkTimeFacade {
         LOGGER.info("POST Endpoint used.");
         if (apiKey.equals(adminConfig.getAdminApiKey())) {
             GarageWorkTime garageWorkTime = garageWorkTimeMapper.mapToGarageWorkTime(garageWorkTimeDto);
-            garageWorkTimeDbService.saveGarageWorkTime(garageWorkTime, garageId);
+            garageWorkTimeService.saveGarageWorkTime(garageWorkTime, garageId);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
@@ -31,7 +31,7 @@ class GarageWorkTimeFacade {
     public ResponseEntity<String> deleteGarageWorkTime(Long garageWorkTimeId, String apiKey) throws MyEntityNotFoundException {
         LOGGER.info("DELETE Endpoint used.");
         if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            garageWorkTimeDbService.deleteGarageWorkTime(garageWorkTimeId);
+            garageWorkTimeService.deleteGarageWorkTime(garageWorkTimeId);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
