@@ -23,6 +23,10 @@ public class CarServiceDbService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username:" + username));
         return carServiceRepository.findCarServicesByUserId(user.getId());
     }
+
+    public CarService getCarService(Long id) throws MyEntityNotFoundException {
+        return carServiceRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("CarService" + id));
+    }
 //    private final AvailableCarServiceRepository availableCarServiceRepository;
 //    private final CarRepository carRepository;
 //    public void saveCarService(List<Long> selectedServices, Long carId) throws MyEntityNotFoundException {

@@ -1,17 +1,17 @@
 package com.viepovsky.booking;
 
 import com.viepovsky.car.Car;
-import com.viepovsky.car.CarRepository;
+import com.viepovsky.car.CarDbService;
 import com.viepovsky.carservice.CarService;
-import com.viepovsky.carservice.CarServiceRepository;
+import com.viepovsky.carservice.CarServiceDbService;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.Garage;
-import com.viepovsky.garage.GarageRepository;
+import com.viepovsky.garage.GarageDbService;
 import com.viepovsky.garage.availableservice.AvailableCarService;
-import com.viepovsky.garage.availableservice.AvailableCarServiceRepository;
+import com.viepovsky.garage.availableservice.AvailableCarServiceDbService;
 import com.viepovsky.user.User;
-import com.viepovsky.user.UserRepository;
+import com.viepovsky.user.UserDbService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,19 +42,19 @@ class BookingDbServiceTestSuite {
     private BookingRepository bookingRepository;
 
     @Mock
-    private GarageRepository garageRepository;
+    private GarageDbService garageDbService;
 
     @Mock
-    private CarServiceRepository carServiceRepository;
+    private CarServiceDbService carServiceDbService;
 
     @Mock
-    private CarRepository carRepository;
+    private CarDbService carDbService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserDbService userDbService;
 
     @Mock
-    private AvailableCarServiceRepository availableCarServiceRepository;
+    private AvailableCarServiceDbService availableCarServiceDbService;
 
     @Test
     void testGetAllBookings() {
@@ -72,7 +72,7 @@ class BookingDbServiceTestSuite {
         //Given
         Booking mockedBooking = Mockito.mock(Booking.class);
         User mockedUser = Mockito.mock(User.class);
-        when(userRepository.findByUsername("username")).thenReturn(Optional.of(mockedUser));
+        when(userDbService.getUser("username")).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
         when(bookingRepository.findBookingsByCarServiceListUserId(1L)).thenReturn(List.of(mockedBooking));
         //When
@@ -101,7 +101,7 @@ class BookingDbServiceTestSuite {
         bookingList.add(booking);
         bookingList.add(bookedService);
 
-        when(carServiceRepository.findById(20L)).thenReturn(Optional.of(carService));
+        when(carServiceDbService.getCarService(anyLong())).thenReturn(carService);
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(bookedService));
         when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingList);
         //When
@@ -135,7 +135,7 @@ class BookingDbServiceTestSuite {
         Garage mockedGarage = Mockito.mock(Garage.class);
         List<Booking> bookingList = new ArrayList<>();
 
-        when(garageRepository.findById(50L)).thenReturn(Optional.of(mockedGarage));
+        when(garageDbService.getGarage(anyLong())).thenReturn(mockedGarage);
         when(bookingRepository.findBookingsByDateAndStatusAndGarageId(localDate, BookingStatus.AVAILABLE, 50L)).thenReturn(bookingList);
         when(bookingRepository.save(any())).thenReturn(any());
         //When
@@ -154,7 +154,7 @@ class BookingDbServiceTestSuite {
         List<Booking> bookingList = new ArrayList<>();
         bookingList.add(booking);
 
-        when(garageRepository.findById(50L)).thenReturn(Optional.of(mockedGarage));
+        when(garageDbService.getGarage(anyLong())).thenReturn(mockedGarage);
         when(bookingRepository.findBookingsByDateAndStatusAndGarageId(localDate, BookingStatus.AVAILABLE, 50L)).thenReturn(bookingList);
         //When & then
         try {
@@ -195,19 +195,19 @@ class BookingDbServiceTestSuite {
         AvailableCarService availableCarService = new AvailableCarService(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
         AvailableCarService availableCarService2 = new AvailableCarService(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
 
-        when(garageRepository.findById(5L)).thenReturn(Optional.of(mockedGarage));
-        when(carRepository.findById(2L)).thenReturn(Optional.of(car));
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        BookingDbService bookingDbService = Mockito.spy(new BookingDbService(bookingRepository, garageRepository, carServiceRepository, carRepository, userRepository, availableCarServiceRepository));
+        when(garageDbService.getGarage(anyLong())).thenReturn(mockedGarage);
+        when(carDbService.getCar(anyLong())).thenReturn(car);
+        when(userDbService.getUser(anyLong())).thenReturn(user);
+        BookingDbService bookingDbService = Mockito.spy(new BookingDbService(bookingRepository, garageDbService, carServiceDbService, carDbService, userDbService, availableCarServiceDbService));
         Mockito.doReturn(localTimeList).when(bookingDbService).getAvailableBookingTimesForSelectedDayAndRepairDuration(localDate, repairDuration, 5L);
         when(bookingRepository.save(any())).thenReturn(any());
-        when(availableCarServiceRepository.findById(10L)).thenReturn(Optional.of(availableCarService));
-        when(availableCarServiceRepository.findById(11L)).thenReturn(Optional.of(availableCarService2));
-        when(userRepository.save(user)).thenReturn(user);
+        when(availableCarServiceDbService.getAvailableCarService(10L)).thenReturn(availableCarService);
+        when(availableCarServiceDbService.getAvailableCarService(11L)).thenReturn(availableCarService2);
+        doNothing().when(userDbService).saveUser(any(User.class));
         //When
         bookingDbService.createBooking(List.of(10L, 11L), localDate, LocalTime.of(10,0), 5L, 2L, repairDuration);
         //Then
-        verify(userRepository, times(1)).save(user);
+        verify(userDbService, times(1)).saveUser(any(User.class));
         verify(bookingRepository, times(2)).save(any());
     }
 }

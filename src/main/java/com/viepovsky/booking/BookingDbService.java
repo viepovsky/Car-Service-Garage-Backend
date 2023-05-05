@@ -1,18 +1,18 @@
 package com.viepovsky.booking;
 
 import com.viepovsky.car.Car;
-import com.viepovsky.car.CarRepository;
+import com.viepovsky.car.CarDbService;
 import com.viepovsky.carservice.CarService;
-import com.viepovsky.carservice.CarServiceRepository;
+import com.viepovsky.carservice.CarServiceDbService;
 import com.viepovsky.carservice.ServiceStatus;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.Garage;
-import com.viepovsky.garage.GarageRepository;
+import com.viepovsky.garage.GarageDbService;
 import com.viepovsky.garage.availableservice.AvailableCarService;
-import com.viepovsky.garage.availableservice.AvailableCarServiceRepository;
+import com.viepovsky.garage.availableservice.AvailableCarServiceDbService;
 import com.viepovsky.user.User;
-import com.viepovsky.user.UserRepository;
+import com.viepovsky.user.UserDbService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,47 +29,51 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class BookingDbService {
+class BookingDbService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingDbService.class);
-    private final BookingRepository bookingRepository;
-    private final GarageRepository garageRepository;
-    private final CarServiceRepository carServiceRepository;
-    private final CarRepository carRepository;
-    private final UserRepository userRepository;
-    private final AvailableCarServiceRepository availableCarServiceRepository;
+    private final BookingRepository repository;
+    private final GarageDbService garageDbService;
+    private final CarServiceDbService carServiceDbService;
+    private final CarDbService carDbService;
+    private final UserDbService userDbService;
+    private final AvailableCarServiceDbService availableCarServiceDbService;
 
     public List<Booking> getAllBookings() {
-        return bookingRepository.findAll();
+        return repository.findAll();
     }
 
     public List<Booking> getAllBookingsForGivenUser(String username) throws MyEntityNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
-        return bookingRepository.findBookingsByCarServiceListUserId(user.getId());
+        User user = userDbService.getUser(username);
+        return repository.findBookingsByCarServiceListUserId(user.getId());
+    }
+
+    private Booking getBooking(Long id) throws MyEntityNotFoundException {
+        return repository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Booking" + id));
     }
 
     public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, Long serviceId) throws MyEntityNotFoundException {
-        CarService carService = carServiceRepository.findById(serviceId).orElseThrow(() -> new MyEntityNotFoundException("CarService" + serviceId));
-        Booking bookedService = bookingRepository.findById(carService.getBooking().getId()).orElseThrow(() -> new MyEntityNotFoundException("Booking" + carService.getBooking().getId()));
-        int repairDuration = bookedService.getCarServiceList().stream().mapToInt(CarService::getRepairTimeInMinutes).sum();
-        Long garageId = bookedService.getGarage().getId();
+        var carService = carServiceDbService.getCarService(serviceId);
+        var reservedBooking = getBooking(carService.getBooking().getId());
+        int repairDuration = reservedBooking.getCarServiceList().stream().mapToInt(CarService::getRepairTimeInMinutes).sum();
+        Long garageId = reservedBooking.getGarage().getId();
 
         LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
-        bookingList.remove(bookedService);
+        List<Booking> allBookingsForDay = repository.findBookingsByDateAndGarageId(date, garageId);
+        allBookingsForDay.remove(reservedBooking);
 
-        List<LocalTime> availableTimeList = checkAvailableTimes(bookingList, date, repairDuration);
-        availableTimeList.remove(bookedService.getStartHour());
-        return availableTimeList;
+        List<LocalTime> availableBookingTimes = checkAvailableBookingTimes(allBookingsForDay, date, repairDuration);
+        availableBookingTimes.remove(reservedBooking.getStartHour());
+        return availableBookingTimes;
     }
 
     public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
         LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
-        return checkAvailableTimes(bookingList, date, repairDuration);
+        List<Booking> bookingList = repository.findBookingsByDateAndGarageId(date, garageId);
+        return checkAvailableBookingTimes(bookingList, date, repairDuration);
     }
 
-    private List<LocalTime> checkAvailableTimes(List<Booking> bookingList, LocalDate date, int repairDuration) {
-        if (bookingList.size() == 0) {
+    private List<LocalTime> checkAvailableBookingTimes(List<Booking> bookingList, LocalDate date, int repairDuration) {
+        if (!isGarageWorkingHoursPresent(bookingList)) {
             return new ArrayList<>();
         }
 
@@ -77,25 +81,51 @@ public class BookingDbService {
                 .filter(booking -> booking.getStatus() == BookingStatus.AVAILABLE)
                 .findFirst()
                 .orElse(null);
-        if (garageWorkTime == null) {
+        if (!isGarageWorkTimePresent(garageWorkTime)) {
             return new ArrayList<>();
         }
 
-        LocalTime openTime = garageWorkTime.getStartHour();
-        if (date.isEqual(LocalDate.now()) && LocalTime.now().isAfter(openTime)) {
-            int minutes = LocalTime.now().getMinute() + LocalTime.now().getHour() * 60;
-            minutes = ((minutes + 10) / 10) * 10;
-            openTime = LocalTime.of(minutes / 60, minutes % 60);
+        LocalTime garageOpenTime = garageWorkTime.getStartHour();
+        LocalTime garageCloseTime = garageWorkTime.getEndHour();
+        if (isOpenTimeBeforeNow(date, garageOpenTime)) {
+            if (isCloseTimeBeforeNow(garageCloseTime)) {
+                return new ArrayList<>();
+            }
+            garageOpenTime = roundUpTimeToNearest10Minutes();
         }
-        LocalTime closeTime = garageWorkTime.getEndHour();
 
         List<Booking> unavailableBookingTimeList = bookingList.stream()
                 .filter(booking -> booking.getStatus() == BookingStatus.UNAVAILABLE || booking.getStatus() == BookingStatus.WAITING_FOR_CUSTOMER)
                 .toList();
 
-        List<LocalTime> availableTimeList = new ArrayList<>();
-        LocalTime currentTime = openTime;
+        return getAvailableTimesForBooking(repairDuration, garageCloseTime, unavailableBookingTimeList, garageOpenTime);
+    }
 
+    private boolean isGarageWorkingHoursPresent(List<Booking> bookingList) {
+        return bookingList.size() != 0;
+    }
+
+    private boolean isGarageWorkTimePresent(Booking garageWorkTime) {
+        return garageWorkTime != null;
+    }
+
+    private boolean isOpenTimeBeforeNow(LocalDate date, LocalTime openTime) {
+        return (date.isEqual(LocalDate.now()) && LocalTime.now().isAfter(openTime));
+    }
+
+    private LocalTime roundUpTimeToNearest10Minutes() {
+        LocalTime timeNow = LocalTime.now();
+        int minutes = timeNow.getMinute() + timeNow.getHour() * 60;
+        minutes = ((minutes + 10) / 10) * 10;
+        return LocalTime.of(minutes / 60, minutes % 60);
+    }
+
+    private boolean isCloseTimeBeforeNow(LocalTime closeTime) {
+        return closeTime.isBefore(LocalTime.now());
+    }
+
+    private List<LocalTime> getAvailableTimesForBooking(int repairDuration, LocalTime closeTime, List<Booking> unavailableBookingTimeList, LocalTime currentTime) {
+        List<LocalTime> availableBookingTimes = new ArrayList<>();
         while (!currentTime.plusMinutes(repairDuration).isAfter(closeTime)) {
             boolean isAvailable = true;
             for (Booking booking : unavailableBookingTimeList) {
@@ -105,72 +135,80 @@ public class BookingDbService {
                 }
             }
             if (isAvailable) {
-                availableTimeList.add(currentTime);
+                availableBookingTimes.add(currentTime);
             }
             currentTime = currentTime.plusMinutes(10);
         }
-        return availableTimeList;
+        return availableBookingTimes;
     }
 
     public void saveBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) throws WrongInputDataException, MyEntityNotFoundException {
-        Garage garage = garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
-        List<Booking> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, BookingStatus.AVAILABLE, garageId);
-        if (bookingList.size() == 0) {
-            Booking booking = new Booking(
-                    BookingStatus.AVAILABLE,
-                    date,
-                    startHour,
-                    endHour,
-                    LocalDateTime.now(),
-                    BigDecimal.ZERO,
-                    new ArrayList<>(),
-                    garage
-            );
-            bookingRepository.save(booking);
+        Garage garage = garageDbService.getGarage(garageId);
+        List<Booking> bookingList = repository.findBookingsByDateAndStatusAndGarageId(date, BookingStatus.AVAILABLE, garageId);
+        if (!isGarageWorkingHoursPresent(bookingList)) {
+            Booking booking = createGarageWorkingHoursBooking(date, startHour, endHour, garage);
+            repository.save(booking);
         } else {
             List<Long> bookingIdList = bookingList.stream().map(Booking::getId).toList();
             throw new WrongInputDataException("Work times of given date: " + date + ", are already declared. To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingIdList);
         }
     }
 
+    private Booking createGarageWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Garage garage) {
+        return new Booking(
+                BookingStatus.AVAILABLE,
+                date,
+                startHour,
+                endHour,
+                LocalDateTime.now(),
+                BigDecimal.ZERO,
+                new ArrayList<>(),
+                garage
+        );
+    }
+
     public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) throws MyEntityNotFoundException {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
+        Booking booking = repository.findById(bookingId).orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
         booking.setDate(date);
         int repairTime = (int) Duration.between(booking.getStartHour(), booking.getEndHour()).toMinutes();
         booking.setStartHour(startHour);
         booking.setEndHour(startHour.plusMinutes(repairTime));
         LOGGER.info("Updated booking with values, date: " + date + ", time: " + startHour);
-        bookingRepository.save(booking);
+        repository.save(booking);
     }
 
     public void createBooking(List<Long> selectedServiceIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) throws MyEntityNotFoundException, WrongInputDataException {
-        Garage garage = garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
-        Car car = carRepository.findById(carId).orElseThrow(() -> new MyEntityNotFoundException("Car", carId));
-        User user = userRepository.findById(car.getUser().getId()).orElseThrow(() -> new MyEntityNotFoundException("User", car.getUser().getId()));
-        List<LocalTime> localTimeList = getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId);
-        if (localTimeList.contains(startHour)) {
-            Booking booking = new Booking(
-                    BookingStatus.WAITING_FOR_CUSTOMER,
-                    date,
-                    startHour,
-                    startHour.plusMinutes(repairDuration),
-                    LocalDateTime.now(),
-                    BigDecimal.ZERO,
-                    new ArrayList<>(),
-                    garage
-            );
-            bookingRepository.save(booking);
+        Garage garage = garageDbService.getGarage(garageId);
+        Car car = carDbService.getCar(carId);
+        User user = userDbService.getUser(car.getUser().getId());
+        List<LocalTime> availableBookingTimes = getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId);
+        if (availableBookingTimes.contains(startHour)) {
+            Booking booking = createCarRepairBooking(date, startHour, repairDuration, garage);
+            repository.save(booking);
             saveBookingAndServicesForGivenCarAndUser(selectedServiceIdList, car, user, booking);
         } else {
             throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another date.");
         }
     }
 
+    private Booking createCarRepairBooking(LocalDate date, LocalTime startHour, int repairDuration, Garage garage) {
+        return new Booking(
+                BookingStatus.WAITING_FOR_CUSTOMER,
+                date,
+                startHour,
+                startHour.plusMinutes(repairDuration),
+                LocalDateTime.now(),
+                BigDecimal.ZERO,
+                new ArrayList<>(),
+                garage
+        );
+    }
+
     private void saveBookingAndServicesForGivenCarAndUser(List<Long> selectedServiceIdList, Car car, User user, Booking booking) throws MyEntityNotFoundException {
         List<AvailableCarService> availableCarServiceList = new ArrayList<>();
         BigDecimal totalCost = BigDecimal.ZERO;
         for (Long id : selectedServiceIdList) {
-            AvailableCarService availableCarService = new AvailableCarService(availableCarServiceRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", id)));
+            AvailableCarService availableCarService = new AvailableCarService(availableCarServiceDbService.getAvailableCarService(id));
             if (availableCarService.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
                 BigDecimal multipliedCost = availableCarService.getCost();
                 multipliedCost = multipliedCost.multiply(availableCarService.getMakeMultiplier());
@@ -198,9 +236,9 @@ public class BookingDbService {
                 .findFirst()
                 .ifPresent(servicedCar -> servicedCar.getCarServicesList().addAll(carServiceList));
         user.getServicesList().addAll(carServiceList);
-        userRepository.save(user);
+        userDbService.saveUser(user);
         booking.getCarServiceList().addAll(carServiceList);
         booking.setTotalCost(totalCost);
-        bookingRepository.save(booking);
+        repository.save(booking);
     }
 }

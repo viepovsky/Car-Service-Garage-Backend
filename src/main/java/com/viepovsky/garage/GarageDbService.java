@@ -15,6 +15,10 @@ public class GarageDbService {
         return garageRepository.findAll();
     }
 
+    public Garage getGarage(Long id) throws MyEntityNotFoundException {
+        return garageRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Garage " + id));
+    }
+
     public List<String> getAllGarageCities() {
         return garageRepository.findAll().stream().map(n -> n.getAddress().substring(0, n.getAddress().indexOf(" "))).toList();
     }
