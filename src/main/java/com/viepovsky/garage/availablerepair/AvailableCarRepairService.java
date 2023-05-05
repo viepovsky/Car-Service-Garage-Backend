@@ -2,7 +2,7 @@ package com.viepovsky.garage.availablerepair;
 
 import com.viepovsky.garage.Garage;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.garage.GarageRepository;
+import com.viepovsky.garage.GarageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AvailableCarRepairService {
     private final AvailableCarRepairRepository availableCarRepairRepository;
-    private final GarageRepository garageRepository;
+    private final GarageService garageService;
 
     public List<AvailableCarRepair> getAllAvailableCarService(Long garageId) {
         return availableCarRepairRepository.findAllByGarageId(garageId);
@@ -23,10 +23,10 @@ public class AvailableCarRepairService {
     }
 
     public void saveAvailableCarService(AvailableCarRepair availableCarRepair, Long garageId) throws MyEntityNotFoundException {
-        Garage garage = garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
+        Garage garage = garageService.getGarage(garageId);
         availableCarRepair.setGarage(garage);
         garage.getAvailableCarRepairList().add(availableCarRepair);
-        garageRepository.save(garage);
+        garageService.saveGarage(garage);
     }
 
     public void deleteAvailableCarService(Long serviceId) throws MyEntityNotFoundException {

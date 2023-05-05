@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BookingRepository extends CrudRepository<Booking, Long> {
+interface BookingRepository extends CrudRepository<Booking, Long> {
     List<Booking> findAll();
 
     Optional<Booking> findById(Long id);

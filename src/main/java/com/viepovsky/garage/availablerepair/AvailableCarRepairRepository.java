@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AvailableCarRepairRepository extends CrudRepository<AvailableCarRepair, Long> {
+interface AvailableCarRepairRepository extends CrudRepository<AvailableCarRepair, Long> {
     List<AvailableCarRepair> findAll();
 
     List<AvailableCarRepair> findAllByGarageId(Long garageId);

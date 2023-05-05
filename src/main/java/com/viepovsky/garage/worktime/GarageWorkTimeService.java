@@ -2,7 +2,7 @@ package com.viepovsky.garage.worktime;
 
 import com.viepovsky.garage.Garage;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.garage.GarageRepository;
+import com.viepovsky.garage.GarageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,17 +12,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GarageWorkTimeService {
     private final GarageWorkTimeRepository garageWorkTimeRepository;
-    private final GarageRepository garageRepository;
+    private final GarageService garageService;
 
     public List<GarageWorkTime> getAllGarageWorkTimes() {
         return garageWorkTimeRepository.findAll();
     }
 
     public void saveGarageWorkTime(GarageWorkTime garageWorkTime, Long garageId) throws MyEntityNotFoundException {
-        Garage garage = garageRepository.findById(garageId).orElseThrow(() -> new MyEntityNotFoundException("Garage", garageId));
+        Garage garage = garageService.getGarage(garageId);
         garageWorkTime.setGarage(garage);
         garage.getGarageWorkTimeList().add(garageWorkTime);
-        garageRepository.save(garage);
+        garageService.saveGarage(garage);
     }
 
     public void deleteGarageWorkTime(Long garageWorkTimeId) throws MyEntityNotFoundException {

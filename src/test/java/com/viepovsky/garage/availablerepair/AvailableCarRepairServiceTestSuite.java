@@ -2,7 +2,7 @@ package com.viepovsky.garage.availablerepair;
 
 import com.viepovsky.garage.Garage;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.garage.GarageRepository;
+import com.viepovsky.garage.GarageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ class AvailableCarRepairServiceTestSuite {
     private AvailableCarRepairRepository availableCarRepairRepository;
 
     @Mock
-    private GarageRepository garageRepository;
+    private GarageService garageService;
 
     @Test
     void testGetAllAvailableCarService() {
@@ -50,12 +50,12 @@ class AvailableCarRepairServiceTestSuite {
         //Given
         Garage garage = new Garage("Test name", "Test address", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         AvailableCarRepair availableCarRepair = new AvailableCarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
-        when(garageRepository.findById(1L)).thenReturn(Optional.of(garage));
-        when(garageRepository.save(garage)).thenReturn(garage);
+        when(garageService.getGarage(anyLong())).thenReturn(garage);
+        doNothing().when(garageService).saveGarage(any(Garage.class));
         //When
         availableCarRepairService.saveAvailableCarService(availableCarRepair, 1L);
         //Then
-        verify(garageRepository, times(1)).save(garage);
+        verify(garageService, times(1)).saveGarage(any(Garage.class));
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Garage", 1L));
     }
 

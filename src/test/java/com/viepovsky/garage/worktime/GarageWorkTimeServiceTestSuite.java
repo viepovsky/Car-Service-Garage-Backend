@@ -2,7 +2,7 @@ package com.viepovsky.garage.worktime;
 
 import com.viepovsky.garage.Garage;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.garage.GarageRepository;
+import com.viepovsky.garage.GarageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ class GarageWorkTimeServiceTestSuite {
     private GarageWorkTimeRepository garageWorkTimeRepository;
 
     @Mock
-    private GarageRepository garageRepository;
+    private GarageService garageService;
 
     @Test
     void testGetAllGarageWorkTimes() {
@@ -49,13 +49,13 @@ class GarageWorkTimeServiceTestSuite {
         //Given
         Garage mockedGarage = Mockito.mock(Garage.class);
         GarageWorkTime mockedGarageWorkTime = Mockito.mock(GarageWorkTime.class);
-        when(garageRepository.findById(1L)).thenReturn(Optional.of(mockedGarage));
-        when(garageRepository.save(mockedGarage)).thenReturn(mockedGarage);
+        when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
+        doNothing().when(garageService).saveGarage(any(Garage.class));
         //When
         garageWorkTimeService.saveGarageWorkTime(mockedGarageWorkTime, 1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Garage", 1L));
-        verify(garageRepository, times(1)).save(mockedGarage);
+        verify(garageService, times(1)).saveGarage(any(Garage.class));
     }
 
     @Test
