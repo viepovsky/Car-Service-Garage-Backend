@@ -2,7 +2,7 @@ package com.viepovsky.car;
 
 import com.viepovsky.user.User;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.user.UserRepository;
+import com.viepovsky.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,34 +11,34 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CarService {
-    private final CarRepository carRepository;
-    private final UserRepository userRepository;
+    private final CarRepository repository;
+    private final UserService userService;
 
     public List<Car> getAllCarsForGivenUsername(String username) throws MyEntityNotFoundException {
-        Long userId = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username)).getId();
-        return carRepository.findCarsByUserId(userId);
+        Long userId = userService.getUser(username).getId();
+        return repository.findCarsByUserId(userId);
     }
 
     public Car getCar(Long id) throws MyEntityNotFoundException {
-        return carRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Car: " + id));
+        return repository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Car: " + id));
     }
 
     public void saveCar(Car car, String username) throws MyEntityNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
+        User user = userService.getUser(username);
         car.setUser(user);
         user.getCarList().add(car);
-        userRepository.save(user);
+        userService.saveUser(user);
     }
 
     public void updateCar(Car car) throws MyEntityNotFoundException {
-        Car retrievedCar = carRepository.findById(car.getId()).orElseThrow(() -> new MyEntityNotFoundException("Car", car.getId()));
+        Car retrievedCar = repository.findById(car.getId()).orElseThrow(() -> new MyEntityNotFoundException("Car", car.getId()));
         car.setUser(retrievedCar.getUser());
-        carRepository.save(car);
+        repository.save(car);
     }
 
     public void deleteCar(Long carId) throws MyEntityNotFoundException {
-        if (carRepository.findById(carId).isPresent()) {
-            carRepository.deleteById(carId);
+        if (repository.findById(carId).isPresent()) {
+            repository.deleteById(carId);
         } else {
             throw new MyEntityNotFoundException("Car", carId);
         }

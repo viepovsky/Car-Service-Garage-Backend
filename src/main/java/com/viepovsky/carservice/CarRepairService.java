@@ -1,11 +1,12 @@
 package com.viepovsky.carservice;
 
 import com.viepovsky.booking.Booking;
-import com.viepovsky.booking.BookingRepository;
+import com.viepovsky.booking.BookingService;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.User;
-import com.viepovsky.user.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.viepovsky.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,19 +14,25 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CarRepairService {
-    private final CarRepairRepository carRepairRepository;
-    private final UserRepository userRepository;
-    private final BookingRepository bookingRepository;
+    private final CarRepairRepository repository;
+    private final UserService userService;
+    private final BookingService bookingService;
+
+    @Autowired
+    public CarRepairService(@Lazy BookingService bookingService, UserService userService, CarRepairRepository repository) {
+        this.repository = repository;
+        this. userService = userService;
+        this.bookingService = bookingService;
+    }
 
     public List<CarRepair> getCarServices(String username) throws MyEntityNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username:" + username));
-        return carRepairRepository.findCarServicesByUserId(user.getId());
+        User user = userService.getUser(username);
+        return repository.findCarServicesByUserId(user.getId());
     }
 
     public CarRepair getCarService(Long id) throws MyEntityNotFoundException {
-        return carRepairRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("CarService" + id));
+        return repository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("CarService" + id));
     }
 //    private final AvailableCarServiceRepository availableCarServiceRepository;
 //    private final CarRepository carRepository;
@@ -57,7 +64,7 @@ public class CarRepairService {
 //    }
 
     public void deleteCarService(Long carServiceId) throws MyEntityNotFoundException {
-        CarRepair carRepair = carRepairRepository.findById(carServiceId).orElseThrow(() -> new MyEntityNotFoundException("CarService", carServiceId));
+        CarRepair carRepair = repository.findById(carServiceId).orElseThrow(() -> new MyEntityNotFoundException("CarService", carServiceId));
         Booking booking = carRepair.getBooking();
         if (booking.getCarRepairList().size() > 1) {
             LocalTime endHour = booking.getEndHour();
@@ -69,11 +76,11 @@ public class CarRepairService {
             booking.setTotalCost(totalCost);
 
             booking.getCarRepairList().remove(carRepair);
-            carRepairRepository.delete(carRepair);
-            bookingRepository.save(booking);
+            repository.delete(carRepair);
+            bookingService.save(booking);
         } else {
-            carRepairRepository.delete(carRepair);
-            bookingRepository.delete(booking);
+            repository.delete(carRepair);
+            bookingService.delete(booking);
         }
     }
 }

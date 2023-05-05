@@ -12,7 +12,7 @@ import com.viepovsky.garage.GarageService;
 import com.viepovsky.garage.availablerepair.AvailableCarRepair;
 import com.viepovsky.garage.availablerepair.AvailableCarRepairService;
 import com.viepovsky.user.User;
-import com.viepovsky.user.UserDbService;
+import com.viepovsky.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +29,13 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-class BookingService {
+public class BookingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingService.class);
     private final BookingRepository repository;
     private final GarageService garageService;
     private final CarRepairService carRepairService;
     private final CarService carService;
-    private final UserDbService userDbService;
+    private final UserService userService;
     private final AvailableCarRepairService availableCarRepairService;
 
     public List<Booking> getAllBookings() {
@@ -43,7 +43,7 @@ class BookingService {
     }
 
     public List<Booking> getAllBookingsForGivenUser(String username) throws MyEntityNotFoundException {
-        User user = userDbService.getUser(username);
+        User user = userService.getUser(username);
         return repository.findBookingsByCarRepairListUserId(user.getId());
     }
 
@@ -180,7 +180,7 @@ class BookingService {
     public void createBooking(List<Long> selectedServiceIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) throws MyEntityNotFoundException, WrongInputDataException {
         Garage garage = garageService.getGarage(garageId);
         Car car = carService.getCar(carId);
-        User user = userDbService.getUser(car.getUser().getId());
+        User user = userService.getUser(car.getUser().getId());
         List<LocalTime> availableBookingTimes = getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId);
         if (availableBookingTimes.contains(startHour)) {
             Booking booking = createCarRepairBooking(date, startHour, repairDuration, garage);
@@ -236,9 +236,17 @@ class BookingService {
                 .findFirst()
                 .ifPresent(servicedCar -> servicedCar.getCarServicesList().addAll(carRepairList));
         user.getServicesList().addAll(carRepairList);
-        userDbService.saveUser(user);
+        userService.saveUser(user);
         booking.getCarRepairList().addAll(carRepairList);
         booking.setTotalCost(totalCost);
         repository.save(booking);
+    }
+
+    public void save(Booking booking) {
+        repository.save(booking);
+    }
+
+    public void delete(Booking booking) {
+        repository.delete(booking);
     }
 }

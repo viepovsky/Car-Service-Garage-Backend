@@ -1,11 +1,11 @@
 package com.viepovsky.carservice;
 
 import com.viepovsky.booking.Booking;
-import com.viepovsky.booking.BookingRepository;
+import com.viepovsky.booking.BookingService;
 import com.viepovsky.booking.BookingStatus;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.User;
-import com.viepovsky.user.UserRepository;
+import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,10 +35,10 @@ class CarRepairServiceTestSuite {
     private CarRepairRepository carRepairRepository;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Mock
-    private BookingRepository bookingRepository;
+    private BookingService bookingService;
 
     @Test
     void testGetCarServices() throws MyEntityNotFoundException {
@@ -47,7 +47,7 @@ class CarRepairServiceTestSuite {
         CarRepair mockedCarRepair = Mockito.mock(CarRepair.class);
         carRepairList.add(mockedCarRepair);
         User mockedUser = Mockito.mock(User.class);
-        when(userRepository.findByUsername("username")).thenReturn(Optional.of(mockedUser));
+        when(userService.getUser(anyString())).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
         when(carRepairRepository.findCarServicesByUserId(1L)).thenReturn(carRepairList);
         //When
@@ -67,7 +67,7 @@ class CarRepairServiceTestSuite {
 
         when(carRepairRepository.findById(1L)).thenReturn(Optional.of(carRepair));
         doNothing().when(carRepairRepository).delete(carRepair);
-        when(bookingRepository.save(booking)).thenReturn(booking);
+        doNothing().when(bookingService).save(any(Booking.class));
         //When
         carRepairService.deleteCarService(1L);
         //Then
@@ -77,7 +77,7 @@ class CarRepairServiceTestSuite {
         assertEquals(LocalTime.of(10, 0), booking.getStartHour());
         assertEquals(LocalTime.of(11, 30), booking.getEndHour());
         verify(carRepairRepository, times(1)).delete(carRepair);
-        verify(bookingRepository, times(1)).save(booking);
+        verify(bookingService, times(1)).save(any(Booking.class));
     }
 
     @Test
@@ -89,12 +89,12 @@ class CarRepairServiceTestSuite {
 
         when(carRepairRepository.findById(1L)).thenReturn(Optional.of(carRepair));
         doNothing().when(carRepairRepository).delete(carRepair);
-        doNothing().when(bookingRepository).delete(booking);
+        doNothing().when(bookingService).delete(booking);
         //When
         carRepairService.deleteCarService(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("CarService", 1L));
         verify(carRepairRepository, times(1)).delete(carRepair);
-        verify(bookingRepository, times(1)).delete(booking);
+        verify(bookingService, times(1)).delete(booking);
     }
 }

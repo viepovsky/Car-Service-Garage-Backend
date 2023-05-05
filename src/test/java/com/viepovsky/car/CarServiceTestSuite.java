@@ -2,7 +2,7 @@ package com.viepovsky.car;
 
 import com.viepovsky.user.User;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.user.UserRepository;
+import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ class CarServiceTestSuite {
     private CarRepository carRepository;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Test
     void testGetAllCarsForGivenUsername() throws MyEntityNotFoundException {
@@ -39,7 +39,7 @@ class CarServiceTestSuite {
         List<Car> carList = new ArrayList<>();
         carList.add(car);
 
-        when(userRepository.findByUsername("username")).thenReturn(Optional.of(mockedUser));
+        when(userService.getUser(anyString())).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
         when(carRepository.findCarsByUserId(1L)).thenReturn(carList);
         //When
@@ -55,12 +55,12 @@ class CarServiceTestSuite {
         //Given
         User mockedUser = Mockito.mock(User.class);
         Car mockedCar = Mockito.mock(Car.class);
-        when(userRepository.findByUsername("username")).thenReturn(Optional.of(mockedUser));
-        when(userRepository.save(mockedUser)).thenReturn(mockedUser);
+        when(userService.getUser(anyString())).thenReturn(mockedUser);
+        doNothing().when(userService).saveUser(any(User.class));
         //When
         carService.saveCar(mockedCar, "username");
         //Then
-        verify(userRepository, times(1)).save(mockedUser);
+        verify(userService, times(1)).saveUser(any(User.class));
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
     }
 

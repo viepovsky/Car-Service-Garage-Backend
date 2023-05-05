@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class UserDbService {
+public class UserService {
     private final UserRepository repository;
 
     public User getUser(String username) throws MyEntityNotFoundException {

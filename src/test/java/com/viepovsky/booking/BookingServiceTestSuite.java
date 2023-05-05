@@ -11,7 +11,7 @@ import com.viepovsky.garage.GarageService;
 import com.viepovsky.garage.availablerepair.AvailableCarRepair;
 import com.viepovsky.garage.availablerepair.AvailableCarRepairService;
 import com.viepovsky.user.User;
-import com.viepovsky.user.UserDbService;
+import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,7 +51,7 @@ class BookingServiceTestSuite {
     private CarService carService;
 
     @Mock
-    private UserDbService userDbService;
+    private UserService userService;
 
     @Mock
     private AvailableCarRepairService availableCarRepairService;
@@ -72,7 +72,7 @@ class BookingServiceTestSuite {
         //Given
         Booking mockedBooking = Mockito.mock(Booking.class);
         User mockedUser = Mockito.mock(User.class);
-        when(userDbService.getUser("username")).thenReturn(mockedUser);
+        when(userService.getUser("username")).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
         when(bookingRepository.findBookingsByCarRepairListUserId(1L)).thenReturn(List.of(mockedBooking));
         //When
@@ -197,17 +197,17 @@ class BookingServiceTestSuite {
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
         when(carService.getCar(anyLong())).thenReturn(car);
-        when(userDbService.getUser(anyLong())).thenReturn(user);
-        BookingService bookingService = Mockito.spy(new BookingService(bookingRepository, garageService, carRepairService, carService, userDbService, availableCarRepairService));
+        when(userService.getUser(anyLong())).thenReturn(user);
+        BookingService bookingService = Mockito.spy(new BookingService(bookingRepository, garageService, carRepairService, carService, userService, availableCarRepairService));
         Mockito.doReturn(localTimeList).when(bookingService).getAvailableBookingTimesForSelectedDayAndRepairDuration(localDate, repairDuration, 5L);
         when(bookingRepository.save(any())).thenReturn(any());
         when(availableCarRepairService.getAvailableCarService(10L)).thenReturn(availableCarRepair);
         when(availableCarRepairService.getAvailableCarService(11L)).thenReturn(availableCarRepair2);
-        doNothing().when(userDbService).saveUser(any(User.class));
+        doNothing().when(userService).saveUser(any(User.class));
         //When
         bookingService.createBooking(List.of(10L, 11L), localDate, LocalTime.of(10,0), 5L, 2L, repairDuration);
         //Then
-        verify(userDbService, times(1)).saveUser(any(User.class));
+        verify(userService, times(1)).saveUser(any(User.class));
         verify(bookingRepository, times(2)).save(any());
     }
 }
