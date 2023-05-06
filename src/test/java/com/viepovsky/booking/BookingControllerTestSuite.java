@@ -50,7 +50,7 @@ class BookingControllerTestSuite {
     @Test
     void shouldGetBookings() throws Exception {
         //Given
-        List<BookingDto> bookingDtoList = List.of(new BookingDto(1L, BookingStatus.WAITING_FOR_CUSTOMER.getStatusName(), LocalDate.of(2022,12,30), LocalTime.of(10,0), LocalTime.of(11,0), LocalDateTime.of(LocalDate.of(2022,12,30), LocalTime.of(10,0)), BigDecimal.valueOf(50), null, null));
+        List<BookingDto> bookingDtoList = List.of(new BookingDto(1L, BookingStatus.WAITING_FOR_CUSTOMER.getStatusName(), LocalDate.of(2022,12,30), LocalTime.of(10,0), LocalTime.of(11,0), BigDecimal.valueOf(50), null, null));
         when(bookingFacade.getBookingsForGivenUsername("username")).thenReturn(bookingDtoList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
@@ -60,8 +60,7 @@ class BookingControllerTestSuite {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].status", Matchers.is("Waiting for customer")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].date", Matchers.is("2022-12-30")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].startHour", Matchers.is("10:00:00")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].created", Matchers.is("2022-12-30T10:00:00")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].startHour", Matchers.is("10:00:00")));
     }
 
     @Test

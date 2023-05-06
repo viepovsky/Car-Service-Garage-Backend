@@ -19,7 +19,6 @@ public class BookingMapper {
                 booking.getDate(),
                 booking.getStartHour(),
                 booking.getEndHour(),
-                booking.getCreated(),
                 booking.getTotalCost(),
                 booking.getCarRepairList().stream()
                         .map(CarRepair::getId)

@@ -1,5 +1,6 @@
 package com.viepovsky.garage.worktime;
 
+import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.garage.Garage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "GARAGE_WORK_TIMES")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
-public class GarageWorkTime {
+public class GarageWorkTime extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")

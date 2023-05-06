@@ -34,7 +34,7 @@ INSERT INTO "GARAGE_WORK_TIMES" (id, work_day, start_hour, end_hour, garage_id) 
 (14, 'SUNDAY', TIME '00:00:00', TIME '00:00:00', 2);
 
 INSERT INTO "USERS" (id, first_name, last_name, email, phone_number, username, password, role, created_date) VALUES
-(1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 0, CURRENT_TIMESTAMP);
+(1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 'ROLE_USER', CURRENT_TIMESTAMP);
 
 INSERT INTO "CARS" (id, make, model, production_year, type, engine, user_id) VALUES
 (1, 'BMW', '3 Series', 2014, 'Sedan', 'Diesel', 1),
@@ -182,11 +182,11 @@ UPDATE "BOOKING" SET end_hour = '16:00:00' WHERE DAYOFWEEK(date) < 6 AND garage_
 UPDATE "BOOKING" SET end_hour = '12:00:00' WHERE DAYOFWEEK(date) = 6 AND garage_id = 2;
 UPDATE "BOOKING" SET end_hour = '00:00:00' WHERE DAYOFWEEK(date) = 7 AND garage_id = 2;
 
-INSERT INTO "BOOKING" (id, status, date, start_hour, end_hour, created, total_cost, garage_id) VALUES
-(123, 0, DATEADD(day, 5, CURRENT_DATE), '07:50:00', '09:10:00', CURRENT_TIMESTAMP, 320.00, 1),
-(124, 0, DATEADD(day, 9, CURRENT_DATE), '09:40:00', '12:40:00', CURRENT_TIMESTAMP, 1700.00, 2),
-(125, 2, DATEADD(day, -10, CURRENT_DATE), '12:20:00', '15:20:00', DATEADD(month, -1, CURRENT_TIMESTAMP), 2100.00, 2),
-(126, 4, CURRENT_DATE, '03:00:00', '23:30:00', DATEADD(day, -1, CURRENT_TIMESTAMP), 5500.00, 1);
+INSERT INTO "BOOKING" (id, status, date, start_hour, end_hour, total_cost, garage_id) VALUES
+(123, 0, DATEADD(day, 5, CURRENT_DATE), '07:50:00', '09:10:00', 320.00, 1),
+(124, 0, DATEADD(day, 9, CURRENT_DATE), '09:40:00', '12:40:00', 1700.00, 2),
+(125, 2, DATEADD(day, -10, CURRENT_DATE), '12:20:00', '15:20:00', 2100.00, 2),
+(126, 4, CURRENT_DATE, '03:00:00', '23:30:00', 5500.00, 1);
 
 UPDATE "BOOKING" SET date = DATEADD(day, 7, CURRENT_DATE) WHERE DAYOFWEEK(date) >= 6 AND status = 0;
 UPDATE "BOOKING" SET date = DATEADD(day, -12, CURRENT_DATE) WHERE DAYOFWEEK(date) >= 6 AND status = 2;

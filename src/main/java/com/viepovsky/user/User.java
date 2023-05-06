@@ -1,15 +1,13 @@
 package com.viepovsky.user;
 
-import com.viepovsky.audit.EntityAudit;
+import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car.Car;
 import com.viepovsky.carservice.CarRepair;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "USERS")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
-//@EntityListeners(AuditingEntityListener.class)
-public class User extends EntityAudit {
+public class User extends BaseEntityAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
@@ -44,7 +41,8 @@ public class User extends EntityAudit {
     private String password;
 
     @Column(name = "role")
-    private UserRole role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(
             targetEntity = Car.class,
@@ -62,7 +60,7 @@ public class User extends EntityAudit {
     )
     private List<CarRepair> servicesList = new ArrayList<>();
 
-    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password, UserRole role, List<Car> carList, List<CarRepair> servicesList) {
+    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password, Role role, List<Car> carList, List<CarRepair> servicesList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

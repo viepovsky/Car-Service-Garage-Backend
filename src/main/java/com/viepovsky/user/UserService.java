@@ -4,8 +4,6 @@ import com.viepovsky.exceptions.MyEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -29,7 +27,7 @@ public class UserService {
 
     public void saveUser(User user) {
         if (user.getRole() == null) {
-            user.setRole(UserRole.USER);
+            user.setRole(Role.ROLE_USER);
         }
         repository.save(user);
     }

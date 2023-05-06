@@ -1,5 +1,6 @@
 package com.viepovsky.carservice;
 
+import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Booking;
 import com.viepovsky.car.Car;
 import com.viepovsky.user.User;
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "CARS_REPAIRS")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
-public class CarRepair {
+public class CarRepair extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")

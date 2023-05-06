@@ -1,15 +1,12 @@
 package com.viepovsky.user;
 
-import com.viepovsky.user.UserRole;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
-import com.viepovsky.user.UserFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.viepovsky.user.UserController;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +51,7 @@ class UserControllerTestSuite {
     @Test
     void testGetUserToLogin() throws Exception {
         //Given
-        UserDto userDto = new UserDto(1L, "Testusername", "Testpassword", UserRole.USER);
+        UserDto userDto = new UserDto(1L, "Testusername", "Testpassword", Role.ROLE_USER);
         when(userFacade.getUserByUsernameToLogin("Testusername")).thenReturn(userDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
@@ -94,7 +91,7 @@ class UserControllerTestSuite {
     @Test
     void testCreateUser() throws Exception {
         //Given
-        UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", UserRole.USER, LocalDateTime.now());
+        UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
         doNothing().when(userFacade).createUser(userDto);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
@@ -121,7 +118,7 @@ class UserControllerTestSuite {
     @Test
     void testUpdateUser() throws Exception {
         //Given
-        UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", UserRole.USER, LocalDateTime.now());
+        UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
         doNothing().when(userFacade).updateUser(userDto);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
