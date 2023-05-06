@@ -18,20 +18,20 @@ INSERT INTO "AVAILABLE_CAR_SERVICE" (id, name, description, cost, repair_time, p
 (13, 'Replace air and cabin filter', 'Replace air and cabin description', 150.00, 25, '', 1.20, 2);
 
 INSERT INTO "GARAGE_WORK_TIMES" (id, work_day, start_hour, end_hour, garage_id) VALUES
-(1, 0, TIME '07:00:00', TIME '15:00:00', 1),
-(2, 1, TIME '07:00:00', TIME '15:00:00', 1),
-(3, 2, TIME '07:00:00', TIME '15:00:00', 1),
-(4, 3, TIME '07:00:00', TIME '15:00:00', 1),
-(5, 4, TIME '07:00:00', TIME '15:00:00', 1),
-(6, 5, TIME '09:00:00', TIME '13:00:00', 1),
-(7, 6, TIME '00:00:00', TIME '00:00:00', 1),
-(8, 0, TIME '08:00:00', TIME '16:00:00', 2),
-(9, 1, TIME '08:00:00', TIME '16:00:00', 2),
-(10, 2, TIME '08:00:00', TIME '16:00:00', 2),
-(11, 3, TIME '08:00:00', TIME '16:00:00', 2),
-(12, 4, TIME '08:00:00', TIME '16:00:00', 2),
-(13, 5, TIME '08:00:00', TIME '12:00:00', 2),
-(14, 6, TIME '00:00:00', TIME '00:00:00', 2);
+(1, 'MONDAY', TIME '07:00:00', TIME '15:00:00', 1),
+(2, 'TUESDAY', TIME '07:00:00', TIME '15:00:00', 1),
+(3, 'WEDNESDAY', TIME '07:00:00', TIME '15:00:00', 1),
+(4, 'THURSDAY', TIME '07:00:00', TIME '15:00:00', 1),
+(5, 'FRIDAY', TIME '07:00:00', TIME '15:00:00', 1),
+(6, 'SATURDAY', TIME '09:00:00', TIME '13:00:00', 1),
+(7, 'SUNDAY', TIME '00:00:00', TIME '00:00:00', 1),
+(8, 'MONDAY', TIME '08:00:00', TIME '16:00:00', 2),
+(9, 'TUESDAY', TIME '08:00:00', TIME '16:00:00', 2),
+(10, 'WEDNESDAY', TIME '08:00:00', TIME '16:00:00', 2),
+(11, 'THURSDAY', TIME '08:00:00', TIME '16:00:00', 2),
+(12, 'FRIDAY', TIME '08:00:00', TIME '16:00:00', 2),
+(13, 'SATURDAY', TIME '08:00:00', TIME '12:00:00', 2),
+(14, 'SUNDAY', TIME '00:00:00', TIME '00:00:00', 2);
 
 INSERT INTO "USERS" (id, first_name, last_name, email, phone_number, username, password, role, created_date) VALUES
 (1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 0, CURRENT_TIMESTAMP);

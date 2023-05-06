@@ -13,7 +13,7 @@ public class GarageWorkTimeDto {
     private Long id;
 
     @NotBlank
-    private String day;
+    private WorkDays day;
 
     @NotNull
     private LocalTime startHour;

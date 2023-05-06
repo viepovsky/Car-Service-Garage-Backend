@@ -10,7 +10,7 @@ public class GarageWorkTimeMapper {
     public GarageWorkTimeDto mapToGarageWorkTimeDto(GarageWorkTime garageWorkTime) {
         return new GarageWorkTimeDto(
                 garageWorkTime.getId(),
-                garageWorkTime.getDay().toString(),
+                garageWorkTime.getDay(),
                 garageWorkTime.getStartHour(),
                 garageWorkTime.getEndHour()
         );
