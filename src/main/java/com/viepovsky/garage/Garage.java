@@ -1,5 +1,6 @@
 package com.viepovsky.garage;
 
+import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Booking;
 import com.viepovsky.garage.availablerepair.AvailableCarRepair;
 import com.viepovsky.garage.worktime.GarageWorkTime;
@@ -19,7 +20,7 @@ import java.util.List;
 @Entity
 @Table(name = "GARAGE")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
-public class Garage {
+public class Garage extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")

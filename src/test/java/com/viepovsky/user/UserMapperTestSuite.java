@@ -1,14 +1,9 @@
 package com.viepovsky.user;
 
-import com.viepovsky.user.User;
-import com.viepovsky.user.UserMapper;
-import com.viepovsky.user.UserRole;
 import com.viepovsky.user.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +21,6 @@ class UserMapperTestSuite {
         user.setEmail("email");
         user.setPhoneNumber("252352");
         user.setUsername("username");
-        user.setCreatedDate(LocalDateTime.now());
         //When
         UserDto mappedUser = userMapper.mapToUserDto(user);
         //Then
@@ -58,7 +52,7 @@ class UserMapperTestSuite {
         user.setId(1L);
         user.setUsername("username");
         user.setPassword("password");
-        user.setRole(UserRole.USER);
+        user.setRole(Role.ROLE_USER);
         //When
         UserDto mappedUser = userMapper.mapToUserDtoLogin(user);
         //Then

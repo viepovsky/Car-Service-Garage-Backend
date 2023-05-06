@@ -160,7 +160,6 @@ public class BookingService {
                 date,
                 startHour,
                 endHour,
-                LocalDateTime.now(),
                 BigDecimal.ZERO,
                 new ArrayList<>(),
                 garage
@@ -197,7 +196,6 @@ public class BookingService {
                 date,
                 startHour,
                 startHour.plusMinutes(repairDuration),
-                LocalDateTime.now(),
                 BigDecimal.ZERO,
                 new ArrayList<>(),
                 garage

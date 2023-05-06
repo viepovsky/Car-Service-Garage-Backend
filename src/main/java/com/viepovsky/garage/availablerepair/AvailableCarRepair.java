@@ -1,5 +1,6 @@
 package com.viepovsky.garage.availablerepair;
 
+import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.garage.Garage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.math.BigDecimal;
 @Table(name = "AVAILABLE_CAR_SERVICE")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
 
-public class AvailableCarRepair {
+public class AvailableCarRepair extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")

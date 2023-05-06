@@ -1,5 +1,6 @@
 package com.viepovsky.booking;
 
+import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.carservice.CarRepair;
 import com.viepovsky.garage.Garage;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.List;
 @Entity
 @Table(name = "BOOKING")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
-public class Booking {
+public class Booking extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
@@ -39,9 +40,6 @@ public class Booking {
     @Column(name = "end_hour")
     private LocalTime endHour;
 
-    @Column(name = "created")
-    private LocalDateTime created;
-
     @Column(name = "total_cost")
     private BigDecimal totalCost;
 
@@ -56,12 +54,11 @@ public class Booking {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    public Booking(BookingStatus status, LocalDate date, LocalTime startHour, LocalTime endHour, LocalDateTime created, BigDecimal totalCost, List<CarRepair> carRepairList, Garage garage) {
+    public Booking(BookingStatus status, LocalDate date, LocalTime startHour, LocalTime endHour, BigDecimal totalCost, List<CarRepair> carRepairList, Garage garage) {
         this.status = status;
         this.date = date;
         this.startHour = startHour;
         this.endHour = endHour;
-        this.created = created;
         this.totalCost = totalCost;
         this.carRepairList = carRepairList;
         this.garage = garage;

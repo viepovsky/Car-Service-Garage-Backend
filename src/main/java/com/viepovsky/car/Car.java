@@ -1,5 +1,6 @@
 package com.viepovsky.car;
 
+import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.carservice.CarRepair;
 import com.viepovsky.user.User;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "CARS")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
-public class Car {
+public class Car extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")

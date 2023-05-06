@@ -1,6 +1,6 @@
 package com.viepovsky.user.dto;
 
-import com.viepovsky.user.UserRole;
+import com.viepovsky.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,11 +31,11 @@ public class UserDto {
 
     private String password;
 
-    private UserRole role;
+    private Role role;
 
     private LocalDateTime createdDate;
 
-    public UserDto(Long id, String username, String password, UserRole role) {
+    public UserDto(Long id, String username, String password, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;

@@ -20,7 +20,6 @@ public class BookingDto {
     private LocalDate date;
     private LocalTime startHour;
     private LocalTime endHour;
-    private LocalDateTime created;
     private BigDecimal totalCost;
     private List<Long> carServiceDtoIdList;
     private GarageDto garageDto;

@@ -1,5 +1,6 @@
 package com.viepovsky.user;
 
+import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car.Car;
 import com.viepovsky.carservice.CarRepair;
 import lombok.Getter;
@@ -7,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "USERS")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
-public class User {
-
+public class User extends BaseEntityAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
     private Long id;
@@ -42,10 +41,8 @@ public class User {
     private String password;
 
     @Column(name = "role")
-    private UserRole role;
-
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(
             targetEntity = Car.class,
@@ -63,7 +60,7 @@ public class User {
     )
     private List<CarRepair> servicesList = new ArrayList<>();
 
-    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password, UserRole role, LocalDateTime createdDate, List<Car> carList, List<CarRepair> servicesList) {
+    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password, Role role, List<Car> carList, List<CarRepair> servicesList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -71,7 +68,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.createdDate = createdDate;
         this.carList = carList;
         this.servicesList = servicesList;
     }

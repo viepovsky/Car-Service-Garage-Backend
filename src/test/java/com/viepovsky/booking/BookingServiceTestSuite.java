@@ -93,10 +93,10 @@ class BookingServiceTestSuite {
         Garage garage = new Garage();
         garage.setId(5L);
 
-        Booking bookedService = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(10,0), LocalTime.of(10,50), LocalDateTime.now(), null, carRepairList, garage);
+        Booking bookedService = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(10,0), LocalTime.of(10,50), null, carRepairList, garage);
         bookedService.setId(1L);
         carRepair.setBooking(bookedService);
-        Booking booking = new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(9,50), LocalTime.of(11,40), LocalDateTime.now(), null, null, null);
+        Booking booking = new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(9,50), LocalTime.of(11,40), null, null, null);
         List<Booking> bookingList = new ArrayList<>();
         bookingList.add(booking);
         bookingList.add(bookedService);
@@ -117,7 +117,7 @@ class BookingServiceTestSuite {
     void testGetAvailableBookingTimesForDayAndRepairDurationThreeParameters() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
-        List<Booking> bookingList = List.of(new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(9,50), LocalTime.of(11,40), LocalDateTime.now(), null, null, null));
+        List<Booking> bookingList = List.of(new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(9,50), LocalTime.of(11,40), null, null, null));
         when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingList);
         //When
         List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(localDate, 50, 5L);
@@ -149,7 +149,7 @@ class BookingServiceTestSuite {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         Garage mockedGarage = Mockito.mock(Garage.class);
-        Booking booking = new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(8,0), LocalTime.of(15,0), LocalDateTime.now(), null, null, null);
+        Booking booking = new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(8,0), LocalTime.of(15,0), null, null, null);
         booking.setId(1L);
         List<Booking> bookingList = new ArrayList<>();
         bookingList.add(booking);
@@ -171,7 +171,7 @@ class BookingServiceTestSuite {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         LocalDate newLocalDate = LocalDate.now().plusDays(2);
-        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(11,0), LocalTime.of(11,30), LocalDateTime.now(), null, null, null);
+        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(11,0), LocalTime.of(11,30), null, null, null);
 
         when(bookingRepository.findById(50L)).thenReturn(Optional.of(booking));
         when(bookingRepository.save(booking)).thenReturn(booking);

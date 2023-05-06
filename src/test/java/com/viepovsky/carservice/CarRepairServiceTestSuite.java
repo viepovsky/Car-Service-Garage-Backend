@@ -59,7 +59,7 @@ class CarRepairServiceTestSuite {
     @Test
     void testDeleteCarServiceMoreThanOneService() throws MyEntityNotFoundException {
         //Given
-        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10,0), LocalTime.of(12,0), LocalDateTime.now(), BigDecimal.valueOf(300), new ArrayList<>(), null);
+        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10,0), LocalTime.of(12,0), BigDecimal.valueOf(300), new ArrayList<>(), null);
         CarRepair carRepair = new CarRepair("Testname","Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
         CarRepair carRepair2 = new CarRepair("Testname2","Testdescription2", BigDecimal.valueOf(250), 90, null, null, booking, RepairStatus.AWAITING);
         booking.getCarRepairList().add(carRepair);
@@ -83,7 +83,7 @@ class CarRepairServiceTestSuite {
     @Test
     void testDeleteCarServiceOnlyOneService() throws MyEntityNotFoundException {
         //Given
-        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10,0), LocalTime.of(10,30), LocalDateTime.now(), BigDecimal.valueOf(50), new ArrayList<>(), null);
+        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10,0), LocalTime.of(10,30), BigDecimal.valueOf(50), new ArrayList<>(), null);
         CarRepair carRepair = new CarRepair("Testname","Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
         booking.getCarRepairList().add(carRepair);
 
