@@ -12,7 +12,6 @@ import java.time.LocalTime;
 public class GarageWorkTimeDto {
     private Long id;
 
-    @NotBlank
     private WorkDays day;
 
     @NotNull

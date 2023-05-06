@@ -26,7 +26,6 @@ class UserMapperTestSuite {
         user.setEmail("email");
         user.setPhoneNumber("252352");
         user.setUsername("username");
-        user.setCreatedDate(LocalDateTime.now());
         //When
         UserDto mappedUser = userMapper.mapToUserDto(user);
         //Then

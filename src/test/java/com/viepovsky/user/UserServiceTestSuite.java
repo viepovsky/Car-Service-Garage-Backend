@@ -72,14 +72,13 @@ class UserServiceTestSuite {
         userService.saveUser(user);
         //Then
         assertEquals(UserRole.USER, user.getRole());
-        assertNotNull(user.getCreatedDate());
         verify(userRepository, times(1)).save(user);
     }
 
     @Test
     void testUpdateUser() throws MyEntityNotFoundException {
         //Given
-        User user = new User("test", "testlast", "email", "656", "testuser", "123", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
+        User user = new User("test", "testlast", "email", "656", "testuser", "123", UserRole.USER, new ArrayList<>(), new ArrayList<>());
         User userToUpdate = new User();
         when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(userToUpdate));
         when(userRepository.save(userToUpdate)).thenReturn(userToUpdate);

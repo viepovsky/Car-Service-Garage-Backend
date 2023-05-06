@@ -41,7 +41,7 @@ class GarageWorkTimeControllerTestSuite {
     @Test
     void testCreateGarageWorkTime() throws Exception {
         //Given
-        GarageWorkTimeDto garageWorkTimeDto = new GarageWorkTimeDto(1L, "MONDAY", LocalTime.of(10,0), LocalTime.of(15,0));
+        GarageWorkTimeDto garageWorkTimeDto = new GarageWorkTimeDto(1L, WorkDays.MONDAY, LocalTime.of(10,0), LocalTime.of(15,0));
         when(garageWorkTimeFacade.createGarageWorkTime(garageWorkTimeDto, 1L, adminApiKey)).thenReturn(ResponseEntity.ok().build());
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new TypeAdapter<LocalTime>() {

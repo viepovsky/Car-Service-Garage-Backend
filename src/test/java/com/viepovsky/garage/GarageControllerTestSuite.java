@@ -4,6 +4,7 @@ import com.viepovsky.garage.worktime.GarageWorkTimeDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.viepovsky.garage.worktime.WorkDays;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ class GarageControllerTestSuite {
     @Test
     void shouldGetAllGarages() throws Exception {
         //Given
-        List<GarageWorkTimeDto> garageWorkTimeDtoList = List.of(new GarageWorkTimeDto(20L, "MONDAY", LocalTime.of(10,0), LocalTime.of(11,0)));
+        List<GarageWorkTimeDto> garageWorkTimeDtoList = List.of(new GarageWorkTimeDto(20L, WorkDays.MONDAY, LocalTime.of(10,0), LocalTime.of(11,0)));
         List<GarageDto> garageDtoList = List.of(new GarageDto(1L, "Test garage", "Test address", garageWorkTimeDtoList));
         when(garageFacade.getAllGarages()).thenReturn(garageDtoList);
         //When && then

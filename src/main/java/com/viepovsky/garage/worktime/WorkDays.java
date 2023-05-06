@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
+public
 enum WorkDays {
     MONDAY,
     TUESDAY,

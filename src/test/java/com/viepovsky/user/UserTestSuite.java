@@ -25,7 +25,7 @@ class UserTestSuite {
     @Test
     public void testSaveAndRetrieveUser() throws MyEntityNotFoundException {
         //Given
-        User user = new User("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
+        User user = new User("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, new ArrayList<>(), new ArrayList<>());
         userService.saveUser(user);
         //When
         User retrievedUser = userService.getUser("testusername");
@@ -40,7 +40,7 @@ class UserTestSuite {
     @Test
     public void testUpdateAndDeleteUser() throws MyEntityNotFoundException {
         //Given
-        User user = new User("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, LocalDateTime.now(), new ArrayList<>(), new ArrayList<>());
+        User user = new User("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", UserRole.USER, new ArrayList<>(), new ArrayList<>());
         userService.saveUser(user);
         User userToUpdate = userService.getUser("testusername");
         userToUpdate.setFirstName("Wiktor");
