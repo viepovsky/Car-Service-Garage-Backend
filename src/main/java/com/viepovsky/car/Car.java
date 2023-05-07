@@ -5,7 +5,7 @@ import com.viepovsky.carservice.CarRepair;
 import com.viepovsky.user.User;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

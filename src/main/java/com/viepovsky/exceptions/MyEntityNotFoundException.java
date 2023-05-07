@@ -1,9 +1,10 @@
 package com.viepovsky.exceptions;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 
 @Getter
-public class MyEntityNotFoundException extends Exception {
+public class MyEntityNotFoundException extends EntityNotFoundException {
     private Long recordId;
     private String text;
     public MyEntityNotFoundException(String text, Long recordId) {

@@ -6,7 +6,7 @@ import com.viepovsky.car.Car;
 import com.viepovsky.user.User;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Getter
