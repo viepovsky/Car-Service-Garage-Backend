@@ -3,9 +3,7 @@ package com.viepovsky.user;
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car.Car;
 import com.viepovsky.carservice.CarRepair;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +15,8 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "USERS")
