@@ -1,8 +1,6 @@
 package com.viepovsky.api.weather;
 
-import com.viepovsky.api.weather.WeatherApiController;
 import com.viepovsky.api.weather.dto.CityForecastDto;
-import com.viepovsky.api.weather.WeatherApiService;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.Role;
 import com.viepovsky.user.User;
@@ -16,11 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -81,10 +77,10 @@ class WeatherApiControllerTestSuite {
         when(weatherApiService.getForecastForCityAndDate("Poznan", LocalDate.of(2022, 10, 15))).thenReturn(cityForecastDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/weather-api")
-                .param("city", "Poznan")
-                .param("date", LocalDate.of(2022,10,15).toString())
-                .header("Authorization", "Bearer " + jwtToken))
+                        .get("/v1/weather-api")
+                        .param("city", "Poznan")
+                        .param("date", LocalDate.of(2022, 10, 15).toString())
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.symbol", Matchers.is("R20")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.symbolPhrase", Matchers.is("Raining")))

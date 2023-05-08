@@ -1,4 +1,4 @@
-package com.viepovsky.carservice;
+package com.viepovsky.carrepair;
 
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.Role;
@@ -13,11 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -77,11 +75,11 @@ class CarRepairControllerTestSuite {
     void testShouldGetEmptyCarServiceList() throws Exception {
         //Given
         List<CarRepairDto> emptyList = List.of();
-        when(carRepairFacade.getCarServices("username")).thenReturn(emptyList);
+        when(carRepairFacade.getCarServices(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/car-services")
-                        .param("username", "username")
+                        .get("/v1/car-repairs")
+                        .param("username", "testuser")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
@@ -92,11 +90,11 @@ class CarRepairControllerTestSuite {
     void testShouldGetCarServiceList() throws Exception {
         //Given
         List<CarRepairDto> carList = List.of(new CarRepairDto(1L, "Test name", "Test description", BigDecimal.valueOf(50), 60));
-        when(carRepairFacade.getCarServices("username")).thenReturn(carList);
+        when(carRepairFacade.getCarServices(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/car-services")
-                        .param("username", "username")
+                        .get("/v1/car-repairs")
+                        .param("username", "testuser")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
@@ -111,7 +109,7 @@ class CarRepairControllerTestSuite {
         doNothing().when(carRepairFacade).deleteCarService(1L);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/v1/car-services/1")
+                        .delete("/v1/car-repairs/1")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }

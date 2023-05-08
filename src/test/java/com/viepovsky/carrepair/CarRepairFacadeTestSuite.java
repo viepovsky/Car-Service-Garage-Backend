@@ -1,4 +1,4 @@
-package com.viepovsky.carservice;
+package com.viepovsky.carrepair;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.scheduler.ApplicationScheduler;
@@ -11,7 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest

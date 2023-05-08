@@ -1,4 +1,4 @@
-package com.viepovsky.carservice;
+package com.viepovsky.carrepair;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Booking;

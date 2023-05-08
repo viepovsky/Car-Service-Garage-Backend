@@ -1,7 +1,7 @@
 package com.viepovsky.car;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.carservice.CarRepair;
+import com.viepovsky.carrepair.CarRepair;
 import com.viepovsky.user.User;
 import lombok.*;
 

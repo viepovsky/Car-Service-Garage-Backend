@@ -1,4 +1,4 @@
-package com.viepovsky.carservice;
+package com.viepovsky.carrepair;
 
 import com.viepovsky.booking.BookingMapper;
 import com.viepovsky.car.CarMapper;

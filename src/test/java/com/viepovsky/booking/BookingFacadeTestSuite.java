@@ -18,7 +18,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -95,28 +96,11 @@ class BookingFacadeTestSuite {
         LocalDate date = LocalDate.now();
         LocalTime start = LocalTime.now();
         LocalTime end = start.plusMinutes(50);
-        when(adminConfig.getAdminApiKey()).thenReturn(adminApiKey);
         doNothing().when(bookingService).saveBooking(date, start, end, 2L);
         //When
-        ResponseEntity<String> response = bookingFacade.createAvailableBookingDays(date, start, end, 2L, adminApiKey);
+        bookingFacade.createWorkingHoursBooking(date, start, end, 2L);
         //Then
         verify(bookingService, times(1)).saveBooking(date, start, end, 2L);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    void shouldNotCreateAvailableBookingDays() throws MyEntityNotFoundException, WrongInputDataException {
-        //Given
-        LocalDate date = LocalDate.now();
-        LocalTime start = LocalTime.now();
-        LocalTime end = start.plusMinutes(50);
-        when(adminConfig.getAdminApiKey()).thenReturn(adminApiKey);
-        doNothing().when(bookingService).saveBooking(date, start, end, 2L);
-        //When
-        ResponseEntity<String> response = bookingFacade.createAvailableBookingDays(date, start, end, 2L, "55d");
-        //Then
-        verify(bookingService, times(0)).saveBooking(date, start, end, 2L);
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Test

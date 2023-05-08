@@ -1,15 +1,17 @@
 package com.viepovsky.garage.worktime;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -17,22 +19,27 @@ import jakarta.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 @Validated
 class GarageWorkTimeController {
-    private final GarageWorkTimeFacade garageWorkTimeFacade;
+    private final GarageWorkTimeFacade facade;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/admin/{garageId}")
-    public ResponseEntity<String> createGarageWorkTime(
-            @Valid @RequestBody GarageWorkTimeDto garageWorkTimeDto,
-            @PathVariable @Min(1) Long garageId,
-            @RequestHeader("api-key") @NotBlank String apiKey
-    ) throws MyEntityNotFoundException {
-        return garageWorkTimeFacade.createGarageWorkTime(garageWorkTimeDto, garageId, apiKey);
+    @GetMapping(path = "/{garageId}")
+    ResponseEntity<List<GarageWorkTimeDto>> getGarageWorkTimes(@PathVariable @Min(1) Long garageId) {
+        return ResponseEntity.ok(facade.getGarageWorkTimes(garageId));
     }
 
-    @DeleteMapping(path = "/admin/{garageWorkTimeId}")
-    public ResponseEntity<String> deleteGarageWorkTime(
-            @PathVariable @Min(1) Long garageWorkTimeId,
-            @RequestHeader("api-key") @NotBlank String apiKey
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/{garageId}")
+    ResponseEntity<String> createGarageWorkTime(
+            @Valid @RequestBody GarageWorkTimeDto garageWorkTimeDto,
+            @PathVariable @Min(1) Long garageId
     ) throws MyEntityNotFoundException {
-        return garageWorkTimeFacade.deleteGarageWorkTime(garageWorkTimeId, apiKey);
+        facade.createGarageWorkTime(garageWorkTimeDto, garageId);
+        return ResponseEntity.created(URI.create("/v1/garage-work-time/" + garageId)).build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(path = "/{garageWorkTimeId}")
+    ResponseEntity<String> deleteGarageWorkTime(@PathVariable @Min(1) Long garageWorkTimeId) throws MyEntityNotFoundException {
+        facade.deleteGarageWorkTime(garageWorkTimeId);
+        return ResponseEntity.ok().build();
     }
 }

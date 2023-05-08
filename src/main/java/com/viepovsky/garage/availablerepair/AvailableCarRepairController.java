@@ -1,17 +1,17 @@
 package com.viepovsky.garage.availablerepair;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,27 +20,26 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 class AvailableCarRepairController {
-    private final AvailableCarRepairFacade availableCarRepairFacade;
+    private final AvailableCarRepairFacade facade;
 
     @GetMapping(path = "/{garageId}")
-    public ResponseEntity<List<AvailableCarRepairDto>> getAvailableCarServices(@PathVariable @Min(1) Long garageId) {
-        return ResponseEntity.ok(availableCarRepairFacade.getAvailableCarServices(garageId));
+    ResponseEntity<List<AvailableCarRepairDto>> getAvailableCarServices(@PathVariable @Min(1) Long garageId) {
+        return ResponseEntity.ok(facade.getAvailableCarServices(garageId));
     }
 
-    @PostMapping(path = "/admin", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createAvailableCarService(
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<String> createAvailableCarService(
             @Valid @RequestBody AvailableCarRepairDto availableCarRepairDto,
-            @RequestParam(name = "garage-id") @NotNull @Min(1) Long garageId,
-            @RequestHeader("api-key") @NotBlank String apiKey
+            @RequestParam(name = "garage-id") @NotNull @Min(1) Long garageId
     ) throws MyEntityNotFoundException {
-        return availableCarRepairFacade.createAvailableCarService(availableCarRepairDto, garageId, apiKey);
+        facade.createAvailableCarService(availableCarRepairDto, garageId);
+        return ResponseEntity.created(URI.create("/v1/available-car-service/" + garageId)).build();
     }
 
-    @DeleteMapping(path = "/admin/{availableCarServiceId}")
-    public ResponseEntity<String> deleteAvailableCarService(
-            @PathVariable @Min(1) Long availableCarServiceId,
-            @RequestHeader("api-key") @NotBlank String apiKey
-    ) throws MyEntityNotFoundException {
-        return availableCarRepairFacade.deleteAvailableCarService(availableCarServiceId, apiKey);
+    @DeleteMapping(path = "/{availableCarServiceId}")
+    ResponseEntity<String> deleteAvailableCarService(@PathVariable @Min(1) Long availableCarServiceId) throws MyEntityNotFoundException {
+        facade.deleteAvailableCarService(availableCarServiceId);
+        return ResponseEntity.ok().build();
     }
 }

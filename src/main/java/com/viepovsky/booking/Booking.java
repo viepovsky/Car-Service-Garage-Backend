@@ -1,7 +1,7 @@
 package com.viepovsky.booking;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.carservice.CarRepair;
+import com.viepovsky.carrepair.CarRepair;
 import com.viepovsky.garage.Garage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,6 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 

@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -33,7 +32,8 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -54,13 +54,17 @@ class GarageWorkTimeControllerTestSuite {
     @Value("${jwt.secret.key}")
     private String secretKey;
 
-    private String jwtToken;
+    private String jwtTokenUser;
+    private String jwtTokenAdmin;
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
-        var userInDb = User.builder().username("testuser").role(Role.ROLE_USER).build();
-        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
-        jwtToken = generateToken("testuser", secretKey);
+        var userInDb = User.builder().username("Testusername").role(Role.ROLE_USER).build();
+        var adminInDb = User.builder().username("Testadmin").role(Role.ROLE_ADMIN).build();
+        when(userDetailsService.loadUserByUsername("Testusername")).thenReturn(userInDb);
+        when(userDetailsService.loadUserByUsername("Testadmin")).thenReturn(adminInDb);
+        jwtTokenUser = generateToken("Testusername", secretKey);
+        jwtTokenAdmin = generateToken("Testadmin", secretKey);
     }
 
     public static String generateToken(String username, String secretKey) {
@@ -84,8 +88,7 @@ class GarageWorkTimeControllerTestSuite {
     void testCreateGarageWorkTime() throws Exception {
         //Given
         GarageWorkTimeDto garageWorkTimeDto = new GarageWorkTimeDto(1L, WorkDays.MONDAY, LocalTime.of(10,0), LocalTime.of(15,0));
-        when(garageWorkTimeFacade.createGarageWorkTime(garageWorkTimeDto, 1L, adminApiKey)).thenReturn(ResponseEntity.ok().build());
-
+        doNothing().when(garageWorkTimeFacade).createGarageWorkTime(any(GarageWorkTimeDto.class), anyLong());
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new TypeAdapter<LocalTime>() {
             @Override
             public void write(JsonWriter out, LocalTime value) throws IOException {
@@ -99,30 +102,24 @@ class GarageWorkTimeControllerTestSuite {
         }).create();
         String jsonContent = gson.toJson(garageWorkTimeDto);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", adminApiKey);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/garage-work-time/admin/1")
+                        .post("/v1/garage-work-time/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent)
                         .characterEncoding("UTF-8")
-                        .headers(headers)
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                        .header("Authorization", "Bearer " + jwtTokenAdmin))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     void testDeleteGarageWorkTime() throws Exception {
         //Given
-        when(garageWorkTimeFacade.deleteGarageWorkTime(1L, adminApiKey)).thenReturn(ResponseEntity.ok().build());
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", adminApiKey);
+        doNothing().when(garageWorkTimeFacade).deleteGarageWorkTime(anyLong());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/v1/garage-work-time/admin/1")
-                        .headers(headers)
-                        .header("Authorization", "Bearer " + jwtToken))
+                        .delete("/v1/garage-work-time/1")
+                        .header("Authorization", "Bearer " + jwtTokenAdmin))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

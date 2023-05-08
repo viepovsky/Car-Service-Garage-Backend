@@ -14,12 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -29,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -78,12 +77,12 @@ class CarControllerTestSuite {
     void testShouldGetEmptyCarList() throws Exception {
         //Given
         List<CarDto> emptyList = List.of();
-        when(carFacade.getCarsForGivenUsername("username")).thenReturn(emptyList);
+        when(carFacade.getCarsForGivenUsername(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/cars")
-                .param("username", "username")
-                .header("Authorization", "Bearer " + jwtToken))
+                        .get("/v1/cars")
+                        .param("username", "testuser")
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
     }
@@ -92,11 +91,11 @@ class CarControllerTestSuite {
     void testShouldGetCarList() throws Exception {
         //Given
         List<CarDto> carList = List.of(new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", 5L));
-        when(carFacade.getCarsForGivenUsername("username")).thenReturn(carList);
+        when(carFacade.getCarsForGivenUsername(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/cars")
-                        .param("username", "username")
+                        .param("username", "testuser")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
@@ -109,7 +108,7 @@ class CarControllerTestSuite {
     void testShouldCreateCar() throws Exception {
         //Given
         CarDto carDto = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
-        doNothing().when(carFacade).createCar(carDto, "username");
+        doNothing().when(carFacade).createCar(any(CarDto.class), anyString());
         Gson gson = new Gson();
         String jsonContent = gson.toJson(carDto);
         //When & then
@@ -118,7 +117,7 @@ class CarControllerTestSuite {
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .content(jsonContent)
-                        .param("username", "username")
+                        .param("username", "testuser")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -127,7 +126,7 @@ class CarControllerTestSuite {
     void testShouldUpdateCar() throws Exception {
         //Given
         CarDto carDto = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
-        doNothing().when(carFacade).updateCar(carDto);
+        doNothing().when(carFacade).updateCar(any(CarDto.class));
         Gson gson = new Gson();
         String jsonContent = gson.toJson(carDto);
         //When & then

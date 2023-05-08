@@ -10,5 +10,7 @@ import java.util.Optional;
 interface GarageWorkTimeRepository extends CrudRepository<GarageWorkTime, Long> {
     List<GarageWorkTime> findAll();
 
+    List<GarageWorkTime> findAllByGarageId(Long id);
+
     Optional<GarageWorkTime> findById(Long id);
 }

@@ -1,6 +1,5 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.config.AdminConfig;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import org.junit.jupiter.api.Test;
@@ -10,8 +9,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -29,12 +26,6 @@ class GarageFacadeTestSuite {
 
     @Mock
     private GarageMapper garageMapper;
-
-    @Mock
-    private AdminConfig adminConfig;
-
-    @Value("${admin.api.key}")
-    private String adminKey;
 
     @Test
     void shouldGetAllGarages() {
@@ -55,7 +46,6 @@ class GarageFacadeTestSuite {
         //Given
         GarageDto mockedGarageDto = Mockito.mock(GarageDto.class);
         Garage mockedGarage = Mockito.mock(Garage.class);
-        when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
         when(garageMapper.mapToGarage(mockedGarageDto)).thenReturn(mockedGarage);
         when(garageService.saveGarage(any(Garage.class))).thenReturn(Mockito.mock(Garage.class));
         //When
@@ -67,7 +57,6 @@ class GarageFacadeTestSuite {
     @Test
     void shouldDeleteGarage() throws MyEntityNotFoundException {
         //Given
-        when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
         doNothing().when(garageService).deleteGarage(1L);
         //When
         garageFacade.deleteGarage(1L);

@@ -17,8 +17,6 @@ class GarageFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageFacade.class);
     private final GarageService service;
     private final GarageMapper mapper;
-    private final AdminConfig adminConfig;
-
     List<GarageDto> getAllGarages() {
         LOGGER.info("GET Endpoint used.");
         List<Garage> garageList = service.getAllGarages();

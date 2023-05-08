@@ -15,26 +15,29 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 class CarApiController {
-    private final CarApiService carApiService;
+    private final CarApiService service;
 
     @GetMapping(path = "/makes")
-    public ResponseEntity<List<String>> getCarMakes() {
-        return ResponseEntity.ok(carApiService.getCarMakes());
+    ResponseEntity<List<String>> getCarMakes() {
+        return ResponseEntity.ok(service.getCarMakes());
     }
+
     @GetMapping(path = "/types")
-    public ResponseEntity<List<String>> getCarTypes() {
-        return ResponseEntity.ok(carApiService.getCarTypes());
+    ResponseEntity<List<String>> getCarTypes() {
+        return ResponseEntity.ok(service.getCarTypes());
     }
+
     @GetMapping(path = "/years")
-    public ResponseEntity<List<Integer>> getCarYears() {
-        return ResponseEntity.ok(carApiService.getCarYears());
+    ResponseEntity<List<Integer>> getCarYears() {
+        return ResponseEntity.ok(service.getCarYears());
     }
+
     @GetMapping
-    public ResponseEntity<List<String>> getCarModels(
+    ResponseEntity<List<String>> getCarModels(
             @RequestParam @Min(1950) Integer year,
             @RequestParam @NotBlank String make,
             @RequestParam @NotBlank String type
     ) throws InterruptedException {
-        return ResponseEntity.ok(carApiService.getCarModels(year, make, type));
+        return ResponseEntity.ok(service.getCarModels(year, make, type));
     }
 }
