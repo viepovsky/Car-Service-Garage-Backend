@@ -32,6 +32,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -51,13 +52,17 @@ class UserControllerTestSuite {
     @Value("${jwt.secret.key}")
     private String secretKey;
 
-    private String jwtToken;
+    private String jwtTokenUser;
+    private String jwtTokenAdmin;
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
-        var userInDb = User.builder().username("testuser").role(Role.ROLE_USER).build();
-        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
-        jwtToken = generateToken("testuser", secretKey);
+        var userInDb = User.builder().username("Testusername").role(Role.ROLE_USER).build();
+        var adminInDb = User.builder().username("Testadmin").role(Role.ROLE_ADMIN).build();
+        when(userDetailsService.loadUserByUsername("Testusername")).thenReturn(userInDb);
+        when(userDetailsService.loadUserByUsername("Testadmin")).thenReturn(adminInDb);
+        jwtTokenUser = generateToken("Testusername", secretKey);
+        jwtTokenAdmin = generateToken("Testadmin", secretKey);
     }
 
     public static String generateToken(String username, String secretKey) {
@@ -86,7 +91,7 @@ class UserControllerTestSuite {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/information")
                         .param("username", "Testusername")
-                        .header("Authorization", "Bearer " + jwtToken))
+                        .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.phoneNumber", Matchers.is("25325235")))
@@ -100,9 +105,8 @@ class UserControllerTestSuite {
         when(userFacade.getUserByUsernameToLogin("Testusername")).thenReturn(userDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/users")
-                        .param("username", "Testusername")
-                        .header("Authorization", "Bearer " + jwtToken))
+                        .get("/v1/users/login")
+                        .param("username", "Testusername"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is("Testusername")))
@@ -117,7 +121,7 @@ class UserControllerTestSuite {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/is-registered")
                         .param("username", "username")
-                        .header("Authorization", "Bearer " + jwtToken))
+                        .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.is(true)));
     }
@@ -126,12 +130,12 @@ class UserControllerTestSuite {
     void testGetUserPassword() throws Exception {
         //Given
         PasswordDto passwordDto = new PasswordDto("testpassword");
-        when(userFacade.getUserPass("username")).thenReturn(passwordDto);
+        when(userFacade.getUserPass(anyString())).thenReturn(passwordDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/pass")
-                        .param("username", "username")
-                        .header("Authorization", "Bearer " + jwtToken))
+                        .param("username", "Testusername")
+                        .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.password", Matchers.is("testpassword")));
     }
@@ -140,7 +144,8 @@ class UserControllerTestSuite {
     void testCreateUser() throws Exception {
         //Given
         UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
-        doNothing().when(userFacade).createUser(userDto);
+        User user = User.builder().username("test").id(5L).build();
+        when(userFacade.createUser(any(UserDto.class))).thenReturn(user);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override
@@ -160,14 +165,14 @@ class UserControllerTestSuite {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent)
                         .characterEncoding("UTF-8")
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                        .header("Authorization", "Bearer " + jwtTokenAdmin))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     void testUpdateUser() throws Exception {
         //Given
-        UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
+        UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "Testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
         doNothing().when(userFacade).updateUser(userDto);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
@@ -188,7 +193,7 @@ class UserControllerTestSuite {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent)
                         .characterEncoding("UTF-8")
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                        .header("Authorization", "Bearer " + jwtTokenUser))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

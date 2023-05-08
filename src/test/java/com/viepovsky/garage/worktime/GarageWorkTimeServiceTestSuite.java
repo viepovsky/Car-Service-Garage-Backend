@@ -50,7 +50,7 @@ class GarageWorkTimeServiceTestSuite {
         Garage mockedGarage = Mockito.mock(Garage.class);
         GarageWorkTime mockedGarageWorkTime = Mockito.mock(GarageWorkTime.class);
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
-        doNothing().when(garageService).saveGarage(any(Garage.class));
+        when(garageService.saveGarage(any(Garage.class))).thenReturn(mockedGarage);
         //When
         garageWorkTimeService.saveGarageWorkTime(mockedGarageWorkTime, 1L);
         //Then

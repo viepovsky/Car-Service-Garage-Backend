@@ -18,14 +18,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -38,7 +34,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -59,13 +56,17 @@ class GarageControllerTestSuite {
     @Value("${jwt.secret.key}")
     private String secretKey;
 
-    private String jwtToken;
+    private String jwtTokenUser;
+    private String jwtTokenAdmin;
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
-        var userInDb = User.builder().username("testuser").role(Role.ROLE_USER).build();
-        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
-        jwtToken = generateToken("testuser", secretKey);
+        var userInDb = User.builder().username("Testusername").role(Role.ROLE_USER).build();
+        var adminInDb = User.builder().username("Testadmin").role(Role.ROLE_ADMIN).build();
+        when(userDetailsService.loadUserByUsername("Testusername")).thenReturn(userInDb);
+        when(userDetailsService.loadUserByUsername("Testadmin")).thenReturn(adminInDb);
+        jwtTokenUser = generateToken("Testusername", secretKey);
+        jwtTokenAdmin = generateToken("Testadmin", secretKey);
     }
 
     public static String generateToken(String username, String secretKey) {
@@ -93,7 +94,7 @@ class GarageControllerTestSuite {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/garages")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + jwtToken))
+                        .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
 
@@ -107,7 +108,7 @@ class GarageControllerTestSuite {
         //When && then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/garages")
-                        .header("Authorization", "Bearer " + jwtToken))
+                        .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
@@ -124,39 +125,33 @@ class GarageControllerTestSuite {
     void shouldCreateGarage() throws Exception {
         //Given
         GarageDto garageDto = new GarageDto(1L, "Test garage", "Test address", null);
-        when(garageFacade.createGarage(garageDto, adminApiKey)).thenReturn(ResponseEntity.ok().build());
+        Garage garage = new Garage();
+        when(garageFacade.createGarage(any(GarageDto.class))).thenReturn(garage);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, type, jsonDeserializationContext) ->
                 ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalTime()).create();
         String jsonContent = gson.toJson(garageDto);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", adminApiKey);
-
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/garages/admin")
+                        .post("/v1/garages")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .content(jsonContent)
-                        .headers(headers)
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                        .header("Authorization", "Bearer " + jwtTokenAdmin))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
 
     }
 
     @Test
     void shouldDeleteGarage() throws Exception {
         //Given
-        when(garageFacade.deleteGarage(1L, adminApiKey)).thenReturn(ResponseEntity.ok().build());
+        doNothing().when(garageFacade).deleteGarage(anyLong());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("api-key", adminApiKey);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/v1/garages/admin/1")
-                        .headers(headers)
-                        .header("Authorization", "Bearer " + jwtToken))
+                        .delete("/v1/garages/1")
+                        .header("Authorization", "Bearer " + jwtTokenAdmin))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

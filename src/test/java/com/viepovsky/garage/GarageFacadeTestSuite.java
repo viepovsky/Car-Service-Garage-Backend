@@ -57,27 +57,11 @@ class GarageFacadeTestSuite {
         Garage mockedGarage = Mockito.mock(Garage.class);
         when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
         when(garageMapper.mapToGarage(mockedGarageDto)).thenReturn(mockedGarage);
-        doNothing().when(garageService).saveGarage(mockedGarage);
+        when(garageService.saveGarage(any(Garage.class))).thenReturn(Mockito.mock(Garage.class));
         //When
-        ResponseEntity<String> response = garageFacade.createGarage(mockedGarageDto, adminKey);
+        Garage createdGarage = garageFacade.createGarage(mockedGarageDto);
         //Then
-        verify(garageService, times(1)).saveGarage(mockedGarage);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    void shouldNotCreateGarage() {
-        //Given
-        GarageDto mockedGarageDto = Mockito.mock(GarageDto.class);
-        Garage mockedGarage = Mockito.mock(Garage.class);
-        when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
-        when(garageMapper.mapToGarage(mockedGarageDto)).thenReturn(mockedGarage);
-        doNothing().when(garageService).saveGarage(mockedGarage);
-        //When
-        ResponseEntity<String> response = garageFacade.createGarage(mockedGarageDto, "2523ddd");
-        //Then
-        verify(garageService, times(0)).saveGarage(mockedGarage);
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        verify(garageService, times(1)).saveGarage(any(Garage.class));
     }
 
     @Test
@@ -86,21 +70,8 @@ class GarageFacadeTestSuite {
         when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
         doNothing().when(garageService).deleteGarage(1L);
         //When
-        ResponseEntity<String> response = garageFacade.deleteGarage(1L, adminKey);
+        garageFacade.deleteGarage(1L);
         //Then
         verify(garageService, times(1)).deleteGarage(1L);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-    }
-
-    @Test
-    void shouldNotDeleteGarage() throws MyEntityNotFoundException {
-        //Given
-        when(adminConfig.getAdminApiKey()).thenReturn(adminKey);
-        doNothing().when(garageService).deleteGarage(1L);
-        //When
-        ResponseEntity<String> response = garageFacade.deleteGarage(1L, "awdawdad");
-        //Then
-        verify(garageService, times(0)).deleteGarage(1L);
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 }
