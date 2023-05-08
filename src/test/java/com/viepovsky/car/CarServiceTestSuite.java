@@ -56,7 +56,7 @@ class CarServiceTestSuite {
         User mockedUser = Mockito.mock(User.class);
         Car mockedCar = Mockito.mock(Car.class);
         when(userService.getUser(anyString())).thenReturn(mockedUser);
-        doNothing().when(userService).saveUser(any(User.class));
+        when(userService.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
         //When
         carService.saveCar(mockedCar, "username");
         //Then

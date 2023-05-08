@@ -2,13 +2,13 @@ package com.viepovsky.user;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.scheduler.ApplicationScheduler;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;

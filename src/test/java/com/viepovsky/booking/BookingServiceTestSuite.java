@@ -203,7 +203,7 @@ class BookingServiceTestSuite {
         when(bookingRepository.save(any())).thenReturn(any());
         when(availableCarRepairService.getAvailableCarService(10L)).thenReturn(availableCarRepair);
         when(availableCarRepairService.getAvailableCarService(11L)).thenReturn(availableCarRepair2);
-        doNothing().when(userService).saveUser(any(User.class));
+        when(userService.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
         //When
         bookingService.createBooking(List.of(10L, 11L), localDate, LocalTime.of(10,0), 5L, 2L, repairDuration);
         //Then

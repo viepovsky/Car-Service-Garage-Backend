@@ -1,29 +1,45 @@
 package com.viepovsky.booking;
 
+import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.user.Role;
+import com.viepovsky.user.User;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
+import java.security.Key;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-@SpringJUnitWebConfig
-@WebMvcTest(BookingController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@MockBean(ApplicationScheduler.class)
 class BookingControllerTestSuite {
     @Value("${admin.api.key}")
     private String adminApiKey;
@@ -34,6 +50,39 @@ class BookingControllerTestSuite {
     @MockBean
     private BookingFacade bookingFacade;
 
+    @MockBean
+    private UserDetailsService userDetailsService;
+
+    @Value("${jwt.secret.key}")
+    private String secretKey;
+
+    private String jwtToken;
+
+    @BeforeEach
+    public void initializeUserAndGenerateTokenForUser() {
+        var userInDb = User.builder().username("testuser").role(Role.ROLE_USER).build();
+        when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
+        jwtToken = generateToken("testuser", secretKey);
+    }
+
+    public static String generateToken(String username, String secretKey) {
+        return Jwts
+                .builder()
+                .setClaims(new HashMap<>())
+                .setSubject(username)
+                .setIssuer("medical-app.com")
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .signWith(getSignInKey(secretKey), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    private static Key getSignInKey(String secretKey) {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+
     @Test
     void shouldGetEmptyListBookings() throws Exception {
         //Given
@@ -42,7 +91,8 @@ class BookingControllerTestSuite {
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/bookings")
-                        .param("name", "username"))
+                        .param("name", "username")
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
     }
@@ -55,7 +105,8 @@ class BookingControllerTestSuite {
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/bookings")
-                        .param("name", "username"))
+                        .param("name", "username")
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].status", Matchers.is("Waiting for customer")))
@@ -74,7 +125,8 @@ class BookingControllerTestSuite {
                         .param("date", LocalDate.of(2022,10,15).toString())
                         .param("repair-duration", "50")
                         .param("garage-id", "1")
-                        .param("car-service-id", "22"))
+                        .param("car-service-id", "22")
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0]", Matchers.is("10:00:00")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1]", Matchers.is("11:00:00")));
@@ -93,7 +145,8 @@ class BookingControllerTestSuite {
                         .param("start-hour", LocalTime.of(10,0).toString())
                         .param("garage-id", "33")
                         .param("car-id", "4")
-                        .param("repair-duration", "55"))
+                        .param("repair-duration", "55")
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -110,7 +163,8 @@ class BookingControllerTestSuite {
                         .param("start-hour", LocalTime.of(10,0).toString())
                         .param("end-hour", LocalTime.of(15,0).toString())
                         .param("garage-id", "20")
-                        .headers(headers))
+                        .headers(headers)
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -122,7 +176,8 @@ class BookingControllerTestSuite {
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/v1/bookings/1")
                         .param("date", LocalDate.of(2022,10,15).toString())
-                        .param("start-hour", LocalTime.of(10,0).toString()))
+                        .param("start-hour", LocalTime.of(10,0).toString())
+                        .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

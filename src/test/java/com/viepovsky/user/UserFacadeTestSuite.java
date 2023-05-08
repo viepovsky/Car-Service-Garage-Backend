@@ -79,7 +79,7 @@ class UserFacadeTestSuite {
         User mockedUser = Mockito.mock(User.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
         when(userMapper.mapToUserLogin(mockedUserDto)).thenReturn(mockedUser);
-        doNothing().when(userService).saveUser(mockedUser);
+        when(userService.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
         //When
         userFacade.createUser(mockedUserDto);
         //Then
