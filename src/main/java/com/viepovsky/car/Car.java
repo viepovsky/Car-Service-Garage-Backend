@@ -1,11 +1,11 @@
 package com.viepovsky.car;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.carservice.CarRepair;
+import com.viepovsky.carrepair.CarRepair;
 import com.viepovsky.user.User;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

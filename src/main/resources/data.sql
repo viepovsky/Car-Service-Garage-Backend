@@ -34,7 +34,8 @@ INSERT INTO "GARAGE_WORK_TIMES" (id, work_day, start_hour, end_hour, garage_id) 
 (14, 'SUNDAY', TIME '00:00:00', TIME '00:00:00', 2);
 
 INSERT INTO "USERS" (id, first_name, last_name, email, phone_number, username, password, role, created_date) VALUES
-(1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 'ROLE_USER', CURRENT_TIMESTAMP);
+(1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 'ROLE_USER', CURRENT_TIMESTAMP),
+(2, 'testName', 'testLastName', 'test@email.com', '00555555555', 'testadmin', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 'ROLE_ADMIN', CURRENT_TIMESTAMP);
 
 INSERT INTO "CARS" (id, make, model, production_year, type, engine, user_id) VALUES
 (1, 'BMW', '3 Series', 2014, 'Sedan', 'Diesel', 1),

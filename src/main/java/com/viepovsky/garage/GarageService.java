@@ -23,8 +23,8 @@ public class GarageService {
         return garageRepository.findAll().stream().map(n -> n.getAddress().substring(0, n.getAddress().indexOf(" "))).toList();
     }
 
-    public void saveGarage(Garage garage) {
-        garageRepository.save(garage);
+    public Garage saveGarage(Garage garage) {
+        return garageRepository.save(garage);
     }
 
     public void deleteGarage(Long garageId) throws MyEntityNotFoundException {

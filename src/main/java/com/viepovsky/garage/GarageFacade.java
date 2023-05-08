@@ -15,32 +15,26 @@ import java.util.List;
 @RequiredArgsConstructor
 class GarageFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageFacade.class);
-    private final GarageService garageService;
-    private final GarageMapper garageMapper;
-    private final AdminConfig adminConfig;
-
-    public List<GarageDto> getAllGarages() {
+    private final GarageService service;
+    private final GarageMapper mapper;
+    List<GarageDto> getAllGarages() {
         LOGGER.info("GET Endpoint used.");
-        List<Garage> garageList = garageService.getAllGarages();
-        return garageMapper.mapToGarageDtoList(garageList);
+        List<Garage> garageList = service.getAllGarages();
+        return mapper.mapToGarageDtoList(garageList);
     }
 
-    public ResponseEntity<String> createGarage(GarageDto garageDto, String apiKey) {
+    GarageDto getGarage(Long garageId) {
+        var retrievedGarage = service.getGarage(garageId);
+        return mapper.mapToGarageDto(retrievedGarage);
+    }
+
+    Garage createGarage(GarageDto garageDto) {
         LOGGER.info("POST Endpoint used.");
-        if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            garageService.saveGarage(garageMapper.mapToGarage(garageDto));
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
-        }
+        var garageToSave = mapper.mapToGarage(garageDto);
+        return service.saveGarage(garageToSave);
     }
 
-    public ResponseEntity<String> deleteGarage(Long garageId, String apiKey) throws MyEntityNotFoundException {
-        if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            garageService.deleteGarage(garageId);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
-        }
+    void deleteGarage(Long garageId) throws MyEntityNotFoundException {
+            service.deleteGarage(garageId);
     }
 }

@@ -12,38 +12,38 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class UserFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserFacade.class);
-    private final UserService userService;
-    private final UserMapper userMapper;
+    private final UserService service;
+    private final UserMapper mapper;
 
     public UserDto getUserByUsername(String username) throws MyEntityNotFoundException {
         LOGGER.info("GET Endpoint getUserByUsername used.");
-        User user = userService.getUser(username);
-        return userMapper.mapToUserDto(user);
+        User user = service.getUser(username);
+        return mapper.mapToUserDto(user);
     }
 
     public UserDto getUserByUsernameToLogin(String username) throws MyEntityNotFoundException {
         LOGGER.info("GET Endpoint getUserByUsernameToLogin used.");
-        User user = userService.getUser(username);
-        return userMapper.mapToUserDtoLogin(user);
+        User user = service.getUser(username);
+        return mapper.mapToUserDtoLogin(user);
     }
 
     public Boolean isUserRegistered(String username) {
         LOGGER.info("GET Endpoint isUserRegistered used.");
-        return userService.isUserInDatabase(username);
+        return service.isUserInDatabase(username);
     }
 
     public PasswordDto getUserPass(String username) throws MyEntityNotFoundException {
         LOGGER.info("GET Endpoint getUserPass used.");
-        return new PasswordDto(userService.getUserPass(username));
+        return new PasswordDto(service.getUserPass(username));
     }
 
-    public void createUser(UserDto userDto) {
+    public User createUser(UserDto userDto) {
         LOGGER.info("POST Endpoint used.");
-        userService.saveUser(userMapper.mapToUserLogin(userDto));
+        return service.saveUser(mapper.mapToUserLogin(userDto));
     }
 
     public void updateUser(UserDto userDto) throws MyEntityNotFoundException {
         LOGGER.info("PUT Endpoint used.");
-        userService.updateUser(userMapper.mapToUserLogin(userDto));
+        service.updateUser(mapper.mapToUserLogin(userDto));
     }
 }

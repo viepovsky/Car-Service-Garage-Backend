@@ -11,11 +11,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GarageWorkTimeService {
-    private final GarageWorkTimeRepository garageWorkTimeRepository;
+    private final GarageWorkTimeRepository repository;
     private final GarageService garageService;
 
-    public List<GarageWorkTime> getAllGarageWorkTimes() {
-        return garageWorkTimeRepository.findAll();
+    public List<GarageWorkTime> getAllGarageWorkTimes(Long garageId) {
+        return repository.findAllByGarageId(garageId);
     }
 
     public void saveGarageWorkTime(GarageWorkTime garageWorkTime, Long garageId) throws MyEntityNotFoundException {
@@ -26,8 +26,8 @@ public class GarageWorkTimeService {
     }
 
     public void deleteGarageWorkTime(Long garageWorkTimeId) throws MyEntityNotFoundException {
-        if (garageWorkTimeRepository.findById(garageWorkTimeId).isPresent()) {
-            garageWorkTimeRepository.deleteById(garageWorkTimeId);
+        if (repository.findById(garageWorkTimeId).isPresent()) {
+            repository.deleteById(garageWorkTimeId);
         } else {
             throw new MyEntityNotFoundException("GarageWorkTime", garageWorkTimeId);
         }

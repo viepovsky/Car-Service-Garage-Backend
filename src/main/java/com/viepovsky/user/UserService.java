@@ -25,11 +25,8 @@ public class UserService {
         return repository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username)).getPassword();
     }
 
-    public void saveUser(User user) {
-        if (user.getRole() == null) {
-            user.setRole(Role.ROLE_USER);
-        }
-        repository.save(user);
+    public User saveUser(User user) {
+        return repository.save(user);
     }
 
     public void updateUser(User user) throws MyEntityNotFoundException {

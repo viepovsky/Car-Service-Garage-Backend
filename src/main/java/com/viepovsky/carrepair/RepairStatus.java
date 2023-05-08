@@ -1,4 +1,4 @@
-package com.viepovsky.carservice;
+package com.viepovsky.carrepair;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.viepovsky.carservice;
+package com.viepovsky.carrepair;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

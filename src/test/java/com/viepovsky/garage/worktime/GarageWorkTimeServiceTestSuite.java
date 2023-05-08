@@ -37,9 +37,9 @@ class GarageWorkTimeServiceTestSuite {
         List<GarageWorkTime> garageWorkTimeList = new ArrayList<>();
         GarageWorkTime garageWorkTime = Mockito.mock(GarageWorkTime.class);
         garageWorkTimeList.add(garageWorkTime);
-        when(garageWorkTimeRepository.findAll()).thenReturn(garageWorkTimeList);
+        when(garageWorkTimeRepository.findAllByGarageId(anyLong())).thenReturn(garageWorkTimeList);
         //When
-        List<GarageWorkTime> retrievedGarageWorkTimeList = garageWorkTimeService.getAllGarageWorkTimes();
+        List<GarageWorkTime> retrievedGarageWorkTimeList = garageWorkTimeService.getAllGarageWorkTimes(5L);
         //Then
         assertEquals(1, retrievedGarageWorkTimeList.size());
     }
@@ -50,7 +50,7 @@ class GarageWorkTimeServiceTestSuite {
         Garage mockedGarage = Mockito.mock(Garage.class);
         GarageWorkTime mockedGarageWorkTime = Mockito.mock(GarageWorkTime.class);
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
-        doNothing().when(garageService).saveGarage(any(Garage.class));
+        when(garageService.saveGarage(any(Garage.class))).thenReturn(mockedGarage);
         //When
         garageWorkTimeService.saveGarageWorkTime(mockedGarageWorkTime, 1L);
         //Then

@@ -2,8 +2,8 @@ package com.viepovsky.booking;
 
 import com.viepovsky.car.Car;
 import com.viepovsky.car.CarService;
-import com.viepovsky.carservice.CarRepair;
-import com.viepovsky.carservice.CarRepairService;
+import com.viepovsky.carrepair.CarRepair;
+import com.viepovsky.carrepair.CarRepairService;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.Garage;
@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -203,7 +202,7 @@ class BookingServiceTestSuite {
         when(bookingRepository.save(any())).thenReturn(any());
         when(availableCarRepairService.getAvailableCarService(10L)).thenReturn(availableCarRepair);
         when(availableCarRepairService.getAvailableCarService(11L)).thenReturn(availableCarRepair2);
-        doNothing().when(userService).saveUser(any(User.class));
+        when(userService.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
         //When
         bookingService.createBooking(List.of(10L, 11L), localDate, LocalTime.of(10,0), 5L, 2L, repairDuration);
         //Then

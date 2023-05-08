@@ -1,40 +1,33 @@
 package com.viepovsky.garage.worktime;
 
-import com.viepovsky.config.AdminConfig;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 class GarageWorkTimeFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageWorkTimeFacade.class);
-    private final GarageWorkTimeService garageWorkTimeService;
-    private final GarageWorkTimeMapper garageWorkTimeMapper;
-    private final AdminConfig adminConfig;
+    private final GarageWorkTimeService service;
+    private final GarageWorkTimeMapper mapper;
 
-    public ResponseEntity<String> createGarageWorkTime(GarageWorkTimeDto garageWorkTimeDto, Long garageId, String apiKey) throws MyEntityNotFoundException {
-        LOGGER.info("POST Endpoint used.");
-        if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            GarageWorkTime garageWorkTime = garageWorkTimeMapper.mapToGarageWorkTime(garageWorkTimeDto);
-            garageWorkTimeService.saveGarageWorkTime(garageWorkTime, garageId);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
-        }
+    List<GarageWorkTimeDto> getGarageWorkTimes(Long garageId) {
+        List<GarageWorkTime> workTimes = service.getAllGarageWorkTimes(garageId);
+        return mapper.mapToGarageWorkTimeDtoList(workTimes);
     }
 
-    public ResponseEntity<String> deleteGarageWorkTime(Long garageWorkTimeId, String apiKey) throws MyEntityNotFoundException {
+    void createGarageWorkTime(GarageWorkTimeDto garageWorkTimeDto, Long garageId) throws MyEntityNotFoundException {
+        LOGGER.info("POST Endpoint used.");
+            GarageWorkTime garageWorkTime = mapper.mapToGarageWorkTime(garageWorkTimeDto);
+            service.saveGarageWorkTime(garageWorkTime, garageId);
+    }
+
+    void deleteGarageWorkTime(Long garageWorkTimeId) throws MyEntityNotFoundException {
         LOGGER.info("DELETE Endpoint used.");
-        if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            garageWorkTimeService.deleteGarageWorkTime(garageWorkTimeId);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
-        }
+            service.deleteGarageWorkTime(garageWorkTimeId);
     }
 }

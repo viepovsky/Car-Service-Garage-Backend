@@ -2,9 +2,9 @@ package com.viepovsky.booking;
 
 import com.viepovsky.car.Car;
 import com.viepovsky.car.CarService;
-import com.viepovsky.carservice.CarRepair;
-import com.viepovsky.carservice.CarRepairService;
-import com.viepovsky.carservice.RepairStatus;
+import com.viepovsky.carrepair.CarRepair;
+import com.viepovsky.carrepair.CarRepairService;
+import com.viepovsky.carrepair.RepairStatus;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.Garage;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +44,10 @@ public class BookingService {
     public List<Booking> getAllBookingsForGivenUser(String username) throws MyEntityNotFoundException {
         User user = userService.getUser(username);
         return repository.findBookingsByCarRepairListUserId(user.getId());
+    }
+
+    public List<Booking> getBookingsForGivenDateAndGarageId(LocalDate date, Long garageId) throws MyEntityNotFoundException {
+        return repository.findBookingsByDateAndGarageId(date, garageId);
     }
 
     private Booking getBooking(Long id) throws MyEntityNotFoundException {

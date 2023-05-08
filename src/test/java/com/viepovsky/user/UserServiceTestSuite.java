@@ -70,7 +70,6 @@ class UserServiceTestSuite {
         //When
         userService.saveUser(user);
         //Then
-        assertEquals(Role.ROLE_USER, user.getRole());
         verify(userRepository, times(1)).save(user);
     }
 

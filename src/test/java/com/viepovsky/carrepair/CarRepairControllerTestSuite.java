@@ -1,6 +1,5 @@
-package com.viepovsky.car;
+package com.viepovsky.carrepair;
 
-import com.google.gson.Gson;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.Role;
 import com.viepovsky.user.User;
@@ -16,18 +15,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.math.BigDecimal;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -35,12 +33,12 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
-class CarControllerTestSuite {
+class CarRepairControllerTestSuite {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CarFacade carFacade;
+    private CarRepairFacade carRepairFacade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -74,79 +72,46 @@ class CarControllerTestSuite {
     }
 
     @Test
-    void testShouldGetEmptyCarList() throws Exception {
+    void testShouldGetEmptyCarServiceList() throws Exception {
         //Given
-        List<CarDto> emptyList = List.of();
-        when(carFacade.getCarsForGivenUsername(anyString())).thenReturn(emptyList);
+        List<CarRepairDto> emptyList = List.of();
+        when(carRepairFacade.getCarServices(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/cars")
+                        .get("/v1/car-repairs")
                         .param("username", "testuser")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
+
     }
 
     @Test
-    void testShouldGetCarList() throws Exception {
+    void testShouldGetCarServiceList() throws Exception {
         //Given
-        List<CarDto> carList = List.of(new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", 5L));
-        when(carFacade.getCarsForGivenUsername(anyString())).thenReturn(carList);
+        List<CarRepairDto> carList = List.of(new CarRepairDto(1L, "Test name", "Test description", BigDecimal.valueOf(50), 60));
+        when(carRepairFacade.getCarServices(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/cars")
+                        .get("/v1/car-repairs")
                         .param("username", "testuser")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].year", Matchers.is(2014)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].engine", Matchers.is("Diesel")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("Test name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].cost", Matchers.is(50)));
     }
 
     @Test
-    void testShouldCreateCar() throws Exception {
+    void testShouldDeleteCarService() throws Exception {
         //Given
-        CarDto carDto = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
-        doNothing().when(carFacade).createCar(any(CarDto.class), anyString());
-        Gson gson = new Gson();
-        String jsonContent = gson.toJson(carDto);
+        doNothing().when(carRepairFacade).deleteCarService(1L);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/cars")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(jsonContent)
-                        .param("username", "testuser")
+                        .delete("/v1/car-repairs/1")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    void testShouldUpdateCar() throws Exception {
-        //Given
-        CarDto carDto = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
-        doNothing().when(carFacade).updateCar(any(CarDto.class));
-        Gson gson = new Gson();
-        String jsonContent = gson.toJson(carDto);
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .put("/v1/cars")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(jsonContent)
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    void testShouldDeleteCar() throws Exception {
-        //Given
-        doNothing().when(carFacade).deleteCar(1L);
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/v1/cars/1")
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
 }

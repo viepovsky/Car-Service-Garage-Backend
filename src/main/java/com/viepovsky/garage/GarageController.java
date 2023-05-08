@@ -1,15 +1,16 @@
 package com.viepovsky.garage;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,26 +19,29 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 class GarageController {
-    private final GarageFacade garageFacade;
+    private final GarageFacade facade;
 
     @GetMapping
-    public ResponseEntity<List<GarageDto>> getGarages() {
-        return ResponseEntity.ok(garageFacade.getAllGarages());
+    ResponseEntity<List<GarageDto>> getGarages() {
+        return ResponseEntity.ok(facade.getAllGarages());
     }
 
-    @PostMapping(path = "/admin", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createGarage(
-            @Valid @RequestBody GarageDto garageDto,
-            @RequestHeader("api-key") @NotBlank String apiKey
-    ) {
-        return garageFacade.createGarage(garageDto, apiKey);
+    @GetMapping(path = "/{garageId}")
+    ResponseEntity<GarageDto> getGarage(@PathVariable @Min(1) Long garageId) {
+        return ResponseEntity.ok(facade.getGarage(garageId));
     }
 
-    @DeleteMapping(path = "/admin/{garageId}")
-    public ResponseEntity<String> deleteGarage(
-            @PathVariable @Min(1) Long garageId,
-            @RequestHeader("api-key") @NotBlank String apiKey
-    ) throws MyEntityNotFoundException {
-        return garageFacade.deleteGarage(garageId, apiKey);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<String> createGarage(@Valid @RequestBody GarageDto garageDto) {
+        var createdGarage = facade.createGarage(garageDto);
+        return ResponseEntity.created(URI.create("/v1/garages/" + createdGarage.getId())).build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(path = "/{garageId}")
+    ResponseEntity<String> deleteGarage(@PathVariable @Min(1) Long garageId) throws MyEntityNotFoundException {
+        facade.deleteGarage(garageId);
+        return ResponseEntity.ok().build();
     }
 }

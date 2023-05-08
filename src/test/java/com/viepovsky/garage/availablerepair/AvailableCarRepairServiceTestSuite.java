@@ -51,7 +51,7 @@ class AvailableCarRepairServiceTestSuite {
         Garage garage = new Garage("Test name", "Test address", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         AvailableCarRepair availableCarRepair = new AvailableCarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
         when(garageService.getGarage(anyLong())).thenReturn(garage);
-        doNothing().when(garageService).saveGarage(any(Garage.class));
+        when(garageService.saveGarage(any(Garage.class))).thenReturn(garage);
         //When
         availableCarRepairService.saveAvailableCarService(availableCarRepair, 1L);
         //Then

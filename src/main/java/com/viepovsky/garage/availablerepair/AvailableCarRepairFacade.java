@@ -15,34 +15,23 @@ import java.util.List;
 @RequiredArgsConstructor
 class AvailableCarRepairFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(AvailableCarRepairFacade.class);
-    private final AvailableCarRepairService availableCarRepairService;
-    private final AvailableCarRepairMapper availableCarRepairMapper;
-    private final AdminConfig adminConfig;
+    private final AvailableCarRepairService service;
+    private final AvailableCarRepairMapper mapper;
 
     public List<AvailableCarRepairDto> getAvailableCarServices(Long garageId) {
         LOGGER.info("GET Endpoint used.");
-        List<AvailableCarRepair> availableCarRepairList = availableCarRepairService.getAllAvailableCarService(garageId);
-        return availableCarRepairMapper.mapToAvailableCarServiceDtoList(availableCarRepairList);
+        List<AvailableCarRepair> availableCarRepairList = service.getAllAvailableCarService(garageId);
+        return mapper.mapToAvailableCarServiceDtoList(availableCarRepairList);
     }
 
-    public ResponseEntity<String> createAvailableCarService(AvailableCarRepairDto availableCarRepairDto, Long garageId, String apiKey) throws MyEntityNotFoundException {
+    public void createAvailableCarService(AvailableCarRepairDto availableCarRepairDto, Long garageId) throws MyEntityNotFoundException {
         LOGGER.info("POST Endpoint used.");
-        if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            AvailableCarRepair availableCarRepair = availableCarRepairMapper.mapToAvailableCarService(availableCarRepairDto);
-            availableCarRepairService.saveAvailableCarService(availableCarRepair, garageId);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
-        }
+        AvailableCarRepair availableCarRepair = mapper.mapToAvailableCarService(availableCarRepairDto);
+        service.saveAvailableCarService(availableCarRepair, garageId);
     }
 
-    public ResponseEntity<String> deleteAvailableCarService(Long availableCarServiceId, String apiKey) throws MyEntityNotFoundException {
+    public void deleteAvailableCarService(Long availableCarServiceId) throws MyEntityNotFoundException {
         LOGGER.info("PUT Endpoint used.");
-        if (apiKey.equals(adminConfig.getAdminApiKey())) {
-            availableCarRepairService.deleteAvailableCarService(availableCarServiceId);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized. Wrong api-key.");
-        }
+        service.deleteAvailableCarService(availableCarServiceId);
     }
 }
