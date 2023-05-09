@@ -1,18 +1,12 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.config.AdminConfig;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
-import com.viepovsky.scheduler.ApplicationScheduler;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,33 +16,42 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@MockBean(ApplicationScheduler.class)
+@ExtendWith(MockitoExtension.class)
 class BookingFacadeTestSuite {
     @InjectMocks
-    private BookingFacade bookingFacade;
+    private BookingFacade facade;
 
     @Mock
-    private BookingService bookingService;
+    private BookingService service;
 
     @Mock
-    private BookingMapper bookingMapper;
+    private BookingMapper mapper;
 
-    @Mock
-    private AdminConfig adminConfig;
+    @Test
+    void shouldGetBookingsForGivenDateAndGarageId() throws MyEntityNotFoundException {
+        //Given
+        var booking = new Booking();
+        var bookingDto = new BookingDto();
 
-    @Value("${admin.api.key}")
-    private String adminApiKey;
+        when(service.getBookingsForGivenDateAndGarageId(any(LocalDate.class), anyLong())).thenReturn(List.of(booking));
+        when(mapper.mapToBookingDtoList(anyList())).thenReturn(List.of(bookingDto));
+        //When
+        List<BookingDto> retrievedList = facade.getBookingsForGivenDateAndGarageId(LocalDate.now(), 5L);
+        //Then
+        assertNotNull(retrievedList);
+        assertEquals(1, retrievedList.size());
+    }
 
     @Test
     void shouldGetBookingsForGivenUsername() throws MyEntityNotFoundException {
         //Given
-        Booking mockedBooking = Mockito.mock(Booking.class);
-        BookingDto mockedBookingDto = Mockito.mock(BookingDto.class);
-        when(bookingService.getAllBookingsForGivenUser("username")).thenReturn(List.of(mockedBooking));
-        when(bookingMapper.mapToBookingDtoList(List.of(mockedBooking))).thenReturn(List.of(mockedBookingDto));
+        var booking = new Booking();
+        var bookingDto = new BookingDto();
+
+        when(service.getAllBookingsForGivenUser(anyString())).thenReturn(List.of(booking));
+        when(mapper.mapToBookingDtoList(anyList())).thenReturn(List.of(bookingDto));
         //When
-        List<BookingDto> retrievedList = bookingFacade.getBookingsForGivenUsername("username");
+        List<BookingDto> retrievedList = facade.getBookingsForGivenUsername("username");
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -58,9 +61,9 @@ class BookingFacadeTestSuite {
     void shouldGetAvailableBookingTimesTwoParams() throws MyEntityNotFoundException {
         //Given
         LocalDate date = LocalDate.now();
-        when(bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, 1L)).thenReturn(List.of(LocalTime.now()));
+        when(service.getAvailableBookingTimesForSelectedDayAndRepairDuration(any(LocalDate.class), anyLong())).thenReturn(List.of(LocalTime.now()));
         //When
-        List<LocalTime> retrievedList = bookingFacade.getAvailableBookingTimes(date, 50, 2L, 1L);
+        List<LocalTime> retrievedList = facade.getAvailableBookingTimes(date, 50, 2L, 1L);
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -70,9 +73,9 @@ class BookingFacadeTestSuite {
     void shouldGetAvailableBookingTimesThreeParams() throws MyEntityNotFoundException {
         //Given
         LocalDate date = LocalDate.now();
-        when(bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, 50, 2L)).thenReturn(List.of(LocalTime.now()));
+        when(service.getAvailableBookingTimesForSelectedDayAndRepairDuration(any(LocalDate.class), anyInt(), anyLong())).thenReturn(List.of(LocalTime.now()));
         //When
-        List<LocalTime> retrievedList = bookingFacade.getAvailableBookingTimes(date, 50, 2L, 0L);
+        List<LocalTime> retrievedList = facade.getAvailableBookingTimes(date, 50, 2L, 0L);
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -83,11 +86,11 @@ class BookingFacadeTestSuite {
         //Given
         LocalDate date = LocalDate.now();
         LocalTime start = LocalTime.now();
-        doNothing().when(bookingService).createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
+        doNothing().when(service).createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
         //When
-        bookingFacade.createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
+        facade.createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
         //Then
-        verify(bookingService, times(1)).createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
+        verify(service, times(1)).createBooking(List.of(1L, 2L), date, start, 1L, 2L, 50);
     }
 
     @Test
@@ -96,11 +99,11 @@ class BookingFacadeTestSuite {
         LocalDate date = LocalDate.now();
         LocalTime start = LocalTime.now();
         LocalTime end = start.plusMinutes(50);
-        doNothing().when(bookingService).saveBooking(date, start, end, 2L);
+        doNothing().when(service).saveBooking(date, start, end, 2L);
         //When
-        bookingFacade.createWorkingHoursBooking(date, start, end, 2L);
+        facade.createWorkingHoursBooking(date, start, end, 2L);
         //Then
-        verify(bookingService, times(1)).saveBooking(date, start, end, 2L);
+        verify(service, times(1)).saveBooking(date, start, end, 2L);
     }
 
     @Test
@@ -108,11 +111,11 @@ class BookingFacadeTestSuite {
         //Given
         LocalDate date = LocalDate.now();
         LocalTime start = LocalTime.now();
-        doNothing().when(bookingService).updateBooking(2L, date, start);
+        doNothing().when(service).updateBooking(2L, date, start);
         //When
-        bookingFacade.updateBooking(2L, date, start);
+        facade.updateBooking(2L, date, start);
         //Then
-        verify(bookingService, times(1)).updateBooking(2L, date, start);
+        verify(service, times(1)).updateBooking(2L, date, start);
     }
 
 }

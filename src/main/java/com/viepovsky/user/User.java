@@ -3,12 +3,12 @@ package com.viepovsky.user;
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car.Car;
 import com.viepovsky.carrepair.CarRepair;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

@@ -22,12 +22,12 @@ class GarageWorkTimeFacade {
 
     void createGarageWorkTime(GarageWorkTimeDto garageWorkTimeDto, Long garageId) throws MyEntityNotFoundException {
         LOGGER.info("POST Endpoint used.");
-            GarageWorkTime garageWorkTime = mapper.mapToGarageWorkTime(garageWorkTimeDto);
-            service.saveGarageWorkTime(garageWorkTime, garageId);
+        GarageWorkTime garageWorkTime = mapper.mapToGarageWorkTime(garageWorkTimeDto);
+        service.saveGarageWorkTime(garageWorkTime, garageId);
     }
 
     void deleteGarageWorkTime(Long garageWorkTimeId) throws MyEntityNotFoundException {
         LOGGER.info("DELETE Endpoint used.");
-            service.deleteGarageWorkTime(garageWorkTimeId);
+        service.deleteGarageWorkTime(garageWorkTimeId);
     }
 }

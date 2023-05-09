@@ -55,7 +55,7 @@ public class BookingService {
     }
 
     public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, Long serviceId) throws MyEntityNotFoundException {
-        var carService = carRepairService.getCarService(serviceId);
+        var carService = carRepairService.getCarRepair(serviceId);
         var reservedBooking = getBooking(carService.getBooking().getId());
         int repairDuration = reservedBooking.getCarRepairList().stream().mapToInt(CarRepair::getRepairTimeInMinutes).sum();
         Long garageId = reservedBooking.getGarage().getId();

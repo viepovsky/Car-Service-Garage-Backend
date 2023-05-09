@@ -3,12 +3,12 @@ package com.viepovsky.booking;
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.carrepair.CarRepair;
 import com.viepovsky.garage.Garage;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;

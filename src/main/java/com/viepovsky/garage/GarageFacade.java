@@ -1,12 +1,9 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.config.AdminConfig;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,6 +14,7 @@ class GarageFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageFacade.class);
     private final GarageService service;
     private final GarageMapper mapper;
+
     List<GarageDto> getAllGarages() {
         LOGGER.info("GET Endpoint used.");
         List<Garage> garageList = service.getAllGarages();
@@ -35,6 +33,6 @@ class GarageFacade {
     }
 
     void deleteGarage(Long garageId) throws MyEntityNotFoundException {
-            service.deleteGarage(garageId);
+        service.deleteGarage(garageId);
     }
 }

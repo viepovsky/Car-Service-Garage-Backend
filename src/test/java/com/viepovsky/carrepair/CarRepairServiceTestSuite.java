@@ -40,7 +40,7 @@ class CarRepairServiceTestSuite {
     private BookingService bookingService;
 
     @Test
-    void testGetCarServices() throws MyEntityNotFoundException {
+    void testGetCarRepairs() throws MyEntityNotFoundException {
         //Given
         List<CarRepair> carRepairList = new ArrayList<>();
         CarRepair mockedCarRepair = Mockito.mock(CarRepair.class);
@@ -50,17 +50,28 @@ class CarRepairServiceTestSuite {
         when(mockedUser.getId()).thenReturn(1L);
         when(carRepairRepository.findCarServicesByUserId(1L)).thenReturn(carRepairList);
         //When
-        List<CarRepair> retrievedCarRepairList = carRepairService.getCarServices("username");
+        List<CarRepair> retrievedCarRepairList = carRepairService.getCarRepairs("username");
         //Then
         assertEquals(1, retrievedCarRepairList.size());
     }
 
     @Test
+    void shouldGetCarRepair() {
+        //Given
+        var carRepair = new CarRepair();
+        when(carRepairRepository.findById(anyLong())).thenReturn(Optional.of(carRepair));
+        //When
+        var retrievedCarRepair = carRepairService.getCarRepair(5L);
+        //Then
+        assertNotNull(retrievedCarRepair);
+    }
+
+    @Test
     void testDeleteCarServiceMoreThanOneService() throws MyEntityNotFoundException {
         //Given
-        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10,0), LocalTime.of(12,0), BigDecimal.valueOf(300), new ArrayList<>(), null);
-        CarRepair carRepair = new CarRepair("Testname","Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
-        CarRepair carRepair2 = new CarRepair("Testname2","Testdescription2", BigDecimal.valueOf(250), 90, null, null, booking, RepairStatus.AWAITING);
+        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(12, 0), BigDecimal.valueOf(300), new ArrayList<>(), null);
+        CarRepair carRepair = new CarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
+        CarRepair carRepair2 = new CarRepair("Testname2", "Testdescription2", BigDecimal.valueOf(250), 90, null, null, booking, RepairStatus.AWAITING);
         booking.getCarRepairList().add(carRepair);
         booking.getCarRepairList().add(carRepair2);
 
@@ -68,7 +79,7 @@ class CarRepairServiceTestSuite {
         doNothing().when(carRepairRepository).delete(carRepair);
         doNothing().when(bookingService).save(any(Booking.class));
         //When
-        carRepairService.deleteCarService(1L);
+        carRepairService.deleteCarRepair(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("CarService", 1L));
         assertEquals(1, booking.getCarRepairList().size());
@@ -82,15 +93,15 @@ class CarRepairServiceTestSuite {
     @Test
     void testDeleteCarServiceOnlyOneService() throws MyEntityNotFoundException {
         //Given
-        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10,0), LocalTime.of(10,30), BigDecimal.valueOf(50), new ArrayList<>(), null);
-        CarRepair carRepair = new CarRepair("Testname","Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
+        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(10, 30), BigDecimal.valueOf(50), new ArrayList<>(), null);
+        CarRepair carRepair = new CarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
         booking.getCarRepairList().add(carRepair);
 
         when(carRepairRepository.findById(1L)).thenReturn(Optional.of(carRepair));
         doNothing().when(carRepairRepository).delete(carRepair);
         doNothing().when(bookingService).delete(booking);
         //When
-        carRepairService.deleteCarService(1L);
+        carRepairService.deleteCarRepair(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("CarService", 1L));
         verify(carRepairRepository, times(1)).delete(carRepair);

@@ -2,12 +2,12 @@ package com.viepovsky.garage.availablerepair;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.garage.Garage;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Getter
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "AVAILABLE_CAR_SERVICE")
+@Table(name = "AVAILABLE_CAR_REPAIRS")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
 
 public class AvailableCarRepair extends BaseEntityAudit {

@@ -1,14 +1,16 @@
 package com.viepovsky.garage;
 
 import com.viepovsky.garage.worktime.GarageWorkTimeDto;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class GarageDto {

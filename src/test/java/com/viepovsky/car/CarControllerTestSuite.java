@@ -1,6 +1,6 @@
 package com.viepovsky.car;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.Role;
 import com.viepovsky.user.User;
@@ -40,7 +40,7 @@ class CarControllerTestSuite {
     private MockMvc mockMvc;
 
     @MockBean
-    private CarFacade carFacade;
+    private CarFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -77,7 +77,7 @@ class CarControllerTestSuite {
     void testShouldGetEmptyCarList() throws Exception {
         //Given
         List<CarDto> emptyList = List.of();
-        when(carFacade.getCarsForGivenUsername(anyString())).thenReturn(emptyList);
+        when(facade.getCarsForGivenUsername(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/cars")
@@ -91,7 +91,7 @@ class CarControllerTestSuite {
     void testShouldGetCarList() throws Exception {
         //Given
         List<CarDto> carList = List.of(new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", 5L));
-        when(carFacade.getCarsForGivenUsername(anyString())).thenReturn(carList);
+        when(facade.getCarsForGivenUsername(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/cars")
@@ -105,36 +105,61 @@ class CarControllerTestSuite {
     }
 
     @Test
+    void testShouldNotGetCarListIfGivenUsernameDoesNotMatchWithUser() throws Exception {
+        //Given & when & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/cars")
+                        .param("username", "testuser22")
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
     void testShouldCreateCar() throws Exception {
         //Given
-        CarDto carDto = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
-        doNothing().when(carFacade).createCar(any(CarDto.class), anyString());
-        Gson gson = new Gson();
-        String jsonContent = gson.toJson(carDto);
+        var carRequest = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
+        var jsonRequest = new ObjectMapper().writeValueAsString(carRequest);
+
+        doNothing().when(facade).createCar(any(CarDto.class), anyString());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/cars")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content(jsonContent)
+                        .content(jsonRequest)
                         .param("username", "testuser")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
+    void testShouldNotCreateCartIfGivenUsernameDoesNotMatchWithUser() throws Exception {
+        var carRequest = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
+        var jsonRequest = new ObjectMapper().writeValueAsString(carRequest);
+        //Given & when & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/cars")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(jsonRequest)
+                        .param("username", "testuser22")
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
     void testShouldUpdateCar() throws Exception {
         //Given
-        CarDto carDto = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
-        doNothing().when(carFacade).updateCar(any(CarDto.class));
-        Gson gson = new Gson();
-        String jsonContent = gson.toJson(carDto);
+        var carRequest = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
+        var jsonRequest = new ObjectMapper().writeValueAsString(carRequest);
+
+        doNothing().when(facade).updateCar(any(CarDto.class));
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/v1/cars")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content(jsonContent)
+                        .content(jsonRequest)
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -142,7 +167,7 @@ class CarControllerTestSuite {
     @Test
     void testShouldDeleteCar() throws Exception {
         //Given
-        doNothing().when(carFacade).deleteCar(1L);
+        doNothing().when(facade).deleteCar(1L);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/cars/1")

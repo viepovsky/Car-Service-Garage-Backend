@@ -4,9 +4,12 @@ import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Booking;
 import com.viepovsky.car.Car;
 import com.viepovsky.user.User;
-import lombok.*;
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
 @Getter

@@ -4,18 +4,15 @@ import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Booking;
 import com.viepovsky.garage.availablerepair.AvailableCarRepair;
 import com.viepovsky.garage.worktime.GarageWorkTime;
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

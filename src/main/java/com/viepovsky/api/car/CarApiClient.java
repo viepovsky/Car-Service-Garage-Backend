@@ -32,7 +32,8 @@ class CarApiClient {
         HttpHeaders headers = headersBuild();
         HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
         try {
-            ResponseEntity<List<Integer>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<>(){});
+            ResponseEntity<List<Integer>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<>() {
+            });
             return responseEntity.getBody();
         } catch (RestClientException e) {
             LOGGER.error("Error while getting car years. " + e.getMessage(), e);
@@ -54,7 +55,8 @@ class CarApiClient {
         HttpHeaders headers = headersBuild();
         HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
         try {
-            ResponseEntity<List<String>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<>(){});
+            ResponseEntity<List<String>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<>() {
+            });
             return responseEntity.getBody();
         } catch (RestClientException e) {
             LOGGER.error("Error while getting car " + text + ". " + e.getMessage(), e);
@@ -83,7 +85,7 @@ class CarApiClient {
         }
     }
 
-    private URI urlBuild(String path){
+    private URI urlBuild(String path) {
         return UriComponentsBuilder.fromHttpUrl(carApiConfig.getCarApiEndpoint() + "/" + path).build().encode().toUri();
     }
 

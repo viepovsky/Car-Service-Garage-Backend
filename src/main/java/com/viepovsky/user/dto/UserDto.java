@@ -1,11 +1,11 @@
 package com.viepovsky.user.dto;
 
 import com.viepovsky.user.Role;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data

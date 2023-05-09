@@ -7,6 +7,7 @@ import lombok.Getter;
 public class MyEntityNotFoundException extends EntityNotFoundException {
     private Long recordId;
     private String text;
+
     public MyEntityNotFoundException(String text, Long recordId) {
         super(text + " of id: " + recordId);
         this.recordId = recordId;

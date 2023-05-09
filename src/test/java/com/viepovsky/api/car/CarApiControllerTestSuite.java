@@ -36,7 +36,7 @@ class CarApiControllerTestSuite {
     private MockMvc mockMvc;
 
     @MockBean
-    private CarApiService carApiService;
+    private CarApiService service;
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -74,7 +74,7 @@ class CarApiControllerTestSuite {
     void testGetCarMakes() throws Exception {
         //Given
         List<String> makeList = List.of("AUDI", "BMW", "OPEL", "PEUGEOT");
-        when(carApiService.getCarMakes()).thenReturn(makeList);
+        when(service.getCarMakes()).thenReturn(makeList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/car-api/makes")
@@ -88,7 +88,7 @@ class CarApiControllerTestSuite {
     void testGetCarTypes() throws Exception {
         //Given
         List<String> typeList = List.of("Sedan", "Suv", "Hatchback", "Coupe");
-        when(carApiService.getCarTypes()).thenReturn(typeList);
+        when(service.getCarTypes()).thenReturn(typeList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/car-api/types")
@@ -102,7 +102,7 @@ class CarApiControllerTestSuite {
     void testGetCarYears() throws Exception {
         //Given
         List<Integer> yearList = List.of(2022, 2021, 2020, 2019);
-        when(carApiService.getCarYears()).thenReturn(yearList);
+        when(service.getCarYears()).thenReturn(yearList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/car-api/years")
@@ -116,7 +116,7 @@ class CarApiControllerTestSuite {
     void testGetCarModels() throws Exception {
         //Given
         List<String> modelList = List.of("A8", "A6", "A5", "A4");
-        when(carApiService.getCarModels(2014, "Audi", "Sedan")).thenReturn(modelList);
+        when(service.getCarModels(2014, "Audi", "Sedan")).thenReturn(modelList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/car-api")

@@ -8,7 +8,7 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @MockBean(ApplicationScheduler.class)
-@TestPropertySource(locations="classpath:application.properties")
+@TestPropertySource(locations = "classpath:application.properties")
 class AppBackendApplicationTests {
 
     @Test

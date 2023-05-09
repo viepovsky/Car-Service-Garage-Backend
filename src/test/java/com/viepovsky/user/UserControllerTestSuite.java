@@ -1,13 +1,13 @@
 package com.viepovsky.user;
 
-import com.viepovsky.scheduler.ApplicationScheduler;
-import com.viepovsky.user.dto.PasswordDto;
-import com.viepovsky.user.dto.UserDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.user.dto.PasswordDto;
+import com.viepovsky.user.dto.UserDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -45,7 +45,7 @@ class UserControllerTestSuite {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserFacade userFacade;
+    private UserFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -85,8 +85,8 @@ class UserControllerTestSuite {
     @Test
     void testGetUser() throws Exception {
         //Given
-        UserDto userDto = new UserDto(1L, "Testname", "Testlastname", "test@email", "25325235","Testusername", LocalDateTime.now());
-        when(userFacade.getUserByUsername("Testusername")).thenReturn(userDto);
+        var userDto = new UserDto(1L, "Testname", "Testlastname", "test@email", "25325235", "Testusername", LocalDateTime.now());
+        when(facade.getUserByUsername("Testusername")).thenReturn(userDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/information")
@@ -99,10 +99,23 @@ class UserControllerTestSuite {
     }
 
     @Test
+    void shouldNotGetUserIfUserDoesNotMatchGivenUsername() throws Exception {
+        //Given
+        var userDto = new UserDto(1L, "Testname", "Testlastname", "test@email", "25325235", "Testusername", LocalDateTime.now());
+        when(facade.getUserByUsername("Testusername")).thenReturn(userDto);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/users/information")
+                        .param("username", "Testlogin")
+                        .header("Authorization", "Bearer " + jwtTokenUser))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
     void testGetUserToLogin() throws Exception {
         //Given
-        UserDto userDto = new UserDto(1L, "Testusername", "Testpassword", Role.ROLE_USER);
-        when(userFacade.getUserByUsernameToLogin("Testusername")).thenReturn(userDto);
+        var userDto = new UserDto(1L, "Testusername", "Testpassword", Role.ROLE_USER);
+        when(facade.getUserByUsernameToLogin("Testusername")).thenReturn(userDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/login")
@@ -116,7 +129,7 @@ class UserControllerTestSuite {
     @Test
     void testIsUserRegistered() throws Exception {
         //Given
-        when(userFacade.isUserRegistered("username")).thenReturn(true);
+        when(facade.isUserRegistered("username")).thenReturn(true);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/is-registered")
@@ -129,8 +142,8 @@ class UserControllerTestSuite {
     @Test
     void testGetUserPassword() throws Exception {
         //Given
-        PasswordDto passwordDto = new PasswordDto("testpassword");
-        when(userFacade.getUserPass(anyString())).thenReturn(passwordDto);
+        var passwordDto = new PasswordDto("testpassword");
+        when(facade.getUserPass(anyString())).thenReturn(passwordDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/pass")
@@ -141,24 +154,27 @@ class UserControllerTestSuite {
     }
 
     @Test
+    void shouldNotGetPasswordIfUserDoesNotMatchGivenUsername() throws Exception {
+        //Given
+        var passwordDto = new PasswordDto("testpassword");
+        when(facade.getUserPass(anyString())).thenReturn(passwordDto);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/users/pass")
+                        .param("username", "Testlogin")
+                        .header("Authorization", "Bearer " + jwtTokenUser))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
     void testCreateUser() throws Exception {
         //Given
-        UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
-        User user = User.builder().username("test").id(5L).build();
-        when(userFacade.createUser(any(UserDto.class))).thenReturn(user);
+        var userDto = new UserDto(1L, "Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
+        var user = User.builder().username("test").id(5L).build();
+        Gson gson = getGsonWithProperLocalDateTimeSetting();
+        var jsonContent = gson.toJson(userDto);
 
-        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
-            @Override
-            public void write(JsonWriter out, LocalDateTime value) throws IOException {
-                out.value(value.toString());
-            }
-
-            @Override
-            public LocalDateTime read(JsonReader in) throws IOException {
-                return LocalDateTime.parse(in.nextString());
-            }
-        }).create();
-        String jsonContent = gson.toJson(userDto);
+        when(facade.createUser(any(UserDto.class))).thenReturn(user);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/users")
@@ -172,10 +188,39 @@ class UserControllerTestSuite {
     @Test
     void testUpdateUser() throws Exception {
         //Given
-        UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "Testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
-        doNothing().when(userFacade).updateUser(userDto);
+        var userDto = new UserDto(1L, "Testname", "Testlastname", "testmail@mail", "858585858558", "Testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
+        Gson gson = getGsonWithProperLocalDateTimeSetting();
+        var jsonContent = gson.toJson(userDto);
 
-        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
+        doNothing().when(facade).updateUser(userDto);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent)
+                        .characterEncoding("UTF-8")
+                        .header("Authorization", "Bearer " + jwtTokenUser))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    void shouldNotUpdateIfUserDoesNotMatchGivenUsername() throws Exception {
+        //Given
+        var userDto = new UserDto(1L, "Testname", "Testlastname", "testmail@mail", "858585858558", "Testlogin", "testpassword", Role.ROLE_USER, LocalDateTime.now());
+        Gson gson = getGsonWithProperLocalDateTimeSetting();
+        var jsonContent = gson.toJson(userDto);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent)
+                        .characterEncoding("UTF-8")
+                        .header("Authorization", "Bearer " + jwtTokenUser))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    private static Gson getGsonWithProperLocalDateTimeSetting() {
+        return new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override
             public void write(JsonWriter out, LocalDateTime value) throws IOException {
                 out.value(value.toString());
@@ -186,14 +231,5 @@ class UserControllerTestSuite {
                 return LocalDateTime.parse(in.nextString());
             }
         }).create();
-        String jsonContent = gson.toJson(userDto);
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .put("/v1/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonContent)
-                        .characterEncoding("UTF-8")
-                        .header("Authorization", "Bearer " + jwtTokenUser))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

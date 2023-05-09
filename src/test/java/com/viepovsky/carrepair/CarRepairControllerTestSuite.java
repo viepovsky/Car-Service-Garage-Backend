@@ -38,7 +38,7 @@ class CarRepairControllerTestSuite {
     private MockMvc mockMvc;
 
     @MockBean
-    private CarRepairFacade carRepairFacade;
+    private CarRepairFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -75,7 +75,7 @@ class CarRepairControllerTestSuite {
     void testShouldGetEmptyCarServiceList() throws Exception {
         //Given
         List<CarRepairDto> emptyList = List.of();
-        when(carRepairFacade.getCarServices(anyString())).thenReturn(emptyList);
+        when(facade.getCarServices(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/car-repairs")
@@ -90,7 +90,7 @@ class CarRepairControllerTestSuite {
     void testShouldGetCarServiceList() throws Exception {
         //Given
         List<CarRepairDto> carList = List.of(new CarRepairDto(1L, "Test name", "Test description", BigDecimal.valueOf(50), 60));
-        when(carRepairFacade.getCarServices(anyString())).thenReturn(carList);
+        when(facade.getCarServices(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/car-repairs")
@@ -104,9 +104,19 @@ class CarRepairControllerTestSuite {
     }
 
     @Test
+    void testShouldNotGetCarServiceListIfGivenUsernameDoesNotMatchWithUser() throws Exception {
+        //Given & When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/car-repairs")
+                        .param("username", "testuser22")
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
     void testShouldDeleteCarService() throws Exception {
         //Given
-        doNothing().when(carRepairFacade).deleteCarService(1L);
+        doNothing().when(facade).deleteCarService(1L);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/car-repairs/1")

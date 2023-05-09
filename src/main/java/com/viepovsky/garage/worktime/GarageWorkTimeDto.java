@@ -1,13 +1,14 @@
 package com.viepovsky.garage.worktime;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 @Data
+@Builder
 @AllArgsConstructor
 public class GarageWorkTimeDto {
     private Long id;

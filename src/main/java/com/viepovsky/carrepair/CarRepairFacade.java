@@ -17,12 +17,12 @@ class CarRepairFacade {
 
     public List<CarRepairDto> getCarServices(String username) throws MyEntityNotFoundException {
         LOGGER.info("GET Endpoint used.");
-        List<CarRepair> carRepairList = carRepairService.getCarServices(username);
+        List<CarRepair> carRepairList = carRepairService.getCarRepairs(username);
         return carRepairMapper.mapToCarServiceDtoList(carRepairList);
     }
 
     public void deleteCarService(Long carServiceId) throws MyEntityNotFoundException {
         LOGGER.info("DELETE Endpoint used.");
-        carRepairService.deleteCarService(carServiceId);
+        carRepairService.deleteCarRepair(carServiceId);
     }
 }

@@ -1,40 +1,38 @@
 package com.viepovsky.user;
 
+import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
-import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.scheduler.ApplicationScheduler;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@MockBean(ApplicationScheduler.class)
+@ExtendWith(MockitoExtension.class)
 class UserFacadeTestSuite {
     @InjectMocks
-    private UserFacade userFacade;
+    private UserFacade facade;
 
     @Mock
-    private UserService userService;
+    private UserService service;
 
     @Mock
-    private UserMapper userMapper;
+    private UserMapper mapper;
 
     @Test
     void shouldGetUserByUsername() throws MyEntityNotFoundException {
         //Given
         User mockedUser = Mockito.mock(User.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
-        when(userService.getUser("username")).thenReturn(mockedUser);
-        when(userMapper.mapToUserDto(mockedUser)).thenReturn(mockedUserDto);
+        when(service.getUser("username")).thenReturn(mockedUser);
+        when(mapper.mapToUserDto(mockedUser)).thenReturn(mockedUserDto);
         //When
-        UserDto retrievedUser = userFacade.getUserByUsername("username");
+        UserDto retrievedUser = facade.getUserByUsername("username");
         //Then
         assertNotNull(retrievedUser);
     }
@@ -44,10 +42,10 @@ class UserFacadeTestSuite {
         //Given
         User mockedUser = Mockito.mock(User.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
-        when(userService.getUser("username")).thenReturn(mockedUser);
-        when(userMapper.mapToUserDtoLogin(mockedUser)).thenReturn(mockedUserDto);
+        when(service.getUser("username")).thenReturn(mockedUser);
+        when(mapper.mapToUserDtoLogin(mockedUser)).thenReturn(mockedUserDto);
         //When
-        UserDto retrievedUser = userFacade.getUserByUsernameToLogin("username");
+        UserDto retrievedUser = facade.getUserByUsernameToLogin("username");
         //Then
         assertNotNull(retrievedUser);
     }
@@ -55,9 +53,9 @@ class UserFacadeTestSuite {
     @Test
     void shouldReturnTrueIfUserRegistered() {
         //Given
-        when(userService.isUserInDatabase("username")).thenReturn(true);
+        when(service.isUserInDatabase("username")).thenReturn(true);
         //When
-        boolean isUserInDb = userFacade.isUserRegistered("username");
+        boolean isUserInDb = facade.isUserRegistered("username");
         //Then
         assertTrue(isUserInDb);
     }
@@ -65,9 +63,9 @@ class UserFacadeTestSuite {
     @Test
     void shouldGetUserPass() throws MyEntityNotFoundException {
         //Given
-        when(userService.getUserPass("username")).thenReturn("encrypted password");
+        when(service.getUserPass("username")).thenReturn("encrypted password");
         //When
-        PasswordDto passwordDto = userFacade.getUserPass("username");
+        PasswordDto passwordDto = facade.getUserPass("username");
         //Then
         assertNotNull(passwordDto);
         assertEquals("encrypted password", passwordDto.getPassword());
@@ -78,12 +76,12 @@ class UserFacadeTestSuite {
         //Given
         User mockedUser = Mockito.mock(User.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
-        when(userMapper.mapToUserLogin(mockedUserDto)).thenReturn(mockedUser);
-        when(userService.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
+        when(mapper.mapToUserLogin(mockedUserDto)).thenReturn(mockedUser);
+        when(service.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
         //When
-        userFacade.createUser(mockedUserDto);
+        facade.createUser(mockedUserDto);
         //Then
-        verify(userService, times(1)).saveUser(mockedUser);
+        verify(service, times(1)).saveUser(mockedUser);
     }
 
     @Test
@@ -91,12 +89,12 @@ class UserFacadeTestSuite {
         //Given
         User mockedUser = Mockito.mock(User.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
-        when(userMapper.mapToUserLogin(mockedUserDto)).thenReturn(mockedUser);
-        doNothing().when(userService).updateUser(mockedUser);
+        when(mapper.mapToUserLogin(mockedUserDto)).thenReturn(mockedUser);
+        doNothing().when(service).updateUser(mockedUser);
         //When
-        userFacade.updateUser(mockedUserDto);
+        facade.updateUser(mockedUserDto);
         //Then
-        verify(userService, times(1)).updateUser(mockedUser);
+        verify(service, times(1)).updateUser(mockedUser);
     }
 
 }
