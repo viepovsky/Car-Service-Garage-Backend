@@ -21,10 +21,10 @@ import static org.mockito.Mockito.*;
 class GarageServiceTestSuite {
 
     @InjectMocks
-    private GarageService garageService;
+    private GarageService service;
 
     @Mock
-    private GarageRepository garageRepository;
+    private GarageRepository repository;
 
     @Test
     void testGetAllGarages() {
@@ -32,9 +32,9 @@ class GarageServiceTestSuite {
         List<Garage> garageList = new ArrayList<>();
         Garage mockedGarage = Mockito.mock(Garage.class);
         garageList.add(mockedGarage);
-        when(garageRepository.findAll()).thenReturn(garageList);
+        when(repository.findAll()).thenReturn(garageList);
         //When
-        List<Garage> retrievedGarageList = garageService.getAllGarages();
+        List<Garage> retrievedGarageList = service.getAllGarages();
         //Then
         assertEquals(1, retrievedGarageList.size());
     }
@@ -49,9 +49,9 @@ class GarageServiceTestSuite {
         garageList.add(mockedGarage2);
         when(mockedGarage.getAddress()).thenReturn("Gdańsk 62-500, test st");
         when(mockedGarage2.getAddress()).thenReturn("Łódź 62-500, test st");
-        when(garageRepository.findAll()).thenReturn(garageList);
+        when(repository.findAll()).thenReturn(garageList);
         //When
-        List<String> retrievedCities = garageService.getAllGarageCities();
+        List<String> retrievedCities = service.getAllGarageCities();
         //Then
         assertEquals(2, retrievedCities.size());
         assertEquals("Gdańsk", retrievedCities.get(0));
@@ -61,23 +61,23 @@ class GarageServiceTestSuite {
     void testSaveGarage() {
         //Given
         Garage mockedGarage = Mockito.mock(Garage.class);
-        when(garageRepository.save(mockedGarage)).thenReturn(mockedGarage);
+        when(repository.save(mockedGarage)).thenReturn(mockedGarage);
         //When
-        garageRepository.save(mockedGarage);
+        repository.save(mockedGarage);
         //Then
-        verify(garageRepository, times(1)).save(mockedGarage);
+        verify(repository, times(1)).save(mockedGarage);
     }
 
     @Test
     void testDeleteGarage() throws MyEntityNotFoundException {
         //Given
         Garage mockedGarage = Mockito.mock(Garage.class);
-        when(garageRepository.findById(1L)).thenReturn(Optional.of(mockedGarage));
-        doNothing().when(garageRepository).deleteById(1L);
+        when(repository.findById(1L)).thenReturn(Optional.of(mockedGarage));
+        doNothing().when(repository).deleteById(1L);
         //When
-        garageService.deleteGarage(1L);
+        service.deleteGarage(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Garage", 1L));
-        verify(garageRepository, times(1)).deleteById(1L);
+        verify(repository, times(1)).deleteById(1L);
     }
 }

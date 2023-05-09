@@ -20,18 +20,18 @@ import static org.mockito.Mockito.*;
 class UserServiceTestSuite {
 
     @InjectMocks
-    private UserService userService;
+    private UserService service;
 
     @Mock
-    private UserRepository userRepository;
+    private UserRepository repository;
 
     @Test
     void testGetUser() throws MyEntityNotFoundException {
         //Given
         User user = Mockito.mock(User.class);
-        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
+        when(repository.findByUsername("username")).thenReturn(Optional.of(user));
         //When
-        User retrievedUser = userService.getUser("username");
+        User retrievedUser = service.getUser("username");
         //Then
         assertNotNull(retrievedUser);
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
@@ -41,9 +41,9 @@ class UserServiceTestSuite {
     void testIsUserInDatabase() {
         //Given
         User user = Mockito.mock(User.class);
-        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
+        when(repository.findByUsername("username")).thenReturn(Optional.of(user));
         //When
-        boolean retrievedAnswer = userService.isUserInDatabase("username");
+        boolean retrievedAnswer = service.isUserInDatabase("username");
         //Then
         assertTrue(retrievedAnswer);
     }
@@ -52,11 +52,11 @@ class UserServiceTestSuite {
     void testGetUserPass() throws MyEntityNotFoundException {
         //Given
         User user = Mockito.mock(User.class);
-        when(userRepository.findByUsername("username")).thenReturn(Optional.of(user));
+        when(repository.findByUsername("username")).thenReturn(Optional.of(user));
         String pass = "1234";
         when(user.getPassword()).thenReturn(pass);
         //When
-        String retrievedPass = userService.getUserPass("username");
+        String retrievedPass = service.getUserPass("username");
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
         assertEquals("1234", retrievedPass);
@@ -66,11 +66,11 @@ class UserServiceTestSuite {
     void testSaveUser() {
         //Given
         User user = new User();
-        when(userRepository.save(user)).thenReturn(user);
+        when(repository.save(user)).thenReturn(user);
         //When
-        userService.saveUser(user);
+        service.saveUser(user);
         //Then
-        verify(userRepository, times(1)).save(user);
+        verify(repository, times(1)).save(user);
     }
 
     @Test
@@ -78,13 +78,13 @@ class UserServiceTestSuite {
         //Given
         User user = new User("test", "testlast", "email", "656", "testuser", "123", Role.ROLE_USER, new ArrayList<>(), new ArrayList<>());
         User userToUpdate = new User();
-        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(userToUpdate));
-        when(userRepository.save(userToUpdate)).thenReturn(userToUpdate);
+        when(repository.findByUsername("testuser")).thenReturn(Optional.of(userToUpdate));
+        when(repository.save(userToUpdate)).thenReturn(userToUpdate);
         //When
-        userService.updateUser(user);
+        service.updateUser(user);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + user.getUsername()));
-        verify(userRepository, times(1)).save(userToUpdate);
+        verify(repository, times(1)).save(userToUpdate);
         assertEquals("123", userToUpdate.getPassword());
     }
 
@@ -92,13 +92,13 @@ class UserServiceTestSuite {
     void testDeleteUser() throws MyEntityNotFoundException {
         //Given
         User mockedUser = Mockito.mock(User.class);
-        when(userRepository.findByUsername("username")).thenReturn(Optional.of(mockedUser));
+        when(repository.findByUsername("username")).thenReturn(Optional.of(mockedUser));
         when(mockedUser.getId()).thenReturn(1L);
-        doNothing().when(userRepository).deleteById(1L);
+        doNothing().when(repository).deleteById(1L);
         //When
-        userService.deleteUser("username");
+        service.deleteUser("username");
         //Then
-        verify(userRepository, times(1)).deleteById(1L);
+        verify(repository, times(1)).deleteById(1L);
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
     }
 }

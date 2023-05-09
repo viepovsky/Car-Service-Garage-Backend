@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,7 +31,8 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -40,30 +40,23 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
 class GarageWorkTimeControllerTestSuite {
-    @Value("${admin.api.key}")
-    private String adminApiKey;
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private GarageWorkTimeFacade garageWorkTimeFacade;
+    private GarageWorkTimeFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
 
-    private String jwtTokenUser;
     private String jwtTokenAdmin;
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
-        var userInDb = User.builder().username("Testusername").role(Role.ROLE_USER).build();
         var adminInDb = User.builder().username("Testadmin").role(Role.ROLE_ADMIN).build();
-        when(userDetailsService.loadUserByUsername("Testusername")).thenReturn(userInDb);
         when(userDetailsService.loadUserByUsername("Testadmin")).thenReturn(adminInDb);
-        jwtTokenUser = generateToken("Testusername", secretKey);
         jwtTokenAdmin = generateToken("Testadmin", secretKey);
     }
 
@@ -87,8 +80,8 @@ class GarageWorkTimeControllerTestSuite {
     @Test
     void testCreateGarageWorkTime() throws Exception {
         //Given
-        GarageWorkTimeDto garageWorkTimeDto = new GarageWorkTimeDto(1L, WorkDays.MONDAY, LocalTime.of(10,0), LocalTime.of(15,0));
-        doNothing().when(garageWorkTimeFacade).createGarageWorkTime(any(GarageWorkTimeDto.class), anyLong());
+        GarageWorkTimeDto garageWorkTimeDto = new GarageWorkTimeDto(1L, WorkDays.MONDAY, LocalTime.of(10, 0), LocalTime.of(15, 0));
+        doNothing().when(facade).createGarageWorkTime(any(GarageWorkTimeDto.class), anyLong());
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new TypeAdapter<LocalTime>() {
             @Override
             public void write(JsonWriter out, LocalTime value) throws IOException {
@@ -115,7 +108,7 @@ class GarageWorkTimeControllerTestSuite {
     @Test
     void testDeleteGarageWorkTime() throws Exception {
         //Given
-        doNothing().when(garageWorkTimeFacade).deleteGarageWorkTime(anyLong());
+        doNothing().when(facade).deleteGarageWorkTime(anyLong());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/garage-work-time/1")

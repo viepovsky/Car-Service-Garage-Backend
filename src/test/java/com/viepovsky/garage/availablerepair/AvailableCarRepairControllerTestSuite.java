@@ -36,14 +36,11 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
 class AvailableCarRepairControllerTestSuite {
-    @Value("${admin.api.key}")
-    private String adminApiKey;
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private AvailableCarRepairFacade availableCarRepairFacade;
+    private AvailableCarRepairFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -83,7 +80,7 @@ class AvailableCarRepairControllerTestSuite {
     @Test
     void testShouldGetEmptyListAvailableCarServices() throws Exception {
         //Given
-        when(availableCarRepairFacade.getAvailableCarServices(1L)).thenReturn(List.of());
+        when(facade.getAvailableCarServices(1L)).thenReturn(List.of());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/available-car-service/1")
@@ -96,7 +93,7 @@ class AvailableCarRepairControllerTestSuite {
     void testShouldGetAllAvailableCarServices() throws Exception {
         //Given
         List<AvailableCarRepairDto> carServiceList = List.of( new AvailableCarRepairDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), 22L));
-        when(availableCarRepairFacade.getAvailableCarServices(1L)).thenReturn(carServiceList);
+        when(facade.getAvailableCarServices(1L)).thenReturn(carServiceList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/available-car-service/1")
@@ -114,7 +111,7 @@ class AvailableCarRepairControllerTestSuite {
     void testShouldCreateAvailableCarService() throws Exception {
         //Given
         AvailableCarRepairDto availableCarRepairDto = new AvailableCarRepairDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
-        doNothing().when(availableCarRepairFacade).createAvailableCarService(any(AvailableCarRepairDto.class), anyLong());
+        doNothing().when(facade).createAvailableCarService(any(AvailableCarRepairDto.class), anyLong());
         Gson gson = new Gson();
         String jsonContent = gson.toJson(availableCarRepairDto);
         //When & then
@@ -131,7 +128,7 @@ class AvailableCarRepairControllerTestSuite {
     @Test
     void shouldDeleteAvailableCarService() throws Exception {
         //Given
-        doNothing().when(availableCarRepairFacade).deleteAvailableCarService(anyLong());
+        doNothing().when(facade).deleteAvailableCarService(anyLong());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/available-car-service/20")

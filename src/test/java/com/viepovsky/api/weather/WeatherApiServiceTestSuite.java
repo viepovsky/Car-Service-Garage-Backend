@@ -1,6 +1,5 @@
 package com.viepovsky.api.weather;
 
-import com.viepovsky.api.weather.*;
 import com.viepovsky.api.weather.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,16 +20,16 @@ import static org.mockito.Mockito.*;
 @DisplayName("Weather Api Service Test Suite")
 class WeatherApiServiceTestSuite {
     @InjectMocks
-    private WeatherApiService weatherApiService;
+    private WeatherApiService service;
 
     @Mock
-    private WeatherApiClient weatherApiClient;
+    private WeatherApiClient client;
 
     @Mock
-    private StoredForecastRepository storedForecastRepository;
+    private StoredForecastRepository repository;
 
     @Mock
-    private ForecastMapper forecastMapper;
+    private ForecastMapper mapper;
 
     @Test
     void testGetAndStore14DaysForecast() {
@@ -52,16 +51,16 @@ class WeatherApiServiceTestSuite {
         storedForecastList.add(storedForecast);
         storedForecastList.add(storedForecast2);
 
-        when(storedForecastRepository.findAllByCity(city)).thenReturn(new ArrayList<>());
-        when(weatherApiClient.getIdForCityName(city)).thenReturn(locationDto);
-        when(weatherApiClient.get14DaysForecast(56750)).thenReturn(forecastDto);
-        when(forecastMapper.mapToStoredForecastList(forecastDto.getForecasts(), city)).thenReturn(storedForecastList);
-        when(storedForecastRepository.saveAll(storedForecastList)).thenReturn(storedForecastList);
+        when(repository.findAllByCity(city)).thenReturn(new ArrayList<>());
+        when(client.getIdForCityName(city)).thenReturn(locationDto);
+        when(client.get14DaysForecast(56750)).thenReturn(forecastDto);
+        when(mapper.mapToStoredForecastList(forecastDto.getForecasts(), city)).thenReturn(storedForecastList);
+        when(repository.saveAll(storedForecastList)).thenReturn(storedForecastList);
         //When
-        weatherApiService.getAndStore14DaysForecast(city);
+        service.getAndStore14DaysForecast(city);
         //Then
-        verify(storedForecastRepository, times(0)).deleteAllByCity(city);
-        verify(storedForecastRepository, times(1)).saveAll(storedForecastList);
+        verify(repository, times(0)).deleteAllByCity(city);
+        verify(repository, times(1)).saveAll(storedForecastList);
         assertEquals(56750, locationDto.getLocations().get(0).getCityId());
     }
 
@@ -72,12 +71,12 @@ class WeatherApiServiceTestSuite {
         LocalDate localDate = LocalDate.now();
         StoredForecast storedForecast = Mockito.mock(StoredForecast.class);
         CityForecastDto cityForecastDto = Mockito.mock(CityForecastDto.class);
-        when(storedForecastRepository.findByDateAndCity(localDate, city)).thenReturn(storedForecast);
-        when(forecastMapper.mapToCityForecastDto(storedForecast)).thenReturn(cityForecastDto);
+        when(repository.findByDateAndCity(localDate, city)).thenReturn(storedForecast);
+        when(mapper.mapToCityForecastDto(storedForecast)).thenReturn(cityForecastDto);
         //When
-        CityForecastDto retrievedCityForecast = weatherApiService.getForecastForCityAndDate(city, localDate);
+        CityForecastDto retrievedCityForecast = service.getForecastForCityAndDate(city, localDate);
         //Then
         assertNotNull(retrievedCityForecast);
-        verify(storedForecastRepository, times(1)).findByDateAndCity(localDate,city);
+        verify(repository, times(1)).findByDateAndCity(localDate,city);
     }
 }

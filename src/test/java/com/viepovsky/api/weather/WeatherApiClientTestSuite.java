@@ -1,7 +1,5 @@
 package com.viepovsky.api.weather;
 
-import com.viepovsky.api.weather.WeatherApiClient;
-import com.viepovsky.api.weather.WeatherApiConfig;
 import com.viepovsky.api.weather.dto.ForecastDto;
 import com.viepovsky.api.weather.dto.ForecastsDto;
 import com.viepovsky.api.weather.dto.LocationDto;
@@ -26,19 +24,19 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class WeatherApiClientTestSuite {
     @InjectMocks
-    private WeatherApiClient weatherApiClient;
+    private WeatherApiClient client;
 
     @Mock
     private RestTemplate restTemplate;
 
     @Mock
-    private WeatherApiConfig weatherApiConfig;
+    private WeatherApiConfig config;
 
     @BeforeEach
     void beforeEach() {
-        when(weatherApiConfig.getWeatherApiEndpoint()).thenReturn("https://test.com");
-        when(weatherApiConfig.getWeatherApiKey()).thenReturn("testkey");
-        when(weatherApiConfig.getWeatherApiHost()).thenReturn("testhost");
+        when(config.getWeatherApiEndpoint()).thenReturn("https://test.com");
+        when(config.getWeatherApiKey()).thenReturn("testkey");
+        when(config.getWeatherApiHost()).thenReturn("testhost");
     }
 
     @Test
@@ -49,8 +47,8 @@ class WeatherApiClientTestSuite {
         forecastDto.setForecasts(List.of(forecastsDto));
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-RapidAPI-Key", weatherApiConfig.getWeatherApiKey());
-        headers.set("X-RapidAPI-Host", weatherApiConfig.getWeatherApiHost());
+        headers.set("X-RapidAPI-Key", config.getWeatherApiKey());
+        headers.set("X-RapidAPI-Host", config.getWeatherApiHost());
 
         HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
 
@@ -60,7 +58,7 @@ class WeatherApiClientTestSuite {
 
         when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, ForecastDto.class)).thenReturn(response);
         //When
-        ForecastDto retrievedForecast = weatherApiClient.get14DaysForecast(12050);
+        ForecastDto retrievedForecast = client.get14DaysForecast(12050);
         //Then
         assertEquals(1, retrievedForecast.getForecasts().size());
         assertEquals(LocalDate.of(2022,10,15), retrievedForecast.getForecasts().get(0).getDate());
@@ -75,8 +73,8 @@ class WeatherApiClientTestSuite {
         locationDto.setLocations(List.of(locationsDto));
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-RapidAPI-Key", weatherApiConfig.getWeatherApiKey());
-        headers.set("X-RapidAPI-Host", weatherApiConfig.getWeatherApiHost());
+        headers.set("X-RapidAPI-Key", config.getWeatherApiKey());
+        headers.set("X-RapidAPI-Host", config.getWeatherApiHost());
 
         HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
 
@@ -86,7 +84,7 @@ class WeatherApiClientTestSuite {
 
         when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, LocationDto.class)).thenReturn(response);
         //When
-        LocationDto retrievedLocationDto = weatherApiClient.getIdForCityName("Poznan");
+        LocationDto retrievedLocationDto = client.getIdForCityName("Poznan");
         //Then
         assertEquals(1, retrievedLocationDto.getLocations().size());
         assertEquals(12050, retrievedLocationDto.getLocations().get(0).getCityId());

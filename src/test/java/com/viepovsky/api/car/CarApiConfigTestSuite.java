@@ -1,6 +1,5 @@
 package com.viepovsky.api.car;
 
-import com.viepovsky.api.car.CarApiConfig;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +11,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @MockBean(ApplicationScheduler.class)
 class CarApiConfigTestSuite {
     @Autowired
-    private CarApiConfig carApiConfig;
+    private CarApiConfig config;
 
     @Test
     void testCarApiConfig() {
         //Given
         //When
-        String endpoint = carApiConfig.getCarApiEndpoint();
-        String key = carApiConfig.getCarApiKey();
-        String host = carApiConfig.getCarApiHost();
+        String endpoint = config.getCarApiEndpoint();
+        String key = config.getCarApiKey();
+        String host = config.getCarApiHost();
         //Then
         assertNotNull(endpoint);
         assertNotNull(key);

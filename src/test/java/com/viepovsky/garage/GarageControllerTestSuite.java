@@ -1,9 +1,9 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.garage.worktime.GarageWorkTimeDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.viepovsky.garage.worktime.GarageWorkTimeDto;
 import com.viepovsky.garage.worktime.WorkDays;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.Role;
@@ -34,7 +34,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -42,14 +43,11 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
 class GarageControllerTestSuite {
-    @Value("${admin.api.key}")
-    private String adminApiKey;
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private GarageFacade garageFacade;
+    private GarageFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -89,7 +87,7 @@ class GarageControllerTestSuite {
     @Test
     void shouldGetEmptyListAllGarages() throws Exception {
         //Given
-        when(garageFacade.getAllGarages()).thenReturn(List.of());
+        when(facade.getAllGarages()).thenReturn(List.of());
         //When && then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/garages")
@@ -99,12 +97,13 @@ class GarageControllerTestSuite {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
 
     }
+
     @Test
     void shouldGetAllGarages() throws Exception {
         //Given
-        List<GarageWorkTimeDto> garageWorkTimeDtoList = List.of(new GarageWorkTimeDto(20L, WorkDays.MONDAY, LocalTime.of(10,0), LocalTime.of(11,0)));
+        List<GarageWorkTimeDto> garageWorkTimeDtoList = List.of(new GarageWorkTimeDto(20L, WorkDays.MONDAY, LocalTime.of(10, 0), LocalTime.of(11, 0)));
         List<GarageDto> garageDtoList = List.of(new GarageDto(1L, "Test garage", "Test address", garageWorkTimeDtoList));
-        when(garageFacade.getAllGarages()).thenReturn(garageDtoList);
+        when(facade.getAllGarages()).thenReturn(garageDtoList);
         //When && then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/garages")
@@ -126,7 +125,7 @@ class GarageControllerTestSuite {
         //Given
         GarageDto garageDto = new GarageDto(1L, "Test garage", "Test address", null);
         Garage garage = new Garage();
-        when(garageFacade.createGarage(any(GarageDto.class))).thenReturn(garage);
+        when(facade.createGarage(any(GarageDto.class))).thenReturn(garage);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, type, jsonDeserializationContext) ->
                 ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalTime()).create();
@@ -146,7 +145,7 @@ class GarageControllerTestSuite {
     @Test
     void shouldDeleteGarage() throws Exception {
         //Given
-        doNothing().when(garageFacade).deleteGarage(anyLong());
+        doNothing().when(facade).deleteGarage(anyLong());
 
         //When & then
         mockMvc.perform(MockMvcRequestBuilders

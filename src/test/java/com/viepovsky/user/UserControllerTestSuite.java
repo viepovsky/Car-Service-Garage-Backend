@@ -45,7 +45,7 @@ class UserControllerTestSuite {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserFacade userFacade;
+    private UserFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -86,7 +86,7 @@ class UserControllerTestSuite {
     void testGetUser() throws Exception {
         //Given
         UserDto userDto = new UserDto(1L, "Testname", "Testlastname", "test@email", "25325235","Testusername", LocalDateTime.now());
-        when(userFacade.getUserByUsername("Testusername")).thenReturn(userDto);
+        when(facade.getUserByUsername("Testusername")).thenReturn(userDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/information")
@@ -102,7 +102,7 @@ class UserControllerTestSuite {
     void testGetUserToLogin() throws Exception {
         //Given
         UserDto userDto = new UserDto(1L, "Testusername", "Testpassword", Role.ROLE_USER);
-        when(userFacade.getUserByUsernameToLogin("Testusername")).thenReturn(userDto);
+        when(facade.getUserByUsernameToLogin("Testusername")).thenReturn(userDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/login")
@@ -116,7 +116,7 @@ class UserControllerTestSuite {
     @Test
     void testIsUserRegistered() throws Exception {
         //Given
-        when(userFacade.isUserRegistered("username")).thenReturn(true);
+        when(facade.isUserRegistered("username")).thenReturn(true);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/is-registered")
@@ -130,7 +130,7 @@ class UserControllerTestSuite {
     void testGetUserPassword() throws Exception {
         //Given
         PasswordDto passwordDto = new PasswordDto("testpassword");
-        when(userFacade.getUserPass(anyString())).thenReturn(passwordDto);
+        when(facade.getUserPass(anyString())).thenReturn(passwordDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/users/pass")
@@ -145,7 +145,7 @@ class UserControllerTestSuite {
         //Given
         UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
         User user = User.builder().username("test").id(5L).build();
-        when(userFacade.createUser(any(UserDto.class))).thenReturn(user);
+        when(facade.createUser(any(UserDto.class))).thenReturn(user);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override
@@ -173,7 +173,7 @@ class UserControllerTestSuite {
     void testUpdateUser() throws Exception {
         //Given
         UserDto userDto = new UserDto(1L,"Testname", "Testlastname", "testmail@mail", "858585858558", "Testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
-        doNothing().when(userFacade).updateUser(userDto);
+        doNothing().when(facade).updateUser(userDto);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new TypeAdapter<LocalDateTime>() {
             @Override

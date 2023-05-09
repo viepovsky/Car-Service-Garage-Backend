@@ -40,7 +40,7 @@ class BookingControllerTestSuite {
     private MockMvc mockMvc;
 
     @MockBean
-    private BookingFacade bookingFacade;
+    private BookingFacade facade;
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -83,7 +83,7 @@ class BookingControllerTestSuite {
     void shouldGetEmptyListBookings() throws Exception {
         //Given
         List<BookingDto> bookingDtoList = List.of();
-        when(bookingFacade.getBookingsForGivenUsername(anyString())).thenReturn(bookingDtoList);
+        when(facade.getBookingsForGivenUsername(anyString())).thenReturn(bookingDtoList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/bookings")
@@ -97,7 +97,7 @@ class BookingControllerTestSuite {
     void shouldGetBookings() throws Exception {
         //Given
         List<BookingDto> bookingDtoList = List.of(new BookingDto(1L, BookingStatus.WAITING_FOR_CUSTOMER.getStatusName(), LocalDate.of(2022, 12, 30), LocalTime.of(10, 0), LocalTime.of(11, 0), BigDecimal.valueOf(50), null, null));
-        when(bookingFacade.getBookingsForGivenUsername(anyString())).thenReturn(bookingDtoList);
+        when(facade.getBookingsForGivenUsername(anyString())).thenReturn(bookingDtoList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/bookings")
@@ -114,7 +114,7 @@ class BookingControllerTestSuite {
     void shouldGetAvailableBookingTimes() throws Exception {
         //Given
         List<LocalTime> localTimeList = List.of(LocalTime.of(10, 0), LocalTime.of(11, 0));
-        when(bookingFacade.getAvailableBookingTimes(LocalDate.of(2022, 10, 15), 50, 1L, 22L)).thenReturn(localTimeList);
+        when(facade.getAvailableBookingTimes(LocalDate.of(2022, 10, 15), 50, 1L, 22L)).thenReturn(localTimeList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/bookings/available-times")
@@ -132,7 +132,7 @@ class BookingControllerTestSuite {
     void shouldCreateBooking() throws Exception {
         //Given
         List<Long> idList = List.of(1L, 2L, 5L);
-        doNothing().when(bookingFacade).createBooking(idList, LocalDate.of(2022, 10, 15), LocalTime.of(10, 0), 33L, 4L, 55);
+        doNothing().when(facade).createBooking(idList, LocalDate.of(2022, 10, 15), LocalTime.of(10, 0), 33L, 4L, 55);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/bookings")
@@ -149,7 +149,7 @@ class BookingControllerTestSuite {
     @Test
     void shouldCreateAvailableBooking() throws Exception {
         //Given
-        doNothing().when(bookingFacade).createWorkingHoursBooking(any(), any(), any(), anyLong());
+        doNothing().when(facade).createWorkingHoursBooking(any(), any(), any(), anyLong());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/bookings/admin")
@@ -164,7 +164,7 @@ class BookingControllerTestSuite {
     @Test
     void shouldUpdateBooking() throws Exception {
         //Given
-        doNothing().when(bookingFacade).updateBooking(1L, LocalDate.of(2022, 10, 15), LocalTime.of(10, 0));
+        doNothing().when(facade).updateBooking(1L, LocalDate.of(2022, 10, 15), LocalTime.of(10, 0));
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/v1/bookings/1")

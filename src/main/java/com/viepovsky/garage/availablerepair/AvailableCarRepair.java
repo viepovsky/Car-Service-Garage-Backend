@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "AVAILABLE_CAR_SERVICE")
+@Table(name = "AVAILABLE_CAR_REPAIRS")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
 
 public class AvailableCarRepair extends BaseEntityAudit {

@@ -1,48 +1,46 @@
 package com.viepovsky.garage.worktime;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.scheduler.ApplicationScheduler;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@MockBean(ApplicationScheduler.class)
+@ExtendWith(MockitoExtension.class)
 class GarageWorkTimeFacadeTestSuite {
     @InjectMocks
-    private GarageWorkTimeFacade garageWorkTimeFacade;
+    private GarageWorkTimeFacade facade;
 
     @Mock
-    private GarageWorkTimeService garageWorkTimeService;
+    private GarageWorkTimeService service;
 
     @Mock
-    private GarageWorkTimeMapper garageWorkTimeMapper;
+    private GarageWorkTimeMapper mapper;
 
     @Test
     void shouldCreateGarageWorkTime() throws MyEntityNotFoundException {
         //Given
         GarageWorkTimeDto mockedDto = Mockito.mock(GarageWorkTimeDto.class);
         GarageWorkTime mocked = Mockito.mock(GarageWorkTime.class);
-        when(garageWorkTimeMapper.mapToGarageWorkTime(mockedDto)).thenReturn(mocked);
-        doNothing().when(garageWorkTimeService).saveGarageWorkTime(mocked, 1L);
+        when(mapper.mapToGarageWorkTime(mockedDto)).thenReturn(mocked);
+        doNothing().when(service).saveGarageWorkTime(mocked, 1L);
         //When
-        garageWorkTimeFacade.createGarageWorkTime(mockedDto, 1L);
+        facade.createGarageWorkTime(mockedDto, 1L);
         //Then
-        verify(garageWorkTimeService, times(1)).saveGarageWorkTime(mocked, 1L);
+        verify(service, times(1)).saveGarageWorkTime(mocked, 1L);
     }
 
     @Test
     void shouldDeleteGarageWorkTime() throws MyEntityNotFoundException {
         //Given
-        doNothing().when(garageWorkTimeService).deleteGarageWorkTime(1L);
+        doNothing().when(service).deleteGarageWorkTime(1L);
         //When
-        garageWorkTimeFacade.deleteGarageWorkTime(1L);
+        facade.deleteGarageWorkTime(1L);
         //Then
-        verify(garageWorkTimeService, times(1)).deleteGarageWorkTime(1L);
+        verify(service, times(1)).deleteGarageWorkTime(1L);
     }
 }

@@ -37,7 +37,7 @@ class WeatherApiControllerTestSuite {
     private MockMvc mockMvc;
 
     @MockBean
-    private WeatherApiService weatherApiService;
+    private WeatherApiService service;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -74,7 +74,7 @@ class WeatherApiControllerTestSuite {
     void testGetForecastForGivenCityAndDate() throws Exception {
         //Given
         CityForecastDto cityForecastDto = new CityForecastDto(LocalDate.of(2022, 10, 15), "R20", "Raining", 8, 2, 30, "Poznan");
-        when(weatherApiService.getForecastForCityAndDate("Poznan", LocalDate.of(2022, 10, 15))).thenReturn(cityForecastDto);
+        when(service.getForecastForCityAndDate("Poznan", LocalDate.of(2022, 10, 15))).thenReturn(cityForecastDto);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/weather-api")

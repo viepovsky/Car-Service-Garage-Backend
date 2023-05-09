@@ -40,7 +40,7 @@ class CarControllerTestSuite {
     private MockMvc mockMvc;
 
     @MockBean
-    private CarFacade carFacade;
+    private CarFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -77,7 +77,7 @@ class CarControllerTestSuite {
     void testShouldGetEmptyCarList() throws Exception {
         //Given
         List<CarDto> emptyList = List.of();
-        when(carFacade.getCarsForGivenUsername(anyString())).thenReturn(emptyList);
+        when(facade.getCarsForGivenUsername(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/cars")
@@ -91,7 +91,7 @@ class CarControllerTestSuite {
     void testShouldGetCarList() throws Exception {
         //Given
         List<CarDto> carList = List.of(new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", 5L));
-        when(carFacade.getCarsForGivenUsername(anyString())).thenReturn(carList);
+        when(facade.getCarsForGivenUsername(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/cars")
@@ -108,7 +108,7 @@ class CarControllerTestSuite {
     void testShouldCreateCar() throws Exception {
         //Given
         CarDto carDto = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
-        doNothing().when(carFacade).createCar(any(CarDto.class), anyString());
+        doNothing().when(facade).createCar(any(CarDto.class), anyString());
         Gson gson = new Gson();
         String jsonContent = gson.toJson(carDto);
         //When & then
@@ -126,7 +126,7 @@ class CarControllerTestSuite {
     void testShouldUpdateCar() throws Exception {
         //Given
         CarDto carDto = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
-        doNothing().when(carFacade).updateCar(any(CarDto.class));
+        doNothing().when(facade).updateCar(any(CarDto.class));
         Gson gson = new Gson();
         String jsonContent = gson.toJson(carDto);
         //When & then
@@ -142,7 +142,7 @@ class CarControllerTestSuite {
     @Test
     void testShouldDeleteCar() throws Exception {
         //Given
-        doNothing().when(carFacade).deleteCar(1L);
+        doNothing().when(facade).deleteCar(1L);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/cars/1")
