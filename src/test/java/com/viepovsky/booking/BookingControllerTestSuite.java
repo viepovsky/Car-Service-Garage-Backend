@@ -111,6 +111,16 @@ class BookingControllerTestSuite {
     }
 
     @Test
+    void shouldNotGetBookingsIfGivenUsernameDoesNotMatchUser() throws Exception {
+        //Given & when & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/bookings")
+                        .param("name", "Testusername22")
+                        .header("Authorization", "Bearer " + jwtTokenUser))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
     void shouldGetAvailableBookingTimes() throws Exception {
         //Given
         List<LocalTime> localTimeList = List.of(LocalTime.of(10, 0), LocalTime.of(11, 0));

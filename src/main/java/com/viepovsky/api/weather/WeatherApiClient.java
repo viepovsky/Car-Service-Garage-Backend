@@ -65,6 +65,7 @@ class WeatherApiClient {
             return new LocationDto();
         }
     }
+
     private HttpHeaders createHeader() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-RapidAPI-Key", weatherApiConfig.getWeatherApiKey());

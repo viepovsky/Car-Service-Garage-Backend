@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @MockBean(ApplicationScheduler.class)
 @Transactional

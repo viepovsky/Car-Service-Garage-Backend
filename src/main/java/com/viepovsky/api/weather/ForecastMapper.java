@@ -19,6 +19,7 @@ class ForecastMapper {
                 city
         );
     }
+
     public List<StoredForecast> mapToStoredForecastList(List<ForecastsDto> forecastDtoList, String city) {
         return forecastDtoList.stream()
                 .map(n -> mapToStoredForecast(n, city))
@@ -34,6 +35,6 @@ class ForecastMapper {
                 storedForecast.getMinTemp(),
                 storedForecast.getMaxWindSpeed(),
                 storedForecast.getCity()
-                );
+        );
     }
 }

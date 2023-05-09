@@ -1,7 +1,7 @@
 package com.viepovsky.garage.availablerepair;
 
-import com.viepovsky.garage.Garage;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

@@ -32,6 +32,7 @@ class JwtService {
     String generateJwtToken(UserDetails userDetails) {
         return generateJwtToken(new HashMap<>(), userDetails);
     }
+
     String generateJwtToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts
                 .builder()

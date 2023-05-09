@@ -30,7 +30,7 @@ class CarRepairFacadeTestSuite {
         //Given
         List<CarRepair> mockedCarRepairList = List.of(Mockito.mock(CarRepair.class));
         List<CarRepairDto> mockedCarRepairDtoList = List.of(Mockito.mock(CarRepairDto.class));
-        when(service.getCarServices("username")).thenReturn(mockedCarRepairList);
+        when(service.getCarRepairs("username")).thenReturn(mockedCarRepairList);
         when(mapper.mapToCarServiceDtoList(mockedCarRepairList)).thenReturn(mockedCarRepairDtoList);
         //When
         List<CarRepairDto> retrievedList = facade.getCarServices("username");
@@ -42,11 +42,11 @@ class CarRepairFacadeTestSuite {
     @Test
     void shouldDeleteCarService() throws MyEntityNotFoundException {
         //Given
-        doNothing().when(service).deleteCarService(1L);
+        doNothing().when(service).deleteCarRepair(1L);
         //When
         facade.deleteCarService(1L);
         //Then
-        verify(service, times(1)).deleteCarService(1L);
+        verify(service, times(1)).deleteCarRepair(1L);
     }
 
 }

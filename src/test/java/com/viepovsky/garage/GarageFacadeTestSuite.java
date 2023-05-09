@@ -40,6 +40,19 @@ class GarageFacadeTestSuite {
     }
 
     @Test
+    void shouldGetGarage() {
+        //Given
+        var garage = new Garage();
+        var responseGarage = new GarageDto();
+        when(service.getGarage(anyLong())).thenReturn(garage);
+        when(mapper.mapToGarageDto(any(Garage.class))).thenReturn(responseGarage);
+        //When
+        var retrievedGarage = facade.getGarage(5L);
+        //Then
+        assertNotNull(retrievedGarage);
+    }
+
+    @Test
     void shouldCreateGarage() {
         //Given
         GarageDto mockedGarageDto = Mockito.mock(GarageDto.class);

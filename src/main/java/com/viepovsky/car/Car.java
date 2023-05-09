@@ -3,9 +3,12 @@ package com.viepovsky.car;
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.carrepair.CarRepair;
 import com.viepovsky.user.User;
-import lombok.*;
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +31,7 @@ class CarApiServiceTestSuite {
     private TimeKeeper timeKeeper;
 
     @Test
-    void testGetCarMakes(){
+    void testGetCarMakes() {
         //Given
         List<String> makeList = List.of("AUDI", "BMW", "OPEL", "PEUGEOT");
         StoredCarApi storedCarApi = Mockito.mock(StoredCarApi.class);
@@ -46,7 +46,7 @@ class CarApiServiceTestSuite {
     }
 
     @Test
-    void testGetCarTypes(){
+    void testGetCarTypes() {
         //Given
         List<String> typeList = List.of("Sedan", "Suv", "Hatchback", "Coupe");
         StoredCarApi storedCarApi = Mockito.mock(StoredCarApi.class);
@@ -61,7 +61,7 @@ class CarApiServiceTestSuite {
     }
 
     @Test
-    void testGetCarYears(){
+    void testGetCarYears() {
         //Given
         List<Integer> yearList = List.of(2022, 2021, 2020, 2019);
         StoredCarApi storedCarApi = Mockito.mock(StoredCarApi.class);

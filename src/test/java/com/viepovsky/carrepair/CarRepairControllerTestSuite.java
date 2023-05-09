@@ -104,6 +104,16 @@ class CarRepairControllerTestSuite {
     }
 
     @Test
+    void testShouldNotGetCarServiceListIfGivenUsernameDoesNotMatchWithUser() throws Exception {
+        //Given & When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/car-repairs")
+                        .param("username", "testuser22")
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
     void testShouldDeleteCarService() throws Exception {
         //Given
         doNothing().when(facade).deleteCarService(1L);

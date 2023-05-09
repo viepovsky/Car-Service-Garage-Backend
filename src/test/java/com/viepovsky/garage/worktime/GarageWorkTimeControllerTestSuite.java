@@ -1,5 +1,6 @@
 package com.viepovsky.garage.worktime;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -30,6 +31,7 @@ import java.security.Key;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -51,12 +53,16 @@ class GarageWorkTimeControllerTestSuite {
     @Value("${jwt.secret.key}")
     private String secretKey;
 
+    private String jwtTokenUser;
     private String jwtTokenAdmin;
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
+        var userInDb = User.builder().username("Testusername").role(Role.ROLE_USER).build();
         var adminInDb = User.builder().username("Testadmin").role(Role.ROLE_ADMIN).build();
+        when(userDetailsService.loadUserByUsername("Testusername")).thenReturn(userInDb);
         when(userDetailsService.loadUserByUsername("Testadmin")).thenReturn(adminInDb);
+        jwtTokenUser = generateToken("Testusername", secretKey);
         jwtTokenAdmin = generateToken("Testadmin", secretKey);
     }
 
@@ -75,6 +81,20 @@ class GarageWorkTimeControllerTestSuite {
     private static Key getSignInKey(String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    @Test
+    void getGarageWorkTimes() throws Exception {
+        //Given
+        List<GarageWorkTimeDto> workTimesResponse = List.of(GarageWorkTimeDto.builder().build());
+        var jsonResponse = new ObjectMapper().writeValueAsString(workTimesResponse);
+        when(facade.getGarageWorkTimes(anyLong())).thenReturn(workTimesResponse);
+        //When
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/garage-work-time/1")
+                        .header("Authorization", "Bearer " + jwtTokenUser))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(jsonResponse));
     }
 
     @Test

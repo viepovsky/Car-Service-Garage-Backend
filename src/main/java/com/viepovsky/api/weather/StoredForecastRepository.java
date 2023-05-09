@@ -7,6 +7,8 @@ import java.util.List;
 
 interface StoredForecastRepository extends CrudRepository<StoredForecast, Long> {
     StoredForecast findByDateAndCity(LocalDate date, String city);
+
     List<StoredForecast> findAllByCity(String city);
+
     void deleteAllByCity(String city);
 }

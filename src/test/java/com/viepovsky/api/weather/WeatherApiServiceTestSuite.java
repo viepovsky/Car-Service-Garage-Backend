@@ -13,7 +13,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -77,6 +78,6 @@ class WeatherApiServiceTestSuite {
         CityForecastDto retrievedCityForecast = service.getForecastForCityAndDate(city, localDate);
         //Then
         assertNotNull(retrievedCityForecast);
-        verify(repository, times(1)).findByDateAndCity(localDate,city);
+        verify(repository, times(1)).findByDateAndCity(localDate, city);
     }
 }

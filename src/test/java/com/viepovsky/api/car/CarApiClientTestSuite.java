@@ -14,7 +14,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +49,8 @@ class CarApiClientTestSuite {
         ResponseEntity<List<String>> response = new ResponseEntity<>(makeList, HttpStatus.OK);
 
         URI url = new URI("https://test.com/makes");
-        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<List<String>>(){})).thenReturn(response);
+        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<List<String>>() {
+        })).thenReturn(response);
         //When
         List<String> retrievedList = client.getCarMakes();
         //Then
@@ -69,7 +71,8 @@ class CarApiClientTestSuite {
         ResponseEntity<List<Integer>> response = new ResponseEntity<>(yearList, HttpStatus.OK);
 
         URI url = new URI("https://test.com/years");
-        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<List<Integer>>(){})).thenReturn(response);
+        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<List<Integer>>() {
+        })).thenReturn(response);
         //When
         List<Integer> retrievedList = client.getCarYears();
         //Then
@@ -90,7 +93,8 @@ class CarApiClientTestSuite {
         ResponseEntity<List<String>> response = new ResponseEntity<>(typeList, HttpStatus.OK);
 
         URI url = new URI("https://test.com/types");
-        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<List<String>>(){})).thenReturn(response);
+        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, new ParameterizedTypeReference<List<String>>() {
+        })).thenReturn(response);
         //When
         List<String> retrievedList = client.getCarTypes();
         //Then

@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,7 +61,7 @@ class WeatherApiClientTestSuite {
         ForecastDto retrievedForecast = client.get14DaysForecast(12050);
         //Then
         assertEquals(1, retrievedForecast.getForecasts().size());
-        assertEquals(LocalDate.of(2022,10,15), retrievedForecast.getForecasts().get(0).getDate());
+        assertEquals(LocalDate.of(2022, 10, 15), retrievedForecast.getForecasts().get(0).getDate());
         assertEquals("Raining", retrievedForecast.getForecasts().get(0).getSymbolPhrase());
     }
 

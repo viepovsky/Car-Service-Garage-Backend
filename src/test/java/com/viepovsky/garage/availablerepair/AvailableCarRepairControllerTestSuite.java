@@ -28,7 +28,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -92,7 +93,7 @@ class AvailableCarRepairControllerTestSuite {
     @Test
     void testShouldGetAllAvailableCarServices() throws Exception {
         //Given
-        List<AvailableCarRepairDto> carServiceList = List.of( new AvailableCarRepairDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), 22L));
+        List<AvailableCarRepairDto> carServiceList = List.of(new AvailableCarRepairDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), 22L));
         when(facade.getAvailableCarServices(1L)).thenReturn(carServiceList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders

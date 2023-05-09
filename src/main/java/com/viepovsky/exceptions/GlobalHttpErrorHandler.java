@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MyEntityNotFoundException.class)
-    public ResponseEntity<Object> handleMyEntityNotFoundException(MyEntityNotFoundException exception){
+    public ResponseEntity<Object> handleMyEntityNotFoundException(MyEntityNotFoundException exception) {
         if (exception.getRecordId() != null) {
             return new ResponseEntity<>(exception.getText() + " record with given id: " + exception.getRecordId() + " doesn't exist", HttpStatus.NOT_FOUND);
         }
@@ -18,7 +18,7 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(WrongInputDataException.class)
-    public ResponseEntity<Object> handleWrongInputDataException(WrongInputDataException exception){
+    public ResponseEntity<Object> handleWrongInputDataException(WrongInputDataException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

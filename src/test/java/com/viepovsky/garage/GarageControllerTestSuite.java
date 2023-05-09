@@ -1,5 +1,6 @@
 package com.viepovsky.garage;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -91,7 +92,6 @@ class GarageControllerTestSuite {
         //When && then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/garages")
-                        .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
@@ -121,24 +121,39 @@ class GarageControllerTestSuite {
     }
 
     @Test
+    void shouldGetGarage() throws Exception {
+        //Given
+        var garageResponse = new GarageDto(1L, "Test garage", "Test address", null);
+        var jsonResponse = new ObjectMapper().writeValueAsString(garageResponse);
+        when(facade.getGarage(anyLong())).thenReturn(garageResponse);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/garages/1")
+                        .header("Authorization", "Bearer " + jwtTokenUser))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(jsonResponse));
+    }
+
+    @Test
     void shouldCreateGarage() throws Exception {
         //Given
-        GarageDto garageDto = new GarageDto(1L, "Test garage", "Test address", null);
-        Garage garage = new Garage();
-        when(facade.createGarage(any(GarageDto.class))).thenReturn(garage);
+        var garageRequest = GarageDto.builder().name("Test garage").address("Test address").build();
+        var garageResponse = Garage.builder().id(1L).build();
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, type, jsonDeserializationContext) ->
                 ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalTime()).create();
-        String jsonContent = gson.toJson(garageDto);
+        var jsonRequest = gson.toJson(garageRequest);
 
+        when(facade.createGarage(any(GarageDto.class))).thenReturn(garageResponse);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/garages")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
-                        .content(jsonContent)
+                        .content(jsonRequest)
                         .header("Authorization", "Bearer " + jwtTokenAdmin))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.header().string("Location", "/v1/garages/" + garageResponse.getId()));
 
     }
 

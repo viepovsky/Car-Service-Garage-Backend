@@ -1,6 +1,9 @@
 package com.viepovsky.api.weather;
 
-import com.viepovsky.api.weather.dto.*;
+import com.viepovsky.api.weather.dto.CityForecastDto;
+import com.viepovsky.api.weather.dto.ForecastDto;
+import com.viepovsky.api.weather.dto.ForecastsDto;
+import com.viepovsky.api.weather.dto.LocationDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

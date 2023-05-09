@@ -1,7 +1,7 @@
 package com.viepovsky.car;
 
-import com.viepovsky.user.User;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.user.User;
 import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,7 +48,8 @@ class CarServiceTestSuite {
         //Then
         assertEquals(1, retrievedCarList.size());
         assertEquals("Sedan", retrievedCarList.get(0).getType());
-        assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));;
+        assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
+        ;
     }
 
     @Test
