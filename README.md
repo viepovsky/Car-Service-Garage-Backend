@@ -17,6 +17,7 @@ It can run as a standalone version, which can be tested with Postman. However, i
 The backend uses popular frameworks, technologies such as:
 
 - Spring Boot: Data JPA, Validation, Web, MVC
+- Application secured using Spring Security with JWT 
 - Hibernate
 - Unit tests with: JUnit, Mockito
 - Lombok
@@ -54,7 +55,8 @@ To log in as provided user, use the username: `testuser` and the password: `test
 
 Next, I will develop an ADMIN view for the application, which will allow administrators to add new garage locations and update the current status of customer cars during repairs and services.
 In addition, the view will enable administrators to manage customer accounts and their associated cars, allowing them to make changes at the customer's request.
-Additionally, I will implement endpoint security, as currently only the frontend is secured.
+
+~~Additionally, I will implement endpoint security, as currently only the frontend is secured.~~ ✅ Done.
 
 ## Database schema and test coverage:
 
