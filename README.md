@@ -38,6 +38,7 @@ Car API is used to retrieve car details when user adds or edits their car. The w
 This data is then stored in a database, allowing the frontend application to quickly access the information directly from the backend, rather than sending requests to external APIs with every page reload.
 
 ## How to run
+In order to run please set variable `CAR_SERVICE_GARAGE_SECRET_KEY` to your secret SHA256 hash key. Feel free to use online generator of your choice.
 
 To run whole application, you need to first run the backend by running `AppBackendApplication` class or simply type `./gradlew bootRun` in terminal IDE. Once that is done, to run the frontend, run `Application` class or simply type `./mvnw spring-boot:run` in terminal IDE. Then, if the browser does not open automatically, you can access the application by opening `http://localhost:8081` in your browser.
 
