@@ -1,0 +1,40 @@
+services:
+  db_postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: viepovsky
+      POSTGRES_PASSWORD: viepovsky
+      POSTGRES_DB: garage-service
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: viepovsky@viepovsky.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    networks:
+      - postgres
+    depends_on:
+      - db_postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
