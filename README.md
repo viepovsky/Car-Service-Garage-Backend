@@ -21,7 +21,8 @@ The backend uses popular frameworks, technologies such as:
 - Hibernate
 - Unit tests with: JUnit, Mockito
 - Lombok
-- H2 Database
+- PostgreSQL main database
+- H2 database for tests
 - Gradle
 - Docker
 - Swagger
