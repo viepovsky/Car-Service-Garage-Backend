@@ -4,10 +4,13 @@ services:
     image: viepovsky/car-service-garage-backend:latest
     environment:
       - CAR_SERVICE_GARAGE_SECRET_KEY=840fac1f38c240c3a949d2b7bcebd92195931b5ebb12f5a6dc121303c81ee086
+      - SPRING_PROFILES_ACTIVE=docker
     ports:
       - 8080:8080
     networks:
       - garage-service
+    depends_on:
+      - db_postgres
     restart: unless-stopped
 
   garage-service-frontend:
@@ -19,10 +22,44 @@ services:
       - 8081:8081
     networks:
       - garage-service
-    restart: unless-stopped
     depends_on:
       - garage-service-backend
+    restart: unless-stopped
+
+  db_postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: viepovsky
+      POSTGRES_PASSWORD: viepovsky
+      POSTGRES_DB: garage-service
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    networks:
+      - garage-service
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: viepovsky@viepovsky.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    networks:
+      - garage-service
+    depends_on:
+      - db_postgres
+    restart: unless-stopped
 
 networks:
   garage-service:
     driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
