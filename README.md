@@ -23,6 +23,7 @@ The backend uses popular frameworks, technologies such as:
 - Lombok
 - H2 Database
 - Gradle
+- Docker
 - Swagger
 
 Please note that the application's frontend was developed with **Vaadin** and designed just only to show capabilities of the backend. As a result, the visual design may not be as good as other parts of the application.
@@ -38,13 +39,18 @@ Car API is used to retrieve car details when user adds or edits their car. The w
 This data is then stored in a database, allowing the frontend application to quickly access the information directly from the backend, rather than sending requests to external APIs with every page reload.
 
 ## How to run
-In order to run please set variable `CAR_SERVICE_GARAGE_SECRET_KEY` to your secret SHA256 hash key. Feel free to use online generator of your choice.
+### Using Docker
+If Docker is installed and running you can simply run the entire application by executing `docker compose up -d` in the terminal.
+Wait for containers to start then open `http://localhost:8081` to test the application.
 
-To run whole application, you need to first run the backend by running `AppBackendApplication` class or simply type `./gradlew bootRun` in terminal IDE. Once that is done, to run the frontend, run `Application` class or simply type `./mvnw spring-boot:run` in terminal IDE. Then, if the browser does not open automatically, you can access the application by opening `http://localhost:8081` in your browser.
+### Without Docker
+If Docker is not installed, follow the instructions below:
 
-In case of problems on Mac with the error message `zsh: permission denied: ./mvnw`, simply type `chmod +x ./mvnw` in terminal IDE to make the file executable, and then type `./mvnw spring-boot:run` again to start the frontend application.
+- First run the backend by running `AppBackendApplication` class or simply type `./gradlew bootRun` in terminal.
+- To start the frontend, run `Application` class or simply type `./mvnw spring-boot:run` in terminal.
+- Wait for the applications to start then open `http://localhost:8081` to test the application.
 
-If you only want to test the backend application, you can send requests to the endpoints using tools like Postman after running it. The application runs on `http://localhost:8080/`
+If you encounter permission issues on Mac/Linux with the error message `zsh: permission denied: ./mvnw`, simply type `chmod +x ./mvnw` in terminal to make the `mvnw` file executable. Then type `./mvnw spring-boot:run` again to start the application.
 
 ## Logging to site, initial data
 
