@@ -1,3 +1,4 @@
+#Docker compose for local testing
 services:
   db_postgres:
     container_name: postgres

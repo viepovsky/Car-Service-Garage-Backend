@@ -9,6 +9,8 @@ services:
       - 8080:8080
     networks:
       - garage-service
+    depends_on:
+      - db_postgres
     restart: unless-stopped
 
   garage-service-frontend:
@@ -20,9 +22,9 @@ services:
       - 8081:8081
     networks:
       - garage-service
-    restart: unless-stopped
     depends_on:
       - garage-service-backend
+    restart: unless-stopped
 
   db_postgres:
     container_name: postgres
