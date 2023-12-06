@@ -107,82 +107,82 @@ INSERT INTO BOOKING (id, status, date, garage_id) VALUES
 (NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 1),
 (NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 1),
 (NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 1),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2),
-(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 2);
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2),
+(NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2);
 
-UPDATE BOOKING SET status = 4 WHERE EXTRACT(DOW FROM date) = 0;
+UPDATE BOOKING SET status = 4 WHERE EXTRACT(DOW FROM date) = 7;
 
-UPDATE BOOKING SET start_hour = '07:00:00' WHERE EXTRACT(DOW FROM date) < 5 AND garage_id = 1;
-UPDATE BOOKING SET start_hour = '09:00:00' WHERE EXTRACT(DOW FROM date) = 5 AND garage_id = 1;
-UPDATE BOOKING SET start_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 1;
-UPDATE BOOKING SET end_hour = '15:00:00' WHERE EXTRACT(DOW FROM date) < 5 AND garage_id = 1;
-UPDATE BOOKING SET end_hour = '13:00:00' WHERE EXTRACT(DOW FROM date) = 5 AND garage_id = 1;
-UPDATE BOOKING SET end_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 1;
+UPDATE BOOKING SET start_hour = '07:00:00' WHERE EXTRACT(DOW FROM date) < 6 AND garage_id = 1;
+UPDATE BOOKING SET start_hour = '09:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 1;
+UPDATE BOOKING SET start_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 7 AND garage_id = 1;
+UPDATE BOOKING SET end_hour = '15:00:00' WHERE EXTRACT(DOW FROM date) < 6 AND garage_id = 1;
+UPDATE BOOKING SET end_hour = '13:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 1;
+UPDATE BOOKING SET end_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 7 AND garage_id = 1;
 
-UPDATE BOOKING SET start_hour = '08:00:00' WHERE EXTRACT(DOW FROM date) <= 5 AND garage_id = 2;
-UPDATE BOOKING SET start_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 2;
-UPDATE BOOKING SET end_hour = '16:00:00' WHERE EXTRACT(DOW FROM date) < 5 AND garage_id = 2;
-UPDATE BOOKING SET end_hour = '12:00:00' WHERE EXTRACT(DOW FROM date) = 5 AND garage_id = 2;
-UPDATE BOOKING SET end_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 2;
+UPDATE BOOKING SET start_hour = '08:00:00' WHERE EXTRACT(DOW FROM date) <= 6 AND garage_id = 2;
+UPDATE BOOKING SET start_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 7 AND garage_id = 2;
+UPDATE BOOKING SET end_hour = '16:00:00' WHERE EXTRACT(DOW FROM date) < 6 AND garage_id = 2;
+UPDATE BOOKING SET end_hour = '12:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 2;
+UPDATE BOOKING SET end_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 7 AND garage_id = 2;
 
 INSERT INTO BOOKING (id, status, date, start_hour, end_hour, total_cost, garage_id) VALUES
 (123, 0, CURRENT_DATE + INTERVAL '5 days', '07:50:00', '09:10:00', 320.00, 1),
@@ -190,8 +190,8 @@ INSERT INTO BOOKING (id, status, date, start_hour, end_hour, total_cost, garage_
 (125, 2, CURRENT_DATE + INTERVAL '-10 days', '12:20:00', '15:20:00', 2100.00, 2),
 (126, 4, CURRENT_DATE, '03:00:00', '23:30:00', 5500.00, 1);
 
-UPDATE BOOKING SET date = CURRENT_DATE + INTERVAL '7 days' WHERE EXTRACT(DOW FROM date) >= 5 AND status = 0;
-UPDATE BOOKING SET date = CURRENT_DATE + INTERVAL '-12 days' WHERE EXTRACT(DOW FROM date) >= 5 AND status = 2;
+UPDATE BOOKING SET date = CURRENT_DATE + INTERVAL '7 days' WHERE EXTRACT(DOW FROM date) >= 6 AND status = 0;
+UPDATE BOOKING SET date = CURRENT_DATE + INTERVAL '-12 days' WHERE EXTRACT(DOW FROM date) >= 6 AND status = 2;
 
 INSERT INTO CARS_REPAIRS (id, name, description, cost, repair_time, car_id, user_id, booking_id, service_status) VALUES
 (1, 'Oil change', 'Oil change description', 120.00, 30, 1, 1, 123, 2),
