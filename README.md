@@ -51,8 +51,6 @@ If Docker is not installed, follow the instructions below:
 - To start the frontend, run `Application` class or simply type `./mvnw spring-boot:run` in terminal.
 - Wait for the applications to start then open `http://localhost:8081` to test the application.
 
-If you encounter permission issues on Mac/Linux with the error message `zsh: permission denied: ./mvnw`, simply type `chmod +x ./mvnw` in terminal to make the `mvnw` file executable. Then type `./mvnw spring-boot:run` again to start the application.
-
 ## Logging to site, initial data
 
 The backend of Car Service Garage contains initial data to demonstrate the application's capabilities. After testing with the provided user account, you can add your own to test the application with your own data. Please note that the data is being reset after each backend application run.
