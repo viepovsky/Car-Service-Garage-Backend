@@ -1,7 +1,7 @@
 package com.viepovsky.scheduler;
 
-import com.viepovsky.api.car.CarApiService;
-import com.viepovsky.api.weather.WeatherApiService;
+import com.viepovsky.clients.car.CarApiService;
+import com.viepovsky.clients.weather.WeatherApiService;
 import com.viepovsky.garage.GarageService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
