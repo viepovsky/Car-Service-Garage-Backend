@@ -20,13 +20,13 @@ class GarageWorkTimeFacade {
     }
 
     void createGarageWorkTime(GarageWorkTimeDto garageWorkTimeDto, Long garageId) {
-        LOGGER.info("POST Endpoint used.");
+        LOGGER.info("Create garage work time endpoint used with garage id:{}", garageId);
         GarageWorkTime garageWorkTime = mapper.mapToGarageWorkTime(garageWorkTimeDto);
         garageWorkTimeService.saveGarageWorkTime(garageWorkTime, garageId);
     }
 
-    void deleteGarageWorkTime(Long garageWorkTimeId) {
-        LOGGER.info("DELETE Endpoint used.");
-        garageWorkTimeService.deleteGarageWorkTime(garageWorkTimeId);
+    void deleteGarageWorkTime(Long id) {
+        LOGGER.info("Delete garage work time used for id:{}", id);
+        garageWorkTimeService.deleteGarageWorkTime(id);
     }
 }

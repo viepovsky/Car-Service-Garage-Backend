@@ -15,24 +15,24 @@ class CarFacade {
     private final CarMapper mapper;
 
     public List<CarDto> getCarsForGivenUsername(String username) {
-        LOGGER.info("GET Endpoint used.");
+        LOGGER.info("Get cars for given username endpoint used with username:{}", username);
         List<Car> carList = carService.getAllCarsForGivenUsername(username);
         return mapper.mapToCarDtoList(carList);
     }
 
     public void createCar(CarDto carDto, String username) {
-        LOGGER.info("POST Endpoint used.");
+        LOGGER.info("Create car endpoint used for username:{}", username);
         Car car = mapper.mapToCar(carDto);
         carService.saveCar(car, username);
     }
 
     public void updateCar(CarDto carDto) {
-        LOGGER.info("PUT Endpoint used.");
+        LOGGER.info("Update car endpoint used for car id:{}", carDto.getId());
         carService.updateCar(mapper.mapToCar(carDto));
     }
 
     public void deleteCar(Long carId) {
-        LOGGER.info("DELETE Endpoint used.");
+        LOGGER.info("Delete car endpoint used for car id:{}", carId);
         carService.deleteCar(carId);
     }
 }

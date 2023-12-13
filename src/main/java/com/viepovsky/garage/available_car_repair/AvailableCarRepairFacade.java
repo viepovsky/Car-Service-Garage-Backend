@@ -15,19 +15,19 @@ class AvailableCarRepairFacade {
     private final AvailableCarRepairMapper mapper;
 
     public List<AvailableCarRepairDto> getAvailableCarServices(Long garageId) {
-        LOGGER.info("GET Endpoint used.");
+        LOGGER.info("Get available car services enpoint used with garage id:{}", garageId);
         List<AvailableCarRepair> availableCarRepairList = availableCarRepairService.getAllAvailableCarRepair(garageId);
         return mapper.mapToAvailableCarServiceDtoList(availableCarRepairList);
     }
 
     public void createAvailableCarService(AvailableCarRepairDto availableCarRepairDto, Long garageId) {
-        LOGGER.info("POST Endpoint used.");
+        LOGGER.info("Create available car service endpoint used with garage id:{}", garageId);
         AvailableCarRepair availableCarRepair = mapper.mapToAvailableCarService(availableCarRepairDto);
         availableCarRepairService.saveAvailableCarRepair(availableCarRepair, garageId);
     }
 
-    public void deleteAvailableCarService(Long availableCarServiceId) {
-        LOGGER.info("PUT Endpoint used.");
-        availableCarRepairService.deleteAvailableCarRepair(availableCarServiceId);
+    public void deleteAvailableCarService(Long id) {
+        LOGGER.info("Delete available car service endpoint used with id:{}", id);
+        availableCarRepairService.deleteAvailableCarRepair(id);
     }
 }

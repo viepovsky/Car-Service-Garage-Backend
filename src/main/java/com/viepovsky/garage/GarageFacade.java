@@ -15,23 +15,25 @@ class GarageFacade {
     private final GarageMapper mapper;
 
     List<GarageDto> getAllGarages() {
-        LOGGER.info("GET Endpoint used.");
+        LOGGER.info("Get all garages endpoint used.");
         List<Garage> garageList = garageService.getAllGarages();
         return mapper.mapToGarageDtoList(garageList);
     }
 
-    GarageDto getGarage(Long garageId) {
-        var retrievedGarage = garageService.getGarage(garageId);
+    GarageDto getGarage(Long id) {
+        LOGGER.info("Get garage endpoint used with id:{}", id);
+        var retrievedGarage = garageService.getGarage(id);
         return mapper.mapToGarageDto(retrievedGarage);
     }
 
     Garage createGarage(GarageDto garageDto) {
-        LOGGER.info("POST Endpoint used.");
+        LOGGER.info("Create garage endpoint used.");
         var garageToSave = mapper.mapToGarage(garageDto);
         return garageService.saveGarage(garageToSave);
     }
 
-    void deleteGarage(Long garageId) {
-        garageService.deleteGarage(garageId);
+    void deleteGarage(Long id) {
+        LOGGER.info("Delete garage endpoint used with id:{}", id);
+        garageService.deleteGarage(id);
     }
 }

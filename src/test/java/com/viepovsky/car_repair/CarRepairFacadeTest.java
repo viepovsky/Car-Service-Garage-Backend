@@ -32,7 +32,7 @@ class CarRepairFacadeTest {
         when(service.getCarRepairs("username")).thenReturn(mockedCarRepairList);
         when(mapper.mapToCarServiceDtoList(mockedCarRepairList)).thenReturn(mockedCarRepairDtoList);
         //When
-        List<CarRepairDto> retrievedList = facade.getCarServices("username");
+        List<CarRepairDto> retrievedList = facade.getCarRepairs("username");
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -43,7 +43,7 @@ class CarRepairFacadeTest {
         //Given
         doNothing().when(service).deleteCarRepair(1L);
         //When
-        facade.deleteCarService(1L);
+        facade.deleteCarRepair(1L);
         //Then
         verify(service, times(1)).deleteCarRepair(1L);
     }

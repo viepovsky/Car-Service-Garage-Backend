@@ -28,7 +28,7 @@ class BookingFacade {
     }
 
     public List<LocalTime> getAvailableBookingTimes(LocalDate date, int repairDuration, Long garageId, Long carServiceId) {
-        LOGGER.info("GET Endpoint getAvailableBookingTimes used.");
+        LOGGER.info("Get available booking times endpoint used with date:{}, repair duration:{}, garage id:{}, car service id:{}", date, repairDuration, garageId, carServiceId);
         if (carServiceId != 0L) {
             return bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, carServiceId);
         } else {

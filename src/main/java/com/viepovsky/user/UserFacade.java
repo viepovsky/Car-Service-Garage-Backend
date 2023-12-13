@@ -15,34 +15,34 @@ class UserFacade {
     private final UserMapper mapper;
 
     public UserDto getUserByUsername(String username) {
-        LOGGER.info("GET Endpoint getUserByUsername used.");
+        LOGGER.info("Get user endpoint used with username:{}", username);
         User user = userService.getUser(username);
         return mapper.mapToUserDto(user);
     }
 
     public UserDto getUserByUsernameToLogin(String username) {
-        LOGGER.info("GET Endpoint getUserByUsernameToLogin used.");
+        LOGGER.info("Get user for login endpoint used with username:{}", username);
         User user = userService.getUser(username);
         return mapper.mapToUserDtoLogin(user);
     }
 
     public Boolean isUserRegistered(String username) {
-        LOGGER.info("GET Endpoint isUserRegistered used.");
+        LOGGER.info("Is user registered endpoint used with username:{}", username);
         return userService.isUserInDatabase(username);
     }
 
     public PasswordDto getUserPass(String username) {
-        LOGGER.info("GET Endpoint getUserPass used.");
+        LOGGER.info("Get user password endpoint used for username:{}", username);
         return new PasswordDto(userService.getUserPass(username));
     }
 
     public User createUser(UserDto userDto) {
-        LOGGER.info("POST Endpoint used.");
+        LOGGER.info("Create user endpoint used with username:{}", userDto.getUsername());
         return userService.saveUser(mapper.mapToUserLogin(userDto));
     }
 
     public void updateUser(UserDto userDto) {
-        LOGGER.info("PUT Endpoint used.");
+        LOGGER.info("Update user endpoint used with username:{}", userDto.getUsername());
         userService.updateUser(mapper.mapToUserLogin(userDto));
     }
 }

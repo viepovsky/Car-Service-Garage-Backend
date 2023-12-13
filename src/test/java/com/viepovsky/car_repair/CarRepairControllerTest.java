@@ -75,7 +75,7 @@ class CarRepairControllerTest {
     void testShouldGetEmptyCarServiceList() throws Exception {
         //Given
         List<CarRepairDto> emptyList = List.of();
-        when(facade.getCarServices(anyString())).thenReturn(emptyList);
+        when(facade.getCarRepairs(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/car-repairs")
@@ -90,7 +90,7 @@ class CarRepairControllerTest {
     void testShouldGetCarServiceList() throws Exception {
         //Given
         List<CarRepairDto> carList = List.of(new CarRepairDto(1L, "Test name", "Test description", BigDecimal.valueOf(50), 60));
-        when(facade.getCarServices(anyString())).thenReturn(carList);
+        when(facade.getCarRepairs(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/car-repairs")
@@ -116,7 +116,7 @@ class CarRepairControllerTest {
     @Test
     void testShouldDeleteCarService() throws Exception {
         //Given
-        doNothing().when(facade).deleteCarService(1L);
+        doNothing().when(facade).deleteCarRepair(1L);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/car-repairs/1")

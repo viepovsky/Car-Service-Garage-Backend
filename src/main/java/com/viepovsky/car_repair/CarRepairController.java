@@ -20,17 +20,17 @@ class CarRepairController {
     private final CarRepairFacade carRepairFacade;
 
     @GetMapping
-    ResponseEntity<List<CarRepairDto>> getCarServices(@RequestParam @NotBlank String username) {
+    ResponseEntity<List<CarRepairDto>> getCarRepairs(@RequestParam @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(carRepairFacade.getCarServices(username));
+        return ResponseEntity.ok(carRepairFacade.getCarRepairs(username));
     }
 
-    @DeleteMapping(path = "/{carServiceId}")
-    ResponseEntity<Void> deleteCarService(@PathVariable @Min(1) Long carServiceId) {
-        carRepairFacade.deleteCarService(carServiceId);
+    @DeleteMapping(path = "/{carRepairId}")
+    ResponseEntity<Void> deleteCarRepair(@PathVariable @Min(1) Long carRepairId) {
+        carRepairFacade.deleteCarRepair(carRepairId);
         return ResponseEntity.ok().build();
     }
 }

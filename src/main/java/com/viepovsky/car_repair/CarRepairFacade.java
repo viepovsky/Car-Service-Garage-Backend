@@ -14,14 +14,14 @@ class CarRepairFacade {
     private final CarRepairService carRepairService;
     private final CarRepairMapper mapper;
 
-    public List<CarRepairDto> getCarServices(String username) {
-        LOGGER.info("GET Endpoint used.");
+    public List<CarRepairDto> getCarRepairs(String username) {
+        LOGGER.info("Get car repairs endpoint used for username:{}", username);
         List<CarRepair> carRepairList = carRepairService.getCarRepairs(username);
         return mapper.mapToCarServiceDtoList(carRepairList);
     }
 
-    public void deleteCarService(Long carServiceId) {
-        LOGGER.info("DELETE Endpoint used.");
-        carRepairService.deleteCarRepair(carServiceId);
+    public void deleteCarRepair(Long id) {
+        LOGGER.info("Delete car repair used for car repair id:{}", id);
+        carRepairService.deleteCarRepair(id);
     }
 }
