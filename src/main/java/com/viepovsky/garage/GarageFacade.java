@@ -11,27 +11,27 @@ import java.util.List;
 @RequiredArgsConstructor
 class GarageFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageFacade.class);
-    private final GarageService service;
+    private final GarageService garageService;
     private final GarageMapper mapper;
 
     List<GarageDto> getAllGarages() {
         LOGGER.info("GET Endpoint used.");
-        List<Garage> garageList = service.getAllGarages();
+        List<Garage> garageList = garageService.getAllGarages();
         return mapper.mapToGarageDtoList(garageList);
     }
 
     GarageDto getGarage(Long garageId) {
-        var retrievedGarage = service.getGarage(garageId);
+        var retrievedGarage = garageService.getGarage(garageId);
         return mapper.mapToGarageDto(retrievedGarage);
     }
 
     Garage createGarage(GarageDto garageDto) {
         LOGGER.info("POST Endpoint used.");
         var garageToSave = mapper.mapToGarage(garageDto);
-        return service.saveGarage(garageToSave);
+        return garageService.saveGarage(garageToSave);
     }
 
     void deleteGarage(Long garageId) {
-        service.deleteGarage(garageId);
+        garageService.deleteGarage(garageId);
     }
 }

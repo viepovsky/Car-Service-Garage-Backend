@@ -15,21 +15,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 class CarApiController {
-    private final CarApiService service;
+    private final CarApiService carApiService;
 
     @GetMapping(path = "/makes")
     ResponseEntity<List<String>> getCarMakes() {
-        return ResponseEntity.ok(service.getCarMakes());
+        return ResponseEntity.ok(carApiService.getCarMakes());
     }
 
     @GetMapping(path = "/types")
     ResponseEntity<List<String>> getCarTypes() {
-        return ResponseEntity.ok(service.getCarTypes());
+        return ResponseEntity.ok(carApiService.getCarTypes());
     }
 
     @GetMapping(path = "/years")
     ResponseEntity<List<Integer>> getCarYears() {
-        return ResponseEntity.ok(service.getCarYears());
+        return ResponseEntity.ok(carApiService.getCarYears());
     }
 
     @GetMapping
@@ -37,7 +37,7 @@ class CarApiController {
             @RequestParam @Min(1950) Integer year,
             @RequestParam @NotBlank String make,
             @RequestParam @NotBlank String type
-    ) throws InterruptedException {
-        return ResponseEntity.ok(service.getCarModels(year, make, type));
+    ) {
+        return ResponseEntity.ok(carApiService.getCarModels(year, make, type));
     }
 }

@@ -16,25 +16,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WeatherApiService {
     private static final Logger LOGGER = LoggerFactory.getLogger(WeatherApiService.class);
-    private final WeatherApiClient client;
-    private final StoredForecastRepository repository;
+    private final WeatherApiClient weatherApiClient;
+    private final StoredForecastRepository storedForecastRepository;
     private final ForecastMapper mapper;
 
     public void getAndStore14DaysForecast(String city) {
-        if (repository.findAllByCity(city).size() != 0) {
-            repository.deleteAllByCity(city);
+        if (!storedForecastRepository.findAllByCity(city).isEmpty()) {
+            storedForecastRepository.deleteAllByCity(city);
         }
-        LocationDto locationDto = client.getIdForCityName(city);
+        LocationDto locationDto = weatherApiClient.getIdForCityName(city);
         int cityId = locationDto.getLocations().get(0).getCityId();
-        ForecastDto forecastDto = client.get14DaysForecast(cityId);
+        ForecastDto forecastDto = weatherApiClient.get14DaysForecast(cityId);
         List<ForecastsDto> forecastsDtoList = forecastDto.getForecasts();
         List<StoredForecast> storedForecastList = mapper.mapToStoredForecastList(forecastsDtoList, city);
-        repository.saveAll(storedForecastList);
+        storedForecastRepository.saveAll(storedForecastList);
         LOGGER.info("Stored 14 days forecast for city: " + city);
     }
 
     public CityForecastDto getForecastForCityAndDate(String city, LocalDate date) {
-        StoredForecast storedForecast = repository.findByDateAndCity(date, city);
+        StoredForecast storedForecast = storedForecastRepository.findByDateAndCity(date, city);
         CityForecastDto cityForecastDto = mapper.mapToCityForecastDto(storedForecast);
         LOGGER.info("Retrieved city forecast: " + cityForecastDto);
         return cityForecastDto;

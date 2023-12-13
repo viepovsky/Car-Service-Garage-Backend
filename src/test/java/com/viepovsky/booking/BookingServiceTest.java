@@ -2,13 +2,13 @@ package com.viepovsky.booking;
 
 import com.viepovsky.car.Car;
 import com.viepovsky.car.CarService;
-import com.viepovsky.carrepair.CarRepair;
-import com.viepovsky.carrepair.CarRepairService;
+import com.viepovsky.car_repair.CarRepair;
+import com.viepovsky.car_repair.CarRepairService;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.garage.availablerepair.AvailableCarRepair;
-import com.viepovsky.garage.availablerepair.AvailableCarRepairService;
+import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
+import com.viepovsky.garage.available_car_repair.AvailableCarRepairService;
 import com.viepovsky.user.User;
 import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -199,8 +199,8 @@ class BookingServiceTest {
         BookingService bookingService = Mockito.spy(new BookingService(bookingRepository, garageService, carRepairService, carService, userService, availableCarRepairService));
         Mockito.doReturn(localTimeList).when(bookingService).getAvailableBookingTimesForSelectedDayAndRepairDuration(localDate, repairDuration, 5L);
         when(bookingRepository.save(any())).thenReturn(any());
-        when(availableCarRepairService.getAvailableCarService(10L)).thenReturn(availableCarRepair);
-        when(availableCarRepairService.getAvailableCarService(11L)).thenReturn(availableCarRepair2);
+        when(availableCarRepairService.getAvailableCarRepair(10L)).thenReturn(availableCarRepair);
+        when(availableCarRepairService.getAvailableCarRepair(11L)).thenReturn(availableCarRepair2);
         when(userService.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
         //When
         bookingService.createBooking(List.of(10L, 11L), localDate, LocalTime.of(10, 0), 5L, 2L, repairDuration);

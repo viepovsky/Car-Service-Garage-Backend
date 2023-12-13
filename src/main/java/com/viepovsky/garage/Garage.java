@@ -2,8 +2,8 @@ package com.viepovsky.garage;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Booking;
-import com.viepovsky.garage.availablerepair.AvailableCarRepair;
-import com.viepovsky.garage.worktime.GarageWorkTime;
+import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
+import com.viepovsky.garage.garage_work_time.GarageWorkTime;
 import jakarta.persistence.*;
 import lombok.*;
 

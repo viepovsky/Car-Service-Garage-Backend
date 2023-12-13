@@ -2,15 +2,15 @@ package com.viepovsky.booking;
 
 import com.viepovsky.car.Car;
 import com.viepovsky.car.CarService;
-import com.viepovsky.carrepair.CarRepair;
-import com.viepovsky.carrepair.CarRepairService;
-import com.viepovsky.carrepair.RepairStatus;
+import com.viepovsky.car_repair.CarRepair;
+import com.viepovsky.car_repair.CarRepairService;
+import com.viepovsky.car_repair.RepairStatus;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.garage.availablerepair.AvailableCarRepair;
-import com.viepovsky.garage.availablerepair.AvailableCarRepairService;
+import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
+import com.viepovsky.garage.available_car_repair.AvailableCarRepairService;
 import com.viepovsky.user.User;
 import com.viepovsky.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -214,7 +214,7 @@ public class BookingService {
         List<AvailableCarRepair> availableCarRepairList = new ArrayList<>();
         BigDecimal totalCost = BigDecimal.ZERO;
         for (Long id : selectedServiceIdList) {
-            AvailableCarRepair availableCarRepair = new AvailableCarRepair(availableCarRepairService.getAvailableCarService(id));
+            AvailableCarRepair availableCarRepair = new AvailableCarRepair(availableCarRepairService.getAvailableCarRepair(id));
             if (availableCarRepair.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
                 BigDecimal multipliedCost = availableCarRepair.getCost();
                 multipliedCost = multipliedCost.multiply(availableCarRepair.getMakeMultiplier());

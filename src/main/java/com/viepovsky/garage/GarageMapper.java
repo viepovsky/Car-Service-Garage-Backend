@@ -1,6 +1,6 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.garage.worktime.GarageWorkTimeMapper;
+import com.viepovsky.garage.garage_work_time.GarageWorkTimeMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

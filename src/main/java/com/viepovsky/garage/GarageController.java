@@ -18,29 +18,29 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 class GarageController {
-    private final GarageFacade facade;
+    private final GarageFacade garageFacade;
 
     @GetMapping
     ResponseEntity<List<GarageDto>> getGarages() {
-        return ResponseEntity.ok(facade.getAllGarages());
+        return ResponseEntity.ok(garageFacade.getAllGarages());
     }
 
     @GetMapping(path = "/{garageId}")
     ResponseEntity<GarageDto> getGarage(@PathVariable @Min(1) Long garageId) {
-        return ResponseEntity.ok(facade.getGarage(garageId));
+        return ResponseEntity.ok(garageFacade.getGarage(garageId));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> createGarage(@Valid @RequestBody GarageDto garageDto) {
-        var createdGarage = facade.createGarage(garageDto);
+        var createdGarage = garageFacade.createGarage(garageDto);
         return ResponseEntity.created(URI.create("/v1/garages/" + createdGarage.getId())).build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{garageId}")
     ResponseEntity<String> deleteGarage(@PathVariable @Min(1) Long garageId) {
-        facade.deleteGarage(garageId);
+        garageFacade.deleteGarage(garageId);
         return ResponseEntity.ok().build();
     }
 }

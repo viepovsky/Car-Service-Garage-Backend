@@ -12,23 +12,23 @@ import java.util.List;
 class CarFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(CarFacade.class);
     private final CarService carService;
-    private final CarMapper carMapper;
+    private final CarMapper mapper;
 
     public List<CarDto> getCarsForGivenUsername(String username) {
         LOGGER.info("GET Endpoint used.");
         List<Car> carList = carService.getAllCarsForGivenUsername(username);
-        return carMapper.mapToCarDtoList(carList);
+        return mapper.mapToCarDtoList(carList);
     }
 
     public void createCar(CarDto carDto, String username) {
         LOGGER.info("POST Endpoint used.");
-        Car car = carMapper.mapToCar(carDto);
+        Car car = mapper.mapToCar(carDto);
         carService.saveCar(car, username);
     }
 
     public void updateCar(CarDto carDto) {
         LOGGER.info("PUT Endpoint used.");
-        carService.updateCar(carMapper.mapToCar(carDto));
+        carService.updateCar(mapper.mapToCar(carDto));
     }
 
     public void deleteCar(Long carId) {

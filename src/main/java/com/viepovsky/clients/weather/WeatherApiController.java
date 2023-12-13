@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 class WeatherApiController {
     private static final Logger LOGGER = LoggerFactory.getLogger(WeatherApiController.class);
-    private final WeatherApiService service;
+    private final WeatherApiService weatherApiService;
 
     @GetMapping
     ResponseEntity<CityForecastDto> getForecastForCityAndDate(
@@ -26,7 +26,7 @@ class WeatherApiController {
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
         LOGGER.info("GET Endpoint getForecastForCityAndDate used.");
-        CityForecastDto cityForecastDto = service.getForecastForCityAndDate(city, date);
+        CityForecastDto cityForecastDto = weatherApiService.getForecastForCityAndDate(city, date);
         return ResponseEntity.ok(cityForecastDto);
     }
 }

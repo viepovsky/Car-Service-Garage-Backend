@@ -1,6 +1,6 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.carrepair.CarRepair;
+import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.garage.GarageMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

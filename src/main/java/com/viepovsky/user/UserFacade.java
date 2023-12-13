@@ -11,38 +11,38 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class UserFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserFacade.class);
-    private final UserService service;
+    private final UserService userService;
     private final UserMapper mapper;
 
     public UserDto getUserByUsername(String username) {
         LOGGER.info("GET Endpoint getUserByUsername used.");
-        User user = service.getUser(username);
+        User user = userService.getUser(username);
         return mapper.mapToUserDto(user);
     }
 
     public UserDto getUserByUsernameToLogin(String username) {
         LOGGER.info("GET Endpoint getUserByUsernameToLogin used.");
-        User user = service.getUser(username);
+        User user = userService.getUser(username);
         return mapper.mapToUserDtoLogin(user);
     }
 
     public Boolean isUserRegistered(String username) {
         LOGGER.info("GET Endpoint isUserRegistered used.");
-        return service.isUserInDatabase(username);
+        return userService.isUserInDatabase(username);
     }
 
     public PasswordDto getUserPass(String username) {
         LOGGER.info("GET Endpoint getUserPass used.");
-        return new PasswordDto(service.getUserPass(username));
+        return new PasswordDto(userService.getUserPass(username));
     }
 
     public User createUser(UserDto userDto) {
         LOGGER.info("POST Endpoint used.");
-        return service.saveUser(mapper.mapToUserLogin(userDto));
+        return userService.saveUser(mapper.mapToUserLogin(userDto));
     }
 
     public void updateUser(UserDto userDto) {
         LOGGER.info("PUT Endpoint used.");
-        service.updateUser(mapper.mapToUserLogin(userDto));
+        userService.updateUser(mapper.mapToUserLogin(userDto));
     }
 }

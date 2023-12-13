@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 class CarController {
-    private final CarFacade facade;
+    private final CarFacade carFacade;
 
     @GetMapping
     ResponseEntity<List<CarDto>> getCarsForGivenUsername(@RequestParam(name = "username") @NotBlank String username) {
@@ -27,7 +27,7 @@ class CarController {
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(facade.getCarsForGivenUsername(username));
+        return ResponseEntity.ok(carFacade.getCarsForGivenUsername(username));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -39,19 +39,19 @@ class CarController {
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        facade.createCar(carDto, username);
+        carFacade.createCar(carDto, username);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> updateCar(@Valid @RequestBody CarDto carDto) {
-        facade.updateCar(carDto);
+        carFacade.updateCar(carDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(path = "/{carId}")
     ResponseEntity<Void> deleteCar(@PathVariable @Min(1) Long carId) {
-        facade.deleteCar(carId);
+        carFacade.deleteCar(carId);
         return ResponseEntity.ok().build();
     }
 }

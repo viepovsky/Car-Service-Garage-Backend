@@ -14,40 +14,40 @@ import java.util.List;
 @RequiredArgsConstructor
 class BookingFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingFacade.class);
-    private final BookingService service;
+    private final BookingService bookingService;
     private final BookingMapper mapper;
 
     public List<BookingDto> getBookingsForGivenDateAndGarageId(LocalDate date, Long garageId) {
-        List<Booking> bookingList = service.getBookingsForGivenDateAndGarageId(date, garageId);
+        List<Booking> bookingList = bookingService.getBookingsForGivenDateAndGarageId(date, garageId);
         return mapper.mapToBookingDtoList(bookingList);
     }
 
     public List<BookingDto> getBookingsForGivenUsername(String username) {
-        List<Booking> bookingList = service.getAllBookingsForGivenUser(username);
+        List<Booking> bookingList = bookingService.getAllBookingsForGivenUser(username);
         return mapper.mapToBookingDtoList(bookingList);
     }
 
     public List<LocalTime> getAvailableBookingTimes(LocalDate date, int repairDuration, Long garageId, Long carServiceId) {
         LOGGER.info("GET Endpoint getAvailableBookingTimes used.");
         if (carServiceId != 0L) {
-            return service.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, carServiceId);
+            return bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, carServiceId);
         } else {
-            return service.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId);
+            return bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId);
         }
     }
 
     public void createBooking(List<Long> selectedServiceIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) throws WrongInputDataException {
         LOGGER.info("POST Endpoint createBooking used.");
-        service.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
+        bookingService.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
     }
 
     public void createWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) throws WrongInputDataException {
         LOGGER.info("POST Endpoint createAvailableBooking used.");
-        service.saveBooking(date, startHour, endHour, garageId);
+        bookingService.saveBooking(date, startHour, endHour, garageId);
     }
 
     public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) {
         LOGGER.info("PUT Endpoint getAvailableBookingTimes used.");
-        service.updateBooking(bookingId, date, startHour);
+        bookingService.updateBooking(bookingId, date, startHour);
     }
 }

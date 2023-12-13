@@ -1,7 +1,7 @@
 package com.viepovsky.booking;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.carrepair.CarRepair;
+import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.garage.Garage;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

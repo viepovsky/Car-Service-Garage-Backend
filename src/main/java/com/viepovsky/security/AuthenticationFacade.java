@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 class AuthenticationFacade {
-    private final AuthenticationService service;
+    private final AuthenticationService authenticationService;
 
     AuthenticationResponse register(RegisterUserRequest request) {
-        return service.register(request);
+        return authenticationService.register(request);
     }
 
     AuthenticationResponse authenticate(AuthenticationUserRequest request) {
-        return service.authenticate(request);
+        return authenticationService.authenticate(request);
     }
 }
