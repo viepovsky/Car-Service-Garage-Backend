@@ -1,4 +1,4 @@
-package com.viepovsky.api.weather;
+package com.viepovsky.clients.weather;
 
 import org.springframework.data.repository.CrudRepository;
 
