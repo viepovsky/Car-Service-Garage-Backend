@@ -2,7 +2,6 @@ package com.viepovsky.security;
 
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.User;
-import com.viepovsky.user.UserFacade;
 import com.viepovsky.user.UserService;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;
