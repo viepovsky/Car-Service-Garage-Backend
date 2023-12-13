@@ -47,7 +47,7 @@ class AvailableCarRepairServiceTest {
     }
 
     @Test
-    void testSaveAvailableCarService() throws MyEntityNotFoundException {
+    void testSaveAvailableCarService() {
         //Given
         Garage garage = new Garage("Test name", "Test address", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         AvailableCarRepair availableCarRepair = new AvailableCarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
@@ -61,7 +61,7 @@ class AvailableCarRepairServiceTest {
     }
 
     @Test
-    void testDeleteAvailableCarService() throws MyEntityNotFoundException {
+    void testDeleteAvailableCarService() {
         //Given
         AvailableCarRepair availableCarRepair = new AvailableCarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), new Garage());
         when(availableCarRepairRepository.findById(1L)).thenReturn(Optional.of(availableCarRepair));

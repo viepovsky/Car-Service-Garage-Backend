@@ -1,6 +1,5 @@
 package com.viepovsky.garage.worktime;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +30,14 @@ class GarageWorkTimeController {
     ResponseEntity<String> createGarageWorkTime(
             @Valid @RequestBody GarageWorkTimeDto garageWorkTimeDto,
             @PathVariable @Min(1) Long garageId
-    ) throws MyEntityNotFoundException {
+    ) {
         facade.createGarageWorkTime(garageWorkTimeDto, garageId);
         return ResponseEntity.created(URI.create("/v1/garage-work-time/" + garageId)).build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{garageWorkTimeId}")
-    ResponseEntity<String> deleteGarageWorkTime(@PathVariable @Min(1) Long garageWorkTimeId) throws MyEntityNotFoundException {
+    ResponseEntity<String> deleteGarageWorkTime(@PathVariable @Min(1) Long garageWorkTimeId) {
         facade.deleteGarageWorkTime(garageWorkTimeId);
         return ResponseEntity.ok().build();
     }

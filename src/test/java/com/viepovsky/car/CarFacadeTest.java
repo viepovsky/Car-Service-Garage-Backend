@@ -1,6 +1,5 @@
 package com.viepovsky.car;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +25,7 @@ class CarFacadeTest {
     private CarMapper mapper;
 
     @Test
-    void shouldGetCarsForGivenUsername() throws MyEntityNotFoundException {
+    void shouldGetCarsForGivenUsername() {
         //Given
         List<Car> mockedCarList = List.of(Mockito.mock(Car.class));
         List<CarDto> mockedCarDtoList = List.of(Mockito.mock(CarDto.class));
@@ -40,7 +39,7 @@ class CarFacadeTest {
     }
 
     @Test
-    void shouldCreateCar() throws MyEntityNotFoundException {
+    void shouldCreateCar() {
         //Given
         CarDto mockedCarDto = Mockito.mock(CarDto.class);
         Car mockedCar = Mockito.mock(Car.class);
@@ -53,7 +52,7 @@ class CarFacadeTest {
     }
 
     @Test
-    void shouldUpdateCar() throws MyEntityNotFoundException {
+    void shouldUpdateCar() {
         //Given
         CarDto mockedCarDto = Mockito.mock(CarDto.class);
         Car mockedCar = Mockito.mock(Car.class);
@@ -66,7 +65,7 @@ class CarFacadeTest {
     }
 
     @Test
-    void shouldDeleteCar() throws MyEntityNotFoundException {
+    void shouldDeleteCar() {
         //Given
         doNothing().when(service).deleteCar(1L);
         //When

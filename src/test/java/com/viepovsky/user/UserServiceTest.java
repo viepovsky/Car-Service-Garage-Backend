@@ -25,7 +25,7 @@ class UserServiceTest {
     private UserRepository repository;
 
     @Test
-    void testGetUserByUsername() throws MyEntityNotFoundException {
+    void testGetUserByUsername() {
         //Given
         var user = new User();
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(user));
@@ -37,7 +37,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserById() throws MyEntityNotFoundException {
+    void testGetUserById() {
         //Given
         var user = new User();
         when(repository.findById(anyLong())).thenReturn(Optional.of(user));
@@ -60,7 +60,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testGetUserPass() throws MyEntityNotFoundException {
+    void testGetUserPass() {
         //Given
         var user = new User();
         user.setPassword("1234");
@@ -84,7 +84,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUser() throws MyEntityNotFoundException {
+    void testUpdateUser() {
         //Given
         var user = new User("test", "testlast", "email", "656", "testuser", "123", Role.ROLE_USER, new ArrayList<>(), new ArrayList<>());
         var userToUpdate = new User();
@@ -99,7 +99,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testDeleteUser() throws MyEntityNotFoundException {
+    void testDeleteUser() {
         //Given
         var user = new User();
         user.setId(1L);

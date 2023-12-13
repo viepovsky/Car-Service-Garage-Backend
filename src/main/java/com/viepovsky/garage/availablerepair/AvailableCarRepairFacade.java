@@ -1,6 +1,5 @@
 package com.viepovsky.garage.availablerepair;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +20,13 @@ class AvailableCarRepairFacade {
         return mapper.mapToAvailableCarServiceDtoList(availableCarRepairList);
     }
 
-    public void createAvailableCarService(AvailableCarRepairDto availableCarRepairDto, Long garageId) throws MyEntityNotFoundException {
+    public void createAvailableCarService(AvailableCarRepairDto availableCarRepairDto, Long garageId) {
         LOGGER.info("POST Endpoint used.");
         AvailableCarRepair availableCarRepair = mapper.mapToAvailableCarService(availableCarRepairDto);
         service.saveAvailableCarService(availableCarRepair, garageId);
     }
 
-    public void deleteAvailableCarService(Long availableCarServiceId) throws MyEntityNotFoundException {
+    public void deleteAvailableCarService(Long availableCarServiceId) {
         LOGGER.info("PUT Endpoint used.");
         service.deleteAvailableCarService(availableCarServiceId);
     }

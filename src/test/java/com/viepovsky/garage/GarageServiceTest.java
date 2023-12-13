@@ -79,7 +79,7 @@ class GarageServiceTest {
     }
 
     @Test
-    void testDeleteGarage() throws MyEntityNotFoundException {
+    void testDeleteGarage() {
         //Given
         var garage = new Garage();
         when(repository.findById(anyLong())).thenReturn(Optional.of(garage));
@@ -92,7 +92,7 @@ class GarageServiceTest {
     }
 
     @Test
-    void testDeleteGarageShouldThrowExceptionIfGarageDoesNotExist() throws MyEntityNotFoundException {
+    void testDeleteGarageShouldThrowExceptionIfGarageDoesNotExist() {
         //Given
         when(repository.findById(anyLong())).thenReturn(Optional.empty());
         //When & then

@@ -33,7 +33,7 @@ class CarServiceTest {
     private UserService userService;
 
     @Test
-    void testGetAllCarsForGivenUsername() throws MyEntityNotFoundException {
+    void testGetAllCarsForGivenUsername() {
         //Given
         User mockedUser = Mockito.mock(User.class);
         Car car = new Car("BMW", "3 Series", "Sedan", 2010, "diesel");
@@ -53,7 +53,7 @@ class CarServiceTest {
     }
 
     @Test
-    void testSaveCar() throws MyEntityNotFoundException {
+    void testSaveCar() {
         //Given
         User mockedUser = Mockito.mock(User.class);
         Car mockedCar = Mockito.mock(Car.class);
@@ -67,7 +67,7 @@ class CarServiceTest {
     }
 
     @Test
-    void testUpdateCar() throws MyEntityNotFoundException {
+    void testUpdateCar() {
         //Given
         Car car = new Car(1L, "BMW", "3 Series", 2010, "Sedan", "diesel", null, new ArrayList<>());
 
@@ -83,7 +83,7 @@ class CarServiceTest {
     }
 
     @Test
-    void testDeleteCar() throws MyEntityNotFoundException {
+    void testDeleteCar() {
         //Given
         Car mockedCar = Mockito.mock(Car.class);
         when(carRepository.findById(1L)).thenReturn(Optional.of(mockedCar));

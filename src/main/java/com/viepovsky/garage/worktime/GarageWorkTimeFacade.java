@@ -1,6 +1,5 @@
 package com.viepovsky.garage.worktime;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +19,13 @@ class GarageWorkTimeFacade {
         return mapper.mapToGarageWorkTimeDtoList(workTimes);
     }
 
-    void createGarageWorkTime(GarageWorkTimeDto garageWorkTimeDto, Long garageId) throws MyEntityNotFoundException {
+    void createGarageWorkTime(GarageWorkTimeDto garageWorkTimeDto, Long garageId) {
         LOGGER.info("POST Endpoint used.");
         GarageWorkTime garageWorkTime = mapper.mapToGarageWorkTime(garageWorkTimeDto);
         service.saveGarageWorkTime(garageWorkTime, garageId);
     }
 
-    void deleteGarageWorkTime(Long garageWorkTimeId) throws MyEntityNotFoundException {
+    void deleteGarageWorkTime(Long garageWorkTimeId) {
         LOGGER.info("DELETE Endpoint used.");
         service.deleteGarageWorkTime(garageWorkTimeId);
     }

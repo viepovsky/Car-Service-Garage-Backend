@@ -18,18 +18,18 @@ public class AvailableCarRepairService {
         return repository.findAllByGarageId(garageId);
     }
 
-    public AvailableCarRepair getAvailableCarService(Long id) throws MyEntityNotFoundException {
+    public AvailableCarRepair getAvailableCarService(Long id) {
         return repository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", id));
     }
 
-    public void saveAvailableCarService(AvailableCarRepair availableCarRepair, Long garageId) throws MyEntityNotFoundException {
+    public void saveAvailableCarService(AvailableCarRepair availableCarRepair, Long garageId) {
         Garage garage = garageService.getGarage(garageId);
         availableCarRepair.setGarage(garage);
         garage.getAvailableCarRepairList().add(availableCarRepair);
         garageService.saveGarage(garage);
     }
 
-    public void deleteAvailableCarService(Long serviceId) throws MyEntityNotFoundException {
+    public void deleteAvailableCarService(Long serviceId) {
         if (repository.findById(serviceId).isPresent()) {
             repository.deleteById(serviceId);
         } else {

@@ -1,6 +1,5 @@
 package com.viepovsky.carrepair;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +14,13 @@ class CarRepairFacade {
     private final CarRepairService carRepairService;
     private final CarRepairMapper carRepairMapper;
 
-    public List<CarRepairDto> getCarServices(String username) throws MyEntityNotFoundException {
+    public List<CarRepairDto> getCarServices(String username) {
         LOGGER.info("GET Endpoint used.");
         List<CarRepair> carRepairList = carRepairService.getCarRepairs(username);
         return carRepairMapper.mapToCarServiceDtoList(carRepairList);
     }
 
-    public void deleteCarService(Long carServiceId) throws MyEntityNotFoundException {
+    public void deleteCarService(Long carServiceId) {
         LOGGER.info("DELETE Endpoint used.");
         carRepairService.deleteCarRepair(carServiceId);
     }

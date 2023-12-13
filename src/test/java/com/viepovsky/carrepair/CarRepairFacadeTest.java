@@ -1,6 +1,5 @@
 package com.viepovsky.carrepair;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +25,7 @@ class CarRepairFacadeTest {
     private CarRepairMapper mapper;
 
     @Test
-    void shouldGetCarServices() throws MyEntityNotFoundException {
+    void shouldGetCarServices() {
         //Given
         List<CarRepair> mockedCarRepairList = List.of(Mockito.mock(CarRepair.class));
         List<CarRepairDto> mockedCarRepairDtoList = List.of(Mockito.mock(CarRepairDto.class));
@@ -40,7 +39,7 @@ class CarRepairFacadeTest {
     }
 
     @Test
-    void shouldDeleteCarService() throws MyEntityNotFoundException {
+    void shouldDeleteCarService() {
         //Given
         doNothing().when(service).deleteCarRepair(1L);
         //When

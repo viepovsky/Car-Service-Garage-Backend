@@ -1,7 +1,5 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.exceptions.WrongInputDataException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +26,7 @@ class BookingFacadeTest {
     private BookingMapper mapper;
 
     @Test
-    void shouldGetBookingsForGivenDateAndGarageId() throws MyEntityNotFoundException {
+    void shouldGetBookingsForGivenDateAndGarageId() {
         //Given
         var booking = new Booking();
         var bookingDto = new BookingDto();
@@ -43,7 +41,7 @@ class BookingFacadeTest {
     }
 
     @Test
-    void shouldGetBookingsForGivenUsername() throws MyEntityNotFoundException {
+    void shouldGetBookingsForGivenUsername() {
         //Given
         var booking = new Booking();
         var bookingDto = new BookingDto();
@@ -58,7 +56,7 @@ class BookingFacadeTest {
     }
 
     @Test
-    void shouldGetAvailableBookingTimesTwoParams() throws MyEntityNotFoundException {
+    void shouldGetAvailableBookingTimesTwoParams() {
         //Given
         LocalDate date = LocalDate.now();
         when(service.getAvailableBookingTimesForSelectedDayAndRepairDuration(any(LocalDate.class), anyLong())).thenReturn(List.of(LocalTime.now()));
@@ -70,7 +68,7 @@ class BookingFacadeTest {
     }
 
     @Test
-    void shouldGetAvailableBookingTimesThreeParams() throws MyEntityNotFoundException {
+    void shouldGetAvailableBookingTimesThreeParams() {
         //Given
         LocalDate date = LocalDate.now();
         when(service.getAvailableBookingTimesForSelectedDayAndRepairDuration(any(LocalDate.class), anyInt(), anyLong())).thenReturn(List.of(LocalTime.now()));
@@ -82,7 +80,7 @@ class BookingFacadeTest {
     }
 
     @Test
-    void shouldCreateBooking() throws MyEntityNotFoundException, WrongInputDataException {
+    void shouldCreateBooking() {
         //Given
         LocalDate date = LocalDate.now();
         LocalTime start = LocalTime.now();
@@ -94,7 +92,7 @@ class BookingFacadeTest {
     }
 
     @Test
-    void shouldCreateAvailableBookingDays() throws MyEntityNotFoundException, WrongInputDataException {
+    void shouldCreateAvailableBookingDays() {
         //Given
         LocalDate date = LocalDate.now();
         LocalTime start = LocalTime.now();
@@ -107,7 +105,7 @@ class BookingFacadeTest {
     }
 
     @Test
-    void shouldUpdateBooking() throws MyEntityNotFoundException {
+    void shouldUpdateBooking() {
         //Given
         LocalDate date = LocalDate.now();
         LocalTime start = LocalTime.now();

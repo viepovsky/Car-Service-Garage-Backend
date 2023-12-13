@@ -1,6 +1,5 @@
 package com.viepovsky.garage.availablerepair;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +39,7 @@ class AvailableCarRepairFacadeTest {
     }
 
     @Test
-    void shouldCreateAvailableCarService() throws MyEntityNotFoundException {
+    void shouldCreateAvailableCarService() {
         //Given
         AvailableCarRepairDto serviceDto = Mockito.mock(AvailableCarRepairDto.class);
         AvailableCarRepair service = Mockito.mock(AvailableCarRepair.class);
@@ -53,7 +52,7 @@ class AvailableCarRepairFacadeTest {
     }
 
     @Test
-    void shouldDeleteAvailableCarService() throws MyEntityNotFoundException {
+    void shouldDeleteAvailableCarService() {
         //Given
         doNothing().when(service).deleteAvailableCarService(1L);
         //When

@@ -1,6 +1,5 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -67,7 +66,7 @@ class GarageFacadeTest {
     }
 
     @Test
-    void shouldDeleteGarage() throws MyEntityNotFoundException {
+    void shouldDeleteGarage() {
         //Given
         doNothing().when(service).deleteGarage(1L);
         //When

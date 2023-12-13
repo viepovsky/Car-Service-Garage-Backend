@@ -1,6 +1,5 @@
 package com.viepovsky.car;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +22,7 @@ class CarController {
     private final CarFacade facade;
 
     @GetMapping
-    ResponseEntity<List<CarDto>> getCarsForGivenUsername(@RequestParam(name = "username") @NotBlank String username) throws MyEntityNotFoundException {
+    ResponseEntity<List<CarDto>> getCarsForGivenUsername(@RequestParam(name = "username") @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -35,7 +34,7 @@ class CarController {
     ResponseEntity<Void> createCar(
             @Valid @RequestBody CarDto carDto,
             @RequestParam(name = "username") @NotBlank String username
-    ) throws MyEntityNotFoundException {
+    ) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -45,13 +44,13 @@ class CarController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> updateCar(@Valid @RequestBody CarDto carDto) throws MyEntityNotFoundException {
+    ResponseEntity<Void> updateCar(@Valid @RequestBody CarDto carDto) {
         facade.updateCar(carDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(path = "/{carId}")
-    ResponseEntity<Void> deleteCar(@PathVariable @Min(1) Long carId) throws MyEntityNotFoundException {
+    ResponseEntity<Void> deleteCar(@PathVariable @Min(1) Long carId) {
         facade.deleteCar(carId);
         return ResponseEntity.ok().build();
     }

@@ -26,16 +26,16 @@ public class CarRepairService {
         this.bookingService = bookingService;
     }
 
-    public List<CarRepair> getCarRepairs(String username) throws MyEntityNotFoundException {
+    public List<CarRepair> getCarRepairs(String username) {
         User user = userService.getUser(username);
         return repository.findCarServicesByUserId(user.getId());
     }
 
-    public CarRepair getCarRepair(Long id) throws MyEntityNotFoundException {
+    public CarRepair getCarRepair(Long id) {
         return repository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("CarRepair" + id));
     }
 
-    public void deleteCarRepair(Long carRepairId) throws MyEntityNotFoundException {
+    public void deleteCarRepair(Long carRepairId) {
         CarRepair carRepair = repository.findById(carRepairId).orElseThrow(() -> new MyEntityNotFoundException("CarRepair", carRepairId));
         Booking booking = carRepair.getBooking();
         if (booking.getCarRepairList().size() > 1) {

@@ -1,6 +1,5 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ class GarageFacade {
         return service.saveGarage(garageToSave);
     }
 
-    void deleteGarage(Long garageId) throws MyEntityNotFoundException {
+    void deleteGarage(Long garageId) {
         service.deleteGarage(garageId);
     }
 }

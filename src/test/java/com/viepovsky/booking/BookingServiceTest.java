@@ -4,7 +4,6 @@ import com.viepovsky.car.Car;
 import com.viepovsky.car.CarService;
 import com.viepovsky.carrepair.CarRepair;
 import com.viepovsky.carrepair.CarRepairService;
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
@@ -67,7 +66,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void testGetAllBookingsForGivenUsername() throws MyEntityNotFoundException {
+    void testGetAllBookingsForGivenUsername() {
         //Given
         Booking mockedBooking = Mockito.mock(Booking.class);
         User mockedUser = Mockito.mock(User.class);
@@ -81,7 +80,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void testGetAvailableBookingTimesForDayAndRepairDuration() throws MyEntityNotFoundException {
+    void testGetAvailableBookingTimesForDayAndRepairDuration() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
 
@@ -128,7 +127,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void testBookingSaveWhenNoOpenTimesSet() throws MyEntityNotFoundException, WrongInputDataException {
+    void testBookingSaveWhenNoOpenTimesSet() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         Garage mockedGarage = Mockito.mock(Garage.class);
@@ -144,7 +143,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void testBookingSaveWhenThereAreOpenTimes() throws MyEntityNotFoundException, WrongInputDataException {
+    void testBookingSaveWhenThereAreOpenTimes() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         Garage mockedGarage = Mockito.mock(Garage.class);
@@ -166,7 +165,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void testUpdateBooking() throws MyEntityNotFoundException {
+    void testUpdateBooking() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         LocalDate newLocalDate = LocalDate.now().plusDays(2);
@@ -181,7 +180,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void testCreateBooking() throws MyEntityNotFoundException, WrongInputDataException, NoSuchMethodException {
+    void testCreateBooking() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         int repairDuration = 70;

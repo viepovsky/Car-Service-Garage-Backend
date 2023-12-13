@@ -1,6 +1,5 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ class GarageController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{garageId}")
-    ResponseEntity<String> deleteGarage(@PathVariable @Min(1) Long garageId) throws MyEntityNotFoundException {
+    ResponseEntity<String> deleteGarage(@PathVariable @Min(1) Long garageId) {
         facade.deleteGarage(garageId);
         return ResponseEntity.ok().build();
     }

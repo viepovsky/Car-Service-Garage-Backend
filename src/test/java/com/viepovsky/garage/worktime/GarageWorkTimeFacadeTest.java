@@ -1,6 +1,5 @@
 package com.viepovsky.garage.worktime;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +37,7 @@ class GarageWorkTimeFacadeTest {
     }
 
     @Test
-    void shouldCreateGarageWorkTime() throws MyEntityNotFoundException {
+    void shouldCreateGarageWorkTime() {
         //Given
         var workTimeDto = GarageWorkTimeDto.builder().build();
         var workTime = new GarageWorkTime();
@@ -52,7 +51,7 @@ class GarageWorkTimeFacadeTest {
     }
 
     @Test
-    void shouldDeleteGarageWorkTime() throws MyEntityNotFoundException {
+    void shouldDeleteGarageWorkTime() {
         //Given
         doNothing().when(service).deleteGarageWorkTime(anyLong());
         //When

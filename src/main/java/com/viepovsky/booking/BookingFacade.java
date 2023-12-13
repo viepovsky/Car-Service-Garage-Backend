@@ -1,6 +1,5 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,12 +22,12 @@ class BookingFacade {
         return mapper.mapToBookingDtoList(bookingList);
     }
 
-    public List<BookingDto> getBookingsForGivenUsername(String username) throws MyEntityNotFoundException {
+    public List<BookingDto> getBookingsForGivenUsername(String username) {
         List<Booking> bookingList = service.getAllBookingsForGivenUser(username);
         return mapper.mapToBookingDtoList(bookingList);
     }
 
-    public List<LocalTime> getAvailableBookingTimes(LocalDate date, int repairDuration, Long garageId, Long carServiceId) throws MyEntityNotFoundException {
+    public List<LocalTime> getAvailableBookingTimes(LocalDate date, int repairDuration, Long garageId, Long carServiceId) {
         LOGGER.info("GET Endpoint getAvailableBookingTimes used.");
         if (carServiceId != 0L) {
             return service.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, carServiceId);
@@ -37,17 +36,17 @@ class BookingFacade {
         }
     }
 
-    public void createBooking(List<Long> selectedServiceIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) throws MyEntityNotFoundException, WrongInputDataException {
+    public void createBooking(List<Long> selectedServiceIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) throws WrongInputDataException {
         LOGGER.info("POST Endpoint createBooking used.");
         service.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
     }
 
-    public void createWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) throws MyEntityNotFoundException, WrongInputDataException {
+    public void createWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) throws WrongInputDataException {
         LOGGER.info("POST Endpoint createAvailableBooking used.");
         service.saveBooking(date, startHour, endHour, garageId);
     }
 
-    public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) throws MyEntityNotFoundException {
+    public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) {
         LOGGER.info("PUT Endpoint getAvailableBookingTimes used.");
         service.updateBooking(bookingId, date, startHour);
     }

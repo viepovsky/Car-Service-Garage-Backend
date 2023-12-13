@@ -1,6 +1,5 @@
 package com.viepovsky.user;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,7 @@ class UserFacadeTest {
     private UserMapper mapper;
 
     @Test
-    void shouldGetUserByUsername() throws MyEntityNotFoundException {
+    void shouldGetUserByUsername() {
         //Given
         User mockedUser = Mockito.mock(User.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
@@ -38,7 +37,7 @@ class UserFacadeTest {
     }
 
     @Test
-    void shouldGetUserToLoginByUsername() throws MyEntityNotFoundException {
+    void shouldGetUserToLoginByUsername() {
         //Given
         User mockedUser = Mockito.mock(User.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
@@ -61,7 +60,7 @@ class UserFacadeTest {
     }
 
     @Test
-    void shouldGetUserPass() throws MyEntityNotFoundException {
+    void shouldGetUserPass() {
         //Given
         when(service.getUserPass("username")).thenReturn("encrypted password");
         //When
@@ -85,7 +84,7 @@ class UserFacadeTest {
     }
 
     @Test
-    void shouldUpdateUser() throws MyEntityNotFoundException {
+    void shouldUpdateUser() {
         //Given
         User mockedUser = Mockito.mock(User.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);

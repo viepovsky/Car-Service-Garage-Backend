@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository repository;
 
-    public User getUser(String username) throws MyEntityNotFoundException {
+    public User getUser(String username) {
         return repository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
     }
 
-    public User getUser(Long id) throws MyEntityNotFoundException {
+    public User getUser(Long id) {
         return repository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Username: " + id));
     }
 
@@ -21,7 +21,7 @@ public class UserService {
         return repository.findByUsername(username).isPresent();
     }
 
-    public String getUserPass(String username) throws MyEntityNotFoundException {
+    public String getUserPass(String username) {
         return repository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username)).getPassword();
     }
 
@@ -29,7 +29,7 @@ public class UserService {
         return repository.save(user);
     }
 
-    public void updateUser(User user) throws MyEntityNotFoundException {
+    public void updateUser(User user) {
         User userToUpdate = repository.findByUsername(user.getUsername()).orElseThrow(() -> new MyEntityNotFoundException("Username: " + user.getUsername()));
         userToUpdate.setFirstName(user.getFirstName());
         userToUpdate.setLastName(user.getLastName());
@@ -43,7 +43,7 @@ public class UserService {
         }
     }
 
-    public void deleteUser(String username) throws MyEntityNotFoundException {
+    public void deleteUser(String username) {
         User user = repository.findByUsername(username).orElseThrow(() -> new MyEntityNotFoundException("Username: " + username));
         repository.deleteById(user.getId());
     }

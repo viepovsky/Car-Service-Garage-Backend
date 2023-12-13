@@ -1,6 +1,5 @@
 package com.viepovsky.carrepair;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ class CarRepairController {
     private final CarRepairFacade facade;
 
     @GetMapping
-    ResponseEntity<List<CarRepairDto>> getCarServices(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
+    ResponseEntity<List<CarRepairDto>> getCarServices(@RequestParam @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -30,7 +29,7 @@ class CarRepairController {
     }
 
     @DeleteMapping(path = "/{carServiceId}")
-    ResponseEntity<Void> deleteCarService(@PathVariable @Min(1) Long carServiceId) throws MyEntityNotFoundException {
+    ResponseEntity<Void> deleteCarService(@PathVariable @Min(1) Long carServiceId) {
         facade.deleteCarService(carServiceId);
         return ResponseEntity.ok().build();
     }

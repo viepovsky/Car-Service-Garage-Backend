@@ -15,7 +15,7 @@ public class GarageService {
         return garageRepository.findAll();
     }
 
-    public Garage getGarage(Long id) throws MyEntityNotFoundException {
+    public Garage getGarage(Long id) {
         return garageRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Garage " + id));
     }
 
@@ -27,7 +27,7 @@ public class GarageService {
         return garageRepository.save(garage);
     }
 
-    public void deleteGarage(Long garageId) throws MyEntityNotFoundException {
+    public void deleteGarage(Long garageId) {
         if (garageRepository.findById(garageId).isPresent()) {
             garageRepository.deleteById(garageId);
         } else {

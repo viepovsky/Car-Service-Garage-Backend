@@ -45,7 +45,7 @@ class GarageWorkTimeServiceTest {
     }
 
     @Test
-    void testSaveGarageWorkTime() throws MyEntityNotFoundException {
+    void testSaveGarageWorkTime() {
         //Given
         var garage = new Garage();
         var garageWorkTime = new GarageWorkTime();
@@ -60,7 +60,7 @@ class GarageWorkTimeServiceTest {
     }
 
     @Test
-    void testDeleteGarageWorkTime() throws MyEntityNotFoundException {
+    void testDeleteGarageWorkTime() {
         //Given
         var workTime = new GarageWorkTime();
         when(workTimeRepository.findById(anyLong())).thenReturn(Optional.of(workTime));
@@ -73,7 +73,7 @@ class GarageWorkTimeServiceTest {
     }
 
     @Test
-    void testDeleteWorkTimeShouldThrowExceptionIfWorkTimeDoesNotExist() throws MyEntityNotFoundException {
+    void testDeleteWorkTimeShouldThrowExceptionIfWorkTimeDoesNotExist() {
         //Given
         when(workTimeRepository.findById(anyLong())).thenReturn(Optional.empty());
         //When & then

@@ -14,29 +14,29 @@ public class CarService {
     private final CarRepository repository;
     private final UserService userService;
 
-    public List<Car> getAllCarsForGivenUsername(String username) throws MyEntityNotFoundException {
+    public List<Car> getAllCarsForGivenUsername(String username) {
         Long userId = userService.getUser(username).getId();
         return repository.findCarsByUserId(userId);
     }
 
-    public Car getCar(Long id) throws MyEntityNotFoundException {
+    public Car getCar(Long id) {
         return repository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Car: " + id));
     }
 
-    public void saveCar(Car car, String username) throws MyEntityNotFoundException {
+    public void saveCar(Car car, String username) {
         User user = userService.getUser(username);
         car.setUser(user);
         user.getCarList().add(car);
         userService.saveUser(user);
     }
 
-    public void updateCar(Car car) throws MyEntityNotFoundException {
+    public void updateCar(Car car) {
         Car retrievedCar = repository.findById(car.getId()).orElseThrow(() -> new MyEntityNotFoundException("Car", car.getId()));
         car.setUser(retrievedCar.getUser());
         repository.save(car);
     }
 
-    public void deleteCar(Long carId) throws MyEntityNotFoundException {
+    public void deleteCar(Long carId) {
         if (repository.findById(carId).isPresent()) {
             repository.deleteById(carId);
         } else {

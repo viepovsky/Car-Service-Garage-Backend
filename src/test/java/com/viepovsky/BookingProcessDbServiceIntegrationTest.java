@@ -27,7 +27,7 @@ public class BookingProcessDbServiceIntegrationTest {
 //    private CarServiceDbService carServiceDbService;
 //
 //    @Test
-//    public void testBookingProcess() throws MyEntityNotFoundException, WrongInputDataException {
+//    public void testBookingProcess() {
 //        //Given
 //        initGarageWithWorkTimesAndAvailableCarServices();
 //        initUser();
@@ -61,7 +61,7 @@ public class BookingProcessDbServiceIntegrationTest {
 //    }
 //
 //    @Test
-//    public void testInitMethods() throws MyEntityNotFoundException, WrongInputDataException {
+//    public void testInitMethods() {
 //        //Given
 //        initGarageWithWorkTimesAndAvailableCarServices();
 //        initUser();
@@ -108,7 +108,7 @@ public class BookingProcessDbServiceIntegrationTest {
 //                );
 //    }
 //
-//    private void initGarageWithWorkTimesAndAvailableCarServices() throws MyEntityNotFoundException {
+//    private void initGarageWithWorkTimesAndAvailableCarServices() {
 //        Garage garage = new Garage("Garage test name", "Warszawa test adress");
 //        garageDbService.saveGarage(garage);
 //        garage = garageDbService.getAllGarages().get(0);
@@ -145,7 +145,7 @@ public class BookingProcessDbServiceIntegrationTest {
 //        userDbService.saveUser(user);
 //    }
 //
-//    private void initCar() throws MyEntityNotFoundException {
+//    private void initCar() {
 //        Car car = new Car("BMW","Series 3", "Sedan", 2020, "diesel");
 //        User user = userDbService.getUser("Testusername");
 //        carDbService.saveCar(car, user.getUsername());

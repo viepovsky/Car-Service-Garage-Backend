@@ -1,6 +1,5 @@
 package com.viepovsky.garage.availablerepair;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -32,13 +31,13 @@ class AvailableCarRepairController {
     ResponseEntity<String> createAvailableCarService(
             @Valid @RequestBody AvailableCarRepairDto availableCarRepairDto,
             @RequestParam(name = "garage-id") @NotNull @Min(1) Long garageId
-    ) throws MyEntityNotFoundException {
+    ) {
         facade.createAvailableCarService(availableCarRepairDto, garageId);
         return ResponseEntity.created(URI.create("/v1/available-car-service/" + garageId)).build();
     }
 
     @DeleteMapping(path = "/{availableCarServiceId}")
-    ResponseEntity<String> deleteAvailableCarService(@PathVariable @Min(1) Long availableCarServiceId) throws MyEntityNotFoundException {
+    ResponseEntity<String> deleteAvailableCarService(@PathVariable @Min(1) Long availableCarServiceId) {
         facade.deleteAvailableCarService(availableCarServiceId);
         return ResponseEntity.ok().build();
     }

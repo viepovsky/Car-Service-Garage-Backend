@@ -40,7 +40,7 @@ class CarRepairServiceTest {
     private BookingService bookingService;
 
     @Test
-    void testGetCarRepairs() throws MyEntityNotFoundException {
+    void testGetCarRepairs() {
         //Given
         List<CarRepair> carRepairList = new ArrayList<>();
         CarRepair mockedCarRepair = Mockito.mock(CarRepair.class);
@@ -67,7 +67,7 @@ class CarRepairServiceTest {
     }
 
     @Test
-    void testDeleteCarServiceMoreThanOneService() throws MyEntityNotFoundException {
+    void testDeleteCarServiceMoreThanOneService() {
         //Given
         Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(12, 0), BigDecimal.valueOf(300), new ArrayList<>(), null);
         CarRepair carRepair = new CarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
@@ -91,7 +91,7 @@ class CarRepairServiceTest {
     }
 
     @Test
-    void testDeleteCarServiceOnlyOneService() throws MyEntityNotFoundException {
+    void testDeleteCarServiceOnlyOneService() {
         //Given
         Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(10, 30), BigDecimal.valueOf(50), new ArrayList<>(), null);
         CarRepair carRepair = new CarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);

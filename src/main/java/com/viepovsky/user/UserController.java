@@ -1,6 +1,5 @@
 package com.viepovsky.user;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
 import jakarta.validation.Valid;
@@ -25,7 +24,7 @@ class UserController {
     private final UserFacade userFacade;
 
     @GetMapping(path = "/information")
-    ResponseEntity<UserDto> getUser(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
+    ResponseEntity<UserDto> getUser(@RequestParam @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -34,7 +33,7 @@ class UserController {
     }
 
     @GetMapping(path = "/login")
-    ResponseEntity<UserDto> getUserToLogin(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
+    ResponseEntity<UserDto> getUserToLogin(@RequestParam @NotBlank String username) {
         return ResponseEntity.ok(userFacade.getUserByUsernameToLogin(username));
     }
 
@@ -44,7 +43,7 @@ class UserController {
     }
 
     @GetMapping(path = "/pass")
-    ResponseEntity<PasswordDto> getUserPass(@RequestParam @NotBlank String username) throws MyEntityNotFoundException {
+    ResponseEntity<PasswordDto> getUserPass(@RequestParam @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -60,7 +59,7 @@ class UserController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> updateUser(@Valid @RequestBody UserDto userDto) throws MyEntityNotFoundException {
+    ResponseEntity<Void> updateUser(@Valid @RequestBody UserDto userDto) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(userDto.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

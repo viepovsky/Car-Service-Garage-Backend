@@ -23,7 +23,7 @@ class UserTest {
     private UserService service;
 
     @Test
-    public void testSaveAndRetrieveUser() throws MyEntityNotFoundException {
+    public void testSaveAndRetrieveUser() {
         //Given
         User user = new User("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", Role.ROLE_USER, new ArrayList<>(), new ArrayList<>());
         service.saveUser(user);
@@ -38,7 +38,7 @@ class UserTest {
     }
 
     @Test
-    public void testUpdateAndDeleteUser() throws MyEntityNotFoundException {
+    public void testUpdateAndDeleteUser() {
         //Given
         User user = new User("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", Role.ROLE_USER, new ArrayList<>(), new ArrayList<>());
         service.saveUser(user);

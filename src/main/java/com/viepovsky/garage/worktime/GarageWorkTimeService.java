@@ -18,14 +18,14 @@ public class GarageWorkTimeService {
         return repository.findAllByGarageId(garageId);
     }
 
-    public void saveGarageWorkTime(GarageWorkTime garageWorkTime, Long garageId) throws MyEntityNotFoundException {
+    public void saveGarageWorkTime(GarageWorkTime garageWorkTime, Long garageId) {
         Garage garage = garageService.getGarage(garageId);
         garageWorkTime.setGarage(garage);
         garage.getGarageWorkTimeList().add(garageWorkTime);
         garageService.saveGarage(garage);
     }
 
-    public void deleteGarageWorkTime(Long garageWorkTimeId) throws MyEntityNotFoundException {
+    public void deleteGarageWorkTime(Long garageWorkTimeId) {
         if (repository.findById(garageWorkTimeId).isPresent()) {
             repository.deleteById(garageWorkTimeId);
         } else {

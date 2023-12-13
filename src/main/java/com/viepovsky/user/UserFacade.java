@@ -1,6 +1,5 @@
 package com.viepovsky.user;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +14,13 @@ class UserFacade {
     private final UserService service;
     private final UserMapper mapper;
 
-    public UserDto getUserByUsername(String username) throws MyEntityNotFoundException {
+    public UserDto getUserByUsername(String username) {
         LOGGER.info("GET Endpoint getUserByUsername used.");
         User user = service.getUser(username);
         return mapper.mapToUserDto(user);
     }
 
-    public UserDto getUserByUsernameToLogin(String username) throws MyEntityNotFoundException {
+    public UserDto getUserByUsernameToLogin(String username) {
         LOGGER.info("GET Endpoint getUserByUsernameToLogin used.");
         User user = service.getUser(username);
         return mapper.mapToUserDtoLogin(user);
@@ -32,7 +31,7 @@ class UserFacade {
         return service.isUserInDatabase(username);
     }
 
-    public PasswordDto getUserPass(String username) throws MyEntityNotFoundException {
+    public PasswordDto getUserPass(String username) {
         LOGGER.info("GET Endpoint getUserPass used.");
         return new PasswordDto(service.getUserPass(username));
     }
@@ -42,7 +41,7 @@ class UserFacade {
         return service.saveUser(mapper.mapToUserLogin(userDto));
     }
 
-    public void updateUser(UserDto userDto) throws MyEntityNotFoundException {
+    public void updateUser(UserDto userDto) {
         LOGGER.info("PUT Endpoint used.");
         service.updateUser(mapper.mapToUserLogin(userDto));
     }
