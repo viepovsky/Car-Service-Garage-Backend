@@ -109,7 +109,7 @@ public class BookingService {
     }
 
     private boolean isGarageWorkingHoursPresent(List<Booking> bookingList) {
-        return !bookingList.isEmpty();
+        return bookingList.size() != 0;
     }
 
     private boolean isGarageWorkTimePresent(Booking garageWorkTime) {
