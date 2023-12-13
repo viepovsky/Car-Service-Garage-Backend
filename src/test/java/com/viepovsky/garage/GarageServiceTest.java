@@ -81,20 +81,18 @@ class GarageServiceTest {
     @Test
     void testDeleteGarage() {
         //Given
-        var garage = new Garage();
-        when(repository.findById(anyLong())).thenReturn(Optional.of(garage));
-        doNothing().when(repository).deleteById(anyLong());
+        when(repository.existsById(anyLong())).thenReturn(true);
         //When
         service.deleteGarage(1L);
         //Then
-        assertDoesNotThrow(() -> new MyEntityNotFoundException("Garage", 1L));
         verify(repository, times(1)).deleteById(anyLong());
+        assertDoesNotThrow(() -> new MyEntityNotFoundException("Garage", 1L));
     }
 
     @Test
     void testDeleteGarageShouldThrowExceptionIfGarageDoesNotExist() {
         //Given
-        when(repository.findById(anyLong())).thenReturn(Optional.empty());
+        when(repository.existsById(anyLong())).thenReturn(false);
         //When & then
         assertThrows(MyEntityNotFoundException.class, () -> service.deleteGarage(1L));
     }

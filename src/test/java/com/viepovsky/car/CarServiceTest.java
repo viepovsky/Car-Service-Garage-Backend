@@ -85,8 +85,7 @@ class CarServiceTest {
     @Test
     void testDeleteCar() {
         //Given
-        Car mockedCar = Mockito.mock(Car.class);
-        when(carRepository.findById(1L)).thenReturn(Optional.of(mockedCar));
+        when(carRepository.existsById(1L)).thenReturn(true);
         doNothing().when(carRepository).deleteById(1L);
         //When
         carService.deleteCar(1L);

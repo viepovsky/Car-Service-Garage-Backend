@@ -1,6 +1,7 @@
 package com.viepovsky.garage;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,22 +17,26 @@ public class GarageService {
     }
 
     public Garage getGarage(Long id) {
-        return garageRepository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Garage " + id));
+        return garageRepository.findById(id)
+                .orElseThrow(() -> new MyEntityNotFoundException("Garage " + id));
     }
 
     public List<String> getAllGarageCities() {
-        return garageRepository.findAll().stream().map(n -> n.getAddress().substring(0, n.getAddress().indexOf(" "))).toList();
+        return garageRepository.findAll()
+                .stream()
+                .map(n -> n.getAddress().substring(0, n.getAddress().indexOf(" ")))
+                .toList();
     }
 
     public Garage saveGarage(Garage garage) {
         return garageRepository.save(garage);
     }
 
-    public void deleteGarage(Long garageId) {
-        if (garageRepository.findById(garageId).isPresent()) {
-            garageRepository.deleteById(garageId);
+    public void deleteGarage(Long id) {
+        if (garageRepository.existsById(id)) {
+            garageRepository.deleteById(id);
         } else {
-            throw new MyEntityNotFoundException("Garage", garageId);
+            throw new MyEntityNotFoundException("Garage", id);
         }
     }
 }
