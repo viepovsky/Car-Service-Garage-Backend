@@ -1,6 +1,5 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,27 +11,29 @@ import java.util.List;
 @RequiredArgsConstructor
 class GarageFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageFacade.class);
-    private final GarageService service;
+    private final GarageService garageService;
     private final GarageMapper mapper;
 
     List<GarageDto> getAllGarages() {
-        LOGGER.info("GET Endpoint used.");
-        List<Garage> garageList = service.getAllGarages();
+        LOGGER.info("Get all garages endpoint used.");
+        List<Garage> garageList = garageService.getAllGarages();
         return mapper.mapToGarageDtoList(garageList);
     }
 
-    GarageDto getGarage(Long garageId) {
-        var retrievedGarage = service.getGarage(garageId);
+    GarageDto getGarage(Long id) {
+        LOGGER.info("Get garage endpoint used with id:{}", id);
+        var retrievedGarage = garageService.getGarage(id);
         return mapper.mapToGarageDto(retrievedGarage);
     }
 
     Garage createGarage(GarageDto garageDto) {
-        LOGGER.info("POST Endpoint used.");
+        LOGGER.info("Create garage endpoint used.");
         var garageToSave = mapper.mapToGarage(garageDto);
-        return service.saveGarage(garageToSave);
+        return garageService.saveGarage(garageToSave);
     }
 
-    void deleteGarage(Long garageId) throws MyEntityNotFoundException {
-        service.deleteGarage(garageId);
+    void deleteGarage(Long id) {
+        LOGGER.info("Delete garage endpoint used with id:{}", id);
+        garageService.deleteGarage(id);
     }
 }

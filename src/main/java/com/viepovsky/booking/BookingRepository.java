@@ -1,24 +1,16 @@
 package com.viepovsky.booking;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-interface BookingRepository extends CrudRepository<Booking, Long> {
-    List<Booking> findAll();
-
-    Optional<Booking> findById(Long id);
-
+interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findBookingsByDateAndStatusAndGarageId(LocalDate date, BookingStatus status, Long garageId);
 
     List<Booking> findBookingsByDateAndGarageId(LocalDate date, Long garageId);
-
-    Booking findBookingByDateAndStartHourAndGarageIdAndStatus(LocalDate date, LocalTime startHour, Long garageId, BookingStatus status);
 
     List<Booking> findBookingsByCarRepairListUserId(Long userId);
 }

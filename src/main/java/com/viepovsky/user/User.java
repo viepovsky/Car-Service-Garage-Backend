@@ -2,7 +2,7 @@ package com.viepovsky.user;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car.Car;
-import com.viepovsky.carrepair.CarRepair;
+import com.viepovsky.car_repair.CarRepair;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

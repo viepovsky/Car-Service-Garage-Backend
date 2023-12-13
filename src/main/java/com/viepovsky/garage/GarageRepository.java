@@ -1,14 +1,8 @@
 package com.viepovsky.garage;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
-interface GarageRepository extends CrudRepository<Garage, Long> {
-    List<Garage> findAll();
-
-    Optional<Garage> findById(Long id);
+interface GarageRepository extends JpaRepository<Garage, Long> {
 }

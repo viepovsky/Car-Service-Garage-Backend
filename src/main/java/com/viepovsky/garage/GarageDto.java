@@ -1,6 +1,6 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.garage.worktime.GarageWorkTimeDto;
+import com.viepovsky.garage.garage_work_time.GarageWorkTimeDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

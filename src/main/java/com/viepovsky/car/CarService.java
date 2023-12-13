@@ -11,36 +11,38 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CarService {
-    private final CarRepository repository;
+    private final CarRepository carRepository;
     private final UserService userService;
 
-    public List<Car> getAllCarsForGivenUsername(String username) throws MyEntityNotFoundException {
+    public List<Car> getAllCarsForGivenUsername(String username) {
         Long userId = userService.getUser(username).getId();
-        return repository.findCarsByUserId(userId);
+        return carRepository.findCarsByUserId(userId);
     }
 
-    public Car getCar(Long id) throws MyEntityNotFoundException {
-        return repository.findById(id).orElseThrow(() -> new MyEntityNotFoundException("Car: " + id));
+    public Car getCar(Long id) {
+        return carRepository.findById(id)
+                .orElseThrow(() -> new MyEntityNotFoundException("Car: " + id));
     }
 
-    public void saveCar(Car car, String username) throws MyEntityNotFoundException {
+    public void saveCar(Car car, String username) {
         User user = userService.getUser(username);
         car.setUser(user);
         user.getCarList().add(car);
         userService.saveUser(user);
     }
 
-    public void updateCar(Car car) throws MyEntityNotFoundException {
-        Car retrievedCar = repository.findById(car.getId()).orElseThrow(() -> new MyEntityNotFoundException("Car", car.getId()));
+    public void updateCar(Car car) {
+        Car retrievedCar = carRepository.findById(car.getId())
+                .orElseThrow(() -> new MyEntityNotFoundException("Car", car.getId()));
         car.setUser(retrievedCar.getUser());
-        repository.save(car);
+        carRepository.save(car);
     }
 
-    public void deleteCar(Long carId) throws MyEntityNotFoundException {
-        if (repository.findById(carId).isPresent()) {
-            repository.deleteById(carId);
+    public void deleteCar(Long id) {
+        if (carRepository.existsById(id)) {
+            carRepository.deleteById(id);
         } else {
-            throw new MyEntityNotFoundException("Car", carId);
+            throw new MyEntityNotFoundException("Car", id);
         }
     }
 }

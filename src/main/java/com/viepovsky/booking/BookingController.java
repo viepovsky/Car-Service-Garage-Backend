@@ -1,6 +1,5 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -26,23 +25,23 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 class BookingController {
-    private final BookingFacade facade;
+    private final BookingFacade bookingFacade;
 
     @GetMapping(path = "/work-time")
     ResponseEntity<List<BookingDto>> getBookings(
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam(name = "garage-id") @Min(1) Long garageId
     ) {
-        return ResponseEntity.ok(facade.getBookingsForGivenDateAndGarageId(date, garageId));
+        return ResponseEntity.ok(bookingFacade.getBookingsForGivenDateAndGarageId(date, garageId));
     }
 
     @GetMapping
-    ResponseEntity<List<BookingDto>> getBookings(@RequestParam(name = "name") @NotBlank String username) throws MyEntityNotFoundException {
+    ResponseEntity<List<BookingDto>> getBookings(@RequestParam(name = "name") @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(facade.getBookingsForGivenUsername(username));
+        return ResponseEntity.ok(bookingFacade.getBookingsForGivenUsername(username));
     }
 
     @GetMapping(path = "/available-times")
@@ -51,8 +50,8 @@ class BookingController {
             @RequestParam(name = "repair-duration", required = false, defaultValue = "0") int repairDuration,
             @RequestParam(name = "garage-id", required = false, defaultValue = "0") Long garageId,
             @RequestParam(name = "car-service-id", required = false, defaultValue = "0") Long carServiceId
-    ) throws MyEntityNotFoundException {
-        return ResponseEntity.ok(facade.getAvailableBookingTimes(date, repairDuration, garageId, carServiceId));
+    ) {
+        return ResponseEntity.ok(bookingFacade.getAvailableBookingTimes(date, repairDuration, garageId, carServiceId));
     }
 
     @PostMapping
@@ -63,8 +62,8 @@ class BookingController {
             @RequestParam(name = "garage-id") @Min(1) Long garageId,
             @RequestParam(name = "car-id") @Min(1) Long carId,
             @RequestParam(name = "repair-duration") @NotNull int repairDuration
-    ) throws MyEntityNotFoundException, WrongInputDataException {
-        facade.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
+    ) throws WrongInputDataException {
+        bookingFacade.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
         return ResponseEntity.created(URI.create("")).build();
     }
 
@@ -75,8 +74,8 @@ class BookingController {
             @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour,
             @RequestParam(name = "end-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime endHour,
             @RequestParam(name = "garage-id") @Min(1) Long garageId
-    ) throws MyEntityNotFoundException, WrongInputDataException {
-        facade.createWorkingHoursBooking(date, startHour, endHour, garageId);
+    ) throws WrongInputDataException {
+        bookingFacade.createWorkingHoursBooking(date, startHour, endHour, garageId);
         return ResponseEntity.created(URI.create("/v1/bookings/work-time?date=" + date.toString() + "&garage-id=" + garageId)).build();
 
     }
@@ -86,8 +85,8 @@ class BookingController {
             @PathVariable @Min(1) Long bookingId,
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour
-    ) throws MyEntityNotFoundException {
-        facade.updateBooking(bookingId, date, startHour);
+    ) {
+        bookingFacade.updateBooking(bookingId, date, startHour);
         return ResponseEntity.noContent().build();
     }
 }

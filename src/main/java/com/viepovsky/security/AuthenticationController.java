@@ -18,15 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Validated
 class AuthenticationController {
-    private final AuthenticationFacade facade;
+    private final AuthenticationFacade authenticationFacade;
 
     @PostMapping("/register")
     ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterUserRequest request) {
-        return ResponseEntity.ok(facade.register(request));
+        return ResponseEntity.ok(authenticationFacade.register(request));
     }
 
     @PostMapping("/authenticate")
     ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationUserRequest request) {
-        return ResponseEntity.ok(facade.authenticate(request));
+        return ResponseEntity.ok(authenticationFacade.authenticate(request));
     }
 }
