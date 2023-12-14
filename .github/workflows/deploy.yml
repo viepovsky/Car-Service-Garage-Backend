@@ -21,24 +21,6 @@ jobs:
         id: get_head_commit_message
         run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
 
-      - name: Debug Commit Message
-        run: |
-          echo "Commit Message= ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"
-          echo "Head_commit_message = $HEAD_COMMIT_MESSAGE"
-          echo "Github Output = $GITHUB_OUTPUT"
-          echo "Github Sha = ${{ env.GITHUB_SHA }}"
-          echo "Github event = ${{ github.event.head_commit.message }}"
-          echo "Github event[0] = ${{ github.event.commits[0].message }}"
-          echo "Github commit = $(git log -1 --no-merges --pretty=%B)"
-          echo "Github ENV = $GITHUB_ENV"
-          echo "latest = $(git rev-parse ${{ github.event.pull_request.head.sha }})"
-          echo "latest = $(git rev-parse --short ${{ github.event.pull_request.head.sha }})"
-          echo "$(git rev-parse --short "$GITHUB_SHA")"
-          echo $(git rev-parse --short "$GITHUB_SHA")
-          cd $GITHUB_WORKSPACE
-          echo $(git rev-parse ${{ github.event.pull_request.head.sha }})
-          
-
   build-and-push-docker-image:
     runs-on: ubuntu-latest
     needs: check_skip_flags
