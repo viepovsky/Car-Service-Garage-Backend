@@ -13,7 +13,7 @@ jobs:
     if: |
       github.event_name == 'push' || (
         github.event_name == 'pull_request' &&
-        contains(github.event.workflow_run.head_commit.message, '[push image]')
+        contains(${{ github.event.head_commit.message }}, '[push image]')
       )
 
     steps:
