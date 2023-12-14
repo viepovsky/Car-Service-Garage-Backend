@@ -28,7 +28,7 @@ jobs:
     if: |
       github.event_name == 'push' || (
         github.event_name == 'pull_request' &&
-        contains(${{ needs.check_skip_flags.outputs.head-commit-message }}, '[push image]')
+        contains(needs.check_skip_flags.outputs.head-commit-message, '[push image]')
       )
 
     steps:
