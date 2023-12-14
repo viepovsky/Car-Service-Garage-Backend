@@ -74,7 +74,7 @@ class BookingServiceTest {
         when(mockedUser.getId()).thenReturn(1L);
         when(bookingRepository.findBookingsByCarRepairListUserId(1L)).thenReturn(List.of(mockedBooking));
         //When
-        List<Booking> retrievedList = bookingService.getAllBookingsForGivenUser("username");
+        List<Booking> retrievedList = bookingService.getAllBookingsByUsername("username");
         //Then
         assertEquals(1, retrievedList.size());
     }
@@ -103,7 +103,7 @@ class BookingServiceTest {
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(bookedService));
         when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingList);
         //When
-        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(localDate, 20L);
+        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 20L);
         //Then
         List<LocalTime> expectedTimes = List.of(LocalTime.of(9, 50), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50));
         assertFalse(retrievedAvailableTimeList.isEmpty());
@@ -118,7 +118,7 @@ class BookingServiceTest {
         List<Booking> bookingList = List.of(new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null));
         when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingList);
         //When
-        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(localDate, 50, 5L);
+        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 50, 5L);
         //Then
         List<LocalTime> expectedTimes = List.of(LocalTime.of(9, 50), LocalTime.of(10, 0), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50));
         assertFalse(retrievedAvailableTimeList.isEmpty());
@@ -137,7 +137,7 @@ class BookingServiceTest {
         when(bookingRepository.findBookingsByDateAndStatusAndGarageId(localDate, BookingStatus.AVAILABLE, 50L)).thenReturn(bookingList);
         when(bookingRepository.save(any())).thenReturn(any());
         //When
-        bookingService.saveBooking(localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), 50L);
+        bookingService.createWorkingHoursBooking(localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), 50L);
         //Then
         verify(bookingRepository, times(1)).save(any());
     }
@@ -156,7 +156,7 @@ class BookingServiceTest {
         when(bookingRepository.findBookingsByDateAndStatusAndGarageId(localDate, BookingStatus.AVAILABLE, 50L)).thenReturn(bookingList);
         //When & then
         try {
-            bookingService.saveBooking(localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), 50L);
+            bookingService.createWorkingHoursBooking(localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), 50L);
             fail("Expected an WrongInputDataException to be thrown");
         } catch (WrongInputDataException e) {
             assertThat(e.getMessage(), containsString("Work times of given date: " + localDate + ", are already declared"));
@@ -197,7 +197,7 @@ class BookingServiceTest {
         when(carService.getCar(anyLong())).thenReturn(car);
         when(userService.getUser(anyLong())).thenReturn(user);
         BookingService bookingService = Mockito.spy(new BookingService(bookingRepository, garageService, carRepairService, carService, userService, availableCarRepairService));
-        Mockito.doReturn(localTimeList).when(bookingService).getAvailableBookingTimesForSelectedDayAndRepairDuration(localDate, repairDuration, 5L);
+        Mockito.doReturn(localTimeList).when(bookingService).getAvailableBookingTimesByDayAndRepairDuration(localDate, repairDuration, 5L);
         when(bookingRepository.save(any())).thenReturn(any());
         when(availableCarRepairService.getAvailableCarRepair(10L)).thenReturn(availableCarRepair);
         when(availableCarRepairService.getAvailableCarRepair(11L)).thenReturn(availableCarRepair2);
