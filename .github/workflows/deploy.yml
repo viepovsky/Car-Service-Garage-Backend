@@ -21,6 +21,12 @@ jobs:
         id: get_head_commit_message
         run: echo "HEAD_COMMIT_MESSAGE=$(git show -s --format=%s)" >> "$GITHUB_OUTPUT"
 
+      - name: Debug Commit Message
+        run: |
+          echo "Commit Message= ${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"
+          echo "Head_commit_message = $HEAD_COMMIT_MESSAGE"
+          echo "Github Output = $GITHUB_OUTPUT"
+          echo "Github Sha = ${{ env.GITHUB_SHA }}"
 
   build-and-push-docker-image:
     runs-on: ubuntu-latest
