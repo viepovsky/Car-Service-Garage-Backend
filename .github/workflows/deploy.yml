@@ -27,6 +27,11 @@ jobs:
           echo "Head_commit_message = $HEAD_COMMIT_MESSAGE"
           echo "Github Output = $GITHUB_OUTPUT"
           echo "Github Sha = ${{ env.GITHUB_SHA }}"
+          echo "Github event = ${{ github.event.head_commit.message }}"
+          echo "Github event[0] = ${{ github.event.commits[0].message }}"
+          echo "Github commit = $(git log -1 --no-merges --pretty=%B)"
+          echo "Github ENV = $GITHUB_ENV"
+          
 
   build-and-push-docker-image:
     runs-on: ubuntu-latest
