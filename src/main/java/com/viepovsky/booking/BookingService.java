@@ -41,23 +41,23 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public List<Booking> getAllBookingsForGivenUser(String username) {
+    public List<Booking> getAllBookingsByUsername(String username) {
         User user = userService.getUser(username);
         return bookingRepository.findBookingsByCarRepairListUserId(user.getId());
     }
 
-    public List<Booking> getBookingsForGivenDateAndGarageId(LocalDate date, Long garageId) {
+    public List<Booking> getBookingsByDateAndGarageId(LocalDate date, Long garageId) {
         return bookingRepository.findBookingsByDateAndGarageId(date, garageId);
     }
 
-    private Booking getBooking(Long id) {
+    private Booking getBookingById(Long id) {
         return bookingRepository.findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("Booking" + id));
     }
 
-    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, Long serviceId) {
+    public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, Long serviceId) {
         var carRepair = carRepairService.getCarRepair(serviceId);
-        var reservedBooking = getBooking(carRepair.getBooking().getId());
+        var reservedBooking = getBookingById(carRepair.getBooking().getId());
         int repairDuration = reservedBooking.getCarRepairList()
                 .stream()
                 .mapToInt(CarRepair::getRepairTimeInMinutes)
@@ -73,7 +73,7 @@ public class BookingService {
         return availableBookingTimes;
     }
 
-    public List<LocalTime> getAvailableBookingTimesForSelectedDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
+    public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
         LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
         List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
         return checkAvailableBookingTimes(bookingList, date, repairDuration);
@@ -149,19 +149,22 @@ public class BookingService {
         return availableBookingTimes;
     }
 
-    public void saveBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) {
+    public void createWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) {
         Garage garage = garageService.getGarage(garageId);
         List<Booking> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, BookingStatus.AVAILABLE, garageId);
         if (!isGarageWorkingHoursPresent(bookingList)) {
-            Booking booking = createGarageWorkingHoursBooking(date, startHour, endHour, garage);
+            Booking booking = createWorkingHoursBooking(date, startHour, endHour, garage);
             bookingRepository.save(booking);
         } else {
-            List<Long> bookingIdList = bookingList.stream().map(Booking::getId).toList();
-            throw new WrongInputDataException("Work times of given date: " + date + ", are already declared. To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingIdList);
+            List<Long> bookingIdList = bookingList.stream()
+                    .map(Booking::getId)
+                    .toList();
+            throw new WrongInputDataException("Work times of given date: " + date + ", are already declared. " +
+                    "To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingIdList);
         }
     }
 
-    private Booking createGarageWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Garage garage) {
+    private Booking createWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Garage garage) {
         return new Booking(
                 BookingStatus.AVAILABLE,
                 date,
@@ -176,23 +179,23 @@ public class BookingService {
     public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
-        booking.setDate(date);
         int repairTime = (int) Duration.between(booking.getStartHour(), booking.getEndHour()).toMinutes();
+        booking.setDate(date);
         booking.setStartHour(startHour);
         booking.setEndHour(startHour.plusMinutes(repairTime));
         LOGGER.info("Updated booking with values, date: " + date + ", time: " + startHour);
         bookingRepository.save(booking);
     }
 
-    public void createBooking(List<Long> selectedServiceIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) {
+    public void createBooking(List<Long> selectedCarRepairIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) {
         Garage garage = garageService.getGarage(garageId);
         Car car = carService.getCar(carId);
         User user = userService.getUser(car.getUser().getId());
-        List<LocalTime> availableBookingTimes = getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId);
+        List<LocalTime> availableBookingTimes = getAvailableBookingTimesByDayAndRepairDuration(date, repairDuration, garageId);
         if (availableBookingTimes.contains(startHour)) {
             Booking booking = createCarRepairBooking(date, startHour, repairDuration, garage);
             bookingRepository.save(booking);
-            saveBookingAndServicesForGivenCarAndUser(selectedServiceIdList, car, user, booking);
+            saveBookingAndCarRepairsForCarAndUser(selectedCarRepairIdList, car, user, booking);
         } else {
             throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another date.");
         }
@@ -210,21 +213,17 @@ public class BookingService {
         );
     }
 
-    private void saveBookingAndServicesForGivenCarAndUser(List<Long> selectedServiceIdList, Car car, User user, Booking booking) {
-        List<AvailableCarRepair> availableCarRepairList = new ArrayList<>();
-        BigDecimal totalCost = BigDecimal.ZERO;
-        for (Long id : selectedServiceIdList) {
-            AvailableCarRepair availableCarRepair = new AvailableCarRepair(availableCarRepairService.getAvailableCarRepair(id));
-            if (availableCarRepair.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
-                BigDecimal multipliedCost = availableCarRepair.getCost();
-                multipliedCost = multipliedCost.multiply(availableCarRepair.getMakeMultiplier());
-                availableCarRepair.setCost(multipliedCost);
-            }
-            totalCost = totalCost.add(availableCarRepair.getCost());
-            availableCarRepairList.add(availableCarRepair);
-        }
+    private void saveBookingAndCarRepairsForCarAndUser(List<Long> selectedCarRepairIdList, Car car, User user, Booking booking) {
+        List<AvailableCarRepair> selectedAvailableCarRepairs = new ArrayList<>();
+        List<BigDecimal> repairCosts = new ArrayList<>();
+        selectedCarRepairIdList.stream()
+                .map(id -> new AvailableCarRepair(availableCarRepairService.getAvailableCarRepair(id)))
+                .peek(repair -> multiplyCarRepairCostIfCarIsPremiumMake(car, repair))
+                .peek(selectedAvailableCarRepairs::add)
+                .map(AvailableCarRepair::getCost)
+                .forEach(repairCosts::add);
 
-        List<CarRepair> carRepairList = availableCarRepairList.stream()
+        List<CarRepair> selectedCarRepairs = selectedAvailableCarRepairs.stream()
                 .map(selectedService -> new CarRepair(
                         selectedService.getName(),
                         selectedService.getDescription(),
@@ -237,15 +236,28 @@ public class BookingService {
                 ))
                 .toList();
 
-        user.getCarList().stream()
+        user.getCarList()
+                .stream()
                 .filter(servicedCar -> Objects.equals(servicedCar.getId(), car.getId()))
                 .findFirst()
-                .ifPresent(servicedCar -> servicedCar.getCarServicesList().addAll(carRepairList));
-        user.getServicesList().addAll(carRepairList);
+                .ifPresent(servicedCar -> servicedCar.getCarServicesList().addAll(selectedCarRepairs));
+        user.getServicesList().addAll(selectedCarRepairs);
         userService.saveUser(user);
-        booking.getCarRepairList().addAll(carRepairList);
-        booking.setTotalCost(totalCost);
+
+        BigDecimal totalRepairCost = repairCosts.stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        booking.setTotalCost(totalRepairCost);
+        booking.getCarRepairList().addAll(selectedCarRepairs);
         bookingRepository.save(booking);
+    }
+
+    private void multiplyCarRepairCostIfCarIsPremiumMake(Car car, AvailableCarRepair availableCarRepair) {
+        if (availableCarRepair.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
+            BigDecimal repairCost = availableCarRepair.getCost();
+            BigDecimal makeMultiplier = availableCarRepair.getMakeMultiplier();
+            repairCost = repairCost.multiply(makeMultiplier);
+            availableCarRepair.setCost(repairCost);
+        }
     }
 
     public void save(Booking booking) {

@@ -1,6 +1,5 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.exceptions.WrongInputDataException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,37 +16,37 @@ class BookingFacade {
     private final BookingService bookingService;
     private final BookingMapper mapper;
 
-    public List<BookingDto> getBookingsForGivenDateAndGarageId(LocalDate date, Long garageId) {
-        List<Booking> bookingList = bookingService.getBookingsForGivenDateAndGarageId(date, garageId);
+    public List<BookingDto> getBookingsByDateAndGarageId(LocalDate date, Long garageId) {
+        List<Booking> bookingList = bookingService.getBookingsByDateAndGarageId(date, garageId);
         return mapper.mapToBookingDtoList(bookingList);
     }
 
-    public List<BookingDto> getBookingsForGivenUsername(String username) {
-        List<Booking> bookingList = bookingService.getAllBookingsForGivenUser(username);
+    public List<BookingDto> getBookingsByUsername(String username) {
+        List<Booking> bookingList = bookingService.getAllBookingsByUsername(username);
         return mapper.mapToBookingDtoList(bookingList);
     }
 
     public List<LocalTime> getAvailableBookingTimes(LocalDate date, int repairDuration, Long garageId, Long carServiceId) {
         LOGGER.info("Get available booking times endpoint used with date:{}, repair duration:{}, garage id:{}, car service id:{}", date, repairDuration, garageId, carServiceId);
         if (carServiceId != 0L) {
-            return bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, carServiceId);
+            return bookingService.getAvailableBookingTimesByDayAndRepairDuration(date, carServiceId);
         } else {
-            return bookingService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairDuration, garageId);
+            return bookingService.getAvailableBookingTimesByDayAndRepairDuration(date, repairDuration, garageId);
         }
     }
 
-    public void createBooking(List<Long> selectedServiceIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) throws WrongInputDataException {
-        LOGGER.info("POST Endpoint createBooking used.");
-        bookingService.createBooking(selectedServiceIdList, date, startHour, garageId, carId, repairDuration);
+    public void createBooking(List<Long> selectedCarRepairIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) {
+        LOGGER.info("Create booking endpoint used for service ids:{}, date:{}, garage id:{}, and car id:{}.", selectedCarRepairIdList, date, garageId, carId);
+        bookingService.createBooking(selectedCarRepairIdList, date, startHour, garageId, carId, repairDuration);
     }
 
-    public void createWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) throws WrongInputDataException {
-        LOGGER.info("POST Endpoint createAvailableBooking used.");
-        bookingService.saveBooking(date, startHour, endHour, garageId);
+    public void createWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) {
+        LOGGER.info("Create working hours booking used for date:{}, garageId:{}", date, garageId);
+        bookingService.createWorkingHoursBooking(date, startHour, endHour, garageId);
     }
 
     public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) {
-        LOGGER.info("PUT Endpoint getAvailableBookingTimes used.");
+        LOGGER.info("Update booking endpoint used for booking id:{}", bookingId);
         bookingService.updateBooking(bookingId, date, startHour);
     }
 }
