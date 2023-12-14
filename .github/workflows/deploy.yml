@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Debug Commit Message
-        run: echo "Commit Message= ${{ github.event.workflow_run.head_commit.message }}
+        run: echo "Commit Message= ${{ github.event.workflow_run.head_commit.message }}"
 
 #      - name: Set up JDK
 #        uses: actions/setup-java@v4
