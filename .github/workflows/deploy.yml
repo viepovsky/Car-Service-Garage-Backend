@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 
 jobs:
   build-and-push-docker-image:
@@ -31,9 +32,21 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Determine Docker Tag [branch_name/latest]
+        id: docker_tag
+        run: |
+          if [ -n "$GITHUB_HEAD_REF" ]; then
+            echo "Setting tag to branch name: $GITHUB_HEAD_REF"
+            echo "::set-output name=tag::$GITHUB_HEAD_REF"
+          else
+            echo "Setting tag to 'latest'"
+            echo "::set-output name=tag::latest"
+          fi
+
       - name: Build and push Docker image
         env:
-          DOCKER_REPO: viepovsky/car-service-garage-backend:latest
+          DOCKER_REPO: viepovsky/car-service-garage-backend
+          DOCKER_TAG: ${{ steps.docker_tag.outputs.tag }}
         run: |
           docker buildx create --use
-          docker buildx build -t $DOCKER_REPO --push .
+          docker buildx build -t $DOCKER_REPO:$DOCKER_TAG --push .
