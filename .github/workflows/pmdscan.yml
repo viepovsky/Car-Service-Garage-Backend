@@ -17,8 +17,7 @@ jobs:
 
       - uses: pmd/pmd-github-action@v1
         with:
-          sourcePath: 'src/main/resources'
-          rulesets: 'ruleset.xml'
+          rulesets: 'src/main/resources/ruleset.xml'
           analyzeModifiedFilesOnly: false
 
       - name: Upload SARIF file
