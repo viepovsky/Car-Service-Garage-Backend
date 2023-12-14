@@ -31,6 +31,7 @@ jobs:
           echo "Github event[0] = ${{ github.event.commits[0].message }}"
           echo "Github commit = $(git log -1 --no-merges --pretty=%B)"
           echo "Github ENV = $GITHUB_ENV"
+          echo "latest = ${{ github.event.pull_request.head.sha }}"
           
 
   build-and-push-docker-image:
