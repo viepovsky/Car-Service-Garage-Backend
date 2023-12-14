@@ -66,7 +66,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void testGetAllBookingsForGivenUsername() {
+    void testGetAllBookingsByUsername() {
         //Given
         Booking mockedBooking = Mockito.mock(Booking.class);
         User mockedUser = Mockito.mock(User.class);
@@ -80,7 +80,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void testGetAvailableBookingTimesForDayAndRepairDuration() {
+    void testGetAvailableBookingTimesByDayAndRepairDuration() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
 
@@ -112,7 +112,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void testGetAvailableBookingTimesForDayAndRepairDurationThreeParameters() {
+    void testGetAvailableBookingTimesByDayAndRepairDurationThreeParameters() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         List<Booking> bookingList = List.of(new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null));
@@ -124,6 +124,18 @@ class BookingServiceTest {
         assertFalse(retrievedAvailableTimeList.isEmpty());
         assertEquals(7, retrievedAvailableTimeList.size());
         assertEquals(expectedTimes, retrievedAvailableTimeList);
+    }
+
+    @Test
+    void shouldReturnEmptyArrayWhenGetAvailableBookingTimesParameterDayIsNotWorkingDay() {
+        //Given
+        LocalDate localDate = LocalDate.now().plusDays(1);
+        List<Booking> bookingsOfGivenDate = List.of();
+        when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingsOfGivenDate);
+        //When
+        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 50, 5L);
+        //Then
+        assertTrue(retrievedAvailableTimeList.isEmpty());
     }
 
     @Test
