@@ -20,39 +20,42 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      - name: Debug Commit Message
+        run: echo "Commit Message= ${{ github.event.head_commit.message }}"
 
-      - name: Build with Gradle
-        run: ./gradlew clean build
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Determine Docker Tag [branch_name/latest]
-        id: docker_tag
-        run: |
-          if [ -n "$GITHUB_HEAD_REF" ]; then
-            echo "Setting tag to branch name: $GITHUB_HEAD_REF"
-            echo "::set-output name=tag::$GITHUB_HEAD_REF"
-          else
-            echo "Setting tag to 'latest'"
-            echo "::set-output name=tag::latest"
-          fi
-
-      - name: Build and push Docker image
-        env:
-          DOCKER_REPO: viepovsky/car-service-garage-backend
-          DOCKER_TAG: ${{ steps.docker_tag.outputs.tag }}
-        run: |
-          docker buildx create --use
-          docker buildx build -t $DOCKER_REPO:$DOCKER_TAG --push .
+#      - name: Set up JDK
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: 'temurin'
+#          java-version: '17'
+#
+#      - name: Build with Gradle
+#        run: ./gradlew clean build
+#
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v1
+#        with:
+#          username: ${{ secrets.DOCKER_USERNAME }}
+#          password: ${{ secrets.DOCKER_PASSWORD }}
+#
+#      - name: Determine Docker Tag [branch_name/latest]
+#        id: docker_tag
+#        run: |
+#          if [ -n "$GITHUB_HEAD_REF" ]; then
+#            echo "Setting tag to branch name: $GITHUB_HEAD_REF"
+#            echo "::set-output name=tag::$GITHUB_HEAD_REF"
+#          else
+#            echo "Setting tag to 'latest'"
+#            echo "::set-output name=tag::latest"
+#          fi
+#
+#      - name: Build and push Docker image
+#        env:
+#          DOCKER_REPO: viepovsky/car-service-garage-backend
+#          DOCKER_TAG: ${{ steps.docker_tag.outputs.tag }}
+#        run: |
+#          docker buildx create --use
+#          docker buildx build -t $DOCKER_REPO:$DOCKER_TAG --push .
