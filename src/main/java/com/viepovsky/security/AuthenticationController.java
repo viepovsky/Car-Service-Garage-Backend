@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Validated
 class AuthenticationController {
+
     private final AuthenticationFacade authenticationFacade;
 
     @PostMapping("/register")
