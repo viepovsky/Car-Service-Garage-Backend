@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 class AvailableCarRepairDto {
+
     private Long id;
 
     @NotBlank

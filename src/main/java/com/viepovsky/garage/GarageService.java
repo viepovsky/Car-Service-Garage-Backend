@@ -9,6 +9,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GarageService {
+
     private final GarageRepository garageRepository;
 
     public List<Garage> getAllGarages() {

@@ -11,7 +11,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AvailableCarRepairService {
+
     private final AvailableCarRepairRepository availableCarRepairRepository;
+
     private final GarageService garageService;
 
     public List<AvailableCarRepair> getAllAvailableCarRepair(Long garageId) {

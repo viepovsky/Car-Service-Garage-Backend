@@ -10,8 +10,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 class GarageFacade {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageFacade.class);
+
     private final GarageService garageService;
+
     private final GarageMapper mapper;
 
     List<GarageDto> getAllGarages() {

@@ -40,6 +40,7 @@ public class User extends BaseEntityAudit implements UserDetails {
     @Id
     @SequenceGenerator(
             name = "user_id_sequence",
+            sequenceName = "user_id_sequence",
             initialValue = 5000,
             allocationSize = 100
     )

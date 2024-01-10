@@ -9,6 +9,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class GarageMapper {
+
     private GarageWorkTimeMapper garageWorkTimeMapper;
 
     public GarageDto mapToGarageDto(Garage garage) {

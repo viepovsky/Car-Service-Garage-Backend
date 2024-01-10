@@ -11,7 +11,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GarageWorkTimeService {
+
     private final GarageWorkTimeRepository garageWorkTimeRepository;
+
     private final GarageService garageService;
 
     public List<GarageWorkTime> getAllGarageWorkTimes(Long garageId) {

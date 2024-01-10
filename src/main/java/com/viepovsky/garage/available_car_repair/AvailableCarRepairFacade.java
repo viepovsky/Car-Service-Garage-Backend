@@ -10,8 +10,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 class AvailableCarRepairFacade {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AvailableCarRepairFacade.class);
+
     private final AvailableCarRepairService availableCarRepairService;
+
     private final AvailableCarRepairMapper mapper;
 
     public List<AvailableCarRepairDto> getAvailableCarServices(Long garageId) {
