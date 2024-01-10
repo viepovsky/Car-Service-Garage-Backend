@@ -3,7 +3,18 @@ package com.viepovsky.car;
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.user.User;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +29,19 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "CARS")
-@SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
 public class Car extends BaseEntityAudit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+    @SequenceGenerator(
+            name = "car_id_sequence",
+            sequenceName = "car_id_sequence",
+            initialValue = 5000,
+            allocationSize = 100
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "car_id_sequence"
+    )
     private Long id;
 
     @Column(name = "make")
@@ -52,7 +71,12 @@ public class Car extends BaseEntityAudit {
     )
     private List<CarRepair> carServicesList = new ArrayList<>();
 
-    public Car(Long id, String make, String model, String type, int year, String engine) {
+    public Car(Long id,
+               String make,
+               String model,
+               String type,
+               int year,
+               String engine) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -61,7 +85,11 @@ public class Car extends BaseEntityAudit {
         this.engine = engine;
     }
 
-    public Car(String make, String model, String type, int year, String engine) {
+    public Car(String make,
+               String model,
+               String type,
+               int year,
+               String engine) {
         this.make = make;
         this.model = model;
         this.type = type;

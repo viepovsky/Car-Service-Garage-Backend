@@ -11,7 +11,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CarService {
+
     private final CarRepository carRepository;
+
     private final UserService userService;
 
     public List<Car> getAllCarsForGivenUsername(String username) {

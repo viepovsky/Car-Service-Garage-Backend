@@ -10,6 +10,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class BookingMapper {
+
     private GarageMapper garageMapper;
 
     public BookingDto mapToBookingDto(Booking booking) {

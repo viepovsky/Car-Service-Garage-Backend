@@ -30,11 +30,17 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BookingService {
     private static final Logger LOGGER = LoggerFactory.getLogger(BookingService.class);
+
     private final BookingRepository bookingRepository;
+
     private final GarageService garageService;
+
     private final CarRepairService carRepairService;
+
     private final CarService carService;
+
     private final UserService userService;
+
     private final AvailableCarRepairService availableCarRepairService;
 
     public List<Booking> getAllBookings() {
@@ -131,7 +137,10 @@ public class BookingService {
         return closeTime.isBefore(LocalTime.now());
     }
 
-    private List<LocalTime> getAvailableTimesForBooking(int repairDuration, LocalTime closeTime, List<Booking> unavailableBookingTimeList, LocalTime currentTime) {
+    private List<LocalTime> getAvailableTimesForBooking(int repairDuration,
+                                                        LocalTime closeTime,
+                                                        List<Booking> unavailableBookingTimeList,
+                                                        LocalTime currentTime) {
         List<LocalTime> availableBookingTimes = new ArrayList<>();
         while (!currentTime.plusMinutes(repairDuration).isAfter(closeTime)) {
             boolean isAvailable = true;
@@ -149,7 +158,10 @@ public class BookingService {
         return availableBookingTimes;
     }
 
-    public void createWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Long garageId) {
+    public void createWorkingHoursBooking(LocalDate date,
+                                          LocalTime startHour,
+                                          LocalTime endHour,
+                                          Long garageId) {
         Garage garage = garageService.getGarage(garageId);
         List<Booking> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, BookingStatus.AVAILABLE, garageId);
         if (!isGarageWorkingHoursPresent(bookingList)) {
@@ -164,7 +176,10 @@ public class BookingService {
         }
     }
 
-    private Booking createWorkingHoursBooking(LocalDate date, LocalTime startHour, LocalTime endHour, Garage garage) {
+    private Booking createWorkingHoursBooking(LocalDate date,
+                                              LocalTime startHour,
+                                              LocalTime endHour,
+                                              Garage garage) {
         return new Booking(
                 BookingStatus.AVAILABLE,
                 date,
@@ -187,7 +202,12 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    public void createBooking(List<Long> selectedCarRepairIdList, LocalDate date, LocalTime startHour, Long garageId, Long carId, int repairDuration) {
+    public void createBooking(List<Long> selectedCarRepairIdList,
+                              LocalDate date,
+                              LocalTime startHour,
+                              Long garageId,
+                              Long carId,
+                              int repairDuration) {
         Garage garage = garageService.getGarage(garageId);
         Car car = carService.getCar(carId);
         User user = userService.getUser(car.getUser().getId());
@@ -201,7 +221,10 @@ public class BookingService {
         }
     }
 
-    private Booking createCarRepairBooking(LocalDate date, LocalTime startHour, int repairDuration, Garage garage) {
+    private Booking createCarRepairBooking(LocalDate date,
+                                           LocalTime startHour,
+                                           int repairDuration,
+                                           Garage garage) {
         return new Booking(
                 BookingStatus.WAITING_FOR_CUSTOMER,
                 date,
@@ -213,7 +236,10 @@ public class BookingService {
         );
     }
 
-    private void saveBookingAndCarRepairsForCarAndUser(List<Long> selectedCarRepairIdList, Car car, User user, Booking booking) {
+    private void saveBookingAndCarRepairsForCarAndUser(List<Long> selectedCarRepairIdList,
+                                                       Car car,
+                                                       User user,
+                                                       Booking booking) {
         List<AvailableCarRepair> selectedAvailableCarRepairs = new ArrayList<>();
         List<BigDecimal> repairCosts = new ArrayList<>();
         selectedCarRepairIdList.stream()
