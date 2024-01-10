@@ -16,10 +16,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 class AuthenticationService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
+
     private final UserService userService;
+
     private final PasswordEncoder passwordEncoder;
+
     private final JwtService jwtService;
+
     private final AuthenticationManager authenticationManager;
 
     AuthenticationResponse register(RegisterUserRequest request) {

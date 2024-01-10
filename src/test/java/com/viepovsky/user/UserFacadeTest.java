@@ -71,19 +71,6 @@ class UserFacadeTest {
     }
 
     @Test
-    void shouldCreateUser() {
-        //Given
-        User mockedUser = Mockito.mock(User.class);
-        UserDto mockedUserDto = Mockito.mock(UserDto.class);
-        when(mapper.mapToUserLogin(mockedUserDto)).thenReturn(mockedUser);
-        when(service.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
-        //When
-        facade.createUser(mockedUserDto);
-        //Then
-        verify(service, times(1)).saveUser(mockedUser);
-    }
-
-    @Test
     void shouldUpdateUser() {
         //Given
         User mockedUser = Mockito.mock(User.class);

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CityForecastDto {
+
     private LocalDate date;
 
     private String symbol;

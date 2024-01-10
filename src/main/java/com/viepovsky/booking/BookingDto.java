@@ -14,12 +14,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingDto {
+
     private Long id;
+
     private String status;
+
     private LocalDate date;
+
     private LocalTime startHour;
+
     private LocalTime endHour;
+
     private BigDecimal totalCost;
+
     private List<Long> carServiceDtoIdList;
+
     private GarageDto garageDto;
 }

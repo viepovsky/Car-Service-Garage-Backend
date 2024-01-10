@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GarageDto {
+
     private Long id;
 
     @NotBlank

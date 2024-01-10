@@ -23,8 +23,11 @@ import static java.util.Optional.ofNullable;
 @Component
 @AllArgsConstructor
 class CarApiClient {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CarApiClient.class);
+
     private final RestTemplate restTemplate;
+
     private final CarApiConfig carApiConfig;
 
     public List<Integer> getCarYears() {

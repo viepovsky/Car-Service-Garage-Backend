@@ -1,6 +1,11 @@
 package com.viepovsky.clients.car;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +38,10 @@ class StoredCarApi {
     @Column(name = "date")
     private LocalDate dateFetched;
 
-    public StoredCarApi(List<Integer> carYearsList, List<String> carMakesList, List<String> carTypesList, LocalDate dateFetched) {
+    public StoredCarApi(List<Integer> carYearsList,
+                        List<String> carMakesList,
+                        List<String> carTypesList,
+                        LocalDate dateFetched) {
         this.carYearsList = carYearsList;
         this.carMakesList = carMakesList;
         this.carTypesList = carTypesList;

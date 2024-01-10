@@ -21,8 +21,11 @@ import static java.util.Optional.ofNullable;
 @Component
 @AllArgsConstructor
 class WeatherApiClient {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(WeatherApiClient.class);
+
     private final RestTemplate restTemplate;
+
     private final WeatherApiConfig weatherApiConfig;
 
     public ForecastDto get14DaysForecast(int cityId) {

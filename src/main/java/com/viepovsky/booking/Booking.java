@@ -3,7 +3,17 @@ package com.viepovsky.booking;
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.garage.Garage;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +30,19 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "BOOKING")
-@SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
 public class Booking extends BaseEntityAudit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+    @SequenceGenerator(
+            name = "booking_id_sequence",
+            sequenceName = "booking_id_sequence",
+            initialValue = 5000,
+            allocationSize = 100
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "booking_id_sequence"
+    )
     private Long id;
 
     @Column(name = "status")
@@ -53,7 +71,13 @@ public class Booking extends BaseEntityAudit {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    public Booking(BookingStatus status, LocalDate date, LocalTime startHour, LocalTime endHour, BigDecimal totalCost, List<CarRepair> carRepairList, Garage garage) {
+    public Booking(BookingStatus status,
+                   LocalDate date,
+                   LocalTime startHour,
+                   LocalTime endHour,
+                   BigDecimal totalCost,
+                   List<CarRepair> carRepairList,
+                   Garage garage) {
         this.status = status;
         this.date = date;
         this.startHour = startHour;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
 
     public User getUser(String username) {
@@ -37,13 +38,7 @@ public class UserService {
     public void updateUser(User user) {
         User userToUpdate = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new MyEntityNotFoundException("Username: " + user.getUsername()));
-        userToUpdate.setFirstName(user.getFirstName());
-        userToUpdate.setLastName(user.getLastName());
-        userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setPhoneNumber(user.getPhoneNumber());
-        if (user.getPassword() != null) {
-            userToUpdate.setPassword(user.getPassword());
-        }
+        userToUpdate.updateUser(user);
         userRepository.save(userToUpdate);
     }
 

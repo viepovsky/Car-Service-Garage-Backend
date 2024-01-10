@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @Builder
 @AllArgsConstructor
 public class GarageWorkTimeDto {
+
     private Long id;
 
     private WorkDays day;

@@ -15,9 +15,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WeatherApiService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(WeatherApiService.class);
+
     private final WeatherApiClient weatherApiClient;
+
     private final StoredForecastRepository storedForecastRepository;
+
     private final ForecastMapper mapper;
 
     public void getAndStore14DaysForecast(String city) {

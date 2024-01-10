@@ -16,21 +16,37 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "AVAILABLE_CAR_REPAIRS")
-@SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
-
 public class AvailableCarRepair extends BaseEntityAudit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+    @SequenceGenerator(
+            name = "available_car_repair_id_sequence",
+            sequenceName = "available_car_repair_id_sequence",
+            initialValue = 5000,
+            allocationSize = 100
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "available_car_repair_id_sequence"
+    )
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(
+            name = "name",
+            nullable = false
+    )
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(
+            name = "description",
+            nullable = false
+    )
     private String description;
 
-    @Column(name = "cost", nullable = false)
+    @Column(
+            name = "cost",
+            nullable = false
+    )
     private BigDecimal cost;
 
     @Column(name = "repair_time")
@@ -46,7 +62,13 @@ public class AvailableCarRepair extends BaseEntityAudit {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    public AvailableCarRepair(String name, String description, BigDecimal cost, int repairTimeInMinutes, String premiumMakes, BigDecimal makeMultiplier, Garage garage) {
+    public AvailableCarRepair(String name,
+                              String description,
+                              BigDecimal cost,
+                              int repairTimeInMinutes,
+                              String premiumMakes,
+                              BigDecimal makeMultiplier,
+                              Garage garage) {
         this.name = name;
         this.description = description;
         this.cost = cost;

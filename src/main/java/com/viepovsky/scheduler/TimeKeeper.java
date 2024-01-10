@@ -3,7 +3,9 @@ package com.viepovsky.scheduler;
 import java.time.LocalDate;
 
 public class TimeKeeper {
+
     private static TimeKeeper instance = null;
+
     private LocalDate currentDate;
 
     private TimeKeeper() {

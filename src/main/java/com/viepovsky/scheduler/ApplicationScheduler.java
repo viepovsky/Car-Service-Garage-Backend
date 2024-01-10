@@ -15,13 +15,17 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ApplicationScheduler {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationScheduler.class);
+
     private final CarApiService carApiService;
+
     private final WeatherApiService weatherApiService;
+
     private final GarageService garageService;
 
     @Scheduled(fixedRate = 24 * 60 * 60 * 1000, initialDelay = 0)
-    public void fetchDataFromCarApi() throws InterruptedException {
+    public void fetchDataFromCarApi() {
         TimeKeeper timeKeeper = TimeKeeper.getInstance();
         timeKeeper.setCurrentDate(LocalDate.now());
         LocalDate localDate = timeKeeper.getCurrentDate();

@@ -17,6 +17,7 @@ import java.util.function.Function;
 
 @Service
 class JwtService {
+
     @Value("${jwt.secret.key}")
     private String SECRET_KEY;
 
@@ -57,7 +58,6 @@ class JwtService {
     private Date extractExpiration(String jwtToken) {
         return extractClaim(jwtToken, Claims::getExpiration);
     }
-
 
     private Claims extractAllClaims(String jwtToken) {
         return Jwts.parserBuilder()

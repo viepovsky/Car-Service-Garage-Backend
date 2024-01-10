@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 class ApplicationConfig {
+
     private final UserService service;
 
     @Bean

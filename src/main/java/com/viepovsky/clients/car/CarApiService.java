@@ -13,9 +13,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CarApiService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CarApiService.class);
+
     private final CarApiClient carApiClient;
+
     private final StoredCarApiRepository storedCarApiRepository;
+
     private final TimeKeeper timeKeeper = TimeKeeper.getInstance();
 
     public List<String> getCarMakes() {
