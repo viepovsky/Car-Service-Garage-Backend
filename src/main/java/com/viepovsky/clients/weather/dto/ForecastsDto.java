@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ForecastsDto {
+
     @JsonProperty("date")
     private LocalDate date;
 
