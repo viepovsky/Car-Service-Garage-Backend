@@ -3,8 +3,23 @@ package com.viepovsky.user;
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car.Car;
 import com.viepovsky.car_repair.CarRepair;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,10 +35,18 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "USERS")
-@SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
 public class User extends BaseEntityAudit implements UserDetails {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
+    @SequenceGenerator(
+            name = "user_id_sequence",
+            initialValue = 5000,
+            allocationSize = 100
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_id_sequence"
+    )
     private Long id;
 
     @Column(name = "first_name")
@@ -64,7 +87,15 @@ public class User extends BaseEntityAudit implements UserDetails {
     )
     private List<CarRepair> servicesList = new ArrayList<>();
 
-    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password, Role role, List<Car> carList, List<CarRepair> servicesList) {
+    public User(String firstName,
+                String lastName,
+                String email,
+                String phoneNumber,
+                String username,
+                String password,
+                Role role,
+                List<Car> carList,
+                List<CarRepair> servicesList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -76,13 +107,28 @@ public class User extends BaseEntityAudit implements UserDetails {
         this.servicesList = servicesList;
     }
 
-    public User(String firstName, String lastName, String email, String phoneNumber, String username, String password) {
+    public User(String firstName,
+                String lastName,
+                String email,
+                String phoneNumber,
+                String username,
+                String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.password = password;
+    }
+
+    public void updateUser(User user) {
+        firstName = user.getFirstName();
+        lastName = user.getLastName();
+        email = user.getEmail();
+        phoneNumber = user.getPhoneNumber();
+        if (user.getPassword() != null) {
+            password = user.getPassword();
+        }
     }
 
     @Override

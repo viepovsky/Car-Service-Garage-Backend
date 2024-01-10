@@ -35,14 +35,23 @@ public class UserDto {
 
     private LocalDateTime createdDate;
 
-    public UserDto(Long id, String username, String password, Role role) {
+    public UserDto(Long id,
+                   String username,
+                   String password,
+                   Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
     }
 
-    public UserDto(Long id, String firstName, String lastName, String email, String phoneNumber, String username, LocalDateTime createdDate) {
+    public UserDto(Long id,
+                   String firstName,
+                   String lastName,
+                   String email,
+                   String phoneNumber,
+                   String username,
+                   LocalDateTime createdDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
