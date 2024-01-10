@@ -58,13 +58,6 @@ class UserController {
         return ResponseEntity.ok(userFacade.getUserPass(username));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createUser(@Valid @RequestBody UserDto userDto) {
-        var createdUser = userFacade.createUser(userDto);
-        return ResponseEntity.created(URI.create("/v1/users/information?username=" + createdUser.getUsername())).build();
-    }
-
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> updateUser(@Valid @RequestBody UserDto userDto) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();

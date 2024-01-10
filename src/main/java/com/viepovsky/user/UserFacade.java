@@ -36,11 +36,6 @@ class UserFacade {
         return new PasswordDto(userService.getUserPass(username));
     }
 
-    public User createUser(UserDto userDto) {
-        LOGGER.info("Create user endpoint used with username:{}", userDto.getUsername());
-        return userService.saveUser(mapper.mapToUserLogin(userDto));
-    }
-
     public void updateUser(UserDto userDto) {
         LOGGER.info("Update user endpoint used with username:{}", userDto.getUsername());
         userService.updateUser(mapper.mapToUserLogin(userDto));

@@ -167,25 +167,6 @@ class UserControllerTest {
     }
 
     @Test
-    void testCreateUser() throws Exception {
-        //Given
-        var userDto = new UserDto(1L, "Testname", "Testlastname", "testmail@mail", "858585858558", "testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
-        var user = User.builder().username("test").id(5L).build();
-        Gson gson = getGsonWithProperLocalDateTimeSetting();
-        var jsonContent = gson.toJson(userDto);
-
-        when(facade.createUser(any(UserDto.class))).thenReturn(user);
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonContent)
-                        .characterEncoding("UTF-8")
-                        .header("Authorization", "Bearer " + jwtTokenAdmin))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
-    }
-
-    @Test
     void testUpdateUser() throws Exception {
         //Given
         var userDto = new UserDto(1L, "Testname", "Testlastname", "testmail@mail", "858585858558", "Testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
