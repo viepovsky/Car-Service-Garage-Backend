@@ -3,7 +3,7 @@ package com.viepovsky.car_repair;
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Visit;
 import com.viepovsky.vehicle.model.Vehicle;
-import com.viepovsky.user.AppUser;
+import com.viepovsky.user.model.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -8,6 +8,8 @@ import com.google.gson.stream.JsonWriter;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;

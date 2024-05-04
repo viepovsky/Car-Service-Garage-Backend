@@ -2,6 +2,7 @@ package com.viepovsky.user;
 
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
+import com.viepovsky.user.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

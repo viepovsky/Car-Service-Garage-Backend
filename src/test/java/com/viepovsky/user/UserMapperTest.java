@@ -1,6 +1,8 @@
 package com.viepovsky.user;
 
 import com.viepovsky.user.dto.UserDto;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

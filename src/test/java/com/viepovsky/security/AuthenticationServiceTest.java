@@ -1,6 +1,6 @@
 package com.viepovsky.security;
 
-import com.viepovsky.user.AppUser;
+import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;

@@ -2,8 +2,8 @@ package com.viepovsky.vehicle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.scheduler.ApplicationScheduler;
-import com.viepovsky.user.Role;
-import com.viepovsky.user.AppUser;
+import com.viepovsky.user.model.Role;
+import com.viepovsky.user.model.AppUser;
 import com.viepovsky.vehicle.dto.VehicleDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

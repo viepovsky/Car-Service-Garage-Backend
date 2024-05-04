@@ -1,4 +1,4 @@
-package com.viepovsky.user;
+package com.viepovsky.user.model;
 
 public enum Role {
     ROLE_USER,

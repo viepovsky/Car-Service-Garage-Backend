@@ -1,8 +1,8 @@
 package com.viepovsky.booking;
 
 import com.viepovsky.scheduler.ApplicationScheduler;
-import com.viepovsky.user.Role;
-import com.viepovsky.user.AppUser;
+import com.viepovsky.user.model.Role;
+import com.viepovsky.user.model.AppUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;

@@ -1,6 +1,7 @@
 package com.viepovsky.user;
 
 import com.viepovsky.user.dto.UserDto;
+import com.viepovsky.user.model.AppUser;
 import org.springframework.stereotype.Service;
 
 @Service

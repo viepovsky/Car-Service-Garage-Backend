@@ -1,4 +1,4 @@
-package com.viepovsky.user;
+package com.viepovsky.user.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Visit;

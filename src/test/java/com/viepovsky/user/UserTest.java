@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.scheduler.ApplicationScheduler;
 
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
 import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -26,14 +28,14 @@ class UserTest {
         // Given
         var user =
                 AppUser.builder()
-                        .firstName("Oskar")
-                        .lastName("Test")
-                        .email("testmail@gmail.com")
-                        .mobile("+48756756756")
-                        .username("testusername")
-                        .password("testpassword")
-                        .role(Role.ROLE_USER)
-                        .build();
+                       .firstName("Oskar")
+                       .lastName("Test")
+                       .email("testmail@gmail.com")
+                       .mobile("+48756756756")
+                       .username("testusername")
+                       .password("testpassword")
+                       .role(Role.ROLE_USER)
+                       .build();
         service.saveUser(user);
         // When
         AppUser retrievedUser = service.getUser("testusername");

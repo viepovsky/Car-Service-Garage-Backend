@@ -1,7 +1,7 @@
 package com.viepovsky.vehicle.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.user.AppUser;
+import com.viepovsky.user.model.AppUser;
 
 import jakarta.persistence.*;
 

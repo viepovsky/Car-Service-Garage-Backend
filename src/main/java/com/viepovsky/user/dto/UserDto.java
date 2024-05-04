@@ -1,6 +1,6 @@
 package com.viepovsky.user.dto;
 
-import com.viepovsky.user.Role;
+import com.viepovsky.user.model.Role;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;

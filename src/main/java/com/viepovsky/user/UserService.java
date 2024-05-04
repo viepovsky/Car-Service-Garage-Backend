@@ -1,6 +1,7 @@
 package com.viepovsky.user;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.user.model.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

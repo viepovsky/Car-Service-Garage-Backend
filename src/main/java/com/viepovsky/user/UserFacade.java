@@ -2,6 +2,7 @@ package com.viepovsky.user;
 
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
+import com.viepovsky.user.model.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

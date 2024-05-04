@@ -4,7 +4,7 @@ import com.viepovsky.booking.Visit;
 import com.viepovsky.booking.BookingService;
 import com.viepovsky.booking.BookingStatus;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.user.AppUser;
+import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

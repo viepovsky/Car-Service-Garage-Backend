@@ -3,7 +3,7 @@ package com.viepovsky.car_repair;
 import com.viepovsky.booking.Visit;
 import com.viepovsky.booking.BookingService;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.user.AppUser;
+import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

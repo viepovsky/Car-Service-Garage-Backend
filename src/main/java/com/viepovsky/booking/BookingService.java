@@ -11,7 +11,7 @@ import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
 import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
 import com.viepovsky.garage.available_car_repair.AvailableCarRepairService;
-import com.viepovsky.user.AppUser;
+import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
