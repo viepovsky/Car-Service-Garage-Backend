@@ -1,7 +1,6 @@
-package com.viepovsky.vehicle_services.model;
+package com.viepovsky.offer.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.car_repair.OfferSelected;
 import com.viepovsky.garage.model.Garage;
 
 import jakarta.persistence.*;
@@ -19,16 +18,16 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "OfferCatalog")
-@Table(name = "offer_catalog")
-public class OfferCatalog extends BaseEntityAudit {
+@Entity(name = "CatalogOffer")
+@Table(name = "catalog_offer")
+public class CatalogOffer extends BaseEntityAudit {
     @Id
     @SequenceGenerator(
-            name = "offer_catalog_id_sequence",
-            sequenceName = "offer_catalog_id_sequence",
+            name = "catalog_offer_id_sequence",
+            sequenceName = "catalog_offer_id_sequence",
             initialValue = 5000,
             allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offer_catalog_id_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "catalog_offer_id_sequence")
     private Long id;
 
     @Column(name = "name", nullable = false, length = 128)
@@ -48,16 +47,16 @@ public class OfferCatalog extends BaseEntityAudit {
             name = "garage_id",
             nullable = false,
             referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "offer_catalog_garage_id_fk"))
+            foreignKey = @ForeignKey(name = "catalog_offer_garage_id_fk"))
     private Garage garage;
 
     @OneToMany(
-            targetEntity = OfferSelected.class,
-            mappedBy = "offerCatalog",
+            targetEntity = SelectedOffer.class,
+            mappedBy = "catalogOffer",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    private List<OfferSelected> selectedOffers = new ArrayList<>();
+    private List<SelectedOffer> selectedOffers = new ArrayList<>();
 
-    public OfferCatalog(
+    public CatalogOffer(
             String name,
             String description,
             BigDecimal price,
@@ -70,7 +69,7 @@ public class OfferCatalog extends BaseEntityAudit {
         this.garage = garage;
     }
 
-    public OfferCatalog(OfferCatalog availableCarRepair) {
+    public CatalogOffer(CatalogOffer availableCarRepair) {
         this.id = availableCarRepair.getId();
         this.name = availableCarRepair.getName();
         this.description = availableCarRepair.getDescription();

@@ -1,4 +1,4 @@
-package com.viepovsky.car_repair;
+package com.viepovsky.offer.dto;
 
 import com.viepovsky.booking.BookingDto;
 import com.viepovsky.vehicle.dto.VehicleDto;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-class CarRepairDto {
+public class SelectedOfferDto {
     private Long id;
     private String name;
     private String description;
@@ -21,7 +21,7 @@ class CarRepairDto {
     private BookingDto bookingDto;
     private String status;
 
-    public CarRepairDto(Long id, String name, String description, BigDecimal cost, int repairTimeInMinutes) {
+    public SelectedOfferDto(Long id, String name, String description, BigDecimal cost, int repairTimeInMinutes) {
         this.id = id;
         this.name = name;
         this.description = description;

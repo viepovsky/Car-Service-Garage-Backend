@@ -1,4 +1,4 @@
-package com.viepovsky.vehicle_services.dto;
+package com.viepovsky.offer.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
-public class OfferCatalogDto {
+public class CatalogOfferDto {
 
     private Long id;
 

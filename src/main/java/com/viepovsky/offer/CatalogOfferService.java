@@ -1,9 +1,9 @@
-package com.viepovsky.vehicle_services;
+package com.viepovsky.offer;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.vehicle_services.model.OfferCatalog;
+import com.viepovsky.offer.model.CatalogOffer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,22 +11,22 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OfferCatalogService {
+public class CatalogOfferService {
 
-    private final OfferCatalogRepository availableCarRepairRepository;
+    private final CatalogOfferRepository availableCarRepairRepository;
 
     private final GarageService garageService;
 
-    public List<OfferCatalog> getAllAvailableCarRepair(Long garageId) {
+    public List<CatalogOffer> getAllAvailableCarRepair(Long garageId) {
         return availableCarRepairRepository.findAllByGarageId(garageId);
     }
 
-    public OfferCatalog getAvailableCarRepair(Long id) {
+    public CatalogOffer getAvailableCarRepair(Long id) {
         return availableCarRepairRepository.findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", id));
     }
 
-    public void saveAvailableCarRepair(OfferCatalog availableCarRepair, Long garageId) {
+    public void saveAvailableCarRepair(CatalogOffer availableCarRepair, Long garageId) {
         Garage garage = garageService.getGarage(garageId);
         availableCarRepair.setGarage(garage);
         garage.getAvailableServices().add(availableCarRepair);

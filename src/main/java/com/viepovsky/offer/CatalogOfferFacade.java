@@ -1,8 +1,8 @@
-package com.viepovsky.vehicle_services;
+package com.viepovsky.offer;
 
 import com.viepovsky.mapper.ServiceCatalogMapper;
-import com.viepovsky.vehicle_services.dto.OfferCatalogDto;
-import com.viepovsky.vehicle_services.model.OfferCatalog;
+import com.viepovsky.offer.dto.CatalogOfferDto;
+import com.viepovsky.offer.model.CatalogOffer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,23 +12,23 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-class OfferCatalogFacade {
+class CatalogOfferFacade {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OfferCatalogFacade.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CatalogOfferFacade.class);
 
-    private final OfferCatalogService availableCarRepairService;
+    private final CatalogOfferService availableCarRepairService;
 
     private final ServiceCatalogMapper mapper;
 
-    public List<OfferCatalogDto> getAvailableCarServices(Long garageId) {
+    public List<CatalogOfferDto> getAvailableCarServices(Long garageId) {
         LOGGER.info("Get available car services enpoint used with garage id:{}", garageId);
-        List<OfferCatalog> availableCarRepairList = availableCarRepairService.getAllAvailableCarRepair(garageId);
+        List<CatalogOffer> availableCarRepairList = availableCarRepairService.getAllAvailableCarRepair(garageId);
         return mapper.mapToAvailableCarServiceDtoList(availableCarRepairList);
     }
 
-    public void createAvailableCarService(OfferCatalogDto availableCarRepairDto, Long garageId) {
+    public void createAvailableCarService(CatalogOfferDto availableCarRepairDto, Long garageId) {
         LOGGER.info("Create available car service endpoint used with garage id:{}", garageId);
-        OfferCatalog availableCarRepair = mapper.mapToAvailableCarService(availableCarRepairDto);
+        CatalogOffer availableCarRepair = mapper.mapToAvailableCarService(availableCarRepairDto);
         availableCarRepairService.saveAvailableCarRepair(availableCarRepair, garageId);
     }
 

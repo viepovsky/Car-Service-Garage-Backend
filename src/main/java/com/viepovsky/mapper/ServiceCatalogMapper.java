@@ -1,7 +1,7 @@
 package com.viepovsky.mapper;
 
-import com.viepovsky.vehicle_services.dto.OfferCatalogDto;
-import com.viepovsky.vehicle_services.model.OfferCatalog;
+import com.viepovsky.offer.dto.CatalogOfferDto;
+import com.viepovsky.offer.model.CatalogOffer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class ServiceCatalogMapper {
 
-    public OfferCatalogDto mapToAvailableCarServiceDto(OfferCatalog availableCarRepair) {
+    public CatalogOfferDto mapToAvailableCarServiceDto(CatalogOffer availableCarRepair) {
         //TODO fix this
         return null;
 //        return new AvailableCarRepairDto(
@@ -24,12 +24,12 @@ public class ServiceCatalogMapper {
 //        );
     }
 
-    public OfferCatalog mapToAvailableCarService(OfferCatalogDto availableCarRepairDto) {
+    public CatalogOffer mapToAvailableCarService(CatalogOfferDto availableCarRepairDto) {
         //TODO fix this
         return null;
     }
 
-    public List<OfferCatalogDto> mapToAvailableCarServiceDtoList(List<OfferCatalog> availableCarRepairList) {
+    public List<CatalogOfferDto> mapToAvailableCarServiceDtoList(List<CatalogOffer> availableCarRepairList) {
         return availableCarRepairList.stream()
                 .map(this::mapToAvailableCarServiceDto)
                 .toList();

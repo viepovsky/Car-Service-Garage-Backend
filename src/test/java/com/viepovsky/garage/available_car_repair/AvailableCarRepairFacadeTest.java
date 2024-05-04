@@ -1,7 +1,7 @@
 package com.viepovsky.garage.available_car_repair;
 
-import com.viepovsky.vehicle_services.*;
-import com.viepovsky.vehicle_services.model.OfferCatalog;
+import com.viepovsky.offer.*;
+import com.viepovsky.offer.model.CatalogOffer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ class AvailableCarRepairFacadeTest {
     private AvailableCarRepairFacade facade;
 
     @Mock
-    private OfferCatalogService service;
+    private CatalogOfferService service;
 
     @Mock
     private AvailableCarRepairMapper mapper;
@@ -29,7 +29,7 @@ class AvailableCarRepairFacadeTest {
     @Test
     void shouldGetAvailableCarServices() {
         //Given
-        List<OfferCatalog> carServiceList = List.of(Mockito.mock(OfferCatalog.class));
+        List<CatalogOffer> carServiceList = List.of(Mockito.mock(CatalogOffer.class));
         List<AvailableCarRepairDto> carServiceDtoList = List.of(Mockito.mock(AvailableCarRepairDto.class));
         when(service.getAllAvailableCarRepair(1L)).thenReturn(carServiceList);
         when(mapper.mapToAvailableCarServiceDtoList(carServiceList)).thenReturn(carServiceDtoList);
@@ -44,7 +44,7 @@ class AvailableCarRepairFacadeTest {
     void shouldCreateAvailableCarService() {
         //Given
         AvailableCarRepairDto serviceDto = Mockito.mock(AvailableCarRepairDto.class);
-        OfferCatalog service = Mockito.mock(OfferCatalog.class);
+        CatalogOffer service = Mockito.mock(CatalogOffer.class);
         when(mapper.mapToAvailableCarService(serviceDto)).thenReturn(service);
         doNothing().when(this.service).saveAvailableCarRepair(service, 1L);
         //When

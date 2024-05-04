@@ -1,7 +1,8 @@
-package com.viepovsky.car_repair;
+package com.viepovsky.mapper;
 
 import com.viepovsky.booking.BookingMapper;
-import com.viepovsky.mapper.VehicleMapper;
+import com.viepovsky.offer.dto.SelectedOfferDto;
+import com.viepovsky.offer.model.SelectedOffer;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,11 +10,11 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-class CarRepairMapper {
+public class OfferSelectedMapper {
     private VehicleMapper carMapper;
     private BookingMapper bookingMapper;
 
-    public List<CarRepairDto> mapToCarServiceDtoList(List<OfferSelected> carRepairList) {
+    public List<SelectedOfferDto> mapToCarServiceDtoList(List<SelectedOffer> carRepairList) {
         //TODO fix this
         return null;
 //        return carRepairList.stream()

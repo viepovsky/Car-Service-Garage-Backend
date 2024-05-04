@@ -6,7 +6,7 @@ INSERT INTO garage (id, name, address_id) VALUES
 (1, 'Fast Furious Garage', 1),
 (2, 'Prestige Car Garage', 2);
 
-INSERT INTO offer_catalog (id, name, description, price, repair_time, garage_id) VALUES
+INSERT INTO catalog_offer (id, name, description, price, repair_time, garage_id) VALUES
 (1, 'Oil change', 'Oil change description', 100.00, 30, 1),
 (2, 'Tire change', 'Tire change description', 200.00, 50, 1),
 (3, 'Wheel change', 'Wheel change description', 120.00, 30, 1),

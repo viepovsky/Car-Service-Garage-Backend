@@ -1,4 +1,4 @@
-package com.viepovsky.car_repair;
+package com.viepovsky.offer.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

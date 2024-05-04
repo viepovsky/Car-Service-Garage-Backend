@@ -1,5 +1,7 @@
 package com.viepovsky.car_repair;
 
+import com.viepovsky.offer.OfferSelectedFacade;
+import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
@@ -38,7 +40,7 @@ class CarRepairControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CarRepairFacade facade;
+    private OfferSelectedFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -74,7 +76,7 @@ class CarRepairControllerTest {
     @Test
     void testShouldGetEmptyCarServiceList() throws Exception {
         //Given
-        List<CarRepairDto> emptyList = List.of();
+        List<SelectedOfferDto> emptyList = List.of();
         when(facade.getCarRepairs(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
@@ -89,7 +91,7 @@ class CarRepairControllerTest {
     @Test
     void testShouldGetCarServiceList() throws Exception {
         //Given
-        List<CarRepairDto> carList = List.of(new CarRepairDto(1L, "Test name", "Test description", BigDecimal.valueOf(50), 60));
+        List<SelectedOfferDto> carList = List.of(new SelectedOfferDto(1L, "Test name", "Test description", BigDecimal.valueOf(50), 60));
         when(facade.getCarRepairs(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders

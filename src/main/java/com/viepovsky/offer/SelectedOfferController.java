@@ -1,5 +1,6 @@
-package com.viepovsky.car_repair;
+package com.viepovsky.offer;
 
+import com.viepovsky.offer.dto.SelectedOfferDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,11 @@ import java.util.List;
 @RequestMapping("/v1/car-repairs")
 @RequiredArgsConstructor
 @Validated
-class CarRepairController {
-    private final CarRepairFacade carRepairFacade;
+class SelectedOfferController {
+    private final SelectedOfferFacade carRepairFacade;
 
     @GetMapping
-    ResponseEntity<List<CarRepairDto>> getCarRepairs(@RequestParam @NotBlank String username) {
+    ResponseEntity<List<SelectedOfferDto>> getCarRepairs(@RequestParam @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

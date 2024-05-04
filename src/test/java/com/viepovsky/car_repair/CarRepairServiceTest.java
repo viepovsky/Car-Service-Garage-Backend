@@ -4,6 +4,10 @@ import com.viepovsky.booking.Visit;
 import com.viepovsky.booking.BookingService;
 import com.viepovsky.booking.BookingStatus;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.offer.OfferSelectedRepository;
+import com.viepovsky.offer.SelectedOfferService;
+import com.viepovsky.offer.model.SelectedOffer;
+import com.viepovsky.offer.model.RepairStatus;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -28,10 +32,10 @@ import static org.mockito.Mockito.*;
 @DisplayName("Car Service Db Service Tests")
 class CarRepairServiceTest {
     @InjectMocks
-    private CarRepairService carRepairService;
+    private SelectedOfferService carRepairService;
 
     @Mock
-    private CarRepairRepository carRepairRepository;
+    private OfferSelectedRepository carRepairRepository;
 
     @Mock
     private UserService userService;
@@ -42,15 +46,16 @@ class CarRepairServiceTest {
     @Test
     void testGetCarRepairs() {
         //Given
-        List<OfferSelected> carRepairList = new ArrayList<>();
-        OfferSelected mockedCarRepair = Mockito.mock(OfferSelected.class);
+        List<SelectedOffer> carRepairList = new ArrayList<>();
+        SelectedOffer mockedCarRepair = Mockito.mock(SelectedOffer.class);
         carRepairList.add(mockedCarRepair);
         AppUser mockedUser = Mockito.mock(AppUser.class);
         when(userService.getUser(anyString())).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
-        when(carRepairRepository.findCarServicesByName(1L)).thenReturn(carRepairList);
+        //TODO fix it
+//        when(carRepairRepository.findAllOfferSelected(1L)).thenReturn(carRepairList);
         //When
-        List<OfferSelected> retrievedCarRepairList = carRepairService.getCarRepairs("username");
+        List<SelectedOffer> retrievedCarRepairList = carRepairService.getCarRepairs("username");
         //Then
         assertEquals(1, retrievedCarRepairList.size());
     }
@@ -58,7 +63,7 @@ class CarRepairServiceTest {
     @Test
     void shouldGetCarRepair() {
         //Given
-        var carRepair = new OfferSelected();
+        var carRepair = new SelectedOffer();
         when(carRepairRepository.findById(anyLong())).thenReturn(Optional.of(carRepair));
         //When
         var retrievedCarRepair = carRepairService.getCarRepair(5L);
@@ -70,8 +75,8 @@ class CarRepairServiceTest {
     void testDeleteCarServiceMoreThanOneService() {
         //Given
         Visit booking = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(12, 0), BigDecimal.valueOf(300), new ArrayList<>(), null);
-        OfferSelected carRepair = new OfferSelected("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
-        OfferSelected carRepair2 = new OfferSelected("Testname2", "Testdescription2", BigDecimal.valueOf(250), 90, null, null, booking, RepairStatus.AWAITING);
+        SelectedOffer carRepair = new SelectedOffer("Testdescription", BigDecimal.valueOf(50), 30, null, booking, RepairStatus.AWAITING);
+        SelectedOffer carRepair2 = new SelectedOffer("Testdescription2", BigDecimal.valueOf(250), 90, null, booking, RepairStatus.AWAITING);
         booking.getCarRepairList().add(carRepair);
         booking.getCarRepairList().add(carRepair2);
 
@@ -94,7 +99,7 @@ class CarRepairServiceTest {
     void testDeleteCarServiceOnlyOneService() {
         //Given
         Visit booking = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(10, 30), BigDecimal.valueOf(50), new ArrayList<>(), null);
-        OfferSelected carRepair = new OfferSelected("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
+        SelectedOffer carRepair = new SelectedOffer("Testdescription", BigDecimal.valueOf(50), 30, null, booking, RepairStatus.AWAITING);
         booking.getCarRepairList().add(carRepair);
 
         when(carRepairRepository.findById(1L)).thenReturn(Optional.of(carRepair));

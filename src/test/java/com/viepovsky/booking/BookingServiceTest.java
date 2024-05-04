@@ -2,13 +2,13 @@ package com.viepovsky.booking;
 
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.vehicle.VehicleService;
-import com.viepovsky.car_repair.OfferSelected;
-import com.viepovsky.car_repair.CarRepairService;
+import com.viepovsky.offer.model.SelectedOffer;
+import com.viepovsky.offer.SelectedOfferService;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.vehicle_services.model.OfferCatalog;
-import com.viepovsky.vehicle_services.OfferCatalogService;
+import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.offer.CatalogOfferService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class BookingServiceTest {
     private GarageService garageService;
 
     @Mock
-    private CarRepairService carRepairService;
+    private SelectedOfferService carRepairService;
 
     @Mock
     private VehicleService carService;
@@ -52,7 +52,7 @@ class BookingServiceTest {
     private UserService userService;
 
     @Mock
-    private OfferCatalogService availableCarRepairService;
+    private CatalogOfferService availableCarRepairService;
 
     @Test
     void testGetAllBookings() {
@@ -84,16 +84,16 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
 
-        OfferSelected carRepair = new OfferSelected();
-        carRepair.setRepairTimeInMinutes(50);
+        SelectedOffer carRepair = new SelectedOffer();
+        carRepair.setProbableRepairTime(50);
 
-        List<OfferSelected> carRepairList = List.of(carRepair);
+        List<SelectedOffer> carRepairList = List.of(carRepair);
         Garage garage = new Garage();
         garage.setId(5L);
 
         Visit bookedService = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(10, 0), LocalTime.of(10, 50), null, carRepairList, garage);
         bookedService.setId(1L);
-        carRepair.setBooking(bookedService);
+        carRepair.setVisit(bookedService);
         Visit booking = new Visit(BookingStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null);
         List<Visit> bookingList = new ArrayList<>();
         bookingList.add(booking);
@@ -203,8 +203,8 @@ class BookingServiceTest {
         Vehicle car = Mockito.mock(Vehicle.class);
         user.setVehicles(List.of(car));
         List<LocalTime> localTimeList = List.of(LocalTime.of(10, 0), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50), LocalTime.of(11, 0));
-        OfferCatalog availableCarRepair = new OfferCatalog(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
-        OfferCatalog availableCarRepair2 = new OfferCatalog(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
+        CatalogOffer availableCarRepair = new CatalogOffer(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
+        CatalogOffer availableCarRepair2 = new CatalogOffer(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
         when(carService.getCar(anyLong())).thenReturn(car);

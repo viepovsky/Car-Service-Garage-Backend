@@ -2,15 +2,15 @@ package com.viepovsky.booking;
 
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.vehicle.VehicleService;
-import com.viepovsky.car_repair.OfferSelected;
-import com.viepovsky.car_repair.CarRepairService;
-import com.viepovsky.car_repair.RepairStatus;
+import com.viepovsky.offer.model.SelectedOffer;
+import com.viepovsky.offer.SelectedOfferService;
+import com.viepovsky.offer.model.RepairStatus;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.vehicle_services.model.OfferCatalog;
-import com.viepovsky.vehicle_services.OfferCatalogService;
+import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.offer.CatalogOfferService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +34,13 @@ public class BookingService {
 
     private final GarageService garageService;
 
-    private final CarRepairService carRepairService;
+    private final SelectedOfferService carRepairService;
 
     private final VehicleService carService;
 
     private final UserService userService;
 
-    private final OfferCatalogService availableCarRepairService;
+    private final CatalogOfferService availableCarRepairService;
 
     public List<Visit> getAllBookings() {
         return bookingRepository.findAll();
@@ -62,10 +62,10 @@ public class BookingService {
 
     public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, Long serviceId) {
         var carRepair = carRepairService.getCarRepair(serviceId);
-        var reservedBooking = getBookingById(carRepair.getBooking().getId());
+        var reservedBooking = getBookingById(carRepair.getVisit().getId());
         int repairDuration = reservedBooking.getCarRepairList()
                 .stream()
-                .mapToInt(OfferSelected::getRepairTimeInMinutes)
+                .mapToInt(SelectedOffer::getProbableRepairTime)
                 .sum();
         Long garageId = reservedBooking.getGarage().getId();
 
@@ -239,23 +239,21 @@ public class BookingService {
                                                        Vehicle car,
                                                        AppUser user,
                                                        Visit booking) {
-        List<OfferCatalog> selectedAvailableCarRepairs = new ArrayList<>();
+        List<CatalogOffer> selectedAvailableCarRepairs = new ArrayList<>();
         List<BigDecimal> repairCosts = new ArrayList<>();
         selectedCarRepairIdList.stream()
-                .map(id -> new OfferCatalog(availableCarRepairService.getAvailableCarRepair(id)))
+                .map(id -> new CatalogOffer(availableCarRepairService.getAvailableCarRepair(id)))
                 .peek(repair -> multiplyCarRepairCostIfCarIsPremiumMake(car, repair))
                 .peek(selectedAvailableCarRepairs::add)
-                .map(OfferCatalog::getPrice)
+                .map(CatalogOffer::getPrice)
                 .forEach(repairCosts::add);
 
-        List<OfferSelected> selectedCarRepairs = selectedAvailableCarRepairs.stream()
-                                                                            .map(selectedService -> new OfferSelected(
-                        selectedService.getName(),
-                        selectedService.getDescription(),
+        List<SelectedOffer> selectedCarRepairs = selectedAvailableCarRepairs.stream()
+                                                                            .map(selectedService -> new SelectedOffer(
+                                                                                    selectedService.getDescription(),
                         selectedService.getPrice(),
                         selectedService.getProbableRepairTime(),
-                        car,
-                        user,
+                                                                                    user,
                         booking,
                         RepairStatus.AWAITING
                 ))
@@ -276,7 +274,7 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    private void multiplyCarRepairCostIfCarIsPremiumMake(Vehicle car, OfferCatalog availableCarRepair) {
+    private void multiplyCarRepairCostIfCarIsPremiumMake(Vehicle car, CatalogOffer availableCarRepair) {
         //TODO fix it
 //        if (availableCarRepair.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
 //            BigDecimal repairCost = availableCarRepair.getCost();
