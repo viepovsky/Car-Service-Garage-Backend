@@ -1,4 +1,4 @@
-package com.viepovsky.car;
+package com.viepovsky.vehicle;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

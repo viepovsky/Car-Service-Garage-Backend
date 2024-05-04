@@ -1,4 +1,4 @@
-package com.viepovsky.car;
+package com.viepovsky.vehicle;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.AppUser;

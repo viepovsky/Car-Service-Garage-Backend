@@ -37,9 +37,17 @@ INSERT INTO app_user (id, first_name, last_name, email, mobile, username, passwo
 (1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 'ROLE_USER', CURRENT_TIMESTAMP),
 (2, 'testName', 'testLastName', 'test@email.com', '00555555555', 'testadmin', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 'ROLE_ADMIN', CURRENT_TIMESTAMP);
 
-INSERT INTO vehicle (id, make, model, production_year, type, engine, user_id) VALUES
-(1, 'BMW', '3 Series', 2014, 'Sedan', 'Diesel', 1),
-(2, 'Volvo', 'XC60', 2018, 'SUV', 'Diesel', 1);
+INSERT INTO make (id, name) VALUES
+(1, 'BMW'),
+(2, 'Volvo');
+
+INSERT INTO model (id, name, make_id, type) VALUES
+(1, '3 Series', 1, 'SEDAN'),
+(2, 'XC60', 2, 'SUV');
+
+INSERT INTO vehicle (id, license_plate, model_id, manufactured_year, engine_type, user_id) VALUES
+(1, 'PKN11111', 1, 2014, 'DIESEL', 1),
+(2, 'PO11111', 2, 2018, 'PETROL', 1);
 
 CREATE SEQUENCE IF NOT EXISTS bookings_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE IF NOT EXISTS date_seq START WITH 0 INCREMENT BY 1 MINVALUE 0;

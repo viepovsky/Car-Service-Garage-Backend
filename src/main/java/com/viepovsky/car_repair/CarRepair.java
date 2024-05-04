@@ -2,7 +2,7 @@ package com.viepovsky.car_repair;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Visit;
-import com.viepovsky.car.Vehicle;
+import com.viepovsky.vehicle.Vehicle;
 import com.viepovsky.user.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

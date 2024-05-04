@@ -1,4 +1,4 @@
-package com.viepovsky.car;
+package com.viepovsky.vehicle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.scheduler.ApplicationScheduler;

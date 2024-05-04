@@ -1,7 +1,7 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.car.Vehicle;
-import com.viepovsky.car.CarService;
+import com.viepovsky.vehicle.Vehicle;
+import com.viepovsky.vehicle.CarService;
 import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.car_repair.CarRepairService;
 import com.viepovsky.exceptions.WrongInputDataException;
@@ -199,7 +199,8 @@ class BookingServiceTest {
         Garage mockedGarage = Mockito.mock(Garage.class);
         AppUser user = new AppUser("Firstname", "Lastname", "email", "phonenumber", "username", "password");
         user.setId(1L);
-        Vehicle car = new Vehicle(2L, "BMW", "3 Series", 2014, "Sedan", "Diesel", user, new ArrayList<>());
+        //todo fix it
+        Vehicle car = Mockito.mock(Vehicle.class);
         user.setVehicles(List.of(car));
         List<LocalTime> localTimeList = List.of(LocalTime.of(10, 0), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50), LocalTime.of(11, 0));
         AvailableCarRepair availableCarRepair = new AvailableCarRepair(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);

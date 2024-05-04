@@ -1,4 +1,4 @@
-package com.viepovsky.car;
+package com.viepovsky.vehicle;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

@@ -1,7 +1,7 @@
 package com.viepovsky.car_repair;
 
 import com.viepovsky.booking.BookingDto;
-import com.viepovsky.car.CarDto;
+import com.viepovsky.vehicle.CarDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

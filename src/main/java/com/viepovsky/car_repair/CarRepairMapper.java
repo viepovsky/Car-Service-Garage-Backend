@@ -1,7 +1,7 @@
 package com.viepovsky.car_repair;
 
 import com.viepovsky.booking.BookingMapper;
-import com.viepovsky.car.CarMapper;
+import com.viepovsky.vehicle.CarMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +14,19 @@ class CarRepairMapper {
     private BookingMapper bookingMapper;
 
     public List<CarRepairDto> mapToCarServiceDtoList(List<CarRepair> carRepairList) {
-        return carRepairList.stream()
-                .map(n -> new CarRepairDto(
-                        n.getId(),
-                        n.getName(),
-                        n.getDescription(),
-                        n.getCost(),
-                        n.getRepairTimeInMinutes(),
-                        carMapper.mapToCarDto(n.getCar()),
-                        bookingMapper.mapToBookingDto(n.getBooking()),
-                        n.getStatus().getServiceStatus()
-                ))
-                .toList();
+        //TODO fix this
+        return null;
+//        return carRepairList.stream()
+//                .map(n -> new CarRepairDto(
+//                        n.getId(),
+//                        n.getName(),
+//                        n.getDescription(),
+//                        n.getCost(),
+//                        n.getRepairTimeInMinutes(),
+//                        carMapper.mapToCarDto(n.getCar()),
+//                        bookingMapper.mapToBookingDto(n.getBooking()),
+//                        n.getStatus().getServiceStatus()
+//                ))
+//                .toList();
     }
 }

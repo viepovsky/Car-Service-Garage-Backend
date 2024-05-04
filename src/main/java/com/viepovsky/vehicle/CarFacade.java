@@ -1,4 +1,4 @@
-package com.viepovsky.car;
+package com.viepovsky.vehicle;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

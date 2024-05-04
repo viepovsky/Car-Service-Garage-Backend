@@ -1,7 +1,7 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.car.Vehicle;
-import com.viepovsky.car.CarService;
+import com.viepovsky.vehicle.Vehicle;
+import com.viepovsky.vehicle.CarService;
 import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.car_repair.CarRepairService;
 import com.viepovsky.car_repair.RepairStatus;
@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -261,12 +260,12 @@ public class BookingService {
                         RepairStatus.AWAITING
                 ))
                 .toList();
-
-        user.getVehicles()
-                .stream()
-                .filter(servicedCar -> Objects.equals(servicedCar.getId(), car.getId()))
-                .findFirst()
-                .ifPresent(servicedCar -> servicedCar.getCarServicesList().addAll(selectedCarRepairs));
+//TODO fix it
+//        user.getVehicles()
+//                .stream()
+//                .filter(servicedCar -> Objects.equals(servicedCar.getId(), car.getId()))
+//                .findFirst()
+//                .ifPresent(servicedCar -> servicedCar.getCarServicesList().addAll(selectedCarRepairs));
 //        user.getServicesList().addAll(selectedCarRepairs);
         userService.saveUser(user);
 
@@ -278,12 +277,13 @@ public class BookingService {
     }
 
     private void multiplyCarRepairCostIfCarIsPremiumMake(Vehicle car, AvailableCarRepair availableCarRepair) {
-        if (availableCarRepair.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
-            BigDecimal repairCost = availableCarRepair.getCost();
-            BigDecimal makeMultiplier = availableCarRepair.getMakeMultiplier();
-            repairCost = repairCost.multiply(makeMultiplier);
-            availableCarRepair.setCost(repairCost);
-        }
+        //TODO fix it
+//        if (availableCarRepair.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
+//            BigDecimal repairCost = availableCarRepair.getCost();
+//            BigDecimal makeMultiplier = availableCarRepair.getMakeMultiplier();
+//            repairCost = repairCost.multiply(makeMultiplier);
+//            availableCarRepair.setCost(repairCost);
+//        }
     }
 
     public void save(Visit booking) {

@@ -1,17 +1,17 @@
 package com.viepovsky.user;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.scheduler.ApplicationScheduler;
+
 import jakarta.transaction.Transactional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @MockBean(ApplicationScheduler.class)
@@ -19,17 +19,25 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("User Entity Tests")
 class UserTest {
 
-    @Autowired
-    private UserService service;
+    @Autowired private UserService service;
 
     @Test
     public void testSaveAndRetrieveUser() {
-        //Given
-        AppUser user = new AppUser("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", Role.ROLE_USER, new ArrayList<>(), new ArrayList<>());
+        // Given
+        var user =
+                AppUser.builder()
+                        .firstName("Oskar")
+                        .lastName("Test")
+                        .email("testmail@gmail.com")
+                        .mobile("+48756756756")
+                        .username("testusername")
+                        .password("testpassword")
+                        .role(Role.ROLE_USER)
+                        .build();
         service.saveUser(user);
-        //When
+        // When
         AppUser retrievedUser = service.getUser("testusername");
-        //Then
+        // Then
         assertEquals(user.getFirstName(), retrievedUser.getFirstName());
         assertEquals(user.getEmail(), retrievedUser.getEmail());
         assertEquals(user.getCreatedDate(), retrievedUser.getCreatedDate());
@@ -39,28 +47,40 @@ class UserTest {
 
     @Test
     public void testUpdateAndDeleteUser() {
-        //Given
-        AppUser user = new AppUser("Oskar", "Test", "testmail@gmail.com", "+48756756756", "testusername", "testpassword", Role.ROLE_USER, new ArrayList<>(), new ArrayList<>());
+        // Given
+        var user =
+                AppUser.builder()
+                        .firstName("Oskar")
+                        .lastName("Test")
+                        .email("testmail@gmail.com")
+                        .mobile("+48756756756")
+                        .username("testusername")
+                        .password("testpassword")
+                        .role(Role.ROLE_USER)
+                        .build();
         service.saveUser(user);
         AppUser userToUpdate = service.getUser("testusername");
         userToUpdate.setFirstName("Wiktor");
         userToUpdate.setEmail("tested@gmail.com");
-        //When
+        // When
         service.updateUser(userToUpdate);
         AppUser updatedUser = service.getUser(userToUpdate.getUsername());
         service.deleteUser("testusername");
-        //Then
+        // Then
         assertEquals(userToUpdate.getId(), updatedUser.getId());
         assertEquals("Wiktor", updatedUser.getFirstName());
         assertEquals("tested@gmail.com", updatedUser.getEmail());
-        assertThrows(MyEntityNotFoundException.class, () -> service.getUser(updatedUser.getUsername()));
+        assertThrows(
+                MyEntityNotFoundException.class, () -> service.getUser(updatedUser.getUsername()));
         System.out.println(updatedUser.getId());
     }
 
     @Test
     public void testThrowsMyEntityNotFoundException() {
-        //Given & When & Then
-        MyEntityNotFoundException exception = assertThrows(MyEntityNotFoundException.class, () -> service.getUser("testusername"));
+        // Given & When & Then
+        MyEntityNotFoundException exception =
+                assertThrows(
+                        MyEntityNotFoundException.class, () -> service.getUser("testusername"));
         assertEquals("Username: testusername", exception.getMessage());
         assertNull(exception.getRecordId());
     }
