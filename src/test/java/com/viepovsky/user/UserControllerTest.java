@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
 import com.viepovsky.user.model.AppUser;

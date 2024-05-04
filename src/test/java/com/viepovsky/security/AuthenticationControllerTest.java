@@ -1,7 +1,7 @@
 package com.viepovsky.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;

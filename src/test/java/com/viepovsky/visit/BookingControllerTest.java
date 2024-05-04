@@ -1,6 +1,6 @@
 package com.viepovsky.visit;
 
-import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.visit.dto.VisitDto;

@@ -1,9 +1,9 @@
 package com.viepovsky.visit.model;
 
-import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.entity_audit.BaseEntityAudit;
 import com.viepovsky.vehicle.model.Vehicle;
 
 import jakarta.persistence.*;

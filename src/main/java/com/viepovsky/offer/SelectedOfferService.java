@@ -1,11 +1,12 @@
 package com.viepovsky.offer;
 
-import com.viepovsky.visit.model.Visit;
-import com.viepovsky.visit.VisitService;
-import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.offer.model.SelectedOffer;
-import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
+import com.viepovsky.visit.VisitService;
+import com.viepovsky.visit.model.Visit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;

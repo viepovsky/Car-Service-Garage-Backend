@@ -1,7 +1,7 @@
 package com.viepovsky.clients.weather;
 
 import com.viepovsky.clients.weather.dto.CityForecastDto;
-import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
 import io.jsonwebtoken.Jwts;

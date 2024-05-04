@@ -4,7 +4,9 @@ import com.viepovsky.clients.weather.dto.CityForecastDto;
 import com.viepovsky.clients.weather.dto.ForecastDto;
 import com.viepovsky.clients.weather.dto.ForecastsDto;
 import com.viepovsky.clients.weather.dto.LocationDto;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

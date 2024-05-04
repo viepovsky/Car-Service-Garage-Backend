@@ -1,6 +1,6 @@
 package com.viepovsky.vehicle;
 
-import com.viepovsky.mapper.VehicleMapper;
+import com.viepovsky.utility.mapper.VehicleMapper;
 import com.viepovsky.vehicle.dto.VehicleDto;
 import com.viepovsky.vehicle.model.Vehicle;
 import lombok.RequiredArgsConstructor;

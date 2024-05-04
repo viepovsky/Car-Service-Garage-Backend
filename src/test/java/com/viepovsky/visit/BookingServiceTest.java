@@ -4,7 +4,7 @@ import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.vehicle.VehicleService;
 import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.offer.SelectedOfferService;
-import com.viepovsky.exceptions.WrongInputDataException;
+import com.viepovsky.utility.exceptions.WrongInputDataException;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
 import com.viepovsky.offer.model.CatalogOffer;

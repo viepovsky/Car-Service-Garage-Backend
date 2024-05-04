@@ -2,8 +2,10 @@ package com.viepovsky.garage;
 
 import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.garage.model.Schedule;
-import com.viepovsky.mapper.ScheduleMapper;
+import com.viepovsky.utility.mapper.ScheduleMapper;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

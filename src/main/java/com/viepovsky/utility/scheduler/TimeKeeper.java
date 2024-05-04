@@ -1,4 +1,4 @@
-package com.viepovsky.scheduler;
+package com.viepovsky.utility.scheduler;
 
 import java.time.LocalDate;
 

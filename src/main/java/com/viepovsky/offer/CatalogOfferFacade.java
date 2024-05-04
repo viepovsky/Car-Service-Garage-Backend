@@ -1,9 +1,11 @@
 package com.viepovsky.offer;
 
-import com.viepovsky.mapper.ServiceCatalogMapper;
 import com.viepovsky.offer.dto.CatalogOfferDto;
 import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.utility.mapper.ServiceCatalogMapper;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

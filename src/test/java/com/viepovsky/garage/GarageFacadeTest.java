@@ -2,7 +2,7 @@ package com.viepovsky.garage;
 
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.model.Garage;
-import com.viepovsky.mapper.GarageMapper;
+import com.viepovsky.utility.mapper.GarageMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

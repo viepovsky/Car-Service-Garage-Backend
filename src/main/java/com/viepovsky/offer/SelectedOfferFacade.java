@@ -1,9 +1,11 @@
 package com.viepovsky.offer;
 
-import com.viepovsky.mapper.OfferSelectedMapper;
 import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.offer.model.SelectedOffer;
+import com.viepovsky.utility.mapper.OfferSelectedMapper;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

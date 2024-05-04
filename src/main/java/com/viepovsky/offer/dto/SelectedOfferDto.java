@@ -1,7 +1,8 @@
 package com.viepovsky.offer.dto;
 
-import com.viepovsky.visit.dto.VisitDto;
 import com.viepovsky.vehicle.dto.VehicleDto;
+import com.viepovsky.visit.dto.VisitDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

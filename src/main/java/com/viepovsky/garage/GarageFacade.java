@@ -2,8 +2,10 @@ package com.viepovsky.garage;
 
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.model.Garage;
-import com.viepovsky.mapper.GarageMapper;
+import com.viepovsky.utility.mapper.GarageMapper;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

@@ -1,9 +1,12 @@
 package com.viepovsky.clients.weather;
 
 import com.viepovsky.clients.weather.dto.CityForecastDto;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;

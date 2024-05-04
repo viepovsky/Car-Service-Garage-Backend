@@ -1,6 +1,6 @@
 package com.viepovsky.vehicle;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import com.viepovsky.vehicle.model.Vehicle;

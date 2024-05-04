@@ -1,4 +1,4 @@
-package com.viepovsky.mapper;
+package com.viepovsky.utility.mapper;
 
 import com.viepovsky.vehicle.dto.VehicleDto;
 import com.viepovsky.vehicle.model.Vehicle;

@@ -1,6 +1,6 @@
 package com.viepovsky.visit;
 
-import com.viepovsky.mapper.VisitMapper;
+import com.viepovsky.utility.mapper.VisitMapper;
 import com.viepovsky.visit.dto.VisitDto;
 import com.viepovsky.visit.model.Visit;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,7 @@
 package com.viepovsky.clients.car;
 
 import lombok.Getter;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

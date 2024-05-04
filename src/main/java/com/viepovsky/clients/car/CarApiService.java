@@ -1,7 +1,9 @@
 package com.viepovsky.clients.car;
 
-import com.viepovsky.scheduler.TimeKeeper;
+import com.viepovsky.utility.scheduler.TimeKeeper;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

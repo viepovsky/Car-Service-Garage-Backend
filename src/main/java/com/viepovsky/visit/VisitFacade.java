@@ -1,9 +1,11 @@
 package com.viepovsky.visit;
 
-import com.viepovsky.mapper.VisitMapper;
+import com.viepovsky.utility.mapper.VisitMapper;
 import com.viepovsky.visit.dto.VisitDto;
 import com.viepovsky.visit.model.Visit;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

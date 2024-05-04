@@ -1,4 +1,4 @@
-package com.viepovsky.exceptions;
+package com.viepovsky.utility.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.viepovsky.garage.garage_schedule;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 import com.viepovsky.garage.*;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.model.Schedule;

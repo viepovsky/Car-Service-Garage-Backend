@@ -2,6 +2,7 @@ package com.viepovsky.clients.weather;
 
 import com.viepovsky.clients.weather.dto.CityForecastDto;
 import com.viepovsky.clients.weather.dto.ForecastsDto;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

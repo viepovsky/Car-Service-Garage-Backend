@@ -1,4 +1,4 @@
-package com.viepovsky.audit;
+package com.viepovsky.utility.entity_audit;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

@@ -8,7 +8,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.viepovsky.garage.GarageWorkTimeFacade;
 import com.viepovsky.garage.dto.ScheduleDto;
-import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
 import io.jsonwebtoken.Jwts;

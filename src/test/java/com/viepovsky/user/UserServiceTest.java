@@ -3,7 +3,7 @@ package com.viepovsky.user;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;

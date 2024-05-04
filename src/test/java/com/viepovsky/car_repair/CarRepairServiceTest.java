@@ -3,7 +3,7 @@ package com.viepovsky.car_repair;
 import com.viepovsky.visit.model.Visit;
 import com.viepovsky.visit.VisitService;
 import com.viepovsky.visit.model.VisitStatus;
-import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 import com.viepovsky.offer.OfferSelectedRepository;
 import com.viepovsky.offer.SelectedOfferService;
 import com.viepovsky.offer.model.SelectedOffer;

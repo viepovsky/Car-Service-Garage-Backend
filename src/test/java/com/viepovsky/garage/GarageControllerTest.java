@@ -8,7 +8,7 @@ import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.garage.garage_schedule.WorkDays;
 import com.viepovsky.garage.model.Garage;
-import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
 import io.jsonwebtoken.Jwts;

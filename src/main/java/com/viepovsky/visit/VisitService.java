@@ -1,21 +1,23 @@
 package com.viepovsky.visit;
 
-import com.viepovsky.vehicle.model.Vehicle;
-import com.viepovsky.vehicle.VehicleService;
-import com.viepovsky.offer.model.SelectedOffer;
-import com.viepovsky.offer.SelectedOfferService;
-import com.viepovsky.offer.model.RepairStatus;
-import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.exceptions.WrongInputDataException;
-import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.garage.model.Garage;
 import com.viepovsky.offer.CatalogOfferService;
-import com.viepovsky.user.model.AppUser;
+import com.viepovsky.offer.SelectedOfferService;
+import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.offer.model.RepairStatus;
+import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.user.UserService;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
+import com.viepovsky.utility.exceptions.WrongInputDataException;
+import com.viepovsky.vehicle.VehicleService;
+import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.visit.model.Visit;
 import com.viepovsky.visit.model.VisitStatus;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

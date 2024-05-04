@@ -1,6 +1,6 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 import com.viepovsky.garage.model.Garage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

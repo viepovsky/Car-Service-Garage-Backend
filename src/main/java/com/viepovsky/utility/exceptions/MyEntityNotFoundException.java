@@ -1,4 +1,4 @@
-package com.viepovsky.exceptions;
+package com.viepovsky.utility.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;

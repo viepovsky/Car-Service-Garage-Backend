@@ -2,8 +2,8 @@ package com.viepovsky.user;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;

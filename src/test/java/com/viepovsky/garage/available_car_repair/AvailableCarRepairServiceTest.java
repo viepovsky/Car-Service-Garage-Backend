@@ -1,6 +1,6 @@
 package com.viepovsky.garage.available_car_repair;
 
-import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 import com.viepovsky.garage.model.Address;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;

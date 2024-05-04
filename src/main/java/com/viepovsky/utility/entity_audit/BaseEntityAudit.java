@@ -1,4 +1,4 @@
-package com.viepovsky.audit;
+package com.viepovsky.utility.entity_audit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

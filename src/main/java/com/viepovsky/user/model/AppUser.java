@@ -1,8 +1,8 @@
 package com.viepovsky.user.model;
 
-import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.visit.model.Visit;
+import com.viepovsky.utility.entity_audit.BaseEntityAudit;
 import com.viepovsky.vehicle.model.Vehicle;
+import com.viepovsky.visit.model.Visit;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

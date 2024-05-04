@@ -1,4 +1,4 @@
-package com.viepovsky.mapper;
+package com.viepovsky.utility.mapper;
 
 import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.offer.model.SelectedOffer;

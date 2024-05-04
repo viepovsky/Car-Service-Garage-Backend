@@ -2,7 +2,7 @@ package com.viepovsky.car_repair;
 
 import com.viepovsky.offer.OfferSelectedFacade;
 import com.viepovsky.offer.dto.SelectedOfferDto;
-import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
 import io.jsonwebtoken.Jwts;

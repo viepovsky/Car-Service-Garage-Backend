@@ -1,7 +1,7 @@
 package com.viepovsky.vehicle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.vehicle.dto.VehicleDto;

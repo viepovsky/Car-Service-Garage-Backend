@@ -1,8 +1,12 @@
 package com.viepovsky.clients.weather;
 
+import static java.util.Optional.ofNullable;
+
 import com.viepovsky.clients.weather.dto.ForecastDto;
 import com.viepovsky.clients.weather.dto.LocationDto;
+
 import lombok.AllArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -15,8 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-
-import static java.util.Optional.ofNullable;
 
 @Component
 @AllArgsConstructor

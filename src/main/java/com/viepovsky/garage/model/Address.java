@@ -1,6 +1,6 @@
 package com.viepovsky.garage.model;
 
-import com.viepovsky.audit.BaseEntityAudit;
+import com.viepovsky.utility.entity_audit.BaseEntityAudit;
 
 import jakarta.persistence.*;
 

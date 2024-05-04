@@ -1,6 +1,9 @@
 package com.viepovsky.clients.car;
 
+import static java.util.Optional.ofNullable;
+
 import lombok.AllArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -17,8 +20,6 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static java.util.Optional.ofNullable;
 
 @Component
 @AllArgsConstructor

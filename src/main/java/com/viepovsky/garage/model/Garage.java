@@ -1,8 +1,8 @@
 package com.viepovsky.garage.model;
 
-import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.visit.model.Visit;
 import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.utility.entity_audit.BaseEntityAudit;
+import com.viepovsky.visit.model.Visit;
 
 import jakarta.persistence.*;
 

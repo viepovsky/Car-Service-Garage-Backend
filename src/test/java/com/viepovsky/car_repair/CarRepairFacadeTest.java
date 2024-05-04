@@ -1,6 +1,6 @@
 package com.viepovsky.car_repair;
 
-import com.viepovsky.mapper.OfferSelectedMapper;
+import com.viepovsky.utility.mapper.OfferSelectedMapper;
 import com.viepovsky.offer.OfferSelectedFacade;
 import com.viepovsky.offer.SelectedOfferService;
 import com.viepovsky.offer.dto.SelectedOfferDto;

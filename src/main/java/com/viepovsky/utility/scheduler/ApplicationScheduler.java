@@ -1,4 +1,4 @@
-package com.viepovsky.scheduler;
+package com.viepovsky.utility.scheduler;
 
 import com.viepovsky.clients.car.CarApiService;
 import com.viepovsky.clients.weather.WeatherApiService;

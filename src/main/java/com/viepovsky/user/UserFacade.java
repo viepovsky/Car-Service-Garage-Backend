@@ -1,10 +1,12 @@
 package com.viepovsky.user;
 
-import com.viepovsky.mapper.UserMapper;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.mapper.UserMapper;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

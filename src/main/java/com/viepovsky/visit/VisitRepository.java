@@ -2,6 +2,7 @@ package com.viepovsky.visit;
 
 import com.viepovsky.visit.model.Visit;
 import com.viepovsky.visit.model.VisitStatus;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
