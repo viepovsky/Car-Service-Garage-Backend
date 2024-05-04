@@ -6,20 +6,20 @@ import org.springframework.stereotype.Service;
 @Service
 class UserMapper {
 
-    public UserDto mapToUserDto(User user) {
+    public UserDto mapToUserDto(AppUser user) {
         return new UserDto(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getPhoneNumber(),
+                user.getMobile(),
                 user.getUsername(),
                 user.getCreatedDate()
         );
     }
 
-    public User mapToUserLogin(UserDto userDto) {
-        return new User(
+    public AppUser mapToUserLogin(UserDto userDto) {
+        return new AppUser(
                 userDto.getFirstName(),
                 userDto.getLastName(),
                 userDto.getEmail(),
@@ -29,7 +29,7 @@ class UserMapper {
         );
     }
 
-    public UserDto mapToUserDtoLogin(User user) {
+    public UserDto mapToUserDtoLogin(AppUser user) {
         return new UserDto(
                 user.getId(),
                 user.getUsername(),

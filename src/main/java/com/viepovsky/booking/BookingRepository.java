@@ -7,10 +7,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-interface BookingRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findBookingsByDateAndStatusAndGarageId(LocalDate date, BookingStatus status, Long garageId);
+interface BookingRepository extends JpaRepository<Visit, Long> {
+    List<Visit> findBookingsByDateAndStatusAndGarageId(LocalDate date, BookingStatus status, Long garageId);
 
-    List<Booking> findBookingsByDateAndGarageId(LocalDate date, Long garageId);
+    List<Visit> findBookingsByDateAndGarageId(LocalDate date, Long garageId);
 
-    List<Booking> findBookingsByCarRepairListUserId(Long userId);
+//    List<Booking> findBookingsByCarRepairListUserId(Long userId);
+    List<Visit> findBookingsByCarRepairList(Long valueToChangeTODO);
+
 }

@@ -3,7 +3,7 @@ package com.viepovsky.car;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.Role;
-import com.viepovsky.user.User;
+import com.viepovsky.user.AppUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -51,7 +51,7 @@ class CarControllerTest {
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
-        var userInDb = User.builder().username("testuser").role(Role.ROLE_USER).build();
+        var userInDb = AppUser.builder().username("testuser").role(Role.ROLE_USER).build();
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
         jwtToken = generateToken("testuser", secretKey);
     }

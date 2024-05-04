@@ -15,12 +15,12 @@ class UserMapperTest {
     @Test
     void mapToUserDto() {
         //Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
         user.setFirstName("Test name");
         user.setLastName("Test last");
         user.setEmail("email");
-        user.setPhoneNumber("252352");
+        user.setMobile("252352");
         user.setUsername("username");
         //When
         UserDto mappedUser = userMapper.mapToUserDto(user);
@@ -41,7 +41,7 @@ class UserMapperTest {
         userDto.setUsername("username");
         userDto.setPassword("password");
         //When
-        User mappedUser = userMapper.mapToUserLogin(userDto);
+        AppUser mappedUser = userMapper.mapToUserLogin(userDto);
         //Then
         assertEquals("Test name", mappedUser.getFirstName());
         assertEquals("username", mappedUser.getUsername());
@@ -49,7 +49,7 @@ class UserMapperTest {
 
     @Test
     void mapToUserDtoLogin() {
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
         user.setUsername("username");
         user.setPassword("password");

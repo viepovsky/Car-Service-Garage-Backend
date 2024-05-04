@@ -20,12 +20,12 @@ class BookingFacade {
     private final BookingMapper mapper;
 
     public List<BookingDto> getBookingsByDateAndGarageId(LocalDate date, Long garageId) {
-        List<Booking> bookingList = bookingService.getBookingsByDateAndGarageId(date, garageId);
+        List<Visit> bookingList = bookingService.getBookingsByDateAndGarageId(date, garageId);
         return mapper.mapToBookingDtoList(bookingList);
     }
 
     public List<BookingDto> getBookingsByUsername(String username) {
-        List<Booking> bookingList = bookingService.getAllBookingsByUsername(username);
+        List<Visit> bookingList = bookingService.getAllBookingsByUsername(username);
         return mapper.mapToBookingDtoList(bookingList);
     }
 

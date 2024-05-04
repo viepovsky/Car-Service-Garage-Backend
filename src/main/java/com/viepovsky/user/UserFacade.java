@@ -16,13 +16,13 @@ class UserFacade {
 
     public UserDto getUserByUsername(String username) {
         LOGGER.info("Get user endpoint used with username:{}", username);
-        User user = userService.getUser(username);
+        AppUser user = userService.getUser(username);
         return mapper.mapToUserDto(user);
     }
 
     public UserDto getUserByUsernameToLogin(String username) {
         LOGGER.info("Get user for login endpoint used with username:{}", username);
-        User user = userService.getUser(username);
+        AppUser user = userService.getUser(username);
         return mapper.mapToUserDtoLogin(user);
     }
 

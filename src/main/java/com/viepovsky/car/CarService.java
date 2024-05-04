@@ -1,7 +1,7 @@
 package com.viepovsky.car;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.user.User;
+import com.viepovsky.user.AppUser;
 import com.viepovsky.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,26 +16,26 @@ public class CarService {
 
     private final UserService userService;
 
-    public List<Car> getAllCarsForGivenUsername(String username) {
+    public List<Vehicle> getAllCarsForGivenUsername(String username) {
         Long userId = userService.getUser(username).getId();
         return carRepository.findCarsByUserId(userId);
     }
 
-    public Car getCar(Long id) {
+    public Vehicle getCar(Long id) {
         return carRepository.findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("Car: " + id));
     }
 
-    public void saveCar(Car car, String username) {
-        User user = userService.getUser(username);
+    public void saveCar(Vehicle car, String username) {
+        AppUser user = userService.getUser(username);
         car.setUser(user);
-        user.getCarList().add(car);
+        user.getVehicles().add(car);
         userService.saveUser(user);
     }
 
-    public void updateCar(Car car) {
-        Car retrievedCar = carRepository.findById(car.getId())
-                .orElseThrow(() -> new MyEntityNotFoundException("Car", car.getId()));
+    public void updateCar(Vehicle car) {
+        Vehicle retrievedCar = carRepository.findById(car.getId())
+                                            .orElseThrow(() -> new MyEntityNotFoundException("Car", car.getId()));
         car.setUser(retrievedCar.getUser());
         carRepository.save(car);
     }

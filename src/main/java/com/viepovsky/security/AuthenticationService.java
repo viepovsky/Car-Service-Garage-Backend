@@ -1,7 +1,7 @@
 package com.viepovsky.security;
 
 import com.viepovsky.security.dto.AuthenticationResponse;
-import com.viepovsky.user.User;
+import com.viepovsky.user.AppUser;
 import com.viepovsky.user.UserService;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;
@@ -29,14 +29,14 @@ class AuthenticationService {
 
     AuthenticationResponse register(RegisterUserRequest request) {
         LOGGER.info("Register request received.");
-        var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .phoneNumber(request.getPhoneNumber())
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+        var user = AppUser.builder()
+                          .firstName(request.getFirstName())
+                          .lastName(request.getLastName())
+                          .email(request.getEmail())
+                          .mobile(request.getPhoneNumber())
+                          .username(request.getUsername())
+                          .password(passwordEncoder.encode(request.getPassword()))
+                          .build();
         var createdUser = userService.saveUser(user);
         var jwtToken = jwtService.generateJwtToken(createdUser);
         return AuthenticationResponse.builder()

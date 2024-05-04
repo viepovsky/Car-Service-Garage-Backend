@@ -3,17 +3,8 @@ package com.viepovsky.booking;
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.garage.Garage;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import com.viepovsky.user.AppUser;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,9 +19,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "BOOKING")
-public class Booking extends BaseEntityAudit {
+@Entity(name = "Visit")
+@Table(name = "visit")
+public class Visit extends BaseEntityAudit {
 
     @Id
     @SequenceGenerator(
@@ -71,13 +62,22 @@ public class Booking extends BaseEntityAudit {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    public Booking(BookingStatus status,
-                   LocalDate date,
-                   LocalTime startHour,
-                   LocalTime endHour,
-                   BigDecimal totalCost,
-                   List<CarRepair> carRepairList,
-                   Garage garage) {
+    @ManyToOne
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "visit_user_id_fk")
+    )
+    private AppUser user;
+
+    public Visit(BookingStatus status,
+                 LocalDate date,
+                 LocalTime startHour,
+                 LocalTime endHour,
+                 BigDecimal totalCost,
+                 List<CarRepair> carRepairList,
+                 Garage garage) {
         this.status = status;
         this.date = date;
         this.startHour = startHour;

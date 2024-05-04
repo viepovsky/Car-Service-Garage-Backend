@@ -7,7 +7,7 @@ import java.util.List;
 @Service
 public class CarMapper {
 
-    public CarDto mapToCarDto(Car car) {
+    public CarDto mapToCarDto(Vehicle car) {
         return new CarDto(
                 car.getId(),
                 car.getMake(),
@@ -19,8 +19,8 @@ public class CarMapper {
         );
     }
 
-    public Car mapToCar(CarDto carDto) {
-        return new Car(
+    public Vehicle mapToCar(CarDto carDto) {
+        return new Vehicle(
                 carDto.getId(),
                 carDto.getMake(),
                 carDto.getModel(),
@@ -30,7 +30,7 @@ public class CarMapper {
         );
     }
 
-    public List<CarDto> mapToCarDtoList(List<Car> carList) {
+    public List<CarDto> mapToCarDtoList(List<Vehicle> carList) {
         return carList.stream()
                 .map(this::mapToCarDto)
                 .toList();

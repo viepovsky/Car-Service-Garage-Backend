@@ -2,19 +2,8 @@ package com.viepovsky.car;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.car_repair.CarRepair;
-import com.viepovsky.user.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import com.viepovsky.user.AppUser;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,9 +16,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "CARS")
-public class Car extends BaseEntityAudit {
+@Entity(name = "Vehicle")
+@Table(name = "vehicle")
+public class Vehicle extends BaseEntityAudit {
 
     @Id
     @SequenceGenerator(
@@ -59,24 +48,28 @@ public class Car extends BaseEntityAudit {
     @Column(name = "engine")
     private String engine;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToOne
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "car_user_id_fk")
+    )
+    private AppUser user;
 
     @OneToMany(
             targetEntity = CarRepair.class,
             mappedBy = "car",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            fetch = FetchType.LAZY
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
     )
     private List<CarRepair> carServicesList = new ArrayList<>();
 
-    public Car(Long id,
-               String make,
-               String model,
-               String type,
-               int year,
-               String engine) {
+    public Vehicle(Long id,
+                   String make,
+                   String model,
+                   String type,
+                   int year,
+                   String engine) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -85,11 +78,11 @@ public class Car extends BaseEntityAudit {
         this.engine = engine;
     }
 
-    public Car(String make,
-               String model,
-               String type,
-               int year,
-               String engine) {
+    public Vehicle(String make,
+                   String model,
+                   String type,
+                   int year,
+                   String engine) {
         this.make = make;
         this.model = model;
         this.type = type;

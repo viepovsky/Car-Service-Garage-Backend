@@ -28,7 +28,7 @@ class BookingFacadeTest {
     @Test
     void shouldGetBookingsForGivenDateAndGarageId() {
         //Given
-        var booking = new Booking();
+        var booking = new Visit();
         var bookingDto = new BookingDto();
 
         when(service.getBookingsByDateAndGarageId(any(LocalDate.class), anyLong())).thenReturn(List.of(booking));
@@ -43,7 +43,7 @@ class BookingFacadeTest {
     @Test
     void shouldGetBookingsForGivenUsername() {
         //Given
-        var booking = new Booking();
+        var booking = new Visit();
         var bookingDto = new BookingDto();
 
         when(service.getAllBookingsByUsername(anyString())).thenReturn(List.of(booking));

@@ -19,13 +19,13 @@ class CarFacade {
 
     public List<CarDto> getCarsForGivenUsername(String username) {
         LOGGER.info("Get cars for given username endpoint used with username:{}", username);
-        List<Car> carList = carService.getAllCarsForGivenUsername(username);
+        List<Vehicle> carList = carService.getAllCarsForGivenUsername(username);
         return mapper.mapToCarDtoList(carList);
     }
 
     public void createCar(CarDto carDto, String username) {
         LOGGER.info("Create car endpoint used for username:{}", username);
-        Car car = mapper.mapToCar(carDto);
+        Vehicle car = mapper.mapToCar(carDto);
         carService.saveCar(car, username);
     }
 

@@ -1,9 +1,9 @@
 package com.viepovsky.car_repair;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.booking.Booking;
-import com.viepovsky.car.Car;
-import com.viepovsky.user.User;
+import com.viepovsky.booking.Visit;
+import com.viepovsky.car.Vehicle;
+import com.viepovsky.user.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,37 +39,22 @@ public class CarRepair extends BaseEntityAudit {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id", nullable = false)
-    private Car car;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Vehicle car;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "booking_id")
-    private Booking booking;
+    private Visit booking;
 
     @Column(name = "service_status")
     private RepairStatus status;
 
-    public CarRepair(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, User user, Booking booking, RepairStatus status) {
+    public CarRepair(String name, String description, BigDecimal cost, int repairTimeInMinutes, Vehicle car, AppUser user, Visit booking, RepairStatus status) {
         this.name = name;
         this.description = description;
         this.cost = cost;
         this.repairTimeInMinutes = repairTimeInMinutes;
         this.car = car;
-        this.user = user;
         this.booking = booking;
-        this.status = status;
-    }
-
-    public CarRepair(String name, String description, BigDecimal cost, int repairTimeInMinutes, Car car, User user, RepairStatus status) {
-        this.name = name;
-        this.description = description;
-        this.cost = cost;
-        this.repairTimeInMinutes = repairTimeInMinutes;
-        this.car = car;
-        this.user = user;
         this.status = status;
     }
 }

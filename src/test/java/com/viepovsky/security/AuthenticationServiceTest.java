@@ -1,6 +1,6 @@
 package com.viepovsky.security;
 
-import com.viepovsky.user.User;
+import com.viepovsky.user.AppUser;
 import com.viepovsky.user.UserService;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;
@@ -41,12 +41,12 @@ class AuthenticationServiceTest {
         //Given
         var request = RegisterUserRequest.builder().username("testusername")
                 .password("TestPassword20@").email("test@mail.com").firstName("name").lastName("lastname").build();
-        var user = User.builder().username("testusername").password("TestPassword20@")
-                .email("test@mail.com").firstName("name").lastName("lastname").build();
+        var user = AppUser.builder().username("testusername").password("TestPassword20@")
+                          .email("test@mail.com").firstName("name").lastName("lastname").build();
         var jwtToken = "token";
 
-        when(userService.saveUser(any(User.class))).thenReturn(user);
-        when(jwtService.generateJwtToken(any(User.class))).thenReturn(jwtToken);
+        when(userService.saveUser(any(AppUser.class))).thenReturn(user);
+        when(jwtService.generateJwtToken(any(AppUser.class))).thenReturn(jwtToken);
         //When
         var response = authenticationService.register(request);
         //Then
@@ -59,13 +59,13 @@ class AuthenticationServiceTest {
         //Given
         var request = AuthenticationUserRequest.builder()
                 .username("testusername").password("TestPassword20@").build();
-        var user = User.builder().username("testusername").password("TestPassword20@")
-                .email("test@mail.com").firstName("name").lastName("lastname").build();
+        var user = AppUser.builder().username("testusername").password("TestPassword20@")
+                          .email("test@mail.com").firstName("name").lastName("lastname").build();
         var jwtToken = "token";
 
         when(authenticationManager.authenticate(any())).thenReturn(new TestingAuthenticationToken(null, null));
         when(userService.getUser(anyString())).thenReturn(user);
-        when(jwtService.generateJwtToken(any(User.class))).thenReturn(jwtToken);
+        when(jwtService.generateJwtToken(any(AppUser.class))).thenReturn(jwtToken);
 
         //When
         var response = authenticationService.authenticate(request);

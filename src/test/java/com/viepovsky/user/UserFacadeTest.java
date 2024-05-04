@@ -26,7 +26,7 @@ class UserFacadeTest {
     @Test
     void shouldGetUserByUsername() {
         //Given
-        User mockedUser = Mockito.mock(User.class);
+        AppUser mockedUser = Mockito.mock(AppUser.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
         when(service.getUser("username")).thenReturn(mockedUser);
         when(mapper.mapToUserDto(mockedUser)).thenReturn(mockedUserDto);
@@ -39,7 +39,7 @@ class UserFacadeTest {
     @Test
     void shouldGetUserToLoginByUsername() {
         //Given
-        User mockedUser = Mockito.mock(User.class);
+        AppUser mockedUser = Mockito.mock(AppUser.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
         when(service.getUser("username")).thenReturn(mockedUser);
         when(mapper.mapToUserDtoLogin(mockedUser)).thenReturn(mockedUserDto);
@@ -73,7 +73,7 @@ class UserFacadeTest {
     @Test
     void shouldUpdateUser() {
         //Given
-        User mockedUser = Mockito.mock(User.class);
+        AppUser mockedUser = Mockito.mock(AppUser.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
         when(mapper.mapToUserLogin(mockedUserDto)).thenReturn(mockedUser);
         doNothing().when(service).updateUser(mockedUser);

@@ -27,7 +27,7 @@ class CarFacadeTest {
     @Test
     void shouldGetCarsForGivenUsername() {
         //Given
-        List<Car> mockedCarList = List.of(Mockito.mock(Car.class));
+        List<Vehicle> mockedCarList = List.of(Mockito.mock(Vehicle.class));
         List<CarDto> mockedCarDtoList = List.of(Mockito.mock(CarDto.class));
         when(service.getAllCarsForGivenUsername("username")).thenReturn(mockedCarList);
         when(mapper.mapToCarDtoList(mockedCarList)).thenReturn(mockedCarDtoList);
@@ -42,7 +42,7 @@ class CarFacadeTest {
     void shouldCreateCar() {
         //Given
         CarDto mockedCarDto = Mockito.mock(CarDto.class);
-        Car mockedCar = Mockito.mock(Car.class);
+        Vehicle mockedCar = Mockito.mock(Vehicle.class);
         when(mapper.mapToCar(mockedCarDto)).thenReturn(mockedCar);
         doNothing().when(service).saveCar(mockedCar, "username");
         //When
@@ -55,7 +55,7 @@ class CarFacadeTest {
     void shouldUpdateCar() {
         //Given
         CarDto mockedCarDto = Mockito.mock(CarDto.class);
-        Car mockedCar = Mockito.mock(Car.class);
+        Vehicle mockedCar = Mockito.mock(Vehicle.class);
         when(mapper.mapToCar(mockedCarDto)).thenReturn(mockedCar);
         doNothing().when(service).updateCar(mockedCar);
         //When

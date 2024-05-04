@@ -27,7 +27,7 @@ class UserServiceTest {
     @Test
     void testGetUserByUsername() {
         //Given
-        var user = new User();
+        var user = new AppUser();
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(user));
         //When
         var retrievedUser = service.getUser("username");
@@ -39,7 +39,7 @@ class UserServiceTest {
     @Test
     void testGetUserById() {
         //Given
-        var user = new User();
+        var user = new AppUser();
         when(repository.findById(anyLong())).thenReturn(Optional.of(user));
         //When
         var retrievedUser = service.getUser(5L);
@@ -51,7 +51,7 @@ class UserServiceTest {
     @Test
     void testIsUserInDatabase() {
         //Given
-        var user = new User();
+        var user = new AppUser();
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(user));
         //When
         boolean retrievedAnswer = service.isUserInDatabase("username");
@@ -62,7 +62,7 @@ class UserServiceTest {
     @Test
     void testGetUserPass() {
         //Given
-        var user = new User();
+        var user = new AppUser();
         user.setPassword("1234");
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(user));
         //When
@@ -75,7 +75,7 @@ class UserServiceTest {
     @Test
     void testSaveUser() {
         //Given
-        var user = new User();
+        var user = new AppUser();
         when(repository.save(user)).thenReturn(user);
         //When
         service.saveUser(user);
@@ -86,8 +86,8 @@ class UserServiceTest {
     @Test
     void testUpdateUser() {
         //Given
-        var user = new User("test", "testlast", "email", "656", "testuser", "123", Role.ROLE_USER, new ArrayList<>(), new ArrayList<>());
-        var userToUpdate = new User();
+        var user = new AppUser("test", "testlast", "email", "656", "testuser", "123", Role.ROLE_USER, new ArrayList<>(), new ArrayList<>());
+        var userToUpdate = new AppUser();
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(userToUpdate));
         when(repository.save(userToUpdate)).thenReturn(userToUpdate);
         //When
@@ -101,7 +101,7 @@ class UserServiceTest {
     @Test
     void testDeleteUser() {
         //Given
-        var user = new User();
+        var user = new AppUser();
         user.setId(1L);
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(user));
         doNothing().when(repository).deleteById(anyLong());

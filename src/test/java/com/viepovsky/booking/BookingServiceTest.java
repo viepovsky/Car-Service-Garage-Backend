@@ -1,6 +1,6 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.car.Car;
+import com.viepovsky.car.Vehicle;
 import com.viepovsky.car.CarService;
 import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.car_repair.CarRepairService;
@@ -9,7 +9,7 @@ import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
 import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
 import com.viepovsky.garage.available_car_repair.AvailableCarRepairService;
-import com.viepovsky.user.User;
+import com.viepovsky.user.AppUser;
 import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,10 +57,10 @@ class BookingServiceTest {
     @Test
     void testGetAllBookings() {
         //Given
-        Booking mockedBooking = Mockito.mock(Booking.class);
+        Visit mockedBooking = Mockito.mock(Visit.class);
         when(bookingRepository.findAll()).thenReturn(List.of(mockedBooking));
         //When
-        List<Booking> retrievedList = bookingService.getAllBookings();
+        List<Visit> retrievedList = bookingService.getAllBookings();
         //Then
         assertEquals(1, retrievedList.size());
     }
@@ -68,13 +68,13 @@ class BookingServiceTest {
     @Test
     void testGetAllBookingsByUsername() {
         //Given
-        Booking mockedBooking = Mockito.mock(Booking.class);
-        User mockedUser = Mockito.mock(User.class);
+        Visit mockedBooking = Mockito.mock(Visit.class);
+        AppUser mockedUser = Mockito.mock(AppUser.class);
         when(userService.getUser("username")).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
-        when(bookingRepository.findBookingsByCarRepairListUserId(1L)).thenReturn(List.of(mockedBooking));
+        when(bookingRepository.findBookingsByCarRepairList(1L)).thenReturn(List.of(mockedBooking));
         //When
-        List<Booking> retrievedList = bookingService.getAllBookingsByUsername("username");
+        List<Visit> retrievedList = bookingService.getAllBookingsByUsername("username");
         //Then
         assertEquals(1, retrievedList.size());
     }
@@ -91,11 +91,11 @@ class BookingServiceTest {
         Garage garage = new Garage();
         garage.setId(5L);
 
-        Booking bookedService = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(10, 0), LocalTime.of(10, 50), null, carRepairList, garage);
+        Visit bookedService = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(10, 0), LocalTime.of(10, 50), null, carRepairList, garage);
         bookedService.setId(1L);
         carRepair.setBooking(bookedService);
-        Booking booking = new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null);
-        List<Booking> bookingList = new ArrayList<>();
+        Visit booking = new Visit(BookingStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null);
+        List<Visit> bookingList = new ArrayList<>();
         bookingList.add(booking);
         bookingList.add(bookedService);
 
@@ -115,7 +115,7 @@ class BookingServiceTest {
     void testGetAvailableBookingTimesByDayAndRepairDurationThreeParameters() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
-        List<Booking> bookingList = List.of(new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null));
+        List<Visit> bookingList = List.of(new Visit(BookingStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null));
         when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingList);
         //When
         List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 50, 5L);
@@ -130,7 +130,7 @@ class BookingServiceTest {
     void shouldReturnEmptyArrayWhenGetAvailableBookingTimesParameterDayIsNotWorkingDay() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
-        List<Booking> bookingsOfGivenDate = List.of();
+        List<Visit> bookingsOfGivenDate = List.of();
         when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingsOfGivenDate);
         //When
         List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 50, 5L);
@@ -143,7 +143,7 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         Garage mockedGarage = Mockito.mock(Garage.class);
-        List<Booking> bookingList = new ArrayList<>();
+        List<Visit> bookingList = new ArrayList<>();
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
         when(bookingRepository.findBookingsByDateAndStatusAndGarageId(localDate, BookingStatus.AVAILABLE, 50L)).thenReturn(bookingList);
@@ -159,9 +159,9 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         Garage mockedGarage = Mockito.mock(Garage.class);
-        Booking booking = new Booking(BookingStatus.AVAILABLE, localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), null, null, null);
+        Visit booking = new Visit(BookingStatus.AVAILABLE, localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), null, null, null);
         booking.setId(1L);
-        List<Booking> bookingList = new ArrayList<>();
+        List<Visit> bookingList = new ArrayList<>();
         bookingList.add(booking);
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
@@ -181,7 +181,7 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         LocalDate newLocalDate = LocalDate.now().plusDays(2);
-        Booking booking = new Booking(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(11, 0), LocalTime.of(11, 30), null, null, null);
+        Visit booking = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(11, 0), LocalTime.of(11, 30), null, null, null);
 
         when(bookingRepository.findById(50L)).thenReturn(Optional.of(booking));
         when(bookingRepository.save(booking)).thenReturn(booking);
@@ -197,10 +197,10 @@ class BookingServiceTest {
         LocalDate localDate = LocalDate.now().plusDays(1);
         int repairDuration = 70;
         Garage mockedGarage = Mockito.mock(Garage.class);
-        User user = new User("Firstname", "Lastname", "email", "phonenumber", "username", "password");
+        AppUser user = new AppUser("Firstname", "Lastname", "email", "phonenumber", "username", "password");
         user.setId(1L);
-        Car car = new Car(2L, "BMW", "3 Series", 2014, "Sedan", "Diesel", user, new ArrayList<>());
-        user.setCarList(List.of(car));
+        Vehicle car = new Vehicle(2L, "BMW", "3 Series", 2014, "Sedan", "Diesel", user, new ArrayList<>());
+        user.setVehicles(List.of(car));
         List<LocalTime> localTimeList = List.of(LocalTime.of(10, 0), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50), LocalTime.of(11, 0));
         AvailableCarRepair availableCarRepair = new AvailableCarRepair(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
         AvailableCarRepair availableCarRepair2 = new AvailableCarRepair(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
@@ -213,11 +213,11 @@ class BookingServiceTest {
         when(bookingRepository.save(any())).thenReturn(any());
         when(availableCarRepairService.getAvailableCarRepair(10L)).thenReturn(availableCarRepair);
         when(availableCarRepairService.getAvailableCarRepair(11L)).thenReturn(availableCarRepair2);
-        when(userService.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
+        when(userService.saveUser(any(AppUser.class))).thenReturn(Mockito.mock(AppUser.class));
         //When
         bookingService.createBooking(List.of(10L, 11L), localDate, LocalTime.of(10, 0), 5L, 2L, repairDuration);
         //Then
-        verify(userService, times(1)).saveUser(any(User.class));
+        verify(userService, times(1)).saveUser(any(AppUser.class));
         verify(bookingRepository, times(2)).save(any());
     }
 }

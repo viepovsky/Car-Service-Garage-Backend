@@ -1,9 +1,9 @@
 package com.viepovsky.car_repair;
 
-import com.viepovsky.booking.Booking;
+import com.viepovsky.booking.Visit;
 import com.viepovsky.booking.BookingService;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.user.User;
+import com.viepovsky.user.AppUser;
 import com.viepovsky.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -29,8 +29,8 @@ public class CarRepairService {
     }
 
     public List<CarRepair> getCarRepairs(String username) {
-        User user = userService.getUser(username);
-        return carRepairRepository.findCarServicesByUserId(user.getId());
+        AppUser user = userService.getUser(username);
+        return carRepairRepository.findCarServicesByName(user.getId());
     }
 
     public CarRepair getCarRepair(Long id) {
@@ -41,7 +41,7 @@ public class CarRepairService {
     public void deleteCarRepair(Long carRepairId) {
         CarRepair carRepair = carRepairRepository.findById(carRepairId)
                 .orElseThrow(() -> new MyEntityNotFoundException("CarRepair", carRepairId));
-        Booking booking = carRepair.getBooking();
+        Visit booking = carRepair.getBooking();
         if (booking.getCarRepairList().size() > 1) {
             LocalTime endHour = booking.getEndHour();
             endHour = endHour.minusMinutes(carRepair.getRepairTimeInMinutes());

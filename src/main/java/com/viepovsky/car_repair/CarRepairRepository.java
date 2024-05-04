@@ -7,5 +7,7 @@ import java.util.List;
 
 @Repository
 interface CarRepairRepository extends JpaRepository<CarRepair, Long> {
-    List<CarRepair> findCarServicesByUserId(Long userId);
+//    List<CarRepair> findCarServicesByUserId(Long userId);
+    List<CarRepair> findCarServicesByName(Long valueToChangeTODO);
+
 }

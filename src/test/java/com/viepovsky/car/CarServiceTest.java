@@ -1,7 +1,7 @@
 package com.viepovsky.car;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.user.User;
+import com.viepovsky.user.AppUser;
 import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,16 +35,16 @@ class CarServiceTest {
     @Test
     void testGetAllCarsForGivenUsername() {
         //Given
-        User mockedUser = Mockito.mock(User.class);
-        Car car = new Car("BMW", "3 Series", "Sedan", 2010, "diesel");
-        List<Car> carList = new ArrayList<>();
+        AppUser mockedUser = Mockito.mock(AppUser.class);
+        Vehicle car = new Vehicle("BMW", "3 Series", "Sedan", 2010, "diesel");
+        List<Vehicle> carList = new ArrayList<>();
         carList.add(car);
 
         when(userService.getUser(anyString())).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
         when(carRepository.findCarsByUserId(1L)).thenReturn(carList);
         //When
-        List<Car> retrievedCarList = carService.getAllCarsForGivenUsername("username");
+        List<Vehicle> retrievedCarList = carService.getAllCarsForGivenUsername("username");
         //Then
         assertEquals(1, retrievedCarList.size());
         assertEquals("Sedan", retrievedCarList.get(0).getType());
@@ -55,23 +55,23 @@ class CarServiceTest {
     @Test
     void testSaveCar() {
         //Given
-        User mockedUser = Mockito.mock(User.class);
-        Car mockedCar = Mockito.mock(Car.class);
+        AppUser mockedUser = Mockito.mock(AppUser.class);
+        Vehicle mockedCar = Mockito.mock(Vehicle.class);
         when(userService.getUser(anyString())).thenReturn(mockedUser);
-        when(userService.saveUser(any(User.class))).thenReturn(Mockito.mock(User.class));
+        when(userService.saveUser(any(AppUser.class))).thenReturn(Mockito.mock(AppUser.class));
         //When
         carService.saveCar(mockedCar, "username");
         //Then
-        verify(userService, times(1)).saveUser(any(User.class));
+        verify(userService, times(1)).saveUser(any(AppUser.class));
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
     }
 
     @Test
     void testUpdateCar() {
         //Given
-        Car car = new Car(1L, "BMW", "3 Series", 2010, "Sedan", "diesel", null, new ArrayList<>());
+        Vehicle car = new Vehicle(1L, "BMW", "3 Series", 2010, "Sedan", "diesel", null, new ArrayList<>());
 
-        Car carToUpdate = new Car(1L, "BMW", "3 Series", 2010, "Sedan", "diesel", new User(), new ArrayList<>());
+        Vehicle carToUpdate = new Vehicle(1L, "BMW", "3 Series", 2010, "Sedan", "diesel", new AppUser(), new ArrayList<>());
 
         when(carRepository.findById(1L)).thenReturn(Optional.of(carToUpdate));
         when(carRepository.save(car)).thenReturn(car);

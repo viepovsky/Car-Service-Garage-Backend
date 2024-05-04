@@ -1,6 +1,6 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.car.Car;
+import com.viepovsky.car.Vehicle;
 import com.viepovsky.car.CarService;
 import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.car_repair.CarRepairService;
@@ -11,7 +11,7 @@ import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
 import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
 import com.viepovsky.garage.available_car_repair.AvailableCarRepairService;
-import com.viepovsky.user.User;
+import com.viepovsky.user.AppUser;
 import com.viepovsky.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -43,20 +43,20 @@ public class BookingService {
 
     private final AvailableCarRepairService availableCarRepairService;
 
-    public List<Booking> getAllBookings() {
+    public List<Visit> getAllBookings() {
         return bookingRepository.findAll();
     }
 
-    public List<Booking> getAllBookingsByUsername(String username) {
-        User user = userService.getUser(username);
-        return bookingRepository.findBookingsByCarRepairListUserId(user.getId());
+    public List<Visit> getAllBookingsByUsername(String username) {
+        AppUser user = userService.getUser(username);
+        return bookingRepository.findBookingsByCarRepairList(user.getId());
     }
 
-    public List<Booking> getBookingsByDateAndGarageId(LocalDate date, Long garageId) {
+    public List<Visit> getBookingsByDateAndGarageId(LocalDate date, Long garageId) {
         return bookingRepository.findBookingsByDateAndGarageId(date, garageId);
     }
 
-    private Booking getBookingById(Long id) {
+    private Visit getBookingById(Long id) {
         return bookingRepository.findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("Booking" + id));
     }
@@ -71,7 +71,7 @@ public class BookingService {
         Long garageId = reservedBooking.getGarage().getId();
 
         LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Booking> allBookingsForDay = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
+        List<Visit> allBookingsForDay = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
         allBookingsForDay.remove(reservedBooking);
 
         List<LocalTime> availableBookingTimes = checkAvailableBookingTimes(allBookingsForDay, date, repairDuration);
@@ -81,19 +81,19 @@ public class BookingService {
 
     public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
         LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Booking> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
+        List<Visit> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
         return checkAvailableBookingTimes(bookingList, date, repairDuration);
     }
 
-    private List<LocalTime> checkAvailableBookingTimes(List<Booking> bookingList, LocalDate date, int repairDuration) {
+    private List<LocalTime> checkAvailableBookingTimes(List<Visit> bookingList, LocalDate date, int repairDuration) {
         if (!isGarageWorkingHoursPresent(bookingList)) {
             return new ArrayList<>();
         }
 
-        Booking garageWorkTime = bookingList.stream()
-                .filter(booking -> booking.getStatus() == BookingStatus.AVAILABLE)
-                .findFirst()
-                .orElse(null);
+        Visit garageWorkTime = bookingList.stream()
+                                          .filter(booking -> booking.getStatus() == BookingStatus.AVAILABLE)
+                                          .findFirst()
+                                          .orElse(null);
         if (!isGarageWorkTimePresent(garageWorkTime)) {
             return new ArrayList<>();
         }
@@ -107,18 +107,18 @@ public class BookingService {
             garageOpenTime = roundUpTimeToNearest10Minutes();
         }
 
-        List<Booking> unavailableBookingTimeList = bookingList.stream()
-                .filter(booking -> booking.getStatus() == BookingStatus.UNAVAILABLE || booking.getStatus() == BookingStatus.WAITING_FOR_CUSTOMER)
-                .toList();
+        List<Visit> unavailableBookingTimeList = bookingList.stream()
+                                                            .filter(booking -> booking.getStatus() == BookingStatus.UNAVAILABLE || booking.getStatus() == BookingStatus.WAITING_FOR_CUSTOMER)
+                                                            .toList();
 
         return getAvailableTimesForBooking(repairDuration, garageCloseTime, unavailableBookingTimeList, garageOpenTime);
     }
 
-    private boolean isGarageWorkingHoursPresent(List<Booking> bookingList) {
+    private boolean isGarageWorkingHoursPresent(List<Visit> bookingList) {
         return bookingList.size() != 0;
     }
 
-    private boolean isGarageWorkTimePresent(Booking garageWorkTime) {
+    private boolean isGarageWorkTimePresent(Visit garageWorkTime) {
         return garageWorkTime != null;
     }
 
@@ -139,12 +139,12 @@ public class BookingService {
 
     private List<LocalTime> getAvailableTimesForBooking(int repairDuration,
                                                         LocalTime closeTime,
-                                                        List<Booking> unavailableBookingTimeList,
+                                                        List<Visit> unavailableBookingTimeList,
                                                         LocalTime currentTime) {
         List<LocalTime> availableBookingTimes = new ArrayList<>();
         while (!currentTime.plusMinutes(repairDuration).isAfter(closeTime)) {
             boolean isAvailable = true;
-            for (Booking booking : unavailableBookingTimeList) {
+            for (Visit booking : unavailableBookingTimeList) {
                 if (currentTime.plusMinutes(repairDuration).isAfter(booking.getStartHour()) && booking.getEndHour().isAfter(currentTime)) {
                     isAvailable = false;
                     break;
@@ -163,24 +163,24 @@ public class BookingService {
                                           LocalTime endHour,
                                           Long garageId) {
         Garage garage = garageService.getGarage(garageId);
-        List<Booking> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, BookingStatus.AVAILABLE, garageId);
+        List<Visit> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, BookingStatus.AVAILABLE, garageId);
         if (!isGarageWorkingHoursPresent(bookingList)) {
-            Booking booking = createWorkingHoursBooking(date, startHour, endHour, garage);
+            Visit booking = createWorkingHoursBooking(date, startHour, endHour, garage);
             bookingRepository.save(booking);
         } else {
             List<Long> bookingIdList = bookingList.stream()
-                    .map(Booking::getId)
+                    .map(Visit::getId)
                     .toList();
             throw new WrongInputDataException("Work times of given date: " + date + ", are already declared. " +
                     "To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingIdList);
         }
     }
 
-    private Booking createWorkingHoursBooking(LocalDate date,
-                                              LocalTime startHour,
-                                              LocalTime endHour,
-                                              Garage garage) {
-        return new Booking(
+    private Visit createWorkingHoursBooking(LocalDate date,
+                                            LocalTime startHour,
+                                            LocalTime endHour,
+                                            Garage garage) {
+        return new Visit(
                 BookingStatus.AVAILABLE,
                 date,
                 startHour,
@@ -192,8 +192,8 @@ public class BookingService {
     }
 
     public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
+        Visit booking = bookingRepository.findById(bookingId)
+                                         .orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
         int repairTime = (int) Duration.between(booking.getStartHour(), booking.getEndHour()).toMinutes();
         booking.setDate(date);
         booking.setStartHour(startHour);
@@ -209,11 +209,11 @@ public class BookingService {
                               Long carId,
                               int repairDuration) {
         Garage garage = garageService.getGarage(garageId);
-        Car car = carService.getCar(carId);
-        User user = userService.getUser(car.getUser().getId());
+        Vehicle car = carService.getCar(carId);
+        AppUser user = userService.getUser(car.getUser().getId());
         List<LocalTime> availableBookingTimes = getAvailableBookingTimesByDayAndRepairDuration(date, repairDuration, garageId);
         if (availableBookingTimes.contains(startHour)) {
-            Booking booking = createCarRepairBooking(date, startHour, repairDuration, garage);
+            Visit booking = createCarRepairBooking(date, startHour, repairDuration, garage);
             bookingRepository.save(booking);
             saveBookingAndCarRepairsForCarAndUser(selectedCarRepairIdList, car, user, booking);
         } else {
@@ -221,11 +221,11 @@ public class BookingService {
         }
     }
 
-    private Booking createCarRepairBooking(LocalDate date,
-                                           LocalTime startHour,
-                                           int repairDuration,
-                                           Garage garage) {
-        return new Booking(
+    private Visit createCarRepairBooking(LocalDate date,
+                                         LocalTime startHour,
+                                         int repairDuration,
+                                         Garage garage) {
+        return new Visit(
                 BookingStatus.WAITING_FOR_CUSTOMER,
                 date,
                 startHour,
@@ -237,9 +237,9 @@ public class BookingService {
     }
 
     private void saveBookingAndCarRepairsForCarAndUser(List<Long> selectedCarRepairIdList,
-                                                       Car car,
-                                                       User user,
-                                                       Booking booking) {
+                                                       Vehicle car,
+                                                       AppUser user,
+                                                       Visit booking) {
         List<AvailableCarRepair> selectedAvailableCarRepairs = new ArrayList<>();
         List<BigDecimal> repairCosts = new ArrayList<>();
         selectedCarRepairIdList.stream()
@@ -262,12 +262,12 @@ public class BookingService {
                 ))
                 .toList();
 
-        user.getCarList()
+        user.getVehicles()
                 .stream()
                 .filter(servicedCar -> Objects.equals(servicedCar.getId(), car.getId()))
                 .findFirst()
                 .ifPresent(servicedCar -> servicedCar.getCarServicesList().addAll(selectedCarRepairs));
-        user.getServicesList().addAll(selectedCarRepairs);
+//        user.getServicesList().addAll(selectedCarRepairs);
         userService.saveUser(user);
 
         BigDecimal totalRepairCost = repairCosts.stream()
@@ -277,7 +277,7 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    private void multiplyCarRepairCostIfCarIsPremiumMake(Car car, AvailableCarRepair availableCarRepair) {
+    private void multiplyCarRepairCostIfCarIsPremiumMake(Vehicle car, AvailableCarRepair availableCarRepair) {
         if (availableCarRepair.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
             BigDecimal repairCost = availableCarRepair.getCost();
             BigDecimal makeMultiplier = availableCarRepair.getMakeMultiplier();
@@ -286,11 +286,11 @@ public class BookingService {
         }
     }
 
-    public void save(Booking booking) {
+    public void save(Visit booking) {
         bookingRepository.save(booking);
     }
 
-    public void delete(Booking booking) {
+    public void delete(Visit booking) {
         bookingRepository.delete(booking);
     }
 }

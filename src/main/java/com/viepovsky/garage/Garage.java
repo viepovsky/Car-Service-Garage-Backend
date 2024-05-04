@@ -1,7 +1,7 @@
 package com.viepovsky.garage;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.booking.Booking;
+import com.viepovsky.booking.Visit;
 import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
 import com.viepovsky.garage.garage_work_time.GarageWorkTime;
 import jakarta.persistence.CascadeType;
@@ -52,12 +52,12 @@ public class Garage extends BaseEntityAudit {
     private String address;
 
     @OneToMany(
-            targetEntity = Booking.class,
+            targetEntity = Visit.class,
             mappedBy = "garage",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<Booking> bookingList = new ArrayList<>();
+    private List<Visit> bookingList = new ArrayList<>();
 
     @OneToMany(
             targetEntity = GarageWorkTime.class,
@@ -91,7 +91,7 @@ public class Garage extends BaseEntityAudit {
 
     public Garage(String name,
                   String address,
-                  List<Booking> bookingList,
+                  List<Visit> bookingList,
                   List<GarageWorkTime> garageWorkTimeList,
                   List<AvailableCarRepair> availableCarRepairList) {
         this.name = name;

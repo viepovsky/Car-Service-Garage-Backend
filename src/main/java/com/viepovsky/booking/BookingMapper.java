@@ -13,7 +13,7 @@ public class BookingMapper {
 
     private GarageMapper garageMapper;
 
-    public BookingDto mapToBookingDto(Booking booking) {
+    public BookingDto mapToBookingDto(Visit booking) {
         return new BookingDto(
                 booking.getId(),
                 booking.getStatus().toString(),
@@ -28,7 +28,7 @@ public class BookingMapper {
         );
     }
 
-    public List<BookingDto> mapToBookingDtoList(List<Booking> bookingList) {
+    public List<BookingDto> mapToBookingDtoList(List<Visit> bookingList) {
         return bookingList.stream()
                 .map(this::mapToBookingDto)
                 .toList();

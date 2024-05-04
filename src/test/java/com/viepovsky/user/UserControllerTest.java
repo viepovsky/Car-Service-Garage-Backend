@@ -57,8 +57,8 @@ class UserControllerTest {
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
-        var userInDb = User.builder().username("Testusername").role(Role.ROLE_USER).build();
-        var adminInDb = User.builder().username("Testadmin").role(Role.ROLE_ADMIN).build();
+        var userInDb = AppUser.builder().username("Testusername").role(Role.ROLE_USER).build();
+        var adminInDb = AppUser.builder().username("Testadmin").role(Role.ROLE_ADMIN).build();
         when(userDetailsService.loadUserByUsername("Testusername")).thenReturn(userInDb);
         when(userDetailsService.loadUserByUsername("Testadmin")).thenReturn(adminInDb);
         jwtTokenUser = generateToken("Testusername", secretKey);
