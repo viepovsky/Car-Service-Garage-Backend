@@ -9,7 +9,7 @@ import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
+import com.viepovsky.garage.available_car_repair.ServiceCatalog;
 import com.viepovsky.garage.available_car_repair.AvailableCarRepairService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
@@ -239,13 +239,13 @@ public class BookingService {
                                                        Vehicle car,
                                                        AppUser user,
                                                        Visit booking) {
-        List<AvailableCarRepair> selectedAvailableCarRepairs = new ArrayList<>();
+        List<ServiceCatalog> selectedAvailableCarRepairs = new ArrayList<>();
         List<BigDecimal> repairCosts = new ArrayList<>();
         selectedCarRepairIdList.stream()
-                .map(id -> new AvailableCarRepair(availableCarRepairService.getAvailableCarRepair(id)))
+                .map(id -> new ServiceCatalog(availableCarRepairService.getAvailableCarRepair(id)))
                 .peek(repair -> multiplyCarRepairCostIfCarIsPremiumMake(car, repair))
                 .peek(selectedAvailableCarRepairs::add)
-                .map(AvailableCarRepair::getCost)
+                .map(ServiceCatalog::getCost)
                 .forEach(repairCosts::add);
 
         List<CarRepair> selectedCarRepairs = selectedAvailableCarRepairs.stream()
@@ -276,7 +276,7 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    private void multiplyCarRepairCostIfCarIsPremiumMake(Vehicle car, AvailableCarRepair availableCarRepair) {
+    private void multiplyCarRepairCostIfCarIsPremiumMake(Vehicle car, ServiceCatalog availableCarRepair) {
         //TODO fix it
 //        if (availableCarRepair.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
 //            BigDecimal repairCost = availableCarRepair.getCost();

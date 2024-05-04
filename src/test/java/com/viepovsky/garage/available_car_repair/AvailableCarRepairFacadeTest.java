@@ -27,7 +27,7 @@ class AvailableCarRepairFacadeTest {
     @Test
     void shouldGetAvailableCarServices() {
         //Given
-        List<AvailableCarRepair> carServiceList = List.of(Mockito.mock(AvailableCarRepair.class));
+        List<ServiceCatalog> carServiceList = List.of(Mockito.mock(ServiceCatalog.class));
         List<AvailableCarRepairDto> carServiceDtoList = List.of(Mockito.mock(AvailableCarRepairDto.class));
         when(service.getAllAvailableCarRepair(1L)).thenReturn(carServiceList);
         when(mapper.mapToAvailableCarServiceDtoList(carServiceList)).thenReturn(carServiceDtoList);
@@ -42,7 +42,7 @@ class AvailableCarRepairFacadeTest {
     void shouldCreateAvailableCarService() {
         //Given
         AvailableCarRepairDto serviceDto = Mockito.mock(AvailableCarRepairDto.class);
-        AvailableCarRepair service = Mockito.mock(AvailableCarRepair.class);
+        ServiceCatalog service = Mockito.mock(ServiceCatalog.class);
         when(mapper.mapToAvailableCarService(serviceDto)).thenReturn(service);
         doNothing().when(this.service).saveAvailableCarRepair(service, 1L);
         //When

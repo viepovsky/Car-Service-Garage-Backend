@@ -16,19 +16,19 @@ public class AvailableCarRepairService {
 
     private final GarageService garageService;
 
-    public List<AvailableCarRepair> getAllAvailableCarRepair(Long garageId) {
+    public List<ServiceCatalog> getAllAvailableCarRepair(Long garageId) {
         return availableCarRepairRepository.findAllByGarageId(garageId);
     }
 
-    public AvailableCarRepair getAvailableCarRepair(Long id) {
+    public ServiceCatalog getAvailableCarRepair(Long id) {
         return availableCarRepairRepository.findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", id));
     }
 
-    public void saveAvailableCarRepair(AvailableCarRepair availableCarRepair, Long garageId) {
+    public void saveAvailableCarRepair(ServiceCatalog availableCarRepair, Long garageId) {
         Garage garage = garageService.getGarage(garageId);
         availableCarRepair.setGarage(garage);
-        garage.getAvailableCarRepairList().add(availableCarRepair);
+        garage.getAvailableServices().add(availableCarRepair);
         garageService.saveGarage(garage);
     }
 

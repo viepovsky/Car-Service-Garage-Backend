@@ -1,6 +1,7 @@
 package com.viepovsky.garage.available_car_repair;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
+import com.viepovsky.garage.Address;
 import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
 import org.junit.jupiter.api.DisplayName;
@@ -35,12 +36,12 @@ class AvailableCarRepairServiceTest {
     @Test
     void testGetAllAvailableCarService() {
         //Given
-        List<AvailableCarRepair> serviceList = new ArrayList<>();
-        AvailableCarRepair availableCarRepair = Mockito.mock(AvailableCarRepair.class);
+        List<ServiceCatalog> serviceList = new ArrayList<>();
+        ServiceCatalog availableCarRepair = Mockito.mock(ServiceCatalog.class);
         serviceList.add(availableCarRepair);
         when(availableCarRepairRepository.findAllByGarageId(5L)).thenReturn(serviceList);
         //When
-        List<AvailableCarRepair> retrievedServiceList = availableCarRepairService.getAllAvailableCarRepair(5L);
+        List<ServiceCatalog> retrievedServiceList = availableCarRepairService.getAllAvailableCarRepair(5L);
         //Then
         assertEquals(1, retrievedServiceList.size());
     }
@@ -48,8 +49,8 @@ class AvailableCarRepairServiceTest {
     @Test
     void testSaveAvailableCarService() {
         //Given
-        Garage garage = new Garage("Test name", "Test address", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        AvailableCarRepair availableCarRepair = new AvailableCarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
+        Garage garage = new Garage("Test name", Mockito.mock(Address.class), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        ServiceCatalog availableCarRepair = new ServiceCatalog("Testname", "Testdescription", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
         when(garageService.getGarage(anyLong())).thenReturn(garage);
         when(garageService.saveGarage(any(Garage.class))).thenReturn(garage);
         //When

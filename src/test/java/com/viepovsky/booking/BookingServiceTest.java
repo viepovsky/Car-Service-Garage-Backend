@@ -7,7 +7,7 @@ import com.viepovsky.car_repair.CarRepairService;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
+import com.viepovsky.garage.available_car_repair.ServiceCatalog;
 import com.viepovsky.garage.available_car_repair.AvailableCarRepairService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
@@ -203,8 +203,8 @@ class BookingServiceTest {
         Vehicle car = Mockito.mock(Vehicle.class);
         user.setVehicles(List.of(car));
         List<LocalTime> localTimeList = List.of(LocalTime.of(10, 0), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50), LocalTime.of(11, 0));
-        AvailableCarRepair availableCarRepair = new AvailableCarRepair(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
-        AvailableCarRepair availableCarRepair2 = new AvailableCarRepair(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
+        ServiceCatalog availableCarRepair = new ServiceCatalog(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
+        ServiceCatalog availableCarRepair2 = new ServiceCatalog(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
         when(carService.getCar(anyLong())).thenReturn(car);

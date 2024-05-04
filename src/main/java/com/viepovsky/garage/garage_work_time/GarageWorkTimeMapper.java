@@ -7,7 +7,7 @@ import java.util.List;
 @Service
 public class GarageWorkTimeMapper {
 
-    public GarageWorkTimeDto mapToGarageWorkTimeDto(GarageWorkTime garageWorkTime) {
+    public GarageWorkTimeDto mapToGarageWorkTimeDto(GarageSchedule garageWorkTime) {
         return new GarageWorkTimeDto(
                 garageWorkTime.getId(),
                 garageWorkTime.getDay(),
@@ -16,14 +16,14 @@ public class GarageWorkTimeMapper {
         );
     }
 
-    public List<GarageWorkTimeDto> mapToGarageWorkTimeDtoList(List<GarageWorkTime> garageWorkTimeList) {
+    public List<GarageWorkTimeDto> mapToGarageWorkTimeDtoList(List<GarageSchedule> garageWorkTimeList) {
         return garageWorkTimeList.stream()
                 .map(this::mapToGarageWorkTimeDto)
                 .toList();
     }
 
-    public GarageWorkTime mapToGarageWorkTime(GarageWorkTimeDto garageWorkTimeDto) {
-        return new GarageWorkTime(
+    public GarageSchedule mapToGarageWorkTime(GarageWorkTimeDto garageWorkTimeDto) {
+        return new GarageSchedule(
                 garageWorkTimeDto.getId(),
                 garageWorkTimeDto.getDay(),
                 garageWorkTimeDto.getStartHour(),

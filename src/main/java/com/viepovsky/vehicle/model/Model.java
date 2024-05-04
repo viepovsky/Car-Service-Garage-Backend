@@ -25,7 +25,7 @@ public class Model extends BaseEntityAudit {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "model_id_sequence")
     private Long id;
 
-    @Column(name = "name", length = 128)
+    @Column(name = "name", length = 128, nullable = false)
     private String name;
 
     @ManyToOne

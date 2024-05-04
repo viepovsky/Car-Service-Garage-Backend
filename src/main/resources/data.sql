@@ -1,6 +1,10 @@
-INSERT INTO GARAGE (id, name, address) VALUES
-(1, 'Fast Furious Garage', 'Poznan 62-222, Jana street'),
-(2, 'Prestige Car Garage', 'Warsaw 60-333, Halna street');
+INSERT INTO address (id, city, code, street) VALUES
+(1, 'Poznan', '62-222', 'Jana street'),
+(2, 'Warsaw', '60-333', 'Halna street');
+
+INSERT INTO garage (id, name, address_id) VALUES
+(1, 'Fast Furious Garage', 1),
+(2, 'Prestige Car Garage', 2);
 
 INSERT INTO AVAILABLE_CAR_REPAIRS (id, name, description, cost, repair_time, premium_make_list, make_multiplier, garage_id) VALUES
 (1, 'Oil change', 'Oil change description', 100.00, 30, 'BMW, AUDI, MERCEDES', 1.20, 1),

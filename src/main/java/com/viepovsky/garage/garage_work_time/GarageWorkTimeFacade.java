@@ -18,13 +18,13 @@ class GarageWorkTimeFacade {
     private final GarageWorkTimeMapper mapper;
 
     List<GarageWorkTimeDto> getGarageWorkTimes(Long garageId) {
-        List<GarageWorkTime> workTimes = garageWorkTimeService.getAllGarageWorkTimes(garageId);
+        List<GarageSchedule> workTimes = garageWorkTimeService.getAllGarageWorkTimes(garageId);
         return mapper.mapToGarageWorkTimeDtoList(workTimes);
     }
 
     void createGarageWorkTime(GarageWorkTimeDto garageWorkTimeDto, Long garageId) {
         LOGGER.info("Create garage work time endpoint used with garage id:{}", garageId);
-        GarageWorkTime garageWorkTime = mapper.mapToGarageWorkTime(garageWorkTimeDto);
+        GarageSchedule garageWorkTime = mapper.mapToGarageWorkTime(garageWorkTimeDto);
         garageWorkTimeService.saveGarageWorkTime(garageWorkTime, garageId);
     }
 

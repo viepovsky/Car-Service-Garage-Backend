@@ -32,13 +32,13 @@ class GarageWorkTimeServiceTest {
     @Test
     void testGetAllGarageWorkTimes() {
         //Given
-        List<GarageWorkTime> garageWorkTimeList = new ArrayList<>();
-        var garageWorkTime = new GarageWorkTime();
+        List<GarageSchedule> garageWorkTimeList = new ArrayList<>();
+        var garageWorkTime = new GarageSchedule();
         garageWorkTimeList.add(garageWorkTime);
 
         when(workTimeRepository.findAllByGarageId(anyLong())).thenReturn(garageWorkTimeList);
         //When
-        List<GarageWorkTime> retrievedGarageWorkTimeList = workTimeService.getAllGarageWorkTimes(5L);
+        List<GarageSchedule> retrievedGarageWorkTimeList = workTimeService.getAllGarageWorkTimes(5L);
         //Then
         assertEquals(1, retrievedGarageWorkTimeList.size());
     }
@@ -47,7 +47,7 @@ class GarageWorkTimeServiceTest {
     void testSaveGarageWorkTime() {
         //Given
         var garage = new Garage();
-        var garageWorkTime = new GarageWorkTime();
+        var garageWorkTime = new GarageSchedule();
 
         when(garageService.getGarage(anyLong())).thenReturn(garage);
         when(garageService.saveGarage(any(Garage.class))).thenReturn(garage);

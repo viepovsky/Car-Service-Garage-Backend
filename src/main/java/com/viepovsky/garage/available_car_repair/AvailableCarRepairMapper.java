@@ -7,7 +7,7 @@ import java.util.List;
 @Service
 class AvailableCarRepairMapper {
 
-    public AvailableCarRepairDto mapToAvailableCarServiceDto(AvailableCarRepair availableCarRepair) {
+    public AvailableCarRepairDto mapToAvailableCarServiceDto(ServiceCatalog availableCarRepair) {
         return new AvailableCarRepairDto(
                 availableCarRepair.getId(),
                 availableCarRepair.getName(),
@@ -20,8 +20,8 @@ class AvailableCarRepairMapper {
         );
     }
 
-    public AvailableCarRepair mapToAvailableCarService(AvailableCarRepairDto availableCarRepairDto) {
-        return new AvailableCarRepair(
+    public ServiceCatalog mapToAvailableCarService(AvailableCarRepairDto availableCarRepairDto) {
+        return new ServiceCatalog(
                 availableCarRepairDto.getId(),
                 availableCarRepairDto.getName(),
                 availableCarRepairDto.getDescription(),
@@ -33,7 +33,7 @@ class AvailableCarRepairMapper {
         );
     }
 
-    public List<AvailableCarRepairDto> mapToAvailableCarServiceDtoList(List<AvailableCarRepair> availableCarRepairList) {
+    public List<AvailableCarRepairDto> mapToAvailableCarServiceDtoList(List<ServiceCatalog> availableCarRepairList) {
         return availableCarRepairList.stream()
                 .map(this::mapToAvailableCarServiceDto)
                 .toList();

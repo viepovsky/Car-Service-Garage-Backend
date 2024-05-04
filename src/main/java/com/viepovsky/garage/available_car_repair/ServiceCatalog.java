@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "AVAILABLE_CAR_REPAIRS")
-public class AvailableCarRepair extends BaseEntityAudit {
+public class ServiceCatalog extends BaseEntityAudit {
 
     @Id
     @SequenceGenerator(
@@ -62,13 +62,13 @@ public class AvailableCarRepair extends BaseEntityAudit {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    public AvailableCarRepair(String name,
-                              String description,
-                              BigDecimal cost,
-                              int repairTimeInMinutes,
-                              String premiumMakes,
-                              BigDecimal makeMultiplier,
-                              Garage garage) {
+    public ServiceCatalog(String name,
+                          String description,
+                          BigDecimal cost,
+                          int repairTimeInMinutes,
+                          String premiumMakes,
+                          BigDecimal makeMultiplier,
+                          Garage garage) {
         this.name = name;
         this.description = description;
         this.cost = cost;
@@ -78,7 +78,7 @@ public class AvailableCarRepair extends BaseEntityAudit {
         this.garage = garage;
     }
 
-    public AvailableCarRepair(AvailableCarRepair availableCarRepair) {
+    public ServiceCatalog(ServiceCatalog availableCarRepair) {
         this.id = availableCarRepair.getId();
         this.name = availableCarRepair.getName();
         this.description = availableCarRepair.getDescription();

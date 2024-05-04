@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-interface GarageWorkTimeRepository extends JpaRepository<GarageWorkTime, Long> {
-    List<GarageWorkTime> findAllByGarageId(Long id);
+interface GarageWorkTimeRepository extends JpaRepository<GarageSchedule, Long> {
+    List<GarageSchedule> findAllByGarageId(Long id);
 }

@@ -27,7 +27,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "GARAGE_WORK_TIMES")
-public class GarageWorkTime extends BaseEntityAudit {
+public class GarageSchedule extends BaseEntityAudit {
 
     @Id
     @SequenceGenerator(
@@ -56,7 +56,7 @@ public class GarageWorkTime extends BaseEntityAudit {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    public GarageWorkTime(Long id,
+    public GarageSchedule(Long id,
                           WorkDays day,
                           LocalTime startHour,
                           LocalTime endHour) {

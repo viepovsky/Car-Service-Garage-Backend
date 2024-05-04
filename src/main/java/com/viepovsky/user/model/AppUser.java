@@ -77,15 +77,13 @@ public class AppUser extends BaseEntityAudit implements UserDetails {
     @OneToMany(
             targetEntity = Vehicle.class,
             mappedBy = "user",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Vehicle> vehicles = new ArrayList<>();
 
     @OneToMany(
             targetEntity = Visit.class,
             mappedBy = "user",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Visit> visits = new ArrayList<>();
 
     public AppUser(

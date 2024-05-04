@@ -2,18 +2,11 @@ package com.viepovsky.garage;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Visit;
-import com.viepovsky.garage.available_car_repair.AvailableCarRepair;
-import com.viepovsky.garage.garage_work_time.GarageWorkTime;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import com.viepovsky.garage.available_car_repair.ServiceCatalog;
+import com.viepovsky.garage.garage_work_time.GarageSchedule;
+
+import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,76 +21,72 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "GARAGE")
+@Entity(name = "Garage")
+@Table(name = "garage")
 public class Garage extends BaseEntityAudit {
-
     @Id
     @SequenceGenerator(
             name = "garage_id_sequence",
             sequenceName = "garage_id_sequence",
             initialValue = 5000,
-            allocationSize = 100
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "garage_id_sequence"
-    )
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "garage_id_sequence")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 128, nullable = false)
     private String name;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "description", columnDefinition = "text")
+    private String description;
+
+    @OneToOne(
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(
+            name = "address_id",
+            nullable = false,
+            referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "garage_address_id_fk"))
+    private Address address;
 
     @OneToMany(
             targetEntity = Visit.class,
             mappedBy = "garage",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
-    )
-    private List<Visit> bookingList = new ArrayList<>();
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    private List<Visit> visits = new ArrayList<>();
 
     @OneToMany(
-            targetEntity = GarageWorkTime.class,
+            targetEntity = GarageSchedule.class,
             mappedBy = "garage",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
-    )
-    private List<GarageWorkTime> garageWorkTimeList = new ArrayList<>();
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.MERGE,
+                CascadeType.REFRESH,
+                CascadeType.REMOVE
+            })
+    private List<GarageSchedule> garageSchedule = new ArrayList<>();
 
     @OneToMany(
-            targetEntity = AvailableCarRepair.class,
+            targetEntity = ServiceCatalog.class,
             mappedBy = "garage",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
-    )
-    private List<AvailableCarRepair> availableCarRepairList = new ArrayList<>();
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    private List<ServiceCatalog> availableServices = new ArrayList<>();
 
-    public Garage(Long id,
-                  String name,
-                  String address) {
-        this.id = id;
+    public Garage(String name, Address address) {
         this.name = name;
         this.address = address;
     }
 
-    public Garage(String name,
-                  String address) {
+    public Garage(
+            String name,
+            Address address,
+            List<Visit> visits,
+            List<GarageSchedule> garageSchedule,
+            List<ServiceCatalog> availableServices) {
         this.name = name;
         this.address = address;
-    }
-
-    public Garage(String name,
-                  String address,
-                  List<Visit> bookingList,
-                  List<GarageWorkTime> garageWorkTimeList,
-                  List<AvailableCarRepair> availableCarRepairList) {
-        this.name = name;
-        this.address = address;
-        this.bookingList = bookingList;
-        this.garageWorkTimeList = garageWorkTimeList;
-        this.availableCarRepairList = availableCarRepairList;
+        this.visits = visits;
+        this.garageSchedule = garageSchedule;
+        this.availableServices = availableServices;
     }
 }

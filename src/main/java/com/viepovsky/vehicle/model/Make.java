@@ -23,6 +23,6 @@ public class Make {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "make_id_sequence")
     private Long id;
 
-    @Column(name = "name", length = 128)
+    @Column(name = "name", length = 128, nullable = false)
     private String name;
 }

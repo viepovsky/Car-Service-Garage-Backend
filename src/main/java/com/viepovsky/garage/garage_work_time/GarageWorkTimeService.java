@@ -16,14 +16,14 @@ public class GarageWorkTimeService {
 
     private final GarageService garageService;
 
-    public List<GarageWorkTime> getAllGarageWorkTimes(Long garageId) {
+    public List<GarageSchedule> getAllGarageWorkTimes(Long garageId) {
         return garageWorkTimeRepository.findAllByGarageId(garageId);
     }
 
-    public void saveGarageWorkTime(GarageWorkTime garageWorkTime, Long garageId) {
+    public void saveGarageWorkTime(GarageSchedule garageWorkTime, Long garageId) {
         Garage garage = garageService.getGarage(garageId);
         garageWorkTime.setGarage(garage);
-        garage.getGarageWorkTimeList().add(garageWorkTime);
+        garage.getGarageSchedule().add(garageWorkTime);
         garageService.saveGarage(garage);
     }
 

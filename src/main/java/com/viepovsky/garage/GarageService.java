@@ -22,10 +22,12 @@ public class GarageService {
     }
 
     public List<String> getAllGarageCities() {
-        return garageRepository.findAll()
-                .stream()
-                .map(n -> n.getAddress().substring(0, n.getAddress().indexOf(" ")))
-                .toList();
+        //TODO:fixthis
+        return null;
+//        return garageRepository.findAll()
+//                .stream()
+//                .map(n -> n.getAddress().substring(0, n.getAddress().indexOf(" ")))
+//                .toList();
     }
 
     public Garage saveGarage(Garage garage) {

@@ -25,7 +25,7 @@ class GarageWorkTimeFacadeTest {
     @Test
     void shouldGetGarageWorkTImes() {
         //Given
-        List<GarageWorkTime> workTimes = List.of(new GarageWorkTime());
+        List<GarageSchedule> workTimes = List.of(new GarageSchedule());
         List<GarageWorkTimeDto> workTimesResponse = List.of(GarageWorkTimeDto.builder().build());
 
         when(service.getAllGarageWorkTimes(anyLong())).thenReturn(workTimes);
@@ -40,10 +40,10 @@ class GarageWorkTimeFacadeTest {
     void shouldCreateGarageWorkTime() {
         //Given
         var workTimeDto = GarageWorkTimeDto.builder().build();
-        var workTime = new GarageWorkTime();
+        var workTime = new GarageSchedule();
 
         when(mapper.mapToGarageWorkTime(any(GarageWorkTimeDto.class))).thenReturn(workTime);
-        doNothing().when(service).saveGarageWorkTime(any(GarageWorkTime.class), anyLong());
+        doNothing().when(service).saveGarageWorkTime(any(GarageSchedule.class), anyLong());
         //When
         facade.createGarageWorkTime(workTimeDto, 1L);
         //Then
