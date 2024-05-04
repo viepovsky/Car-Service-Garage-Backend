@@ -1,5 +1,10 @@
-package com.viepovsky.garage.garage_work_time;
+package com.viepovsky.garage.garage_schedule;
 
+import com.viepovsky.garage.model.Schedule;
+import com.viepovsky.garage.GarageWorkTimeFacade;
+import com.viepovsky.garage.ScheduleMapper;
+import com.viepovsky.garage.ScheduleService;
+import com.viepovsky.garage.dto.ScheduleDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,21 +22,21 @@ class GarageWorkTimeFacadeTest {
     private GarageWorkTimeFacade facade;
 
     @Mock
-    private GarageWorkTimeService service;
+    private ScheduleService service;
 
     @Mock
-    private GarageWorkTimeMapper mapper;
+    private ScheduleMapper mapper;
 
     @Test
     void shouldGetGarageWorkTImes() {
         //Given
-        List<GarageSchedule> workTimes = List.of(new GarageSchedule());
-        List<GarageWorkTimeDto> workTimesResponse = List.of(GarageWorkTimeDto.builder().build());
+        List<Schedule> workTimes = List.of(new Schedule());
+        List<ScheduleDto> workTimesResponse = List.of(ScheduleDto.builder().build());
 
         when(service.getAllGarageWorkTimes(anyLong())).thenReturn(workTimes);
         when(mapper.mapToGarageWorkTimeDtoList(anyList())).thenReturn(workTimesResponse);
         //When
-        List<GarageWorkTimeDto> retrievedWorkTimes = facade.getGarageWorkTimes(5L);
+        List<ScheduleDto> retrievedWorkTimes = facade.getGarageWorkTimes(5L);
         //Then
         assertEquals(1, retrievedWorkTimes.size());
     }
@@ -39,11 +44,11 @@ class GarageWorkTimeFacadeTest {
     @Test
     void shouldCreateGarageWorkTime() {
         //Given
-        var workTimeDto = GarageWorkTimeDto.builder().build();
-        var workTime = new GarageSchedule();
+        var workTimeDto = ScheduleDto.builder().build();
+        var workTime = new Schedule();
 
-        when(mapper.mapToGarageWorkTime(any(GarageWorkTimeDto.class))).thenReturn(workTime);
-        doNothing().when(service).saveGarageWorkTime(any(GarageSchedule.class), anyLong());
+        when(mapper.mapToGarageWorkTime(any(ScheduleDto.class))).thenReturn(workTime);
+        doNothing().when(service).saveGarageWorkTime(any(Schedule.class), anyLong());
         //When
         facade.createGarageWorkTime(workTimeDto, 1L);
         //Then

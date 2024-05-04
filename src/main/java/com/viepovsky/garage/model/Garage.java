@@ -1,9 +1,8 @@
-package com.viepovsky.garage;
+package com.viepovsky.garage.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Visit;
-import com.viepovsky.garage.available_car_repair.ServiceCatalog;
-import com.viepovsky.garage.garage_work_time.GarageSchedule;
+import com.viepovsky.vehicle_services.ServiceCatalog;
 
 import jakarta.persistence.*;
 
@@ -56,7 +55,7 @@ public class Garage extends BaseEntityAudit {
     private List<Visit> visits = new ArrayList<>();
 
     @OneToMany(
-            targetEntity = GarageSchedule.class,
+            targetEntity = Schedule.class,
             mappedBy = "garage",
             cascade = {
                 CascadeType.PERSIST,
@@ -64,7 +63,7 @@ public class Garage extends BaseEntityAudit {
                 CascadeType.REFRESH,
                 CascadeType.REMOVE
             })
-    private List<GarageSchedule> garageSchedule = new ArrayList<>();
+    private List<Schedule> garageSchedules = new ArrayList<>();
 
     @OneToMany(
             targetEntity = ServiceCatalog.class,
@@ -81,12 +80,12 @@ public class Garage extends BaseEntityAudit {
             String name,
             Address address,
             List<Visit> visits,
-            List<GarageSchedule> garageSchedule,
+            List<Schedule> garageSchedules,
             List<ServiceCatalog> availableServices) {
         this.name = name;
         this.address = address;
         this.visits = visits;
-        this.garageSchedule = garageSchedule;
+        this.garageSchedules = garageSchedules;
         this.availableServices = availableServices;
     }
 }

@@ -1,7 +1,7 @@
-package com.viepovsky.garage.available_car_repair;
+package com.viepovsky.vehicle_services;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.garage.Garage;
+import com.viepovsky.garage.model.Garage;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

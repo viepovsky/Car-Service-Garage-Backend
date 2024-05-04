@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import com.viepovsky.garage.garage_work_time.GarageWorkTimeDto;
-import com.viepovsky.garage.garage_work_time.WorkDays;
+import com.viepovsky.garage.dto.GarageDto;
+import com.viepovsky.garage.dto.ScheduleDto;
+import com.viepovsky.garage.garage_schedule.WorkDays;
+import com.viepovsky.garage.model.Garage;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
@@ -101,7 +103,7 @@ class GarageControllerTest {
     @Test
     void shouldGetAllGarages() throws Exception {
         //Given
-        List<GarageWorkTimeDto> garageWorkTimeDtoList = List.of(new GarageWorkTimeDto(20L, WorkDays.MONDAY, LocalTime.of(10, 0), LocalTime.of(11, 0)));
+        List<ScheduleDto> garageWorkTimeDtoList = List.of(new ScheduleDto(20L, WorkDays.MONDAY, LocalTime.of(10, 0), LocalTime.of(11, 0)));
         List<GarageDto> garageDtoList = List.of(new GarageDto(1L, "Test garage", "Test address", garageWorkTimeDtoList));
         when(facade.getAllGarages()).thenReturn(garageDtoList);
         //When && then

@@ -1,6 +1,7 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.garage.garage_work_time.GarageWorkTimeMapper;
+import com.viepovsky.garage.dto.GarageDto;
+import com.viepovsky.garage.model.Garage;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GarageMapper {
 
-    private GarageWorkTimeMapper garageWorkTimeMapper;
+    private ScheduleMapper garageWorkTimeMapper;
 
     public GarageDto mapToGarageDto(Garage garage) {
         //TODO fixthis

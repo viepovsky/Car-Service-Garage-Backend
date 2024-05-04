@@ -1,5 +1,6 @@
 package com.viepovsky.garage;
 
+import com.viepovsky.garage.dto.GarageDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

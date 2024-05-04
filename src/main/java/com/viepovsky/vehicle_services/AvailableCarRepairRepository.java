@@ -1,4 +1,4 @@
-package com.viepovsky.garage.available_car_repair;
+package com.viepovsky.vehicle_services;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

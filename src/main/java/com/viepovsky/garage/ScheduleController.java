@@ -1,5 +1,6 @@
-package com.viepovsky.garage.garage_work_time;
+package com.viepovsky.garage;
 
+import com.viepovsky.garage.dto.ScheduleDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -24,19 +25,19 @@ import java.util.List;
 @RequestMapping("/v1/garage-work-time")
 @RequiredArgsConstructor
 @Validated
-class GarageWorkTimeController {
+class ScheduleController {
 
-    private final GarageWorkTimeFacade garageWorkTimeFacade;
+    private final ScheduleFacade garageWorkTimeFacade;
 
     @GetMapping(path = "/{garageId}")
-    ResponseEntity<List<GarageWorkTimeDto>> getGarageWorkTimes(@PathVariable @Min(1) Long garageId) {
+    ResponseEntity<List<ScheduleDto>> getGarageWorkTimes(@PathVariable @Min(1) Long garageId) {
         return ResponseEntity.ok(garageWorkTimeFacade.getGarageWorkTimes(garageId));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/{garageId}")
     ResponseEntity<String> createGarageWorkTime(
-            @Valid @RequestBody GarageWorkTimeDto garageWorkTimeDto,
+            @Valid @RequestBody ScheduleDto garageWorkTimeDto,
             @PathVariable @Min(1) Long garageId
     ) {
         garageWorkTimeFacade.createGarageWorkTime(garageWorkTimeDto, garageId);

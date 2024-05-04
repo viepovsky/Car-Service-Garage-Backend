@@ -1,4 +1,4 @@
-package com.viepovsky.garage;
+package com.viepovsky.garage.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
 

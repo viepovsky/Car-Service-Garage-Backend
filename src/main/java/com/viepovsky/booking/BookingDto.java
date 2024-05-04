@@ -1,6 +1,6 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.garage.GarageDto;
+import com.viepovsky.garage.dto.GarageDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

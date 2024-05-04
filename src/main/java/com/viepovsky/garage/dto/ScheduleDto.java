@@ -1,24 +1,26 @@
-package com.viepovsky.garage.garage_work_time;
+package com.viepovsky.garage.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class GarageWorkTimeDto {
+public class ScheduleDto {
 
     private Long id;
 
-    private WorkDays day;
+
+    private LocalDate date;
 
     @NotNull
-    private LocalTime startHour;
+    private LocalTime openFrom;
 
     @NotNull
-    private LocalTime endHour;
+    private LocalTime openTill;
 }

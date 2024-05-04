@@ -1,8 +1,9 @@
-package com.viepovsky.garage.garage_work_time;
+package com.viepovsky.garage.garage_schedule;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.garage.Garage;
-import com.viepovsky.garage.GarageService;
+import com.viepovsky.garage.*;
+import com.viepovsky.garage.model.Garage;
+import com.viepovsky.garage.model.Schedule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.*;
 class GarageWorkTimeServiceTest {
 
     @InjectMocks
-    private GarageWorkTimeService workTimeService;
+    private ScheduleService workTimeService;
 
     @Mock
     private GarageWorkTimeRepository workTimeRepository;
@@ -32,13 +33,13 @@ class GarageWorkTimeServiceTest {
     @Test
     void testGetAllGarageWorkTimes() {
         //Given
-        List<GarageSchedule> garageWorkTimeList = new ArrayList<>();
-        var garageWorkTime = new GarageSchedule();
+        List<Schedule> garageWorkTimeList = new ArrayList<>();
+        var garageWorkTime = new Schedule();
         garageWorkTimeList.add(garageWorkTime);
 
         when(workTimeRepository.findAllByGarageId(anyLong())).thenReturn(garageWorkTimeList);
         //When
-        List<GarageSchedule> retrievedGarageWorkTimeList = workTimeService.getAllGarageWorkTimes(5L);
+        List<Schedule> retrievedGarageWorkTimeList = workTimeService.getAllGarageWorkTimes(5L);
         //Then
         assertEquals(1, retrievedGarageWorkTimeList.size());
     }
@@ -47,7 +48,7 @@ class GarageWorkTimeServiceTest {
     void testSaveGarageWorkTime() {
         //Given
         var garage = new Garage();
-        var garageWorkTime = new GarageSchedule();
+        var garageWorkTime = new Schedule();
 
         when(garageService.getGarage(anyLong())).thenReturn(garage);
         when(garageService.saveGarage(any(Garage.class))).thenReturn(garage);

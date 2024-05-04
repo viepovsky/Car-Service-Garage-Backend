@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.vehicle_services.AvailableCarRepairDto;
+import com.viepovsky.vehicle_services.AvailableCarRepairFacade;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;

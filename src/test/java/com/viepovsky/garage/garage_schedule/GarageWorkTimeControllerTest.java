@@ -1,4 +1,4 @@
-package com.viepovsky.garage.garage_work_time;
+package com.viepovsky.garage.garage_schedule;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.viepovsky.garage.GarageWorkTimeFacade;
+import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
@@ -86,7 +88,7 @@ class GarageWorkTimeControllerTest {
     @Test
     void getGarageWorkTimes() throws Exception {
         //Given
-        List<GarageWorkTimeDto> workTimesResponse = List.of(GarageWorkTimeDto.builder().build());
+        List<ScheduleDto> workTimesResponse = List.of(ScheduleDto.builder().build());
         var jsonResponse = new ObjectMapper().writeValueAsString(workTimesResponse);
         when(facade.getGarageWorkTimes(anyLong())).thenReturn(workTimesResponse);
         //When
@@ -100,8 +102,8 @@ class GarageWorkTimeControllerTest {
     @Test
     void testCreateGarageWorkTime() throws Exception {
         //Given
-        GarageWorkTimeDto garageWorkTimeDto = new GarageWorkTimeDto(1L, WorkDays.MONDAY, LocalTime.of(10, 0), LocalTime.of(15, 0));
-        doNothing().when(facade).createGarageWorkTime(any(GarageWorkTimeDto.class), anyLong());
+        ScheduleDto garageWorkTimeDto = new ScheduleDto(1L, WorkDays.MONDAY, LocalTime.of(10, 0), LocalTime.of(15, 0));
+        doNothing().when(facade).createGarageWorkTime(any(ScheduleDto.class), anyLong());
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new TypeAdapter<LocalTime>() {
             @Override
             public void write(JsonWriter out, LocalTime value) throws IOException {

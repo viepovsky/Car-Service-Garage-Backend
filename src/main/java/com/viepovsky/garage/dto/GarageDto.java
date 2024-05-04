@@ -1,6 +1,5 @@
-package com.viepovsky.garage;
+package com.viepovsky.garage.dto;
 
-import com.viepovsky.garage.garage_work_time.GarageWorkTimeDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,5 +22,5 @@ public class GarageDto {
     @NotBlank
     private String address;
 
-    private List<GarageWorkTimeDto> garageWorkTimeDtoList;
+    private List<ScheduleDto> garageWorkTimeDtoList;
 }

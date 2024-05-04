@@ -1,7 +1,7 @@
-package com.viepovsky.garage.available_car_repair;
+package com.viepovsky.vehicle_services;
 
 import com.viepovsky.exceptions.MyEntityNotFoundException;
-import com.viepovsky.garage.Garage;
+import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

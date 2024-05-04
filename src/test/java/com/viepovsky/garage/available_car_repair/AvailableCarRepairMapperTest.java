@@ -1,6 +1,9 @@
 package com.viepovsky.garage.available_car_repair;
 
-import com.viepovsky.garage.Garage;
+import com.viepovsky.garage.model.Garage;
+import com.viepovsky.vehicle_services.AvailableCarRepairDto;
+import com.viepovsky.vehicle_services.AvailableCarRepairMapper;
+import com.viepovsky.vehicle_services.ServiceCatalog;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;

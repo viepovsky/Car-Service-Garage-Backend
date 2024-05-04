@@ -1,5 +1,7 @@
 package com.viepovsky.garage;
 
+import com.viepovsky.garage.dto.GarageDto;
+import com.viepovsky.garage.model.Garage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

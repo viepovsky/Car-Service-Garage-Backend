@@ -1,4 +1,4 @@
-package com.viepovsky.garage.available_car_repair;
+package com.viepovsky.vehicle_services;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

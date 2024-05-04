@@ -1,5 +1,6 @@
 package com.viepovsky.garage.available_car_repair;
 
+import com.viepovsky.vehicle_services.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
