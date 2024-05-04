@@ -1,3 +1,66 @@
+INSERT INTO make (id, name) VALUES
+(1, 'Acura'),
+(2, 'Alfa Romeo'),
+(3, 'Aston Martin'),
+(4, 'Audi'),
+(5, 'BMW'),
+(6, 'Bentley'),
+(7, 'Buick'),
+(8, 'Cadillac'),
+(9, 'Chevrolet'),
+(10, 'Chrysler'),
+(11, 'Daewoo'),
+(12, 'Daihatsu'),
+(13, 'Dodge'),
+(14, 'Eagle'),
+(15, 'FIAT'),
+(16, 'Ferrari'),
+(17, 'Fisker'),
+(18, 'Ford'),
+(19, 'Freightliner'),
+(20, 'GMC'),
+(21, 'Genesis'),
+(22, 'Geo'),
+(23, 'HUMMER'),
+(24, 'Honda'),
+(25, 'Hyundai'),
+(26, 'INFINITI'),
+(27, 'Isuzu'),
+(28, 'Jaguar'),
+(29, 'Jeep'),
+(30, 'Kia'),
+(31, 'Lamborghini'),
+(32, 'Land Rover'),
+(33, 'Lexus'),
+(34, 'Lincoln'),
+(35, 'Lotus'),
+(36, 'MAZDA'),
+(37, 'MINI'),
+(38, 'Maserati'),
+(39, 'Maybach'),
+(40, 'McLaren'),
+(41, 'Mercedes-Benz'),
+(42, 'Mercury'),
+(43, 'Mitsubishi'),
+(44, 'Nissan'),
+(45, 'Oldsmobile'),
+(46, 'Panoz'),
+(47, 'Plymouth'),
+(48, 'Pontiac'),
+(49, 'Porsche'),
+(50, 'Ram'),
+(51, 'Rolls-Royce'),
+(52, 'SRT'),
+(53, 'Saab'),
+(54, 'Saturn'),
+(55, 'Scion'),
+(56, 'Subaru'),
+(57, 'Suzuki'),
+(58, 'Tesla'),
+(59, 'Toyota'),
+(60, 'Volkswagen'),
+(61, 'Volvo'),
+(62, 'smart');
 INSERT INTO address (id, city, code, street) VALUES
 (1, 'Poznan', '62-222', 'Jana street'),
 (2, 'Warsaw', '60-333', 'Halna street');
@@ -41,13 +104,9 @@ INSERT INTO app_user (id, first_name, last_name, email, mobile, username, passwo
 (1, 'testName', 'testLastName', 'test@email.com', '00444444444', 'testuser', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 'ROLE_USER', CURRENT_TIMESTAMP),
 (2, 'testName', 'testLastName', 'test@email.com', '00555555555', 'testadmin', '$2a$12$wVZjTRY0adwXJQh6U3cGHu44Mu65camSrYpgMZIpawuFWQVnnB4lG', 'ROLE_ADMIN', CURRENT_TIMESTAMP);
 
-INSERT INTO make (id, name) VALUES
-(1, 'BMW'),
-(2, 'Volvo');
-
 INSERT INTO model (id, name, make_id, type) VALUES
-(1, '3 Series', 1, 'SEDAN'),
-(2, 'XC60', 2, 'SUV');
+(1, '3 Series', 5, 'SEDAN'),
+(2, 'XC60', 61, 'SUV');
 
 INSERT INTO vehicle (id, license_plate, model_id, manufactured_year, engine_type, user_id) VALUES
 (1, 'PKN11111', 1, 2014, 'DIESEL', 1),

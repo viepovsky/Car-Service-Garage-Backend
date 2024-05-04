@@ -29,33 +29,26 @@ class AuthenticationService {
 
     AuthenticationResponse register(RegisterUserRequest request) {
         LOGGER.info("Register request received.");
-        var user = AppUser.builder()
-                          .firstName(request.getFirstName())
-                          .lastName(request.getLastName())
-                          .email(request.getEmail())
-                          .mobile(request.getPhoneNumber())
-                          .username(request.getUsername())
-                          .password(passwordEncoder.encode(request.getPassword()))
-                          .build();
+        var user =
+                AppUser.builder()
+                        .firstName(request.getFirstName())
+                        .lastName(request.getLastName())
+                        .email(request.getEmail())
+                        .mobile(request.getPhoneNumber())
+                        .username(request.getUsername())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .build();
         var createdUser = userService.saveUser(user);
         var jwtToken = jwtService.generateJwtToken(createdUser);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
     AuthenticationResponse authenticate(AuthenticationUserRequest request) {
         LOGGER.info("Authenticate request received.");
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.username(),
-                        request.password()
-                )
-        );
+                new UsernamePasswordAuthenticationToken(request.username(), request.password()));
         var user = userService.getUser(request.username());
         var jwtToken = jwtService.generateJwtToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
 }

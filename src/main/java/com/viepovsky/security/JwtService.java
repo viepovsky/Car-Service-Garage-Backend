@@ -35,8 +35,7 @@ class JwtService {
     }
 
     String generateJwtToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts
-                .builder()
+        return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuer("medical-app.com")

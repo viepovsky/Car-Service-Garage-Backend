@@ -6,5 +6,8 @@ public enum Type {
     HATCHBACK,
     CONVERTIBLE,
     SUV,
-    MOTORCYCLE
+    MOTORCYCLE,
+    PICKUP,
+    VAN,
+    COUPE
 }

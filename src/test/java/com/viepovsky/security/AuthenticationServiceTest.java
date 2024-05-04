@@ -52,7 +52,7 @@ class AuthenticationServiceTest {
         var response = authenticationService.register(request);
         //Then
         assertNotNull(response);
-        assertEquals(jwtToken, response.getToken());
+        assertEquals(jwtToken, response.token());
     }
 
     @Test
@@ -72,6 +72,6 @@ class AuthenticationServiceTest {
         var response = authenticationService.authenticate(request);
         //Then
         assertNotNull(response);
-        assertEquals(jwtToken, response.getToken());
+        assertEquals(jwtToken, response.token());
     }
 }
