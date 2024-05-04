@@ -6,20 +6,20 @@ INSERT INTO garage (id, name, address_id) VALUES
 (1, 'Fast Furious Garage', 1),
 (2, 'Prestige Car Garage', 2);
 
-INSERT INTO AVAILABLE_CAR_REPAIRS (id, name, description, cost, repair_time, premium_make_list, make_multiplier, garage_id) VALUES
-(1, 'Oil change', 'Oil change description', 100.00, 30, 'BMW, AUDI, MERCEDES', 1.20, 1),
-(2, 'Tire change', 'Tire change description', 200.00, 50, '', 1.20, 1),
-(3, 'Wheel change', 'Wheel change description', 120.00, 30, '', 1.20, 1),
-(4, 'Timing belt change', 'Timing belt change description', 1500.00, 180, 'BMW, AUDI, MERCEDES', 1.40, 1),
-(5, 'Pre-purchase car inspection', 'Pre-purchase description', 300.00, 60, 'BMW, AUDI, MERCEDES', 1.20, 1),
-(6, 'Replace air filter', 'Replace air filter description', 60.00, 15, '', 1.20, 1),
-(7, 'Replace cabin filter', 'Replace cabin filter description', 50.00, 10, '', 1.20, 1),
-(8, 'Oil change', 'Oil change description', 110.00, 30, 'BMW, AUDI, MERCEDES', 1.20, 2),
-(9, 'Tire change', 'Tire change description', 220.00, 50, '', 1.20, 2),
-(10, 'Wheel change', 'Wheel change description', 130.00, 30, '', 1.20, 2),
-(11, 'Timing belt change', 'Timing belt change description', 1700.00, 180, 'BMW, AUDI, MERCEDES', 1.40, 2),
-(12, 'Pre-purchase car inspection', 'Pre-purchase description', 350.00, 60, 'BMW, AUDI, MERCEDES', 1.20, 2),
-(13, 'Replace air and cabin filter', 'Replace air and cabin description', 150.00, 25, '', 1.20, 2);
+INSERT INTO service_catalog (id, name, description, price, repair_time, garage_id) VALUES
+(1, 'Oil change', 'Oil change description', 100.00, 30, 1),
+(2, 'Tire change', 'Tire change description', 200.00, 50, 1),
+(3, 'Wheel change', 'Wheel change description', 120.00, 30, 1),
+(4, 'Timing belt change', 'Timing belt change description', 1500.00, 180, 1),
+(5, 'Pre-purchase car inspection', 'Pre-purchase description', 300.00, 60, 1),
+(6, 'Replace air filter', 'Replace air filter description', 60.00, 15, 1),
+(7, 'Replace cabin filter', 'Replace cabin filter description', 50.00, 10, 1),
+(8, 'Oil change', 'Oil change description', 110.00, 30, 2),
+(9, 'Tire change', 'Tire change description', 220.00, 50, 2),
+(10, 'Wheel change', 'Wheel change description', 130.00, 30, 2),
+(11, 'Timing belt change', 'Timing belt change description', 1700.00, 180, 2),
+(12, 'Pre-purchase car inspection', 'Pre-purchase description', 350.00, 60, 2),
+(13, 'Replace air and cabin filter', 'Replace air and cabin description', 150.00, 25, 2);
 
 -- INSERT INTO garage_schedule (id, work_day, start_hour, end_hour, garage_id) VALUES
 -- (1, 'MONDAY', TIME '07:00:00', TIME '15:00:00', 1),

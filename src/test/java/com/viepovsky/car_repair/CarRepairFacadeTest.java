@@ -27,7 +27,7 @@ class CarRepairFacadeTest {
     @Test
     void shouldGetCarServices() {
         //Given
-        List<CarRepair> mockedCarRepairList = List.of(Mockito.mock(CarRepair.class));
+        List<ServiceSelected> mockedCarRepairList = List.of(Mockito.mock(ServiceSelected.class));
         List<CarRepairDto> mockedCarRepairDtoList = List.of(Mockito.mock(CarRepairDto.class));
         when(service.getCarRepairs("username")).thenReturn(mockedCarRepairList);
         when(mapper.mapToCarServiceDtoList(mockedCarRepairList)).thenReturn(mockedCarRepairDtoList);

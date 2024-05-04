@@ -28,19 +28,19 @@ public class CarRepairService {
         this.bookingService = bookingService;
     }
 
-    public List<CarRepair> getCarRepairs(String username) {
+    public List<ServiceSelected> getCarRepairs(String username) {
         AppUser user = userService.getUser(username);
         return carRepairRepository.findCarServicesByName(user.getId());
     }
 
-    public CarRepair getCarRepair(Long id) {
+    public ServiceSelected getCarRepair(Long id) {
         return carRepairRepository.findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("CarRepair" + id));
     }
 
     public void deleteCarRepair(Long carRepairId) {
-        CarRepair carRepair = carRepairRepository.findById(carRepairId)
-                .orElseThrow(() -> new MyEntityNotFoundException("CarRepair", carRepairId));
+        ServiceSelected carRepair = carRepairRepository.findById(carRepairId)
+                                                       .orElseThrow(() -> new MyEntityNotFoundException("CarRepair", carRepairId));
         Visit booking = carRepair.getBooking();
         if (booking.getCarRepairList().size() > 1) {
             LocalTime endHour = booking.getEndHour();

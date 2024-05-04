@@ -2,15 +2,15 @@ package com.viepovsky.booking;
 
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.vehicle.VehicleService;
-import com.viepovsky.car_repair.CarRepair;
+import com.viepovsky.car_repair.ServiceSelected;
 import com.viepovsky.car_repair.CarRepairService;
 import com.viepovsky.car_repair.RepairStatus;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.vehicle_services.ServiceCatalog;
-import com.viepovsky.vehicle_services.AvailableCarRepairService;
+import com.viepovsky.vehicle_services.model.ServiceCatalog;
+import com.viepovsky.vehicle_services.ServiceCatalogService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class BookingService {
 
     private final UserService userService;
 
-    private final AvailableCarRepairService availableCarRepairService;
+    private final ServiceCatalogService availableCarRepairService;
 
     public List<Visit> getAllBookings() {
         return bookingRepository.findAll();
@@ -65,7 +65,7 @@ public class BookingService {
         var reservedBooking = getBookingById(carRepair.getBooking().getId());
         int repairDuration = reservedBooking.getCarRepairList()
                 .stream()
-                .mapToInt(CarRepair::getRepairTimeInMinutes)
+                .mapToInt(ServiceSelected::getRepairTimeInMinutes)
                 .sum();
         Long garageId = reservedBooking.getGarage().getId();
 
@@ -245,21 +245,21 @@ public class BookingService {
                 .map(id -> new ServiceCatalog(availableCarRepairService.getAvailableCarRepair(id)))
                 .peek(repair -> multiplyCarRepairCostIfCarIsPremiumMake(car, repair))
                 .peek(selectedAvailableCarRepairs::add)
-                .map(ServiceCatalog::getCost)
+                .map(ServiceCatalog::getPrice)
                 .forEach(repairCosts::add);
 
-        List<CarRepair> selectedCarRepairs = selectedAvailableCarRepairs.stream()
-                .map(selectedService -> new CarRepair(
+        List<ServiceSelected> selectedCarRepairs = selectedAvailableCarRepairs.stream()
+                                                                              .map(selectedService -> new ServiceSelected(
                         selectedService.getName(),
                         selectedService.getDescription(),
-                        selectedService.getCost(),
-                        selectedService.getRepairTimeInMinutes(),
+                        selectedService.getPrice(),
+                        selectedService.getProbableRepairTime(),
                         car,
                         user,
                         booking,
                         RepairStatus.AWAITING
                 ))
-                .toList();
+                                                                              .toList();
 //TODO fix it
 //        user.getVehicles()
 //                .stream()

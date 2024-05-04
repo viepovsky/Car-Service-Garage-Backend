@@ -1,4 +1,4 @@
-package com.viepovsky.garage;
+package com.viepovsky.mapper;
 
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.model.Garage;

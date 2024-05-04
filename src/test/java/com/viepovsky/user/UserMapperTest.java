@@ -1,5 +1,6 @@
 package com.viepovsky.user;
 
+import com.viepovsky.mapper.UserMapper;
 import com.viepovsky.user.dto.UserDto;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;

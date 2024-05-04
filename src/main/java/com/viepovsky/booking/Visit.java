@@ -1,7 +1,7 @@
 package com.viepovsky.booking;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.car_repair.CarRepair;
+import com.viepovsky.car_repair.ServiceSelected;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.user.model.AppUser;
 import jakarta.persistence.*;
@@ -52,11 +52,11 @@ public class Visit extends BaseEntityAudit {
     private BigDecimal totalCost;
 
     @OneToMany(
-            targetEntity = CarRepair.class,
+            targetEntity = ServiceSelected.class,
             mappedBy = "booking",
             fetch = FetchType.LAZY
     )
-    private List<CarRepair> carRepairList;
+    private List<ServiceSelected> carRepairList;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "garage_id")
@@ -76,7 +76,7 @@ public class Visit extends BaseEntityAudit {
                  LocalTime startHour,
                  LocalTime endHour,
                  BigDecimal totalCost,
-                 List<CarRepair> carRepairList,
+                 List<ServiceSelected> carRepairList,
                  Garage garage) {
         this.status = status;
         this.date = date;

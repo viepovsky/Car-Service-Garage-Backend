@@ -5,8 +5,8 @@ import com.viepovsky.garage.model.Address;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
 import com.viepovsky.vehicle_services.AvailableCarRepairRepository;
-import com.viepovsky.vehicle_services.AvailableCarRepairService;
-import com.viepovsky.vehicle_services.ServiceCatalog;
+import com.viepovsky.vehicle_services.ServiceCatalogService;
+import com.viepovsky.vehicle_services.model.ServiceCatalog;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 class AvailableCarRepairServiceTest {
 
     @InjectMocks
-    private AvailableCarRepairService availableCarRepairService;
+    private ServiceCatalogService availableCarRepairService;
 
     @Mock
     private AvailableCarRepairRepository availableCarRepairRepository;
@@ -53,7 +53,7 @@ class AvailableCarRepairServiceTest {
     void testSaveAvailableCarService() {
         //Given
         Garage garage = new Garage("Test name", Mockito.mock(Address.class), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        ServiceCatalog availableCarRepair = new ServiceCatalog("Testname", "Testdescription", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
+        ServiceCatalog availableCarRepair = new ServiceCatalog("Testname", "Testdescription", BigDecimal.valueOf(50), 40, BigDecimal.valueOf(1.2), null);
         when(garageService.getGarage(anyLong())).thenReturn(garage);
         when(garageService.saveGarage(any(Garage.class))).thenReturn(garage);
         //When

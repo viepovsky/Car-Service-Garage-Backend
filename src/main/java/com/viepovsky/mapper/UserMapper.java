@@ -1,11 +1,11 @@
-package com.viepovsky.user;
+package com.viepovsky.mapper;
 
 import com.viepovsky.user.dto.UserDto;
 import com.viepovsky.user.model.AppUser;
 import org.springframework.stereotype.Service;
 
 @Service
-class UserMapper {
+public class UserMapper {
 
     public UserDto mapToUserDto(AppUser user) {
         return new UserDto(

@@ -2,6 +2,7 @@ package com.viepovsky.garage;
 
 import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.garage.model.Schedule;
+import com.viepovsky.mapper.ScheduleMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

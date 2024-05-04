@@ -2,7 +2,7 @@ package com.viepovsky.garage.garage_schedule;
 
 import com.viepovsky.garage.model.Schedule;
 import com.viepovsky.garage.GarageWorkTimeFacade;
-import com.viepovsky.garage.ScheduleMapper;
+import com.viepovsky.mapper.ScheduleMapper;
 import com.viepovsky.garage.ScheduleService;
 import com.viepovsky.garage.dto.ScheduleDto;
 import org.junit.jupiter.api.Test;

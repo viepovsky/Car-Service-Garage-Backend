@@ -42,15 +42,15 @@ class CarRepairServiceTest {
     @Test
     void testGetCarRepairs() {
         //Given
-        List<CarRepair> carRepairList = new ArrayList<>();
-        CarRepair mockedCarRepair = Mockito.mock(CarRepair.class);
+        List<ServiceSelected> carRepairList = new ArrayList<>();
+        ServiceSelected mockedCarRepair = Mockito.mock(ServiceSelected.class);
         carRepairList.add(mockedCarRepair);
         AppUser mockedUser = Mockito.mock(AppUser.class);
         when(userService.getUser(anyString())).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
         when(carRepairRepository.findCarServicesByName(1L)).thenReturn(carRepairList);
         //When
-        List<CarRepair> retrievedCarRepairList = carRepairService.getCarRepairs("username");
+        List<ServiceSelected> retrievedCarRepairList = carRepairService.getCarRepairs("username");
         //Then
         assertEquals(1, retrievedCarRepairList.size());
     }
@@ -58,7 +58,7 @@ class CarRepairServiceTest {
     @Test
     void shouldGetCarRepair() {
         //Given
-        var carRepair = new CarRepair();
+        var carRepair = new ServiceSelected();
         when(carRepairRepository.findById(anyLong())).thenReturn(Optional.of(carRepair));
         //When
         var retrievedCarRepair = carRepairService.getCarRepair(5L);
@@ -70,8 +70,8 @@ class CarRepairServiceTest {
     void testDeleteCarServiceMoreThanOneService() {
         //Given
         Visit booking = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(12, 0), BigDecimal.valueOf(300), new ArrayList<>(), null);
-        CarRepair carRepair = new CarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
-        CarRepair carRepair2 = new CarRepair("Testname2", "Testdescription2", BigDecimal.valueOf(250), 90, null, null, booking, RepairStatus.AWAITING);
+        ServiceSelected carRepair = new ServiceSelected("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
+        ServiceSelected carRepair2 = new ServiceSelected("Testname2", "Testdescription2", BigDecimal.valueOf(250), 90, null, null, booking, RepairStatus.AWAITING);
         booking.getCarRepairList().add(carRepair);
         booking.getCarRepairList().add(carRepair2);
 
@@ -94,7 +94,7 @@ class CarRepairServiceTest {
     void testDeleteCarServiceOnlyOneService() {
         //Given
         Visit booking = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(10, 30), BigDecimal.valueOf(50), new ArrayList<>(), null);
-        CarRepair carRepair = new CarRepair("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
+        ServiceSelected carRepair = new ServiceSelected("Testname", "Testdescription", BigDecimal.valueOf(50), 30, null, null, booking, RepairStatus.AWAITING);
         booking.getCarRepairList().add(carRepair);
 
         when(carRepairRepository.findById(1L)).thenReturn(Optional.of(carRepair));

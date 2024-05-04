@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-interface CarRepairRepository extends JpaRepository<CarRepair, Long> {
+interface CarRepairRepository extends JpaRepository<ServiceSelected, Long> {
 //    List<CarRepair> findCarServicesByUserId(Long userId);
-    List<CarRepair> findCarServicesByName(Long valueToChangeTODO);
+    List<ServiceSelected> findCarServicesByName(Long valueToChangeTODO);
 
 }

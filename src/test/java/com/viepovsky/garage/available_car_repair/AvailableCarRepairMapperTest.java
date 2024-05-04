@@ -3,7 +3,7 @@ package com.viepovsky.garage.available_car_repair;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.vehicle_services.AvailableCarRepairDto;
 import com.viepovsky.vehicle_services.AvailableCarRepairMapper;
-import com.viepovsky.vehicle_services.ServiceCatalog;
+import com.viepovsky.vehicle_services.model.ServiceCatalog;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -44,7 +44,7 @@ class AvailableCarRepairMapperTest {
         //Then
         assertEquals(1L, mappedService.getId());
         assertEquals("Testname", mappedService.getName());
-        assertEquals(BigDecimal.valueOf(50), mappedService.getCost());
+        assertEquals(BigDecimal.valueOf(50), mappedService.getPrice());
     }
 
     @Test

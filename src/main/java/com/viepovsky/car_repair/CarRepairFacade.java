@@ -16,7 +16,7 @@ class CarRepairFacade {
 
     public List<CarRepairDto> getCarRepairs(String username) {
         LOGGER.info("Get car repairs endpoint used for username:{}", username);
-        List<CarRepair> carRepairList = carRepairService.getCarRepairs(username);
+        List<ServiceSelected> carRepairList = carRepairService.getCarRepairs(username);
         return mapper.mapToCarServiceDtoList(carRepairList);
     }
 

@@ -2,13 +2,13 @@ package com.viepovsky.booking;
 
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.vehicle.VehicleService;
-import com.viepovsky.car_repair.CarRepair;
+import com.viepovsky.car_repair.ServiceSelected;
 import com.viepovsky.car_repair.CarRepairService;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.vehicle_services.ServiceCatalog;
-import com.viepovsky.vehicle_services.AvailableCarRepairService;
+import com.viepovsky.vehicle_services.model.ServiceCatalog;
+import com.viepovsky.vehicle_services.ServiceCatalogService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ class BookingServiceTest {
     private UserService userService;
 
     @Mock
-    private AvailableCarRepairService availableCarRepairService;
+    private ServiceCatalogService availableCarRepairService;
 
     @Test
     void testGetAllBookings() {
@@ -84,10 +84,10 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
 
-        CarRepair carRepair = new CarRepair();
+        ServiceSelected carRepair = new ServiceSelected();
         carRepair.setRepairTimeInMinutes(50);
 
-        List<CarRepair> carRepairList = List.of(carRepair);
+        List<ServiceSelected> carRepairList = List.of(carRepair);
         Garage garage = new Garage();
         garage.setId(5L);
 

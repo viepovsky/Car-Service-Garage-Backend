@@ -1,6 +1,7 @@
 package com.viepovsky.garage.available_car_repair;
 
 import com.viepovsky.vehicle_services.*;
+import com.viepovsky.vehicle_services.model.ServiceCatalog;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +21,7 @@ class AvailableCarRepairFacadeTest {
     private AvailableCarRepairFacade facade;
 
     @Mock
-    private AvailableCarRepairService service;
+    private ServiceCatalogService service;
 
     @Mock
     private AvailableCarRepairMapper mapper;

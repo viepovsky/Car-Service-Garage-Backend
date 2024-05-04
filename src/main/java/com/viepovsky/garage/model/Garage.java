@@ -2,7 +2,7 @@ package com.viepovsky.garage.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Visit;
-import com.viepovsky.vehicle_services.ServiceCatalog;
+import com.viepovsky.vehicle_services.model.ServiceCatalog;
 
 import jakarta.persistence.*;
 

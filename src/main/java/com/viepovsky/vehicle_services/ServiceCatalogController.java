@@ -1,9 +1,13 @@
 package com.viepovsky.vehicle_services;
 
+
+import com.viepovsky.vehicle_services.dto.ServiceCatalogDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,19 +30,19 @@ import java.util.List;
 @RequestMapping("/v1/available-car-service")
 @RequiredArgsConstructor
 @Validated
-class AvailableCarRepairController {
+class ServiceCatalogController {
 
-    private final AvailableCarRepairFacade availableCarRepairFacade;
+    private final ServiceCatalogFacade availableCarRepairFacade;
 
     @GetMapping(path = "/{garageId}")
-    ResponseEntity<List<AvailableCarRepairDto>> getAvailableCarServices(@PathVariable @Min(1) Long garageId) {
+    ResponseEntity<List<ServiceCatalogDto>> getAvailableCarServices(@PathVariable @Min(1) Long garageId) {
         return ResponseEntity.ok(availableCarRepairFacade.getAvailableCarServices(garageId));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> createAvailableCarService(
-            @Valid @RequestBody AvailableCarRepairDto availableCarRepairDto,
+            @Valid @RequestBody ServiceCatalogDto availableCarRepairDto,
             @RequestParam(name = "garage-id") @NotNull @Min(1) Long garageId
     ) {
         availableCarRepairFacade.createAvailableCarService(availableCarRepairDto, garageId);
