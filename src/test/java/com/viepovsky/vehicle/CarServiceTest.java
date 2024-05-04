@@ -1,10 +1,15 @@
 package com.viepovsky.vehicle;
 
-import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
-import com.viepovsky.user.model.AppUser;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import com.viepovsky.user.UserService;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 import com.viepovsky.vehicle.model.Model;
 import com.viepovsky.vehicle.model.Vehicle;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Car Db Service Tests")

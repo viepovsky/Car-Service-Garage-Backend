@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ServiceCatalogMapper {
+public class CatalogOfferMapper {
 
     public CatalogOfferDto mapToAvailableCarServiceDto(CatalogOffer availableCarRepair) {
         //TODO fix this

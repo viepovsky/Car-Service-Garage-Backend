@@ -1,12 +1,17 @@
 package com.viepovsky.clients.car;
 
-import com.viepovsky.utility.scheduler.ApplicationScheduler;
-import com.viepovsky.user.model.Role;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,9 +29,6 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc

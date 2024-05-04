@@ -1,14 +1,20 @@
 package com.viepovsky.visit;
 
-import com.viepovsky.utility.scheduler.ApplicationScheduler;
-import com.viepovsky.user.model.Role;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.visit.dto.VisitDto;
 import com.viepovsky.visit.model.VisitStatus;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,10 +35,6 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc

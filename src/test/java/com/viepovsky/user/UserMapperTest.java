@@ -1,14 +1,15 @@
 package com.viepovsky.user;
 
-import com.viepovsky.utility.mapper.UserMapper;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.viepovsky.user.dto.UserDto;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.mapper.UserMapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class UserMapperTest {

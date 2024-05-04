@@ -1,10 +1,12 @@
-package com.viepovsky.garage.garage_schedule;
+package com.viepovsky.garage;
 
-import com.viepovsky.garage.model.Schedule;
-import com.viepovsky.garage.GarageWorkTimeFacade;
-import com.viepovsky.utility.mapper.ScheduleMapper;
-import com.viepovsky.garage.ScheduleService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import com.viepovsky.garage.dto.ScheduleDto;
+import com.viepovsky.garage.model.Schedule;
+import com.viepovsky.utility.mapper.ScheduleMapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,13 +15,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class GarageWorkTimeFacadeTest {
     @InjectMocks
-    private GarageWorkTimeFacade facade;
+    private ScheduleFacade facade;
 
     @Mock
     private ScheduleService service;

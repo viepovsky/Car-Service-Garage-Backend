@@ -1,15 +1,17 @@
-package com.viepovsky.car_repair;
+package com.viepovsky.offer;
 
-import com.viepovsky.visit.model.Visit;
-import com.viepovsky.visit.VisitService;
-import com.viepovsky.visit.model.VisitStatus;
-import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
-import com.viepovsky.offer.OfferSelectedRepository;
-import com.viepovsky.offer.SelectedOfferService;
-import com.viepovsky.offer.model.SelectedOffer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import com.viepovsky.offer.model.RepairStatus;
-import com.viepovsky.user.model.AppUser;
+import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.user.UserService;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
+import com.viepovsky.visit.VisitService;
+import com.viepovsky.visit.model.Visit;
+import com.viepovsky.visit.model.VisitStatus;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,9 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Car Service Db Service Tests")
 class CarRepairServiceTest {
@@ -35,7 +34,7 @@ class CarRepairServiceTest {
     private SelectedOfferService carRepairService;
 
     @Mock
-    private OfferSelectedRepository carRepairRepository;
+    private SelectedOfferRepository selectedOfferRepository;
 
     @Mock
     private UserService userService;
@@ -64,7 +63,7 @@ class CarRepairServiceTest {
     void shouldGetCarRepair() {
         //Given
         var carRepair = new SelectedOffer();
-        when(carRepairRepository.findById(anyLong())).thenReturn(Optional.of(carRepair));
+        when(selectedOfferRepository.findById(anyLong())).thenReturn(Optional.of(carRepair));
         //When
         var retrievedCarRepair = carRepairService.getCarRepair(5L);
         //Then
@@ -80,8 +79,8 @@ class CarRepairServiceTest {
         booking.getSelectedOffers().add(carRepair);
         booking.getSelectedOffers().add(carRepair2);
 
-        when(carRepairRepository.findById(1L)).thenReturn(Optional.of(carRepair));
-        doNothing().when(carRepairRepository).delete(carRepair);
+        when(selectedOfferRepository.findById(1L)).thenReturn(Optional.of(carRepair));
+        doNothing().when(selectedOfferRepository).delete(carRepair);
         doNothing().when(bookingService).save(any(Visit.class));
         //When
         carRepairService.deleteCarRepair(1L);
@@ -91,7 +90,7 @@ class CarRepairServiceTest {
         assertEquals(BigDecimal.valueOf(250), booking.getTotalPrice());
         assertEquals(LocalTime.of(10, 0), booking.getVisitStartTime());
         assertEquals(LocalTime.of(11, 30), booking.getVisitEndTime());
-        verify(carRepairRepository, times(1)).delete(carRepair);
+        verify(selectedOfferRepository, times(1)).delete(carRepair);
         verify(bookingService, times(1)).save(any(Visit.class));
     }
 
@@ -102,14 +101,14 @@ class CarRepairServiceTest {
         SelectedOffer carRepair = new SelectedOffer("Testdescription", BigDecimal.valueOf(50), 30, null, booking, RepairStatus.AWAITING);
         booking.getSelectedOffers().add(carRepair);
 
-        when(carRepairRepository.findById(1L)).thenReturn(Optional.of(carRepair));
-        doNothing().when(carRepairRepository).delete(carRepair);
+        when(selectedOfferRepository.findById(1L)).thenReturn(Optional.of(carRepair));
+        doNothing().when(selectedOfferRepository).delete(carRepair);
         doNothing().when(bookingService).delete(booking);
         //When
         carRepairService.deleteCarRepair(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("CarService", 1L));
-        verify(carRepairRepository, times(1)).delete(carRepair);
+        verify(selectedOfferRepository, times(1)).delete(carRepair);
         verify(bookingService, times(1)).delete(booking);
     }
 }

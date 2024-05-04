@@ -1,20 +1,22 @@
-package com.viepovsky.garage.garage_schedule;
+package com.viepovsky.offer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import com.viepovsky.garage.GarageWorkTimeFacade;
-import com.viepovsky.garage.dto.ScheduleDto;
-import com.viepovsky.utility.scheduler.ApplicationScheduler;
-import com.viepovsky.user.model.Role;
+import com.viepovsky.offer.dto.CatalogOfferDto;
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,27 +30,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.Key;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
-class GarageWorkTimeControllerTest {
+class AvailableCarRepairControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private GarageWorkTimeFacade facade;
+    private CatalogOfferFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -86,54 +82,60 @@ class GarageWorkTimeControllerTest {
     }
 
     @Test
-    void getGarageWorkTimes() throws Exception {
+    void testShouldGetEmptyListAvailableCarServices() throws Exception {
         //Given
-        List<ScheduleDto> workTimesResponse = List.of(ScheduleDto.builder().build());
-        var jsonResponse = new ObjectMapper().writeValueAsString(workTimesResponse);
-        when(facade.getGarageWorkTimes(anyLong())).thenReturn(workTimesResponse);
-        //When
+        when(facade.getAvailableCarServices(1L)).thenReturn(List.of());
+        //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/garage-work-time/1")
+                        .get("/v1/available-car-service/1")
                         .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(jsonResponse));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
     }
 
     @Test
-    void testCreateGarageWorkTime() throws Exception {
+    void testShouldGetAllAvailableCarServices() throws Exception {
         //Given
-        ScheduleDto garageWorkTimeDto = new ScheduleDto(1L, WorkDays.MONDAY, LocalTime.of(10, 0), LocalTime.of(15, 0));
-        doNothing().when(facade).createGarageWorkTime(any(ScheduleDto.class), anyLong());
-        Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new TypeAdapter<LocalTime>() {
-            @Override
-            public void write(JsonWriter out, LocalTime value) throws IOException {
-                out.value(value.toString());
-            }
-
-            @Override
-            public LocalTime read(JsonReader in) throws IOException {
-                return LocalTime.parse(in.nextString());
-            }
-        }).create();
-        String jsonContent = gson.toJson(garageWorkTimeDto);
-
+        List<CatalogOfferDto> carServiceList = List.of(new CatalogOfferDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), 22L));
+        when(facade.getAvailableCarServices(1L)).thenReturn(carServiceList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/garage-work-time/1")
+                        .get("/v1/available-car-service/1")
+                        .header("Authorization", "Bearer " + jwtTokenUser))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("Test service")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].cost", Matchers.is(50)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].repairTimeInMinutes", Matchers.is(40)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].makeMultiplier", Matchers.is(1.2)));
+    }
+
+    @Test
+    void testShouldCreateAvailableCarService() throws Exception {
+        //Given
+        CatalogOfferDto availableCarRepairDto = new CatalogOfferDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
+        doNothing().when(facade).createAvailableCarService(any(CatalogOfferDto.class), anyLong());
+        Gson gson = new Gson();
+        String jsonContent = gson.toJson(availableCarRepairDto);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/v1/available-car-service")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonContent)
                         .characterEncoding("UTF-8")
+                        .content(jsonContent)
+                        .param("garage-id", "22")
                         .header("Authorization", "Bearer " + jwtTokenAdmin))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
-    void testDeleteGarageWorkTime() throws Exception {
+    void shouldDeleteAvailableCarService() throws Exception {
         //Given
-        doNothing().when(facade).deleteGarageWorkTime(anyLong());
+        doNothing().when(facade).deleteAvailableCarService(anyLong());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/v1/garage-work-time/1")
+                        .delete("/v1/available-car-service/20")
                         .header("Authorization", "Bearer " + jwtTokenAdmin))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }

@@ -1,14 +1,19 @@
-package com.viepovsky.car_repair;
+package com.viepovsky.offer;
 
-import com.viepovsky.offer.OfferSelectedFacade;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 import com.viepovsky.offer.dto.SelectedOfferDto;
-import com.viepovsky.utility.scheduler.ApplicationScheduler;
-import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,10 +33,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
@@ -40,7 +41,7 @@ class CarRepairControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private OfferSelectedFacade facade;
+    private SelectedOfferFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 

@@ -1,13 +1,18 @@
 package com.viepovsky.clients.weather;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import com.viepovsky.clients.weather.dto.CityForecastDto;
-import com.viepovsky.utility.scheduler.ApplicationScheduler;
-import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,9 +30,6 @@ import java.security.Key;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc

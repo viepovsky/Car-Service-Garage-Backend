@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class OfferSelectedMapper {
+public class SelectedOfferMapper {
     private VehicleMapper carMapper;
     private VisitMapper bookingMapper;
 

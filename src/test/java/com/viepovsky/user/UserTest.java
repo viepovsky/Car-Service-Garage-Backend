@@ -2,11 +2,11 @@ package com.viepovsky.user;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
 import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 import com.viepovsky.utility.scheduler.ApplicationScheduler;
 
-import com.viepovsky.user.model.AppUser;
-import com.viepovsky.user.model.Role;
 import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.DisplayName;

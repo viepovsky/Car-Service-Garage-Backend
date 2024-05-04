@@ -2,7 +2,7 @@ package com.viepovsky.offer;
 
 import com.viepovsky.offer.dto.CatalogOfferDto;
 import com.viepovsky.offer.model.CatalogOffer;
-import com.viepovsky.utility.mapper.ServiceCatalogMapper;
+import com.viepovsky.utility.mapper.CatalogOfferMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ class CatalogOfferFacade {
 
     private final CatalogOfferService availableCarRepairService;
 
-    private final ServiceCatalogMapper mapper;
+    private final CatalogOfferMapper mapper;
 
     public List<CatalogOfferDto> getAvailableCarServices(Long garageId) {
         LOGGER.info("Get available car services enpoint used with garage id:{}", garageId);

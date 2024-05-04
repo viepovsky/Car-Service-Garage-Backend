@@ -1,7 +1,13 @@
-package com.viepovsky.garage.available_car_repair;
+package com.viepovsky.offer;
 
-import com.viepovsky.offer.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
+import com.viepovsky.offer.dto.CatalogOfferDto;
 import com.viepovsky.offer.model.CatalogOffer;
+
+import com.viepovsky.utility.mapper.CatalogOfferMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,30 +17,26 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
-class AvailableCarRepairFacadeTest {
+class CatalogOfferFacadeTest {
     @InjectMocks
-    private AvailableCarRepairFacade facade;
+    private CatalogOfferFacade facade;
 
     @Mock
     private CatalogOfferService service;
 
     @Mock
-    private AvailableCarRepairMapper mapper;
+    private CatalogOfferMapper mapper;
 
     @Test
     void shouldGetAvailableCarServices() {
         //Given
         List<CatalogOffer> carServiceList = List.of(Mockito.mock(CatalogOffer.class));
-        List<AvailableCarRepairDto> carServiceDtoList = List.of(Mockito.mock(AvailableCarRepairDto.class));
+        List<CatalogOfferDto> carServiceDtoList = List.of(Mockito.mock(CatalogOfferDto.class));
         when(service.getAllAvailableCarRepair(1L)).thenReturn(carServiceList);
         when(mapper.mapToAvailableCarServiceDtoList(carServiceList)).thenReturn(carServiceDtoList);
         //When
-        List<AvailableCarRepairDto> retrievedList = facade.getAvailableCarServices(1L);
+        List<CatalogOfferDto> retrievedList = facade.getAvailableCarServices(1L);
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -43,7 +45,7 @@ class AvailableCarRepairFacadeTest {
     @Test
     void shouldCreateAvailableCarService() {
         //Given
-        AvailableCarRepairDto serviceDto = Mockito.mock(AvailableCarRepairDto.class);
+        CatalogOfferDto serviceDto = Mockito.mock(CatalogOfferDto.class);
         CatalogOffer service = Mockito.mock(CatalogOffer.class);
         when(mapper.mapToAvailableCarService(serviceDto)).thenReturn(service);
         doNothing().when(this.service).saveAvailableCarRepair(service, 1L);

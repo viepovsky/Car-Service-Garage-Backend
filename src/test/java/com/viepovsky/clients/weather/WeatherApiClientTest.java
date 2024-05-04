@@ -1,9 +1,13 @@
 package com.viepovsky.clients.weather;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
 import com.viepovsky.clients.weather.dto.ForecastDto;
 import com.viepovsky.clients.weather.dto.ForecastsDto;
 import com.viepovsky.clients.weather.dto.LocationDto;
 import com.viepovsky.clients.weather.dto.LocationsDto;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,9 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class WeatherApiClientTest {

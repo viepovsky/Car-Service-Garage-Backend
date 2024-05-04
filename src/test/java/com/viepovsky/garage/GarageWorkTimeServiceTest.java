@@ -1,9 +1,12 @@
-package com.viepovsky.garage.garage_schedule;
+package com.viepovsky.garage;
 
-import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
-import com.viepovsky.garage.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.model.Schedule;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,9 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Garage Work Time Db Service Tests")
 class GarageWorkTimeServiceTest {
@@ -25,7 +25,7 @@ class GarageWorkTimeServiceTest {
     private ScheduleService workTimeService;
 
     @Mock
-    private GarageWorkTimeRepository workTimeRepository;
+    private ScheduleRepository scheduleRepository;
 
     @Mock
     private GarageService garageService;
@@ -37,7 +37,7 @@ class GarageWorkTimeServiceTest {
         var garageWorkTime = new Schedule();
         garageWorkTimeList.add(garageWorkTime);
 
-        when(workTimeRepository.findAllByGarageId(anyLong())).thenReturn(garageWorkTimeList);
+        when(scheduleRepository.findAllByGarageId(anyLong())).thenReturn(garageWorkTimeList);
         //When
         List<Schedule> retrievedGarageWorkTimeList = workTimeService.getAllGarageWorkTimes(5L);
         //Then
@@ -62,19 +62,19 @@ class GarageWorkTimeServiceTest {
     @Test
     void testDeleteGarageWorkTime() {
         //Given
-        when(workTimeRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(workTimeRepository).deleteById(anyLong());
+        when(scheduleRepository.existsById(1L)).thenReturn(true);
+        doNothing().when(scheduleRepository).deleteById(anyLong());
         //When
         workTimeService.deleteGarageWorkTime(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("GarageWorkTime", 1L));
-        verify(workTimeRepository, times(1)).deleteById(1L);
+        verify(scheduleRepository, times(1)).deleteById(1L);
     }
 
     @Test
     void testDeleteWorkTimeShouldThrowExceptionIfWorkTimeDoesNotExist() {
         //Given
-        when(workTimeRepository.existsById(1L)).thenReturn(false);
+        when(scheduleRepository.existsById(1L)).thenReturn(false);
         //When & then
         assertThrows(MyEntityNotFoundException.class, () -> workTimeService.deleteGarageWorkTime(1L));
     }

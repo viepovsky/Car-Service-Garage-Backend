@@ -1,12 +1,15 @@
-package com.viepovsky.garage.available_car_repair;
+package com.viepovsky.offer;
 
-import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+import com.viepovsky.garage.GarageService;
 import com.viepovsky.garage.model.Address;
 import com.viepovsky.garage.model.Garage;
-import com.viepovsky.garage.GarageService;
-import com.viepovsky.offer.AvailableCarRepairRepository;
-import com.viepovsky.offer.CatalogOfferService;
 import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,10 +22,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Available Car Services Db Service Tests")
 class AvailableCarRepairServiceTest {
@@ -31,7 +30,7 @@ class AvailableCarRepairServiceTest {
     private CatalogOfferService availableCarRepairService;
 
     @Mock
-    private AvailableCarRepairRepository availableCarRepairRepository;
+    private CatalogOfferRepository catalogOfferRepository;
 
     @Mock
     private GarageService garageService;
@@ -42,7 +41,7 @@ class AvailableCarRepairServiceTest {
         List<CatalogOffer> serviceList = new ArrayList<>();
         CatalogOffer availableCarRepair = Mockito.mock(CatalogOffer.class);
         serviceList.add(availableCarRepair);
-        when(availableCarRepairRepository.findAllByGarageId(5L)).thenReturn(serviceList);
+        when(catalogOfferRepository.findAllByGarageId(5L)).thenReturn(serviceList);
         //When
         List<CatalogOffer> retrievedServiceList = availableCarRepairService.getAllAvailableCarRepair(5L);
         //Then
@@ -53,7 +52,8 @@ class AvailableCarRepairServiceTest {
     void testSaveAvailableCarService() {
         //Given
         Garage garage = new Garage("Test name", Mockito.mock(Address.class), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        CatalogOffer availableCarRepair = new CatalogOffer("Testname", "Testdescription", BigDecimal.valueOf(50), 40, BigDecimal.valueOf(1.2), null);
+        CatalogOffer availableCarRepair = Mockito.mock(CatalogOffer.class);
+        //TODO: fix this new CatalogOffer("Testname", "Testdescription", BigDecimal.valueOf(50), 40, BigDecimal.valueOf(1.2), null);
         when(garageService.getGarage(anyLong())).thenReturn(garage);
         when(garageService.saveGarage(any(Garage.class))).thenReturn(garage);
         //When
@@ -66,13 +66,13 @@ class AvailableCarRepairServiceTest {
     @Test
     void testDeleteAvailableCarService() {
         //Given
-        when(availableCarRepairRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(availableCarRepairRepository).deleteById(1L);
+        when(catalogOfferRepository.existsById(1L)).thenReturn(true);
+        doNothing().when(catalogOfferRepository).deleteById(1L);
         //When
         availableCarRepairService.deleteAvailableCarRepair(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("AvailableCarService", 1L));
-        verify(availableCarRepairRepository, times(1)).deleteById(1L);
+        verify(catalogOfferRepository, times(1)).deleteById(1L);
 
     }
 

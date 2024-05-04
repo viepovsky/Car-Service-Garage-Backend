@@ -2,7 +2,7 @@ package com.viepovsky.offer;
 
 import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.offer.model.SelectedOffer;
-import com.viepovsky.utility.mapper.OfferSelectedMapper;
+import com.viepovsky.utility.mapper.SelectedOfferMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,7 @@ import java.util.List;
 class SelectedOfferFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(SelectedOfferFacade.class);
     private final SelectedOfferService carRepairService;
-    private final OfferSelectedMapper mapper;
+    private final SelectedOfferMapper mapper;
 
     public List<SelectedOfferDto> getCarRepairs(String username) {
         LOGGER.info("Get car repairs endpoint used for username:{}", username);

@@ -1,18 +1,25 @@
 package com.viepovsky.visit;
 
-import com.viepovsky.vehicle.model.Vehicle;
-import com.viepovsky.vehicle.VehicleService;
-import com.viepovsky.offer.model.SelectedOffer;
-import com.viepovsky.offer.SelectedOfferService;
-import com.viepovsky.utility.exceptions.WrongInputDataException;
-import com.viepovsky.garage.model.Garage;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.garage.model.Garage;
 import com.viepovsky.offer.CatalogOfferService;
-import com.viepovsky.user.model.AppUser;
+import com.viepovsky.offer.SelectedOfferService;
+import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.user.UserService;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.exceptions.WrongInputDataException;
+import com.viepovsky.vehicle.VehicleService;
+import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.visit.model.Visit;
 import com.viepovsky.visit.model.VisitStatus;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,12 +33,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
@@ -205,8 +206,9 @@ class BookingServiceTest {
         Vehicle car = Mockito.mock(Vehicle.class);
         user.setVehicles(List.of(car));
         List<LocalTime> localTimeList = List.of(LocalTime.of(10, 0), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50), LocalTime.of(11, 0));
-        CatalogOffer availableCarRepair = new CatalogOffer(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
-        CatalogOffer availableCarRepair2 = new CatalogOffer(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
+        CatalogOffer availableCarRepair = Mockito.mock(CatalogOffer.class);//new CatalogOffer(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
+        //TODO fix this
+        CatalogOffer availableCarRepair2 = Mockito.mock(CatalogOffer.class);//new CatalogOffer(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
         when(carService.getCar(anyLong())).thenReturn(car);

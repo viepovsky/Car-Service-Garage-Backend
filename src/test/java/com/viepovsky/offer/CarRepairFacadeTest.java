@@ -1,10 +1,13 @@
-package com.viepovsky.car_repair;
+package com.viepovsky.offer;
 
-import com.viepovsky.utility.mapper.OfferSelectedMapper;
-import com.viepovsky.offer.OfferSelectedFacade;
-import com.viepovsky.offer.SelectedOfferService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
 import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.offer.model.SelectedOffer;
+import com.viepovsky.utility.mapper.SelectedOfferMapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,20 +17,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class CarRepairFacadeTest {
     @InjectMocks
-    private OfferSelectedFacade facade;
+    private SelectedOfferFacade facade;
 
     @Mock
     private SelectedOfferService service;
 
     @Mock
-    private OfferSelectedMapper mapper;
+    private SelectedOfferMapper mapper;
 
     @Test
     void shouldGetCarServices() {
