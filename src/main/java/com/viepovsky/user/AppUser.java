@@ -2,7 +2,7 @@ package com.viepovsky.user;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Visit;
-import com.viepovsky.vehicle.Vehicle;
+import com.viepovsky.vehicle.model.Vehicle;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

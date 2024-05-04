@@ -3,6 +3,8 @@ package com.viepovsky.vehicle;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.AppUser;
 import com.viepovsky.user.UserService;
+import com.viepovsky.vehicle.model.Model;
+import com.viepovsky.vehicle.model.Vehicle;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +25,10 @@ import static org.mockito.Mockito.*;
 class CarServiceTest {
 
     @InjectMocks
-    private CarService carService;
+    private VehicleService carService;
 
     @Mock
-    private CarRepository carRepository;
+    private VehicleRepository carRepository;
 
     @Mock
     private UserService userService;

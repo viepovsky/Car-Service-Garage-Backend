@@ -1,4 +1,4 @@
-package com.viepovsky.vehicle;
+package com.viepovsky.vehicle.model;
 
 public enum EngineType {
     DIESEL,

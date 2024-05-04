@@ -1,7 +1,7 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.vehicle.Vehicle;
-import com.viepovsky.vehicle.CarService;
+import com.viepovsky.vehicle.model.Vehicle;
+import com.viepovsky.vehicle.VehicleService;
 import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.car_repair.CarRepairService;
 import com.viepovsky.exceptions.WrongInputDataException;
@@ -46,7 +46,7 @@ class BookingServiceTest {
     private CarRepairService carRepairService;
 
     @Mock
-    private CarService carService;
+    private VehicleService carService;
 
     @Mock
     private UserService userService;

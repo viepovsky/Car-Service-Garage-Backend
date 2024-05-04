@@ -1,4 +1,4 @@
-package com.viepovsky.vehicle;
+package com.viepovsky.vehicle.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.user.AppUser;

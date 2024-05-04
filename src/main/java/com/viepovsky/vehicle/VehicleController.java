@@ -1,5 +1,6 @@
 package com.viepovsky.vehicle;
 
+import com.viepovsky.vehicle.dto.VehicleDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -27,12 +28,12 @@ import java.util.List;
 @RequestMapping("/v1/cars")
 @RequiredArgsConstructor
 @Validated
-class CarController {
+class VehicleController {
 
-    private final CarFacade carFacade;
+    private final VehicleFacade carFacade;
 
     @GetMapping
-    ResponseEntity<List<CarDto>> getCarsForGivenUsername(@RequestParam(name = "username") @NotBlank String username) {
+    ResponseEntity<List<VehicleDto>> getCarsForGivenUsername(@RequestParam(name = "username") @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -42,7 +43,7 @@ class CarController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> createCar(
-            @Valid @RequestBody CarDto carDto,
+            @Valid @RequestBody VehicleDto carDto,
             @RequestParam(name = "username") @NotBlank String username
     ) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -54,7 +55,7 @@ class CarController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> updateCar(@Valid @RequestBody CarDto carDto) {
+    ResponseEntity<Void> updateCar(@Valid @RequestBody VehicleDto carDto) {
         carFacade.updateCar(carDto);
         return ResponseEntity.ok().build();
     }

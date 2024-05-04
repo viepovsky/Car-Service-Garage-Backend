@@ -1,5 +1,7 @@
 package com.viepovsky.vehicle;
 
+import com.viepovsky.vehicle.dto.VehicleDto;
+import com.viepovsky.vehicle.model.Vehicle;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,23 +18,23 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CarFacadeTest {
     @InjectMocks
-    private CarFacade facade;
+    private VehicleFacade facade;
 
     @Mock
-    private CarService service;
+    private VehicleService service;
 
     @Mock
-    private CarMapper mapper;
+    private VehicleMapper mapper;
 
     @Test
     void shouldGetCarsForGivenUsername() {
         //Given
         List<Vehicle> mockedCarList = List.of(Mockito.mock(Vehicle.class));
-        List<CarDto> mockedCarDtoList = List.of(Mockito.mock(CarDto.class));
+        List<VehicleDto> mockedCarDtoList = List.of(Mockito.mock(VehicleDto.class));
         when(service.getAllCarsForGivenUsername("username")).thenReturn(mockedCarList);
         when(mapper.mapToCarDtoList(mockedCarList)).thenReturn(mockedCarDtoList);
         //When
-        List<CarDto> retrievedList = facade.getCarsForGivenUsername("username");
+        List<VehicleDto> retrievedList = facade.getCarsForGivenUsername("username");
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -41,7 +43,7 @@ class CarFacadeTest {
     @Test
     void shouldCreateCar() {
         //Given
-        CarDto mockedCarDto = Mockito.mock(CarDto.class);
+        VehicleDto mockedCarDto = Mockito.mock(VehicleDto.class);
         Vehicle mockedCar = Mockito.mock(Vehicle.class);
         when(mapper.mapToCar(mockedCarDto)).thenReturn(mockedCar);
         doNothing().when(service).saveCar(mockedCar, "username");
@@ -54,7 +56,7 @@ class CarFacadeTest {
     @Test
     void shouldUpdateCar() {
         //Given
-        CarDto mockedCarDto = Mockito.mock(CarDto.class);
+        VehicleDto mockedCarDto = Mockito.mock(VehicleDto.class);
         Vehicle mockedCar = Mockito.mock(Vehicle.class);
         when(mapper.mapToCar(mockedCarDto)).thenReturn(mockedCar);
         doNothing().when(service).updateCar(mockedCar);

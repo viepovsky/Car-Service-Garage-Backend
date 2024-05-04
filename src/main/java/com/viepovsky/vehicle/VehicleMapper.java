@@ -1,13 +1,15 @@
 package com.viepovsky.vehicle;
 
+import com.viepovsky.vehicle.dto.VehicleDto;
+import com.viepovsky.vehicle.model.Vehicle;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CarMapper {
+public class VehicleMapper {
 
-    public CarDto mapToCarDto(Vehicle car) {
+    public VehicleDto mapToCarDto(Vehicle car) {
         //TODO fix this
         return null;
 //        return new CarDto(
@@ -21,7 +23,7 @@ public class CarMapper {
 //        );
     }
 
-    public Vehicle mapToCar(CarDto carDto) {
+    public Vehicle mapToCar(VehicleDto carDto) {
         //TODO fix this
         return null;
 //        return new Vehicle(
@@ -31,7 +33,7 @@ public class CarMapper {
 //        );
     }
 
-    public List<CarDto> mapToCarDtoList(List<Vehicle> carList) {
+    public List<VehicleDto> mapToCarDtoList(List<Vehicle> carList) {
         return carList.stream()
                 .map(this::mapToCarDto)
                 .toList();

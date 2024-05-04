@@ -1,7 +1,7 @@
 package com.viepovsky.car_repair;
 
 import com.viepovsky.booking.BookingDto;
-import com.viepovsky.vehicle.CarDto;
+import com.viepovsky.vehicle.dto.VehicleDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ class CarRepairDto {
     private String description;
     private BigDecimal cost;
     private int repairTimeInMinutes;
-    private CarDto carDto;
+    private VehicleDto carDto;
     private BookingDto bookingDto;
     private String status;
 

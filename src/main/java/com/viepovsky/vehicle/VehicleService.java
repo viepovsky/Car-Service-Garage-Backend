@@ -3,6 +3,7 @@ package com.viepovsky.vehicle;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.user.AppUser;
 import com.viepovsky.user.UserService;
+import com.viepovsky.vehicle.model.Vehicle;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +11,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CarService {
+public class VehicleService {
 
-    private final CarRepository carRepository;
+    private final VehicleRepository carRepository;
 
     private final UserService userService;
 

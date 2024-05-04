@@ -1,7 +1,7 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.vehicle.Vehicle;
-import com.viepovsky.vehicle.CarService;
+import com.viepovsky.vehicle.model.Vehicle;
+import com.viepovsky.vehicle.VehicleService;
 import com.viepovsky.car_repair.CarRepair;
 import com.viepovsky.car_repair.CarRepairService;
 import com.viepovsky.car_repair.RepairStatus;
@@ -36,7 +36,7 @@ public class BookingService {
 
     private final CarRepairService carRepairService;
 
-    private final CarService carService;
+    private final VehicleService carService;
 
     private final UserService userService;
 

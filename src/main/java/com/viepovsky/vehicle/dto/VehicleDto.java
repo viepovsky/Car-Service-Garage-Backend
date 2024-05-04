@@ -1,4 +1,4 @@
-package com.viepovsky.vehicle;
+package com.viepovsky.vehicle.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarDto {
+public class VehicleDto {
 
     private Long id;
 

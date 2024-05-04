@@ -1,7 +1,7 @@
 package com.viepovsky.car_repair;
 
 import com.viepovsky.booking.BookingMapper;
-import com.viepovsky.vehicle.CarMapper;
+import com.viepovsky.vehicle.VehicleMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 class CarRepairMapper {
-    private CarMapper carMapper;
+    private VehicleMapper carMapper;
     private BookingMapper bookingMapper;
 
     public List<CarRepairDto> mapToCarServiceDtoList(List<CarRepair> carRepairList) {

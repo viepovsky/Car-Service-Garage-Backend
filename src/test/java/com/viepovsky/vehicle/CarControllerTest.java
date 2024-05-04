@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.Role;
 import com.viepovsky.user.AppUser;
+import com.viepovsky.vehicle.dto.VehicleDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -40,7 +41,7 @@ class CarControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CarFacade facade;
+    private VehicleFacade facade;
     @MockBean
     private UserDetailsService userDetailsService;
 
@@ -76,7 +77,7 @@ class CarControllerTest {
     @Test
     void testShouldGetEmptyCarList() throws Exception {
         //Given
-        List<CarDto> emptyList = List.of();
+        List<VehicleDto> emptyList = List.of();
         when(facade.getCarsForGivenUsername(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
@@ -90,7 +91,7 @@ class CarControllerTest {
     @Test
     void testShouldGetCarList() throws Exception {
         //Given
-        List<CarDto> carList = List.of(new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", 5L));
+        List<VehicleDto> carList = List.of(new VehicleDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", 5L));
         when(facade.getCarsForGivenUsername(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
@@ -117,10 +118,10 @@ class CarControllerTest {
     @Test
     void testShouldCreateCar() throws Exception {
         //Given
-        var carRequest = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
+        var carRequest = new VehicleDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
         var jsonRequest = new ObjectMapper().writeValueAsString(carRequest);
 
-        doNothing().when(facade).createCar(any(CarDto.class), anyString());
+        doNothing().when(facade).createCar(any(VehicleDto.class), anyString());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/cars")
@@ -134,7 +135,7 @@ class CarControllerTest {
 
     @Test
     void testShouldNotCreateCartIfGivenUsernameDoesNotMatchWithUser() throws Exception {
-        var carRequest = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
+        var carRequest = new VehicleDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
         var jsonRequest = new ObjectMapper().writeValueAsString(carRequest);
         //Given & when & then
         mockMvc.perform(MockMvcRequestBuilders
@@ -150,10 +151,10 @@ class CarControllerTest {
     @Test
     void testShouldUpdateCar() throws Exception {
         //Given
-        var carRequest = new CarDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
+        var carRequest = new VehicleDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
         var jsonRequest = new ObjectMapper().writeValueAsString(carRequest);
 
-        doNothing().when(facade).updateCar(any(CarDto.class));
+        doNothing().when(facade).updateCar(any(VehicleDto.class));
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/v1/cars")
