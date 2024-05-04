@@ -54,7 +54,7 @@ class UserController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> updateUser(@Valid @RequestBody UserDto userDto) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!usernameFromToken.equals(userDto.getUsername())) {
+        if (!usernameFromToken.equals(userDto.username())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         userFacade.updateUser(userDto);

@@ -29,21 +29,15 @@ class UserMapperTest {
         //When
         UserDto mappedUser = userMapper.mapToUserDto(user);
         //Then
-        assertEquals(1L, mappedUser.getId());
-        assertEquals("Test name", mappedUser.getFirstName());
-        assertEquals("username", mappedUser.getUsername());
+        assertEquals(1L, mappedUser.id());
+        assertEquals("Test name", mappedUser.firstName());
+        assertEquals("username", mappedUser.username());
     }
 
     @Test
     void mapToUserLogin() {
         //Given
-        UserDto userDto = new UserDto();
-        userDto.setFirstName("Test name");
-        userDto.setLastName("Test last");
-        userDto.setEmail("email");
-        userDto.setPhoneNumber("252352");
-        userDto.setUsername("username");
-        userDto.setPassword("password");
+        UserDto userDto = new UserDto(null, "username", "Test name", "Test last", null, "email", "252352", "password", null, null);
         //When
         AppUser mappedUser = userMapper.mapToUserLogin(userDto);
         //Then
@@ -61,7 +55,7 @@ class UserMapperTest {
         //When
         UserDto mappedUser = userMapper.mapToUserDtoLogin(user);
         //Then
-        assertEquals(1L, mappedUser.getId());
-        assertEquals("username", mappedUser.getUsername());
+        assertEquals(1L, mappedUser.id());
+        assertEquals("username", mappedUser.username());
     }
 }

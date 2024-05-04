@@ -48,11 +48,11 @@ class AuthenticationService {
         LOGGER.info("Authenticate request received.");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
+                        request.username(),
+                        request.password()
                 )
         );
-        var user = userService.getUser(request.getUsername());
+        var user = userService.getUser(request.username());
         var jwtToken = jwtService.generateJwtToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

@@ -70,7 +70,7 @@ class UserFacadeTest {
         PasswordDto passwordDto = facade.getUserPass("username");
         //Then
         assertNotNull(passwordDto);
-        assertEquals("encrypted password", passwordDto.getPassword());
+        assertEquals("encrypted password", passwordDto.password());
     }
 
     @Test

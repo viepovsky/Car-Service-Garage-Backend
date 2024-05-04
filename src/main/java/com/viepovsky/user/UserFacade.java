@@ -41,7 +41,7 @@ class UserFacade {
     }
 
     public void updateUser(UserDto userDto) {
-        LOGGER.info("Update user endpoint used with username:{}", userDto.getUsername());
+        LOGGER.info("Update user endpoint used with username:{}", userDto.username());
         userService.updateUser(mapper.mapToUserLogin(userDto));
     }
 }

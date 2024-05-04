@@ -21,12 +21,12 @@ public class UserMapper {
 
     public AppUser mapToUserLogin(UserDto userDto) {
         return new AppUser(
-                userDto.getFirstName(),
-                userDto.getLastName(),
-                userDto.getEmail(),
-                userDto.getPhoneNumber(),
-                userDto.getUsername(),
-                userDto.getPassword()
+                userDto.firstName(),
+                userDto.lastName(),
+                userDto.email(),
+                userDto.mobile(),
+                userDto.username(),
+                userDto.password()
         );
     }
 

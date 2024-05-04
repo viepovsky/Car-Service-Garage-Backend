@@ -97,7 +97,7 @@ class UserControllerTest {
                         .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.phoneNumber", Matchers.is("25325235")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.mobile", Matchers.is("25325235")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is("Testusername")));
     }
 
@@ -172,7 +172,7 @@ class UserControllerTest {
     @Test
     void testUpdateUser() throws Exception {
         //Given
-        var userDto = new UserDto(1L, "Testname", "Testlastname", "testmail@mail", "858585858558", "Testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
+        var userDto = new UserDto(1L,"Testusername", "Testname", "Testlastname", "testcompany", "testmail@mail", "858585858558", "testpassword", Role.ROLE_USER, LocalDateTime.now());
         Gson gson = getGsonWithProperLocalDateTimeSetting();
         var jsonContent = gson.toJson(userDto);
 
@@ -190,7 +190,7 @@ class UserControllerTest {
     @Test
     void shouldNotUpdateIfUserDoesNotMatchGivenUsername() throws Exception {
         //Given
-        var userDto = new UserDto(1L, "Testname", "Testlastname", "testmail@mail", "858585858558", "Testlogin", "testpassword", Role.ROLE_USER, LocalDateTime.now());
+        var userDto = new UserDto(1L, "testusername", "Testname", "Testlastname", "testcompany", "testmail@mail", "858585858558", "testpassword", Role.ROLE_USER, LocalDateTime.now());
         Gson gson = getGsonWithProperLocalDateTimeSetting();
         var jsonContent = gson.toJson(userDto);
         //When & then
