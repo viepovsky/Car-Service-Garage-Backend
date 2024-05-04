@@ -1,6 +1,6 @@
 package com.viepovsky.offer.dto;
 
-import com.viepovsky.booking.BookingDto;
+import com.viepovsky.visit.dto.VisitDto;
 import com.viepovsky.vehicle.dto.VehicleDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class SelectedOfferDto {
     private BigDecimal cost;
     private int repairTimeInMinutes;
     private VehicleDto carDto;
-    private BookingDto bookingDto;
+    private VisitDto bookingDto;
     private String status;
 
     public SelectedOfferDto(Long id, String name, String description, BigDecimal cost, int repairTimeInMinutes) {

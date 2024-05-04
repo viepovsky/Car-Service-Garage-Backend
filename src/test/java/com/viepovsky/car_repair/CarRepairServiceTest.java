@@ -1,8 +1,8 @@
 package com.viepovsky.car_repair;
 
-import com.viepovsky.booking.Visit;
-import com.viepovsky.booking.BookingService;
-import com.viepovsky.booking.BookingStatus;
+import com.viepovsky.visit.model.Visit;
+import com.viepovsky.visit.VisitService;
+import com.viepovsky.visit.model.VisitStatus;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.offer.OfferSelectedRepository;
 import com.viepovsky.offer.SelectedOfferService;
@@ -41,7 +41,7 @@ class CarRepairServiceTest {
     private UserService userService;
 
     @Mock
-    private BookingService bookingService;
+    private VisitService bookingService;
 
     @Test
     void testGetCarRepairs() {
@@ -74,11 +74,11 @@ class CarRepairServiceTest {
     @Test
     void testDeleteCarServiceMoreThanOneService() {
         //Given
-        Visit booking = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(12, 0), BigDecimal.valueOf(300), new ArrayList<>(), null);
+        Visit booking = new Visit(VisitStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(12, 0), BigDecimal.valueOf(300), new ArrayList<>(), null);
         SelectedOffer carRepair = new SelectedOffer("Testdescription", BigDecimal.valueOf(50), 30, null, booking, RepairStatus.AWAITING);
         SelectedOffer carRepair2 = new SelectedOffer("Testdescription2", BigDecimal.valueOf(250), 90, null, booking, RepairStatus.AWAITING);
-        booking.getCarRepairList().add(carRepair);
-        booking.getCarRepairList().add(carRepair2);
+        booking.getSelectedOffers().add(carRepair);
+        booking.getSelectedOffers().add(carRepair2);
 
         when(carRepairRepository.findById(1L)).thenReturn(Optional.of(carRepair));
         doNothing().when(carRepairRepository).delete(carRepair);
@@ -87,10 +87,10 @@ class CarRepairServiceTest {
         carRepairService.deleteCarRepair(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("CarService", 1L));
-        assertEquals(1, booking.getCarRepairList().size());
-        assertEquals(BigDecimal.valueOf(250), booking.getTotalCost());
-        assertEquals(LocalTime.of(10, 0), booking.getStartHour());
-        assertEquals(LocalTime.of(11, 30), booking.getEndHour());
+        assertEquals(1, booking.getSelectedOffers().size());
+        assertEquals(BigDecimal.valueOf(250), booking.getTotalPrice());
+        assertEquals(LocalTime.of(10, 0), booking.getVisitStartTime());
+        assertEquals(LocalTime.of(11, 30), booking.getVisitEndTime());
         verify(carRepairRepository, times(1)).delete(carRepair);
         verify(bookingService, times(1)).save(any(Visit.class));
     }
@@ -98,9 +98,9 @@ class CarRepairServiceTest {
     @Test
     void testDeleteCarServiceOnlyOneService() {
         //Given
-        Visit booking = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(10, 30), BigDecimal.valueOf(50), new ArrayList<>(), null);
+        Visit booking = new Visit(VisitStatus.WAITING_FOR_CUSTOMER, LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(10, 30), BigDecimal.valueOf(50), new ArrayList<>(), null);
         SelectedOffer carRepair = new SelectedOffer("Testdescription", BigDecimal.valueOf(50), 30, null, booking, RepairStatus.AWAITING);
-        booking.getCarRepairList().add(carRepair);
+        booking.getSelectedOffers().add(carRepair);
 
         when(carRepairRepository.findById(1L)).thenReturn(Optional.of(carRepair));
         doNothing().when(carRepairRepository).delete(carRepair);

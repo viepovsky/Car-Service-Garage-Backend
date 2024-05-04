@@ -1,5 +1,8 @@
-package com.viepovsky.booking;
+package com.viepovsky.visit;
 
+import com.viepovsky.mapper.VisitMapper;
+import com.viepovsky.visit.dto.VisitDto;
+import com.viepovsky.visit.model.Visit;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,24 +20,24 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class BookingFacadeTest {
     @InjectMocks
-    private BookingFacade facade;
+    private VisitFacade facade;
 
     @Mock
-    private BookingService service;
+    private VisitService service;
 
     @Mock
-    private BookingMapper mapper;
+    private VisitMapper mapper;
 
     @Test
     void shouldGetBookingsForGivenDateAndGarageId() {
         //Given
         var booking = new Visit();
-        var bookingDto = new BookingDto();
+        var bookingDto = new VisitDto();
 
         when(service.getBookingsByDateAndGarageId(any(LocalDate.class), anyLong())).thenReturn(List.of(booking));
         when(mapper.mapToBookingDtoList(anyList())).thenReturn(List.of(bookingDto));
         //When
-        List<BookingDto> retrievedList = facade.getBookingsByDateAndGarageId(LocalDate.now(), 5L);
+        List<VisitDto> retrievedList = facade.getBookingsByDateAndGarageId(LocalDate.now(), 5L);
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -44,12 +47,12 @@ class BookingFacadeTest {
     void shouldGetBookingsForGivenUsername() {
         //Given
         var booking = new Visit();
-        var bookingDto = new BookingDto();
+        var bookingDto = new VisitDto();
 
         when(service.getAllBookingsByUsername(anyString())).thenReturn(List.of(booking));
         when(mapper.mapToBookingDtoList(anyList())).thenReturn(List.of(bookingDto));
         //When
-        List<BookingDto> retrievedList = facade.getBookingsByUsername("username");
+        List<VisitDto> retrievedList = facade.getBookingsByUsername("username");
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());

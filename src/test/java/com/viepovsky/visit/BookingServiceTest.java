@@ -1,4 +1,4 @@
-package com.viepovsky.booking;
+package com.viepovsky.visit;
 
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.vehicle.VehicleService;
@@ -11,6 +11,8 @@ import com.viepovsky.offer.model.CatalogOffer;
 import com.viepovsky.offer.CatalogOfferService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
+import com.viepovsky.visit.model.Visit;
+import com.viepovsky.visit.model.VisitStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,10 +36,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
     @InjectMocks
-    private BookingService bookingService;
+    private VisitService bookingService;
 
     @Mock
-    private BookingRepository bookingRepository;
+    private VisitRepository bookingRepository;
 
     @Mock
     private GarageService garageService;
@@ -91,10 +93,10 @@ class BookingServiceTest {
         Garage garage = new Garage();
         garage.setId(5L);
 
-        Visit bookedService = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(10, 0), LocalTime.of(10, 50), null, carRepairList, garage);
+        Visit bookedService = new Visit(VisitStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(10, 0), LocalTime.of(10, 50), null, carRepairList, garage);
         bookedService.setId(1L);
         carRepair.setVisit(bookedService);
-        Visit booking = new Visit(BookingStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null);
+        Visit booking = new Visit(VisitStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null);
         List<Visit> bookingList = new ArrayList<>();
         bookingList.add(booking);
         bookingList.add(bookedService);
@@ -115,7 +117,7 @@ class BookingServiceTest {
     void testGetAvailableBookingTimesByDayAndRepairDurationThreeParameters() {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
-        List<Visit> bookingList = List.of(new Visit(BookingStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null));
+        List<Visit> bookingList = List.of(new Visit(VisitStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null));
         when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingList);
         //When
         List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 50, 5L);
@@ -146,7 +148,7 @@ class BookingServiceTest {
         List<Visit> bookingList = new ArrayList<>();
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
-        when(bookingRepository.findBookingsByDateAndStatusAndGarageId(localDate, BookingStatus.AVAILABLE, 50L)).thenReturn(bookingList);
+        when(bookingRepository.findBookingsByDateAndStatusAndGarageId(localDate, VisitStatus.AVAILABLE, 50L)).thenReturn(bookingList);
         when(bookingRepository.save(any())).thenReturn(any());
         //When
         bookingService.createWorkingHoursBooking(localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), 50L);
@@ -159,13 +161,13 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         Garage mockedGarage = Mockito.mock(Garage.class);
-        Visit booking = new Visit(BookingStatus.AVAILABLE, localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), null, null, null);
+        Visit booking = new Visit(VisitStatus.AVAILABLE, localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), null, null, null);
         booking.setId(1L);
         List<Visit> bookingList = new ArrayList<>();
         bookingList.add(booking);
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
-        when(bookingRepository.findBookingsByDateAndStatusAndGarageId(localDate, BookingStatus.AVAILABLE, 50L)).thenReturn(bookingList);
+        when(bookingRepository.findBookingsByDateAndStatusAndGarageId(localDate, VisitStatus.AVAILABLE, 50L)).thenReturn(bookingList);
         //When & then
         try {
             bookingService.createWorkingHoursBooking(localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), 50L);
@@ -181,7 +183,7 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         LocalDate newLocalDate = LocalDate.now().plusDays(2);
-        Visit booking = new Visit(BookingStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(11, 0), LocalTime.of(11, 30), null, null, null);
+        Visit booking = new Visit(VisitStatus.WAITING_FOR_CUSTOMER, localDate, LocalTime.of(11, 0), LocalTime.of(11, 30), null, null, null);
 
         when(bookingRepository.findById(50L)).thenReturn(Optional.of(booking));
         when(bookingRepository.save(booking)).thenReturn(booking);
@@ -209,7 +211,7 @@ class BookingServiceTest {
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
         when(carService.getCar(anyLong())).thenReturn(car);
         when(userService.getUser(anyLong())).thenReturn(user);
-        BookingService bookingService = Mockito.spy(new BookingService(bookingRepository, garageService, carRepairService, carService, userService, availableCarRepairService));
+        VisitService bookingService = Mockito.spy(new VisitService(bookingRepository, garageService, carRepairService, carService, userService, availableCarRepairService));
         Mockito.doReturn(localTimeList).when(bookingService).getAvailableBookingTimesByDayAndRepairDuration(localDate, repairDuration, 5L);
         when(bookingRepository.save(any())).thenReturn(any());
         when(availableCarRepairService.getAvailableCarRepair(10L)).thenReturn(availableCarRepair);

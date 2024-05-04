@@ -1,6 +1,7 @@
-package com.viepovsky.booking;
+package com.viepovsky.visit.dto;
 
 import com.viepovsky.garage.dto.GarageDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingDto {
+public class VisitDto {
 
     private Long id;
 

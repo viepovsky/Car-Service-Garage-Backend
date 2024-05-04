@@ -1,7 +1,7 @@
 package com.viepovsky.offer;
 
-import com.viepovsky.booking.Visit;
-import com.viepovsky.booking.BookingService;
+import com.viepovsky.visit.model.Visit;
+import com.viepovsky.visit.VisitService;
 import com.viepovsky.exceptions.MyEntityNotFoundException;
 import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.user.model.AppUser;
@@ -18,10 +18,10 @@ import java.util.List;
 public class SelectedOfferService {
     private final SelectedOfferRepository carRepairRepository;
     private final UserService userService;
-    private final BookingService bookingService;
+    private final VisitService bookingService;
 
     @Autowired
-    public SelectedOfferService(@Lazy BookingService bookingService,
+    public SelectedOfferService(@Lazy VisitService bookingService,
                                 UserService userService,
                                 SelectedOfferRepository carRepairRepository) {
         this.carRepairRepository = carRepairRepository;
@@ -45,16 +45,16 @@ public class SelectedOfferService {
         SelectedOffer carRepair = carRepairRepository.findById(carRepairId)
                                                      .orElseThrow(() -> new MyEntityNotFoundException("CarRepair", carRepairId));
         Visit booking = carRepair.getVisit();
-        if (booking.getCarRepairList().size() > 1) {
-            LocalTime endHour = booking.getEndHour();
+        if (booking.getSelectedOffers().size() > 1) {
+            LocalTime endHour = booking.getVisitEndTime();
             endHour = endHour.minusMinutes(carRepair.getProbableRepairTime());
-            booking.setEndHour(endHour);
+            booking.setVisitEndTime(endHour);
 
-            BigDecimal totalCost = booking.getTotalCost();
+            BigDecimal totalCost = booking.getTotalPrice();
             totalCost = totalCost.subtract(carRepair.getPrice());
-            booking.setTotalCost(totalCost);
+            booking.setTotalPrice(totalCost);
 
-            booking.getCarRepairList().remove(carRepair);
+            booking.getSelectedOffers().remove(carRepair);
             carRepairRepository.delete(carRepair);
             bookingService.save(booking);
         } else {

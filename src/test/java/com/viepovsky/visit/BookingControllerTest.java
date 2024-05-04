@@ -1,8 +1,10 @@
-package com.viepovsky.booking;
+package com.viepovsky.visit;
 
 import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.visit.dto.VisitDto;
+import com.viepovsky.visit.model.VisitStatus;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -40,7 +42,7 @@ class BookingControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private BookingFacade facade;
+    private VisitFacade facade;
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -82,7 +84,7 @@ class BookingControllerTest {
     @Test
     void shouldGetEmptyListBookings() throws Exception {
         //Given
-        List<BookingDto> bookingDtoList = List.of();
+        List<VisitDto> bookingDtoList = List.of();
         when(facade.getBookingsByUsername(anyString())).thenReturn(bookingDtoList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
@@ -96,7 +98,7 @@ class BookingControllerTest {
     @Test
     void shouldGetBookings() throws Exception {
         //Given
-        List<BookingDto> bookingDtoList = List.of(new BookingDto(1L, BookingStatus.WAITING_FOR_CUSTOMER.getStatusName(), LocalDate.of(2022, 12, 30), LocalTime.of(10, 0), LocalTime.of(11, 0), BigDecimal.valueOf(50), null, null));
+        List<VisitDto> bookingDtoList = List.of(new VisitDto(1L, VisitStatus.WAITING_FOR_CUSTOMER.getStatusName(), LocalDate.of(2022, 12, 30), LocalTime.of(10, 0), LocalTime.of(11, 0), BigDecimal.valueOf(50), null, null));
         when(facade.getBookingsByUsername(anyString())).thenReturn(bookingDtoList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders

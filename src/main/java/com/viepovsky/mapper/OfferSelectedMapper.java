@@ -1,6 +1,5 @@
 package com.viepovsky.mapper;
 
-import com.viepovsky.booking.BookingMapper;
 import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.offer.model.SelectedOffer;
 import lombok.AllArgsConstructor;
@@ -12,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OfferSelectedMapper {
     private VehicleMapper carMapper;
-    private BookingMapper bookingMapper;
+    private VisitMapper bookingMapper;
 
     public List<SelectedOfferDto> mapToCarServiceDtoList(List<SelectedOffer> carRepairList) {
         //TODO fix this

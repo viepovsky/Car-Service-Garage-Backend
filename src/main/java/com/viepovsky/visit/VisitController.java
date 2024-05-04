@@ -1,5 +1,6 @@
-package com.viepovsky.booking;
+package com.viepovsky.visit;
 
+import com.viepovsky.visit.dto.VisitDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -30,12 +31,12 @@ import java.util.List;
 @RequestMapping("/v1/bookings")
 @RequiredArgsConstructor
 @Validated
-class BookingController {
+class VisitController {
 
-    private final BookingFacade bookingFacade;
+    private final VisitFacade bookingFacade;
 
     @GetMapping(path = "/work-time")
-    ResponseEntity<List<BookingDto>> getBookings(
+    ResponseEntity<List<VisitDto>> getBookings(
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam(name = "garage-id") @Min(1) Long garageId
     ) {
@@ -43,7 +44,7 @@ class BookingController {
     }
 
     @GetMapping
-    ResponseEntity<List<BookingDto>> getBookings(@RequestParam(name = "name") @NotBlank String username) {
+    ResponseEntity<List<VisitDto>> getBookings(@RequestParam(name = "name") @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

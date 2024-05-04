@@ -1,7 +1,7 @@
 package com.viepovsky.user.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.booking.Visit;
+import com.viepovsky.visit.model.Visit;
 import com.viepovsky.vehicle.model.Vehicle;
 
 import jakarta.persistence.CascadeType;
@@ -9,7 +9,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;

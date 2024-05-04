@@ -1,4 +1,4 @@
-package com.viepovsky.booking;
+package com.viepovsky.visit;
 
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.vehicle.VehicleService;
@@ -13,6 +13,8 @@ import com.viepovsky.offer.model.CatalogOffer;
 import com.viepovsky.offer.CatalogOfferService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
+import com.viepovsky.visit.model.Visit;
+import com.viepovsky.visit.model.VisitStatus;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +29,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookingService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BookingService.class);
+public class VisitService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VisitService.class);
 
-    private final BookingRepository bookingRepository;
+    private final VisitRepository bookingRepository;
 
     private final GarageService garageService;
 
@@ -63,7 +65,7 @@ public class BookingService {
     public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, Long serviceId) {
         var carRepair = carRepairService.getCarRepair(serviceId);
         var reservedBooking = getBookingById(carRepair.getVisit().getId());
-        int repairDuration = reservedBooking.getCarRepairList()
+        int repairDuration = reservedBooking.getSelectedOffers()
                 .stream()
                 .mapToInt(SelectedOffer::getProbableRepairTime)
                 .sum();
@@ -74,7 +76,7 @@ public class BookingService {
         allBookingsForDay.remove(reservedBooking);
 
         List<LocalTime> availableBookingTimes = checkAvailableBookingTimes(allBookingsForDay, date, repairDuration);
-        availableBookingTimes.remove(reservedBooking.getStartHour());
+        availableBookingTimes.remove(reservedBooking.getVisitStartTime());
         return availableBookingTimes;
     }
 
@@ -90,15 +92,15 @@ public class BookingService {
         }
 
         Visit garageWorkTime = bookingList.stream()
-                                          .filter(booking -> booking.getStatus() == BookingStatus.AVAILABLE)
+                                          .filter(booking -> booking.getStatus() == VisitStatus.AVAILABLE)
                                           .findFirst()
                                           .orElse(null);
         if (!isGarageWorkTimePresent(garageWorkTime)) {
             return new ArrayList<>();
         }
 
-        LocalTime garageOpenTime = garageWorkTime.getStartHour();
-        LocalTime garageCloseTime = garageWorkTime.getEndHour();
+        LocalTime garageOpenTime = garageWorkTime.getVisitStartTime();
+        LocalTime garageCloseTime = garageWorkTime.getVisitEndTime();
         if (isOpenTimeBeforeNow(date, garageOpenTime)) {
             if (isCloseTimeBeforeNow(garageCloseTime)) {
                 return new ArrayList<>();
@@ -107,7 +109,7 @@ public class BookingService {
         }
 
         List<Visit> unavailableBookingTimeList = bookingList.stream()
-                                                            .filter(booking -> booking.getStatus() == BookingStatus.UNAVAILABLE || booking.getStatus() == BookingStatus.WAITING_FOR_CUSTOMER)
+                                                            .filter(booking -> booking.getStatus() == VisitStatus.UNAVAILABLE || booking.getStatus() == VisitStatus.WAITING_FOR_CUSTOMER)
                                                             .toList();
 
         return getAvailableTimesForBooking(repairDuration, garageCloseTime, unavailableBookingTimeList, garageOpenTime);
@@ -144,7 +146,7 @@ public class BookingService {
         while (!currentTime.plusMinutes(repairDuration).isAfter(closeTime)) {
             boolean isAvailable = true;
             for (Visit booking : unavailableBookingTimeList) {
-                if (currentTime.plusMinutes(repairDuration).isAfter(booking.getStartHour()) && booking.getEndHour().isAfter(currentTime)) {
+                if (currentTime.plusMinutes(repairDuration).isAfter(booking.getVisitStartTime()) && booking.getVisitEndTime().isAfter(currentTime)) {
                     isAvailable = false;
                     break;
                 }
@@ -162,7 +164,7 @@ public class BookingService {
                                           LocalTime endHour,
                                           Long garageId) {
         Garage garage = garageService.getGarage(garageId);
-        List<Visit> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, BookingStatus.AVAILABLE, garageId);
+        List<Visit> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, VisitStatus.AVAILABLE, garageId);
         if (!isGarageWorkingHoursPresent(bookingList)) {
             Visit booking = createWorkingHoursBooking(date, startHour, endHour, garage);
             bookingRepository.save(booking);
@@ -180,7 +182,7 @@ public class BookingService {
                                             LocalTime endHour,
                                             Garage garage) {
         return new Visit(
-                BookingStatus.AVAILABLE,
+                VisitStatus.AVAILABLE,
                 date,
                 startHour,
                 endHour,
@@ -193,10 +195,10 @@ public class BookingService {
     public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) {
         Visit booking = bookingRepository.findById(bookingId)
                                          .orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
-        int repairTime = (int) Duration.between(booking.getStartHour(), booking.getEndHour()).toMinutes();
-        booking.setDate(date);
-        booking.setStartHour(startHour);
-        booking.setEndHour(startHour.plusMinutes(repairTime));
+        int repairTime = (int) Duration.between(booking.getVisitStartTime(), booking.getVisitEndTime()).toMinutes();
+        booking.setVisitStartDate(date);
+        booking.setVisitStartTime(startHour);
+        booking.setVisitEndTime(startHour.plusMinutes(repairTime));
         LOGGER.info("Updated booking with values, date: " + date + ", time: " + startHour);
         bookingRepository.save(booking);
     }
@@ -225,7 +227,7 @@ public class BookingService {
                                          int repairDuration,
                                          Garage garage) {
         return new Visit(
-                BookingStatus.WAITING_FOR_CUSTOMER,
+                VisitStatus.WAITING_FOR_CUSTOMER,
                 date,
                 startHour,
                 startHour.plusMinutes(repairDuration),
@@ -269,8 +271,8 @@ public class BookingService {
 
         BigDecimal totalRepairCost = repairCosts.stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        booking.setTotalCost(totalRepairCost);
-        booking.getCarRepairList().addAll(selectedCarRepairs);
+        booking.setTotalPrice(totalRepairCost);
+        booking.getSelectedOffers().addAll(selectedCarRepairs);
         bookingRepository.save(booking);
     }
 

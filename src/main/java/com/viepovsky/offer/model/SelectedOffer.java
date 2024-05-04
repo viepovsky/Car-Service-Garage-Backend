@@ -1,7 +1,7 @@
 package com.viepovsky.offer.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.booking.Visit;
+import com.viepovsky.visit.model.Visit;
 import com.viepovsky.user.model.AppUser;
 
 import jakarta.persistence.*;

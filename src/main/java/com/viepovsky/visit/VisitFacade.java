@@ -1,5 +1,8 @@
-package com.viepovsky.booking;
+package com.viepovsky.visit;
 
+import com.viepovsky.mapper.VisitMapper;
+import com.viepovsky.visit.dto.VisitDto;
+import com.viepovsky.visit.model.Visit;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,20 +14,20 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-class BookingFacade {
+class VisitFacade {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BookingFacade.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VisitFacade.class);
 
-    private final BookingService bookingService;
+    private final VisitService bookingService;
 
-    private final BookingMapper mapper;
+    private final VisitMapper mapper;
 
-    public List<BookingDto> getBookingsByDateAndGarageId(LocalDate date, Long garageId) {
+    public List<VisitDto> getBookingsByDateAndGarageId(LocalDate date, Long garageId) {
         List<Visit> bookingList = bookingService.getBookingsByDateAndGarageId(date, garageId);
         return mapper.mapToBookingDtoList(bookingList);
     }
 
-    public List<BookingDto> getBookingsByUsername(String username) {
+    public List<VisitDto> getBookingsByUsername(String username) {
         List<Visit> bookingList = bookingService.getAllBookingsByUsername(username);
         return mapper.mapToBookingDtoList(bookingList);
     }
