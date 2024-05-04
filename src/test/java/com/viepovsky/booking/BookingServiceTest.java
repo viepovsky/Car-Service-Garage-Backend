@@ -2,13 +2,13 @@ package com.viepovsky.booking;
 
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.vehicle.VehicleService;
-import com.viepovsky.car_repair.ServiceSelected;
+import com.viepovsky.car_repair.OfferSelected;
 import com.viepovsky.car_repair.CarRepairService;
 import com.viepovsky.exceptions.WrongInputDataException;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
-import com.viepovsky.vehicle_services.model.ServiceCatalog;
-import com.viepovsky.vehicle_services.ServiceCatalogService;
+import com.viepovsky.vehicle_services.model.OfferCatalog;
+import com.viepovsky.vehicle_services.OfferCatalogService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ class BookingServiceTest {
     private UserService userService;
 
     @Mock
-    private ServiceCatalogService availableCarRepairService;
+    private OfferCatalogService availableCarRepairService;
 
     @Test
     void testGetAllBookings() {
@@ -84,10 +84,10 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
 
-        ServiceSelected carRepair = new ServiceSelected();
+        OfferSelected carRepair = new OfferSelected();
         carRepair.setRepairTimeInMinutes(50);
 
-        List<ServiceSelected> carRepairList = List.of(carRepair);
+        List<OfferSelected> carRepairList = List.of(carRepair);
         Garage garage = new Garage();
         garage.setId(5L);
 
@@ -203,8 +203,8 @@ class BookingServiceTest {
         Vehicle car = Mockito.mock(Vehicle.class);
         user.setVehicles(List.of(car));
         List<LocalTime> localTimeList = List.of(LocalTime.of(10, 0), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50), LocalTime.of(11, 0));
-        ServiceCatalog availableCarRepair = new ServiceCatalog(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
-        ServiceCatalog availableCarRepair2 = new ServiceCatalog(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
+        OfferCatalog availableCarRepair = new OfferCatalog(10L, "testname", "testdescription", BigDecimal.valueOf(50), 30, "BMW", BigDecimal.valueOf(1.2), mockedGarage);
+        OfferCatalog availableCarRepair2 = new OfferCatalog(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
         when(carService.getCar(anyLong())).thenReturn(car);

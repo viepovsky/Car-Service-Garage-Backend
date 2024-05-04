@@ -2,7 +2,7 @@ package com.viepovsky.garage.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Visit;
-import com.viepovsky.vehicle_services.model.ServiceCatalog;
+import com.viepovsky.vehicle_services.model.OfferCatalog;
 
 import jakarta.persistence.*;
 
@@ -66,10 +66,10 @@ public class Garage extends BaseEntityAudit {
     private List<Schedule> garageSchedules = new ArrayList<>();
 
     @OneToMany(
-            targetEntity = ServiceCatalog.class,
+            targetEntity = OfferCatalog.class,
             mappedBy = "garage",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    private List<ServiceCatalog> availableServices = new ArrayList<>();
+    private List<OfferCatalog> availableServices = new ArrayList<>();
 
     public Garage(String name, Address address) {
         this.name = name;
@@ -81,7 +81,7 @@ public class Garage extends BaseEntityAudit {
             Address address,
             List<Visit> visits,
             List<Schedule> garageSchedules,
-            List<ServiceCatalog> availableServices) {
+            List<OfferCatalog> availableServices) {
         this.name = name;
         this.address = address;
         this.visits = visits;

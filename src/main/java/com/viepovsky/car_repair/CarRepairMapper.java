@@ -13,7 +13,7 @@ class CarRepairMapper {
     private VehicleMapper carMapper;
     private BookingMapper bookingMapper;
 
-    public List<CarRepairDto> mapToCarServiceDtoList(List<ServiceSelected> carRepairList) {
+    public List<CarRepairDto> mapToCarServiceDtoList(List<OfferSelected> carRepairList) {
         //TODO fix this
         return null;
 //        return carRepairList.stream()

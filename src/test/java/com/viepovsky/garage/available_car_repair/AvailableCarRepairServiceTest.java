@@ -5,8 +5,8 @@ import com.viepovsky.garage.model.Address;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.GarageService;
 import com.viepovsky.vehicle_services.AvailableCarRepairRepository;
-import com.viepovsky.vehicle_services.ServiceCatalogService;
-import com.viepovsky.vehicle_services.model.ServiceCatalog;
+import com.viepovsky.vehicle_services.OfferCatalogService;
+import com.viepovsky.vehicle_services.model.OfferCatalog;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 class AvailableCarRepairServiceTest {
 
     @InjectMocks
-    private ServiceCatalogService availableCarRepairService;
+    private OfferCatalogService availableCarRepairService;
 
     @Mock
     private AvailableCarRepairRepository availableCarRepairRepository;
@@ -39,12 +39,12 @@ class AvailableCarRepairServiceTest {
     @Test
     void testGetAllAvailableCarService() {
         //Given
-        List<ServiceCatalog> serviceList = new ArrayList<>();
-        ServiceCatalog availableCarRepair = Mockito.mock(ServiceCatalog.class);
+        List<OfferCatalog> serviceList = new ArrayList<>();
+        OfferCatalog availableCarRepair = Mockito.mock(OfferCatalog.class);
         serviceList.add(availableCarRepair);
         when(availableCarRepairRepository.findAllByGarageId(5L)).thenReturn(serviceList);
         //When
-        List<ServiceCatalog> retrievedServiceList = availableCarRepairService.getAllAvailableCarRepair(5L);
+        List<OfferCatalog> retrievedServiceList = availableCarRepairService.getAllAvailableCarRepair(5L);
         //Then
         assertEquals(1, retrievedServiceList.size());
     }
@@ -53,7 +53,7 @@ class AvailableCarRepairServiceTest {
     void testSaveAvailableCarService() {
         //Given
         Garage garage = new Garage("Test name", Mockito.mock(Address.class), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-        ServiceCatalog availableCarRepair = new ServiceCatalog("Testname", "Testdescription", BigDecimal.valueOf(50), 40, BigDecimal.valueOf(1.2), null);
+        OfferCatalog availableCarRepair = new OfferCatalog("Testname", "Testdescription", BigDecimal.valueOf(50), 40, BigDecimal.valueOf(1.2), null);
         when(garageService.getGarage(anyLong())).thenReturn(garage);
         when(garageService.saveGarage(any(Garage.class))).thenReturn(garage);
         //When

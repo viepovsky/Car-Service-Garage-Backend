@@ -4,7 +4,7 @@ import com.viepovsky.audit.BaseEntityAudit;
 import com.viepovsky.booking.Visit;
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.user.model.AppUser;
-import com.viepovsky.vehicle_services.model.ServiceCatalog;
+import com.viepovsky.vehicle_services.model.OfferCatalog;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "CARS_REPAIRS")
 @SequenceGenerator(name = "seq", initialValue = 5000, allocationSize = 100)
-public class ServiceSelected extends BaseEntityAudit {
+public class OfferSelected extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
@@ -51,13 +51,13 @@ public class ServiceSelected extends BaseEntityAudit {
 
     @ManyToOne
     @JoinColumn(
-            name = "service_catalog_id",
+            name = "offer_catalog_id",
             referencedColumnName = "id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "selected_service_catalog_id"))
-    private ServiceCatalog serviceCatalog;
+            foreignKey = @ForeignKey(name = "selected_offer_catalog_id"))
+    private OfferCatalog offerCatalog;
 
-    public ServiceSelected(
+    public OfferSelected(
             String name,
             String description,
             BigDecimal cost,

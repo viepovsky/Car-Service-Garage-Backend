@@ -1,7 +1,7 @@
 package com.viepovsky.vehicle_services;
 
 
-import com.viepovsky.vehicle_services.dto.ServiceCatalogDto;
+import com.viepovsky.vehicle_services.dto.OfferCatalogDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -30,19 +30,19 @@ import java.util.List;
 @RequestMapping("/v1/available-car-service")
 @RequiredArgsConstructor
 @Validated
-class ServiceCatalogController {
+class OfferCatalogController {
 
-    private final ServiceCatalogFacade availableCarRepairFacade;
+    private final OfferCatalogFacade availableCarRepairFacade;
 
     @GetMapping(path = "/{garageId}")
-    ResponseEntity<List<ServiceCatalogDto>> getAvailableCarServices(@PathVariable @Min(1) Long garageId) {
+    ResponseEntity<List<OfferCatalogDto>> getAvailableCarServices(@PathVariable @Min(1) Long garageId) {
         return ResponseEntity.ok(availableCarRepairFacade.getAvailableCarServices(garageId));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> createAvailableCarService(
-            @Valid @RequestBody ServiceCatalogDto availableCarRepairDto,
+            @Valid @RequestBody OfferCatalogDto availableCarRepairDto,
             @RequestParam(name = "garage-id") @NotNull @Min(1) Long garageId
     ) {
         availableCarRepairFacade.createAvailableCarService(availableCarRepairDto, garageId);

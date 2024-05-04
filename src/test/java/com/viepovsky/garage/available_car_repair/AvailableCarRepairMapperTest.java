@@ -3,7 +3,7 @@ package com.viepovsky.garage.available_car_repair;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.vehicle_services.AvailableCarRepairDto;
 import com.viepovsky.vehicle_services.AvailableCarRepairMapper;
-import com.viepovsky.vehicle_services.model.ServiceCatalog;
+import com.viepovsky.vehicle_services.model.OfferCatalog;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -24,7 +24,7 @@ class AvailableCarRepairMapperTest {
     void mapToAvailableCarServiceDto() {
         //Given
         Garage mockedGarage = Mockito.mock(Garage.class);
-        ServiceCatalog availableCarRepair = new ServiceCatalog(1L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), mockedGarage);
+        OfferCatalog availableCarRepair = new OfferCatalog(1L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), mockedGarage);
         when(mockedGarage.getId()).thenReturn(2L);
         //When
         AvailableCarRepairDto mappedService = availableServiceMapper.mapToAvailableCarServiceDto(availableCarRepair);
@@ -40,7 +40,7 @@ class AvailableCarRepairMapperTest {
         //Given
         AvailableCarRepairDto availableCarRepairDto = new AvailableCarRepairDto(1L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), 2L);
         //When
-        ServiceCatalog mappedService = availableServiceMapper.mapToAvailableCarService(availableCarRepairDto);
+        OfferCatalog mappedService = availableServiceMapper.mapToAvailableCarService(availableCarRepairDto);
         //Then
         assertEquals(1L, mappedService.getId());
         assertEquals("Testname", mappedService.getName());
@@ -51,8 +51,8 @@ class AvailableCarRepairMapperTest {
     void apToAvailableCarServiceDtoList() {
         //Given
         Garage mockedGarage = Mockito.mock(Garage.class);
-        ServiceCatalog availableCarRepair = new ServiceCatalog(1L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), mockedGarage);
-        ServiceCatalog availableCarRepair2 = new ServiceCatalog(2L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), mockedGarage);
+        OfferCatalog availableCarRepair = new OfferCatalog(1L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), mockedGarage);
+        OfferCatalog availableCarRepair2 = new OfferCatalog(2L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), mockedGarage);
         //When
         List<AvailableCarRepairDto> mappedList = availableServiceMapper.mapToAvailableCarServiceDtoList(List.of(availableCarRepair, availableCarRepair2));
         //Then

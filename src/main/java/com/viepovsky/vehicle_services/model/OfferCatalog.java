@@ -1,7 +1,7 @@
 package com.viepovsky.vehicle_services.model;
 
 import com.viepovsky.audit.BaseEntityAudit;
-import com.viepovsky.car_repair.ServiceSelected;
+import com.viepovsky.car_repair.OfferSelected;
 import com.viepovsky.garage.model.Garage;
 
 import jakarta.persistence.*;
@@ -19,16 +19,16 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "ServiceCatalog")
-@Table(name = "service_catalog")
-public class ServiceCatalog extends BaseEntityAudit {
+@Entity(name = "OfferCatalog")
+@Table(name = "offer_catalog")
+public class OfferCatalog extends BaseEntityAudit {
     @Id
     @SequenceGenerator(
-            name = "service_catalog_id_sequence",
-            sequenceName = "service_catalog_id_sequence",
+            name = "offer_catalog_id_sequence",
+            sequenceName = "offer_catalog_id_sequence",
             initialValue = 5000,
-            allocationSize = 100)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "service_catalog_id_sequence")
+            allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offer_catalog_id_sequence")
     private Long id;
 
     @Column(name = "name", nullable = false, length = 128)
@@ -48,16 +48,16 @@ public class ServiceCatalog extends BaseEntityAudit {
             name = "garage_id",
             nullable = false,
             referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "service_catalog_garage_id_fk"))
+            foreignKey = @ForeignKey(name = "offer_catalog_garage_id_fk"))
     private Garage garage;
 
     @OneToMany(
-            targetEntity = ServiceSelected.class,
-            mappedBy = "serviceCatalog",
+            targetEntity = OfferSelected.class,
+            mappedBy = "offerCatalog",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    private List<ServiceSelected> selectedServices = new ArrayList<>();
+    private List<OfferSelected> selectedOffers = new ArrayList<>();
 
-    public ServiceCatalog(
+    public OfferCatalog(
             String name,
             String description,
             BigDecimal price,
@@ -70,7 +70,7 @@ public class ServiceCatalog extends BaseEntityAudit {
         this.garage = garage;
     }
 
-    public ServiceCatalog(ServiceCatalog availableCarRepair) {
+    public OfferCatalog(OfferCatalog availableCarRepair) {
         this.id = availableCarRepair.getId();
         this.name = availableCarRepair.getName();
         this.description = availableCarRepair.getDescription();

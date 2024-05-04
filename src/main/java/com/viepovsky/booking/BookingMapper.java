@@ -1,6 +1,6 @@
 package com.viepovsky.booking;
 
-import com.viepovsky.car_repair.ServiceSelected;
+import com.viepovsky.car_repair.OfferSelected;
 import com.viepovsky.mapper.GarageMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class BookingMapper {
                 booking.getEndHour(),
                 booking.getTotalCost(),
                 booking.getCarRepairList().stream()
-                        .map(ServiceSelected::getId)
+                        .map(OfferSelected::getId)
                         .toList(),
                 garageMapper.mapToGarageDto(booking.getGarage())
         );
