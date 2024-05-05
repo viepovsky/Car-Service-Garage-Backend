@@ -1,9 +1,12 @@
 package com.viepovsky.vehicle;
 
+import com.viepovsky.security.UserValidator;
 import com.viepovsky.utility.mapper.VehicleMapper;
 import com.viepovsky.vehicle.dto.VehicleDto;
 import com.viepovsky.vehicle.model.Vehicle;
+
 import lombok.RequiredArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,14 +16,13 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 class VehicleFacade {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(VehicleFacade.class);
-
     private final VehicleService carService;
-
     private final VehicleMapper mapper;
+    private final UserValidator userValidator;
 
-    public List<VehicleDto> getCarsForGivenUsername(String username) {
+    public List<VehicleDto> getCarsForUsername(String username) {
+        userValidator.isValidWithAuthToken(username);
         LOGGER.info("Get cars for given username endpoint used with username:{}", username);
         List<Vehicle> carList = carService.getAllCarsForGivenUsername(username);
         return mapper.mapToCarDtoList(carList);

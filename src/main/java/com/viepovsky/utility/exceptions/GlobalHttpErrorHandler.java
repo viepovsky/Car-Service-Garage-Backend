@@ -22,4 +22,9 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ForbiddenRequestException.class)
+    public ResponseEntity<Object> handleForbiddenRequestException(ForbiddenRequestException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
 }

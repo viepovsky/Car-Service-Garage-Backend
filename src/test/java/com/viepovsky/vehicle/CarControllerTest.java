@@ -80,7 +80,7 @@ class CarControllerTest {
     void testShouldGetEmptyCarList() throws Exception {
         //Given
         List<VehicleDto> emptyList = List.of();
-        when(facade.getCarsForGivenUsername(anyString())).thenReturn(emptyList);
+        when(facade.getCarsForUsername(anyString())).thenReturn(emptyList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/cars")
@@ -94,7 +94,7 @@ class CarControllerTest {
     void testShouldGetCarList() throws Exception {
         //Given
         List<VehicleDto> carList = List.of(new VehicleDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", 5L));
-        when(facade.getCarsForGivenUsername(anyString())).thenReturn(carList);
+        when(facade.getCarsForUsername(anyString())).thenReturn(carList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/cars")

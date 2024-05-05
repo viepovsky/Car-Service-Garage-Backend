@@ -4,17 +4,7 @@ import com.viepovsky.utility.entity_audit.BaseEntityAudit;
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.visit.model.Visit;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "AppUser")
-@Table(name = "app_user")
+@Table(name = "app_user", uniqueConstraints = @UniqueConstraint(name = "username_unique", columnNames = "username"))
 public class AppUser extends BaseEntityAudit implements UserDetails {
     @Id
     @SequenceGenerator(
@@ -48,7 +38,7 @@ public class AppUser extends BaseEntityAudit implements UserDetails {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "username", unique = true, length = 64, updatable = false, nullable = false)
+    @Column(name = "username", length = 64, updatable = false, nullable = false)
     private String username;
 
     @Column(name = "first_name", length = 128)

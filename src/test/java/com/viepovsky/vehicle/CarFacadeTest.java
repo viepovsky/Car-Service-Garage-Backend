@@ -36,7 +36,7 @@ class CarFacadeTest {
         when(service.getAllCarsForGivenUsername("username")).thenReturn(mockedCarList);
         when(mapper.mapToCarDtoList(mockedCarList)).thenReturn(mockedCarDtoList);
         //When
-        List<VehicleDto> retrievedList = facade.getCarsForGivenUsername("username");
+        List<VehicleDto> retrievedList = facade.getCarsForUsername("username");
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());

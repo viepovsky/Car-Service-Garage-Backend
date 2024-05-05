@@ -30,8 +30,8 @@ public class ApplicationScheduler {
         timeKeeper.setCurrentDate(LocalDate.now());
         LocalDate localDate = timeKeeper.getCurrentDate();
         LOGGER.info("TimeKeeper set to: " + timeKeeper.getCurrentDate());
-
-        carApiService.getAndSaveCarYearsMakesTypes(localDate);
+        //TODO removed this for a while, next implement fetching all models for most used car makes
+        //carApiService.getAndSaveCarYearsMakesTypes(localDate);
     }
 
     @Scheduled(fixedRate = 24 * 60 * 60 * 1000, initialDelay = 0)

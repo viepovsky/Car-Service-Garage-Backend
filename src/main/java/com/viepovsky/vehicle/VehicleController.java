@@ -29,16 +29,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 class VehicleController {
-
     private final VehicleFacade carFacade;
 
     @GetMapping
-    ResponseEntity<List<VehicleDto>> getCarsForGivenUsername(@RequestParam(name = "username") @NotBlank String username) {
+    ResponseEntity<List<VehicleDto>> getCarsForUsername(
+            @RequestParam(name = "username") @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(carFacade.getCarsForGivenUsername(username));
+        return ResponseEntity.ok(carFacade.getCarsForUsername(username));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
