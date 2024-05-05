@@ -123,7 +123,7 @@ class CarApiControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/car-api")
                         .param("year", "2014")
-                        .param("make", "Audi")
+                        .param("vehicleMake", "Audi")
                         .param("type", "Sedan")
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())

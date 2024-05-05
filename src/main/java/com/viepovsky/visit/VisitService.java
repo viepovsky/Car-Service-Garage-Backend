@@ -212,7 +212,7 @@ public class VisitService {
                               Long carId,
                               int repairDuration) {
         Garage garage = garageService.getGarage(garageId);
-        Vehicle car = carService.getCar(carId);
+        Vehicle car = carService.getVehicle(carId);
         AppUser user = userService.getUser(car.getUser().getId());
         List<LocalTime> availableBookingTimes = getAvailableBookingTimesByDayAndRepairDuration(date, repairDuration, garageId);
         if (availableBookingTimes.contains(startHour)) {

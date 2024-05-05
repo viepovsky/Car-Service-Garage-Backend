@@ -1,9 +1,11 @@
 package com.viepovsky.utility.mapper;
 
+import com.viepovsky.vehicle.dto.MakeDto;
 import com.viepovsky.vehicle.dto.ModelDto;
+import com.viepovsky.vehicle.dto.VehicleCreateRequest;
 import com.viepovsky.vehicle.dto.VehicleDto;
-import com.viepovsky.vehicle.model.Model;
-import com.viepovsky.vehicle.model.Vehicle;
+import com.viepovsky.vehicle.model.*;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,34 +13,46 @@ import java.util.List;
 @Service
 public class VehicleMapper {
 
+    public MakeDto toMakeDto(Make make) {
+        return new MakeDto(make.getId(), make.getName());
+    }
+
+    public List<MakeDto> toMakeDtoList(List<Make> makes) {
+        return makes.stream().map(this::toMakeDto).toList();
+    }
+
     public ModelDto toModelDto(Model model) {
         return new ModelDto(
-                model.getId(), model.getName(), model.getMake().getName(), model.getType().name());
+                model.getId(), model.getName(), toMakeDto(model.getMake()), model.getType().name());
+    }
+
+    public List<ModelDto> toModelDtoList(List<Model> models) {
+        return models.stream().map(this::toModelDto).toList();
     }
 
     public VehicleDto toVehicleDto(Vehicle vehicle) {
         return new VehicleDto(
                 vehicle.getId(),
+                vehicle.getUser().getId(),
                 vehicle.getVin(),
                 vehicle.getLicensePlate(),
-                vehicle.getUser().getId(),
                 toModelDto(vehicle.getModel()),
                 vehicle.getEngineType().name(),
                 vehicle.getManufactured_year(),
                 vehicle.getDetails());
     }
 
-    public Vehicle mapToVehicle(VehicleDto carDto) {
-        // TODO fix this
-        return null;
-        //        return new Vehicle(
-        //                carDto.getId(),
-        //                carDto.getModel(),
-        //                carDto.getYear()
-        //        );
+    public Vehicle mapToVehicle(VehicleCreateRequest vehicleDto) {
+        return Vehicle.builder()
+                .vin(vehicleDto.vin())
+                .licensePlate(vehicleDto.licensePlate())
+                .engineType(EngineType.valueOf(vehicleDto.engineType()))
+                .manufactured_year(vehicleDto.manufactured_year())
+                .details(vehicleDto.details())
+                .build();
     }
 
-    public List<VehicleDto> mapToVehicleDtoList(List<Vehicle> carList) {
-        return carList.stream().map(this::toVehicleDto).toList();
+    public List<VehicleDto> mapToVehicleDtoList(List<Vehicle> vehicles) {
+        return vehicles.stream().map(this::toVehicleDto).toList();
     }
 }

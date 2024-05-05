@@ -48,11 +48,11 @@ class CarFacadeTest {
         VehicleDto mockedCarDto = Mockito.mock(VehicleDto.class);
         Vehicle mockedCar = Mockito.mock(Vehicle.class);
         when(mapper.mapToVehicle(mockedCarDto)).thenReturn(mockedCar);
-        doNothing().when(service).saveVehicle(mockedCar, "username");
+        doNothing().when(service).saveVehicle(mockedCar, "username", vehicleDto.modelId());
         //When
         facade.createVehicle(mockedCarDto, "username");
         //Then
-        verify(service, times(1)).saveVehicle(mockedCar, "username");
+        verify(service, times(1)).saveVehicle(mockedCar, "username", vehicleDto.modelId());
     }
 
     @Test

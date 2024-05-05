@@ -1,17 +1,15 @@
 package com.viepovsky.vehicle.model;
 
-import com.viepovsky.utility.entity_audit.BaseEntityAudit;
 import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.entity_audit.BaseEntityAudit;
 
 import jakarta.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "Vehicle")
@@ -32,7 +30,7 @@ public class Vehicle extends BaseEntityAudit {
     @Column(name = "license_plate", nullable = false, length = 64)
     private String licensePlate;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(
             name = "user_id",
             nullable = false,

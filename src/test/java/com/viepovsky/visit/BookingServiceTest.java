@@ -27,7 +27,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -211,7 +210,7 @@ class BookingServiceTest {
         CatalogOffer availableCarRepair2 = Mockito.mock(CatalogOffer.class);//new CatalogOffer(11L, "testname", "testdescription", BigDecimal.valueOf(70), 40, "AUDI", BigDecimal.valueOf(1.2), mockedGarage);
 
         when(garageService.getGarage(anyLong())).thenReturn(mockedGarage);
-        when(carService.getCar(anyLong())).thenReturn(car);
+        when(carService.getVehicle(anyLong())).thenReturn(car);
         when(userService.getUser(anyLong())).thenReturn(user);
         VisitService bookingService = Mockito.spy(new VisitService(bookingRepository, garageService, carRepairService, carService, userService, availableCarRepairService));
         Mockito.doReturn(localTimeList).when(bookingService).getAvailableBookingTimesByDayAndRepairDuration(localDate, repairDuration, 5L);

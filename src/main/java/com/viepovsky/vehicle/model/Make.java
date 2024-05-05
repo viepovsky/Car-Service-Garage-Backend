@@ -1,5 +1,6 @@
 package com.viepovsky.vehicle.model;
 
+import com.viepovsky.utility.entity_audit.BaseEntityAudit;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity(name = "Make")
 @Table(name = "make")
-public class Make {
+public class Make extends BaseEntityAudit {
     @Id
     @SequenceGenerator(
             name = "make_id_sequence",

@@ -26,7 +26,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "AppUser")
-@Table(name = "app_user", uniqueConstraints = @UniqueConstraint(name = "username_unique", columnNames = "username"))
+@Table(
+        name = "app_user",
+        uniqueConstraints = @UniqueConstraint(name = "username_unique", columnNames = "username"))
 public class AppUser extends BaseEntityAudit implements UserDetails {
     @Id
     @SequenceGenerator(

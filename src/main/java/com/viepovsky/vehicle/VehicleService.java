@@ -1,10 +1,16 @@
 package com.viepovsky.vehicle;
 
-import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
-import com.viepovsky.user.model.AppUser;
+import com.viepovsky.garage.GarageService;
+import com.viepovsky.garage.model.Garage;
 import com.viepovsky.user.UserService;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
+import com.viepovsky.vehicle.model.Make;
+import com.viepovsky.vehicle.model.Model;
 import com.viepovsky.vehicle.model.Vehicle;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,27 +18,30 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class VehicleService {
-
     private final VehicleRepository vehicleRepository;
-
+    private final ModelRepository modelRepository;
+    private final MakeRepository makeRepository;
     private final UserService userService;
+    private final GarageService garageService;
 
     public List<Vehicle> getVehiclesByUsername(String username) {
-//        Long userId = userService.getUser(username).getId();
-        //TODO check if this works
         return vehicleRepository.findVehiclesByUser_Username(username);
     }
 
-    public Vehicle getCar(Long id) {
+    public Vehicle getVehicle(Long id) {
         return vehicleRepository
                 .findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("Vehicle: " + id));
     }
 
-    public Vehicle saveVehicle(Vehicle vehicle, String username) {
+    public Vehicle saveVehicle(Vehicle vehicle, String username, Long modelId) {
         AppUser user = userService.getUser(username);
+        Model model =
+                modelRepository
+                        .findById(modelId)
+                        .orElseThrow(() -> new MyEntityNotFoundException("Model: " + modelId));
         vehicle.setUser(user);
-        user.getVehicles().add(vehicle);
+        vehicle.setModel(model);
         return vehicleRepository.save(vehicle);
     }
 
@@ -40,7 +49,8 @@ public class VehicleService {
         Vehicle retrievedVehicle =
                 vehicleRepository
                         .findById(vehicle.getId())
-                        .orElseThrow(() -> new MyEntityNotFoundException("Vehicle", vehicle.getId()));
+                        .orElseThrow(
+                                () -> new MyEntityNotFoundException("Vehicle", vehicle.getId()));
         vehicle.setUser(retrievedVehicle.getUser());
         vehicleRepository.save(vehicle);
     }
@@ -51,5 +61,13 @@ public class VehicleService {
         } else {
             throw new MyEntityNotFoundException("Vehicle", id);
         }
+    }
+
+    public List<Make> getMakes() {
+        return makeRepository.findAll();
+    }
+
+    public List<Model> getModelsByMakeId(Long makeId) {
+        return modelRepository.findAllByMakeId(makeId);
     }
 }

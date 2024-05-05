@@ -110,7 +110,8 @@ INSERT INTO model (id, name, make_id, type) VALUES
 
 INSERT INTO vehicle (id, license_plate, model_id, manufactured_year, engine_type, user_id) VALUES
 (1, 'PKN11111', 1, 2014, 'DIESEL', 1),
-(2, 'PO11111', 2, 2018, 'PETROL', 1);
+(2, 'PO11111', 2, 2018, 'PETROL', 1),
+(3, 'PO99999', 2, 2020, 'DIESEL', 2);
 
 CREATE SEQUENCE IF NOT EXISTS bookings_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE IF NOT EXISTS date_seq START WITH 0 INCREMENT BY 1 MINVALUE 0;

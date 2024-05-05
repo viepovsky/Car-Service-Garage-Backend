@@ -73,7 +73,7 @@ class CarApiClient {
                 .queryParam("limit", 20)
                 .queryParam("page", 0)
                 .queryParam("year", year)
-                .queryParam("make", make)
+                .queryParam("vehicleMake", make)
                 .queryParam("type", type)
                 .build()
                 .encode()

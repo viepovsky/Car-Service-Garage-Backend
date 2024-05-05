@@ -1,8 +1,13 @@
 package com.viepovsky.vehicle;
 
-import com.viepovsky.security.UserValidator;
+import com.viepovsky.security.DataOwnershipValidator;
 import com.viepovsky.utility.mapper.VehicleMapper;
+import com.viepovsky.vehicle.dto.MakeDto;
+import com.viepovsky.vehicle.dto.ModelDto;
+import com.viepovsky.vehicle.dto.VehicleCreateRequest;
 import com.viepovsky.vehicle.dto.VehicleDto;
+import com.viepovsky.vehicle.model.Make;
+import com.viepovsky.vehicle.model.Model;
 import com.viepovsky.vehicle.model.Vehicle;
 
 import lombok.RequiredArgsConstructor;
@@ -19,34 +24,50 @@ class VehicleFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(VehicleFacade.class);
     private final VehicleService vehicleService;
     private final VehicleMapper mapper;
-    private final UserValidator userValidator;
+    private final DataOwnershipValidator dataOwnershipValidator;
 
     public VehicleDto getVehicle(Long vehicleId) {
-        // TODO implement
-        return null;
+        LOGGER.info("Get vehicle endpoint used for vehicle id:{}", vehicleId);
+        Vehicle vehicle = vehicleService.getVehicle(vehicleId);
+        dataOwnershipValidator.belongsToAuthenticatedUser(vehicle);
+        return mapper.toVehicleDto(vehicle);
     }
 
     public List<VehicleDto> getVehiclesByUsername(String username) {
-        userValidator.isValidWithAuthToken(username);
+        dataOwnershipValidator.belongsToAuthenticatedUser(username);
         LOGGER.info("Get vehicles for given username endpoint used with username:{}", username);
         List<Vehicle> vehicles = vehicleService.getVehiclesByUsername(username);
         return mapper.mapToVehicleDtoList(vehicles);
     }
 
-    public void createVehicle(VehicleDto vehicleDto, String username) {
-        userValidator.isValidWithAuthToken(username);
+    public VehicleDto createVehicle(VehicleCreateRequest vehicleDto, String username) {
+        dataOwnershipValidator.belongsToAuthenticatedUser(username);
         LOGGER.info("Create vehicle endpoint used for username:{}", username);
-        Vehicle vehicle = mapper.mapToVehicle(vehicleDto);
-        vehicleService.saveVehicle(vehicle, username);
+        Vehicle toCreate = mapper.mapToVehicle(vehicleDto);
+        Vehicle createdVehicle =
+                vehicleService.saveVehicle(toCreate, username, vehicleDto.modelId());
+        return mapper.toVehicleDto(createdVehicle);
     }
 
     public void updateVehicle(VehicleDto vehicleDto) {
         LOGGER.info("Update vehicle endpoint used for vehicle id:{}", vehicleDto.vehicleId());
-        vehicleService.updateVehicle(mapper.mapToVehicle(vehicleDto));
+        // vehicleService.updateVehicle(mapper.mapToVehicle(vehicleDto));
     }
 
     public void deleteVehicle(Long vehicleId) {
         LOGGER.info("Delete vehicle endpoint used for vehicle id:{}", vehicleId);
         vehicleService.deleteVehicle(vehicleId);
+    }
+
+    public List<MakeDto> getMakes() {
+        LOGGER.info("Get makes endpoint used.");
+        List<Make> makes = vehicleService.getMakes();
+        return mapper.toMakeDtoList(makes);
+    }
+
+    public List<ModelDto> getModels(Long makeId) {
+        LOGGER.info("Get models endpoint used for makeId:{}", makeId);
+        List<Model> models = vehicleService.getModelsByMakeId(makeId);
+        return mapper.toModelDtoList(models);
     }
 }

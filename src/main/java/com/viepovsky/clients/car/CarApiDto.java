@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 class CarApiDto {
-    @JsonProperty("model")
+    @JsonProperty("vehicleModel")
     private String model;
 }

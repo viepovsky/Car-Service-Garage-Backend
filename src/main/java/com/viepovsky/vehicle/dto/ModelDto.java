@@ -1,3 +1,3 @@
 package com.viepovsky.vehicle.dto;
 
-public record ModelDto(Long modelId, String model, String make, String type) {}
+public record ModelDto(Long modelId, String modelName, MakeDto vehicleMake, String type) {}

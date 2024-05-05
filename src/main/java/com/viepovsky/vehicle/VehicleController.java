@@ -1,5 +1,8 @@
 package com.viepovsky.vehicle;
 
+import com.viepovsky.vehicle.dto.MakeDto;
+import com.viepovsky.vehicle.dto.ModelDto;
+import com.viepovsky.vehicle.dto.VehicleCreateRequest;
 import com.viepovsky.vehicle.dto.VehicleDto;
 
 import jakarta.validation.Valid;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -44,11 +48,12 @@ class VehicleController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createVehicle(
-            @Valid @RequestBody VehicleDto vehicleDto,
+    ResponseEntity<VehicleDto> createVehicle(
+            @Valid @RequestBody VehicleCreateRequest vehicleDto,
             @RequestParam(name = "username") @NotBlank String username) {
-        vehicleFacade.createVehicle(vehicleDto, username);
-        return ResponseEntity.ok().build();
+        var createdVehicle = vehicleFacade.createVehicle(vehicleDto, username);
+        return ResponseEntity.created(URI.create("/v1/vehicles/" + createdVehicle.vehicleId()))
+                .body(createdVehicle);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -61,5 +66,15 @@ class VehicleController {
     ResponseEntity<Void> deleteVehicle(@PathVariable @Min(1) Long vehicleId) {
         vehicleFacade.deleteVehicle(vehicleId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "makes")
+    public ResponseEntity<List<MakeDto>> getVehicleMakes() {
+        return ResponseEntity.ok(vehicleFacade.getMakes());
+    }
+
+    @GetMapping(path = "models")
+    public ResponseEntity<List<ModelDto>> getVehicleModels(@RequestParam @Min(1) Long makeId) {
+        return ResponseEntity.ok(vehicleFacade.getModels(makeId));
     }
 }
