@@ -1,9 +1,6 @@
 package com.viepovsky.vehicle;
 
-import com.viepovsky.vehicle.dto.MakeDto;
-import com.viepovsky.vehicle.dto.ModelDto;
-import com.viepovsky.vehicle.dto.VehicleCreateRequest;
-import com.viepovsky.vehicle.dto.VehicleDto;
+import com.viepovsky.vehicle.dto.*;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -57,9 +54,9 @@ class VehicleController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> updateVehicle(@Valid @RequestBody VehicleDto vehicleDto) {
+    ResponseEntity<Void> updateVehicle(@Valid @RequestBody VehicleUpdateRequest vehicleDto) {
         vehicleFacade.updateVehicle(vehicleDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(path = "/{vehicleId}")

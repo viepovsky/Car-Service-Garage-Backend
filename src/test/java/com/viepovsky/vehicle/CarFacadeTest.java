@@ -61,11 +61,11 @@ class CarFacadeTest {
         VehicleDto mockedCarDto = Mockito.mock(VehicleDto.class);
         Vehicle mockedCar = Mockito.mock(Vehicle.class);
         when(mapper.mapToVehicle(mockedCarDto)).thenReturn(mockedCar);
-        doNothing().when(service).updateVehicle(mockedCar);
+        doNothing().when(service).updateVehicle(mockedCar, vehicle, vehicleDto.modelId());
         //When
         facade.updateVehicle(mockedCarDto);
         //Then
-        verify(service, times(1)).updateVehicle(mockedCar);
+        verify(service, times(1)).updateVehicle(mockedCar, vehicle, vehicleDto.modelId());
     }
 
     @Test

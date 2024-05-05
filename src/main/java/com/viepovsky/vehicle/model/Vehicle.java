@@ -66,4 +66,12 @@ public class Vehicle extends BaseEntityAudit {
         this.model = model;
         this.manufactured_year = manufactured_year;
     }
+
+    public void updateFrom(Vehicle vehicle) {
+        this.vin = vehicle.vin;
+        this.licensePlate = vehicle.licensePlate;
+        this.engineType = vehicle.engineType;
+        this.manufactured_year = vehicle.manufactured_year;
+        this.details = vehicle.details;
+    }
 }

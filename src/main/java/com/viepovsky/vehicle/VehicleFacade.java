@@ -2,10 +2,7 @@ package com.viepovsky.vehicle;
 
 import com.viepovsky.security.DataOwnershipValidator;
 import com.viepovsky.utility.mapper.VehicleMapper;
-import com.viepovsky.vehicle.dto.MakeDto;
-import com.viepovsky.vehicle.dto.ModelDto;
-import com.viepovsky.vehicle.dto.VehicleCreateRequest;
-import com.viepovsky.vehicle.dto.VehicleDto;
+import com.viepovsky.vehicle.dto.*;
 import com.viepovsky.vehicle.model.Make;
 import com.viepovsky.vehicle.model.Model;
 import com.viepovsky.vehicle.model.Vehicle;
@@ -49,14 +46,19 @@ class VehicleFacade {
         return mapper.toVehicleDto(createdVehicle);
     }
 
-    public void updateVehicle(VehicleDto vehicleDto) {
-        LOGGER.info("Update vehicle endpoint used for vehicle id:{}", vehicleDto.vehicleId());
-        // vehicleService.updateVehicle(mapper.mapToVehicle(vehicleDto));
+    public void updateVehicle(VehicleUpdateRequest requestUpdate) {
+        LOGGER.info("Update vehicle endpoint used for vehicle id:{}", requestUpdate.vehicleId());
+        Vehicle vehicleToUpdate = vehicleService.getVehicle(requestUpdate.vehicleId());
+        dataOwnershipValidator.belongsToAuthenticatedUser(vehicleToUpdate);
+        Vehicle vehicle = mapper.mapToVehicle(requestUpdate);
+        vehicleService.updateVehicle(vehicleToUpdate, vehicle, requestUpdate.modelId());
     }
 
     public void deleteVehicle(Long vehicleId) {
         LOGGER.info("Delete vehicle endpoint used for vehicle id:{}", vehicleId);
-        vehicleService.deleteVehicle(vehicleId);
+        Vehicle vehicleToDelete = vehicleService.getVehicle(vehicleId);
+        dataOwnershipValidator.belongsToAuthenticatedUser(vehicleToDelete);
+        vehicleService.deleteVehicle(vehicleToDelete.getId());
     }
 
     public List<MakeDto> getMakes() {

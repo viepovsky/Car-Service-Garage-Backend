@@ -1,7 +1,5 @@
 package com.viepovsky.vehicle;
 
-import com.viepovsky.garage.GarageService;
-import com.viepovsky.garage.model.Garage;
 import com.viepovsky.user.UserService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
@@ -22,7 +20,6 @@ public class VehicleService {
     private final ModelRepository modelRepository;
     private final MakeRepository makeRepository;
     private final UserService userService;
-    private final GarageService garageService;
 
     public List<Vehicle> getVehiclesByUsername(String username) {
         return vehicleRepository.findVehiclesByUser_Username(username);
@@ -45,14 +42,14 @@ public class VehicleService {
         return vehicleRepository.save(vehicle);
     }
 
-    public void updateVehicle(Vehicle vehicle) {
-        Vehicle retrievedVehicle =
-                vehicleRepository
-                        .findById(vehicle.getId())
-                        .orElseThrow(
-                                () -> new MyEntityNotFoundException("Vehicle", vehicle.getId()));
-        vehicle.setUser(retrievedVehicle.getUser());
-        vehicleRepository.save(vehicle);
+    public void updateVehicle(Vehicle vehicleToUpdate, Vehicle vehicle, Long modelId) {
+        Model model =
+                modelRepository
+                        .findById(modelId)
+                        .orElseThrow(() -> new MyEntityNotFoundException("Model: " + modelId));
+        vehicleToUpdate.updateFrom(vehicle);
+        vehicleToUpdate.setModel(model);
+        vehicleRepository.save(vehicleToUpdate);
     }
 
     public void deleteVehicle(Long id) {

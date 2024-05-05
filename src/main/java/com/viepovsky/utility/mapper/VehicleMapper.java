@@ -1,9 +1,6 @@
 package com.viepovsky.utility.mapper;
 
-import com.viepovsky.vehicle.dto.MakeDto;
-import com.viepovsky.vehicle.dto.ModelDto;
-import com.viepovsky.vehicle.dto.VehicleCreateRequest;
-import com.viepovsky.vehicle.dto.VehicleDto;
+import com.viepovsky.vehicle.dto.*;
 import com.viepovsky.vehicle.model.*;
 
 import org.springframework.stereotype.Service;
@@ -44,6 +41,17 @@ public class VehicleMapper {
 
     public Vehicle mapToVehicle(VehicleCreateRequest vehicleDto) {
         return Vehicle.builder()
+                .vin(vehicleDto.vin())
+                .licensePlate(vehicleDto.licensePlate())
+                .engineType(EngineType.valueOf(vehicleDto.engineType()))
+                .manufactured_year(vehicleDto.manufactured_year())
+                .details(vehicleDto.details())
+                .build();
+    }
+
+    public Vehicle mapToVehicle(VehicleUpdateRequest vehicleDto) {
+        return Vehicle.builder()
+                .id(vehicleDto.vehicleId())
                 .vin(vehicleDto.vin())
                 .licensePlate(vehicleDto.licensePlate())
                 .engineType(EngineType.valueOf(vehicleDto.engineType()))
