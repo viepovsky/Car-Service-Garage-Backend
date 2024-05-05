@@ -45,9 +45,9 @@ class CarServiceTest {
 
         when(userService.getUser(anyString())).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
-        when(carRepository.findCarsByUserId(1L)).thenReturn(carList);
+        when(carRepository.findVehiclesByUserId(1L)).thenReturn(carList);
         //When
-        List<Vehicle> retrievedCarList = carService.getAllCarsForGivenUsername("username");
+        List<Vehicle> retrievedCarList = carService.getVehiclesByUsername("username");
         //Then
         assertEquals(1, retrievedCarList.size());
 //        assertEquals("Sedan", retrievedCarList.get(0).getType()); TODO fix it
@@ -63,7 +63,7 @@ class CarServiceTest {
         when(userService.getUser(anyString())).thenReturn(mockedUser);
         when(userService.saveUser(any(AppUser.class))).thenReturn(Mockito.mock(AppUser.class));
         //When
-        carService.saveCar(mockedCar, "username");
+        carService.saveVehicle(mockedCar, "username");
         //Then
         verify(userService, times(1)).saveUser(any(AppUser.class));
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
@@ -92,7 +92,7 @@ class CarServiceTest {
         when(carRepository.existsById(1L)).thenReturn(true);
         doNothing().when(carRepository).deleteById(1L);
         //When
-        carService.deleteCar(1L);
+        carService.deleteVehicle(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Car", 1L));
         verify(carRepository, times(1)).deleteById(1L);

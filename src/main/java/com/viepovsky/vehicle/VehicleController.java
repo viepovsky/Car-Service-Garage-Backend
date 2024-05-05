@@ -1,14 +1,15 @@
 package com.viepovsky.vehicle;
 
 import com.viepovsky.vehicle.dto.VehicleDto;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,44 +26,40 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/v1/cars")
+@RequestMapping("/v1/vehicles")
 @RequiredArgsConstructor
 @Validated
 class VehicleController {
-    private final VehicleFacade carFacade;
+    private final VehicleFacade vehicleFacade;
+
+    @GetMapping(path = "/{vehicleId}")
+    ResponseEntity<VehicleDto> getVehicle(@PathVariable @Min(1) Long vehicleId) {
+        return ResponseEntity.ok(vehicleFacade.getVehicle(vehicleId));
+    }
 
     @GetMapping
-    ResponseEntity<List<VehicleDto>> getCarsForUsername(
+    ResponseEntity<List<VehicleDto>> getVehiclesByUsername(
             @RequestParam(name = "username") @NotBlank String username) {
-        String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!usernameFromToken.equals(username)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        return ResponseEntity.ok(carFacade.getCarsForUsername(username));
+        return ResponseEntity.ok(vehicleFacade.getVehiclesByUsername(username));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> createCar(
-            @Valid @RequestBody VehicleDto carDto,
-            @RequestParam(name = "username") @NotBlank String username
-    ) {
-        String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!usernameFromToken.equals(username)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        carFacade.createCar(carDto, username);
+    ResponseEntity<Void> createVehicle(
+            @Valid @RequestBody VehicleDto vehicleDto,
+            @RequestParam(name = "username") @NotBlank String username) {
+        vehicleFacade.createVehicle(vehicleDto, username);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Void> updateCar(@Valid @RequestBody VehicleDto carDto) {
-        carFacade.updateCar(carDto);
+    ResponseEntity<Void> updateVehicle(@Valid @RequestBody VehicleDto vehicleDto) {
+        vehicleFacade.updateVehicle(vehicleDto);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(path = "/{carId}")
-    ResponseEntity<Void> deleteCar(@PathVariable @Min(1) Long carId) {
-        carFacade.deleteCar(carId);
+    @DeleteMapping(path = "/{vehicleId}")
+    ResponseEntity<Void> deleteVehicle(@PathVariable @Min(1) Long vehicleId) {
+        vehicleFacade.deleteVehicle(vehicleId);
         return ResponseEntity.ok().build();
     }
 }

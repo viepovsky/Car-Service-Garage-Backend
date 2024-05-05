@@ -2,31 +2,13 @@ package com.viepovsky.vehicle.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class VehicleDto {
-
-    private Long id;
-
-    @NotEmpty
-    private String make;
-
-    @NotEmpty
-    private String model;
-
-    @NotEmpty
-    private String type;
-
-    @NotNull
-    private int year;
-
-    @NotNull
-    private String engine;
-
-    private Long userId;
-}
+public record VehicleDto(
+        Long vehicleId,
+        Long userId,
+        String vin,
+        @NotEmpty String licensePlate,
+        @NotNull ModelDto model,
+        String engineType,
+        int manufactured_year,
+        String details) {}

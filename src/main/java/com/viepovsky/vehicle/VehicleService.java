@@ -13,39 +13,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VehicleService {
 
-    private final VehicleRepository carRepository;
+    private final VehicleRepository vehicleRepository;
 
     private final UserService userService;
 
-    public List<Vehicle> getAllCarsForGivenUsername(String username) {
-        Long userId = userService.getUser(username).getId();
-        return carRepository.findCarsByUserId(userId);
+    public List<Vehicle> getVehiclesByUsername(String username) {
+//        Long userId = userService.getUser(username).getId();
+        //TODO check if this works
+        return vehicleRepository.findVehiclesByUser_Username(username);
     }
 
     public Vehicle getCar(Long id) {
-        return carRepository.findById(id)
-                .orElseThrow(() -> new MyEntityNotFoundException("Car: " + id));
+        return vehicleRepository
+                .findById(id)
+                .orElseThrow(() -> new MyEntityNotFoundException("Vehicle: " + id));
     }
 
-    public void saveCar(Vehicle car, String username) {
+    public Vehicle saveVehicle(Vehicle vehicle, String username) {
         AppUser user = userService.getUser(username);
-        car.setUser(user);
-        user.getVehicles().add(car);
-        userService.saveUser(user);
+        vehicle.setUser(user);
+        user.getVehicles().add(vehicle);
+        return vehicleRepository.save(vehicle);
     }
 
-    public void updateCar(Vehicle car) {
-        Vehicle retrievedCar = carRepository.findById(car.getId())
-                                            .orElseThrow(() -> new MyEntityNotFoundException("Car", car.getId()));
-        car.setUser(retrievedCar.getUser());
-        carRepository.save(car);
+    public void updateVehicle(Vehicle vehicle) {
+        Vehicle retrievedVehicle =
+                vehicleRepository
+                        .findById(vehicle.getId())
+                        .orElseThrow(() -> new MyEntityNotFoundException("Vehicle", vehicle.getId()));
+        vehicle.setUser(retrievedVehicle.getUser());
+        vehicleRepository.save(vehicle);
     }
 
-    public void deleteCar(Long id) {
-        if (carRepository.existsById(id)) {
-            carRepository.deleteById(id);
+    public void deleteVehicle(Long id) {
+        if (vehicleRepository.existsById(id)) {
+            vehicleRepository.deleteById(id);
         } else {
-            throw new MyEntityNotFoundException("Car", id);
+            throw new MyEntityNotFoundException("Vehicle", id);
         }
     }
 }

@@ -32,7 +32,7 @@ public class Vehicle extends BaseEntityAudit {
     @Column(name = "license_plate", nullable = false, length = 64)
     private String licensePlate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(
             name = "user_id",
             nullable = false,

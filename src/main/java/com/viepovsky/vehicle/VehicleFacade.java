@@ -17,30 +17,36 @@ import java.util.List;
 @RequiredArgsConstructor
 class VehicleFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(VehicleFacade.class);
-    private final VehicleService carService;
+    private final VehicleService vehicleService;
     private final VehicleMapper mapper;
     private final UserValidator userValidator;
 
-    public List<VehicleDto> getCarsForUsername(String username) {
+    public VehicleDto getVehicle(Long vehicleId) {
+        // TODO implement
+        return null;
+    }
+
+    public List<VehicleDto> getVehiclesByUsername(String username) {
         userValidator.isValidWithAuthToken(username);
-        LOGGER.info("Get cars for given username endpoint used with username:{}", username);
-        List<Vehicle> carList = carService.getAllCarsForGivenUsername(username);
-        return mapper.mapToCarDtoList(carList);
+        LOGGER.info("Get vehicles for given username endpoint used with username:{}", username);
+        List<Vehicle> vehicles = vehicleService.getVehiclesByUsername(username);
+        return mapper.mapToVehicleDtoList(vehicles);
     }
 
-    public void createCar(VehicleDto carDto, String username) {
-        LOGGER.info("Create car endpoint used for username:{}", username);
-        Vehicle car = mapper.mapToCar(carDto);
-        carService.saveCar(car, username);
+    public void createVehicle(VehicleDto vehicleDto, String username) {
+        userValidator.isValidWithAuthToken(username);
+        LOGGER.info("Create vehicle endpoint used for username:{}", username);
+        Vehicle vehicle = mapper.mapToVehicle(vehicleDto);
+        vehicleService.saveVehicle(vehicle, username);
     }
 
-    public void updateCar(VehicleDto carDto) {
-        LOGGER.info("Update car endpoint used for car id:{}", carDto.getId());
-        carService.updateCar(mapper.mapToCar(carDto));
+    public void updateVehicle(VehicleDto vehicleDto) {
+        LOGGER.info("Update vehicle endpoint used for vehicle id:{}", vehicleDto.vehicleId());
+        vehicleService.updateVehicle(mapper.mapToVehicle(vehicleDto));
     }
 
-    public void deleteCar(Long carId) {
-        LOGGER.info("Delete car endpoint used for car id:{}", carId);
-        carService.deleteCar(carId);
+    public void deleteVehicle(Long vehicleId) {
+        LOGGER.info("Delete vehicle endpoint used for vehicle id:{}", vehicleId);
+        vehicleService.deleteVehicle(vehicleId);
     }
 }

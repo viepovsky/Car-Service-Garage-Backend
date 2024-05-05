@@ -33,10 +33,10 @@ class CarFacadeTest {
         //Given
         List<Vehicle> mockedCarList = List.of(Mockito.mock(Vehicle.class));
         List<VehicleDto> mockedCarDtoList = List.of(Mockito.mock(VehicleDto.class));
-        when(service.getAllCarsForGivenUsername("username")).thenReturn(mockedCarList);
-        when(mapper.mapToCarDtoList(mockedCarList)).thenReturn(mockedCarDtoList);
+        when(service.getVehiclesByUsername("username")).thenReturn(mockedCarList);
+        when(mapper.mapToVehicleDtoList(mockedCarList)).thenReturn(mockedCarDtoList);
         //When
-        List<VehicleDto> retrievedList = facade.getCarsForUsername("username");
+        List<VehicleDto> retrievedList = facade.getVehiclesByUsername("username");
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -47,12 +47,12 @@ class CarFacadeTest {
         //Given
         VehicleDto mockedCarDto = Mockito.mock(VehicleDto.class);
         Vehicle mockedCar = Mockito.mock(Vehicle.class);
-        when(mapper.mapToCar(mockedCarDto)).thenReturn(mockedCar);
-        doNothing().when(service).saveCar(mockedCar, "username");
+        when(mapper.mapToVehicle(mockedCarDto)).thenReturn(mockedCar);
+        doNothing().when(service).saveVehicle(mockedCar, "username");
         //When
-        facade.createCar(mockedCarDto, "username");
+        facade.createVehicle(mockedCarDto, "username");
         //Then
-        verify(service, times(1)).saveCar(mockedCar, "username");
+        verify(service, times(1)).saveVehicle(mockedCar, "username");
     }
 
     @Test
@@ -60,21 +60,21 @@ class CarFacadeTest {
         //Given
         VehicleDto mockedCarDto = Mockito.mock(VehicleDto.class);
         Vehicle mockedCar = Mockito.mock(Vehicle.class);
-        when(mapper.mapToCar(mockedCarDto)).thenReturn(mockedCar);
-        doNothing().when(service).updateCar(mockedCar);
+        when(mapper.mapToVehicle(mockedCarDto)).thenReturn(mockedCar);
+        doNothing().when(service).updateVehicle(mockedCar);
         //When
-        facade.updateCar(mockedCarDto);
+        facade.updateVehicle(mockedCarDto);
         //Then
-        verify(service, times(1)).updateCar(mockedCar);
+        verify(service, times(1)).updateVehicle(mockedCar);
     }
 
     @Test
     void shouldDeleteCar() {
         //Given
-        doNothing().when(service).deleteCar(1L);
+        doNothing().when(service).deleteVehicle(1L);
         //When
-        facade.deleteCar(1L);
+        facade.deleteVehicle(1L);
         //Then
-        verify(service, times(1)).deleteCar(1L);
+        verify(service, times(1)).deleteVehicle(1L);
     }
 }
