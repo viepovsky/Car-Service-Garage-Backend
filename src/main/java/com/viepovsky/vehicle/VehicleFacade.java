@@ -34,13 +34,13 @@ class VehicleFacade {
         dataOwnershipValidator.belongsToAuthenticatedUser(username);
         LOGGER.info("Get vehicles for given username endpoint used with username:{}", username);
         List<Vehicle> vehicles = vehicleService.getVehiclesByUsername(username);
-        return mapper.mapToVehicleDtoList(vehicles);
+        return mapper.toVehicleDtoList(vehicles);
     }
 
     public VehicleDto createVehicle(VehicleCreateRequest vehicleDto, String username) {
         dataOwnershipValidator.belongsToAuthenticatedUser(username);
         LOGGER.info("Create vehicle endpoint used for username:{}", username);
-        Vehicle toCreate = mapper.mapToVehicle(vehicleDto);
+        Vehicle toCreate = mapper.toVehicle(vehicleDto);
         Vehicle createdVehicle =
                 vehicleService.saveVehicle(toCreate, username, vehicleDto.modelId());
         return mapper.toVehicleDto(createdVehicle);
@@ -50,7 +50,7 @@ class VehicleFacade {
         LOGGER.info("Update vehicle endpoint used for vehicle id:{}", requestUpdate.vehicleId());
         Vehicle vehicleToUpdate = vehicleService.getVehicle(requestUpdate.vehicleId());
         dataOwnershipValidator.belongsToAuthenticatedUser(vehicleToUpdate);
-        Vehicle vehicle = mapper.mapToVehicle(requestUpdate);
+        Vehicle vehicle = mapper.toVehicle(requestUpdate);
         vehicleService.updateVehicle(vehicleToUpdate, vehicle, requestUpdate.modelId());
     }
 

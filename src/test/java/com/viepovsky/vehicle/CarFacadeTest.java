@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+import com.viepovsky.security.DataOwnershipValidator;
 import com.viepovsky.utility.mapper.VehicleMapper;
 import com.viepovsky.vehicle.dto.VehicleDto;
 import com.viepovsky.vehicle.model.Vehicle;
@@ -19,22 +20,21 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class CarFacadeTest {
-    @InjectMocks
-    private VehicleFacade facade;
+    @InjectMocks private VehicleFacade facade;
 
-    @Mock
-    private VehicleService service;
+    @Mock private VehicleService service;
 
-    @Mock
-    private VehicleMapper mapper;
+    @Mock private VehicleMapper mapper;
+
+    @Mock private DataOwnershipValidator dataOwnershipValidator;
 
     @Test
-    void shouldGetCarsForGivenUsername() {
+    void shouldGetVehicles_ByUsername() {
         //Given
-        List<Vehicle> mockedCarList = List.of(Mockito.mock(Vehicle.class));
-        List<VehicleDto> mockedCarDtoList = List.of(Mockito.mock(VehicleDto.class));
-        when(service.getVehiclesByUsername("username")).thenReturn(mockedCarList);
-        when(mapper.mapToVehicleDtoList(mockedCarList)).thenReturn(mockedCarDtoList);
+        List<Vehicle> vehicles = List.of(Mockito.mock(Vehicle.class));
+        List<VehicleDto> vehicleDtos = List.of(Mockito.mock(VehicleDto.class));
+        when(service.getVehiclesByUsername("username")).thenReturn(vehicles);
+        when(mapper.toVehicleDtoList(vehicles)).thenReturn(vehicleDtos);
         //When
         List<VehicleDto> retrievedList = facade.getVehiclesByUsername("username");
         //Then
@@ -47,7 +47,7 @@ class CarFacadeTest {
         //Given
         VehicleDto mockedCarDto = Mockito.mock(VehicleDto.class);
         Vehicle mockedCar = Mockito.mock(Vehicle.class);
-        when(mapper.mapToVehicle(mockedCarDto)).thenReturn(mockedCar);
+        when(mapper.toVehicle(mockedCarDto)).thenReturn(mockedCar);
         doNothing().when(service).saveVehicle(mockedCar, "username", vehicleDto.modelId());
         //When
         facade.createVehicle(mockedCarDto, "username");

@@ -39,7 +39,7 @@ public class VehicleMapper {
                 vehicle.getDetails());
     }
 
-    public Vehicle mapToVehicle(VehicleCreateRequest vehicleDto) {
+    public Vehicle toVehicle(VehicleCreateRequest vehicleDto) {
         return Vehicle.builder()
                 .vin(vehicleDto.vin())
                 .licensePlate(vehicleDto.licensePlate())
@@ -49,7 +49,7 @@ public class VehicleMapper {
                 .build();
     }
 
-    public Vehicle mapToVehicle(VehicleUpdateRequest vehicleDto) {
+    public Vehicle toVehicle(VehicleUpdateRequest vehicleDto) {
         return Vehicle.builder()
                 .id(vehicleDto.vehicleId())
                 .vin(vehicleDto.vin())
@@ -60,7 +60,7 @@ public class VehicleMapper {
                 .build();
     }
 
-    public List<VehicleDto> mapToVehicleDtoList(List<Vehicle> vehicles) {
+    public List<VehicleDto> toVehicleDtoList(List<Vehicle> vehicles) {
         return vehicles.stream().map(this::toVehicleDto).toList();
     }
 }

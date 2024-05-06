@@ -8,8 +8,12 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.mapper.VehicleMapper;
 import com.viepovsky.utility.scheduler.ApplicationScheduler;
+import com.viepovsky.vehicle.dto.VehicleCreateRequest;
 import com.viepovsky.vehicle.dto.VehicleDto;
+import com.viepovsky.vehicle.dto.VehicleUpdateRequest;
+import com.viepovsky.vehicle.model.EngineType;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -39,13 +43,11 @@ import java.util.List;
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
 class CarControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    @MockBean
-    private VehicleFacade facade;
-    @MockBean
-    private UserDetailsService userDetailsService;
+    @MockBean private VehicleFacade facade;
+    @MockBean private VehicleMapper vehicleMapper;
+    @MockBean private UserDetailsService userDetailsService;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -119,20 +121,28 @@ class CarControllerTest {
 
     @Test
     void testShouldCreateCar() throws Exception {
-        //Given
-        var carRequest = List.of();//TODO fix it new VehicleDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
-        var jsonRequest = new ObjectMapper().writeValueAsString(carRequest);
-
-        doNothing().when(facade).createVehicle(any(VehicleDto.class), anyString());
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/cars")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(jsonRequest)
-                        .param("username", "testuser")
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        // Given
+        var vehicleCreateRequest =
+                VehicleCreateRequest.builder()
+                        .vin("VIN")
+                        .licensePlate("LICENSE_PLATE")
+                        .modelId(1L)
+                        .engineType(EngineType.DIESEL.name())
+                        .manufactured_year(2020)
+                        .build();
+        var jsonRequest = new ObjectMapper().writeValueAsString(vehicleCreateRequest);
+        var vehicle = vehicleMapper.toVehicle(vehicleCreateRequest);
+        var vehicleResponse = vehicleMapper.toVehicleDto(vehicle);
+        when(facade.createVehicle(vehicleCreateRequest, "testuser")).thenReturn(vehicleResponse);
+        // When & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/v1/vehicles")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8")
+                                .content(jsonRequest)
+                                .param("username", "testuser")
+                                .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
@@ -156,7 +166,7 @@ class CarControllerTest {
         var carRequest = List.of();//TODO fix it new VehicleDto(1L, "BMW", "3 Series", "Sedan", 2014, "Diesel", null);
         var jsonRequest = new ObjectMapper().writeValueAsString(carRequest);
 
-        doNothing().when(facade).updateVehicle(any(VehicleDto.class));
+        doNothing().when(facade).updateVehicle(any(VehicleUpdateRequest.class));
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/v1/cars")
