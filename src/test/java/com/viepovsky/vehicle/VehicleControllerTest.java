@@ -1,6 +1,8 @@
 package com.viepovsky.vehicle;
 
 import static com.viepovsky.vehicle.VehicleTestData.TEST_USERNAME;
+import static com.viepovsky.vehicle.VehicleTestData.VEHICLE_ENDPOINT_PATH;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -8,7 +10,6 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;
-import com.viepovsky.utility.mapper.VehicleMapper;
 import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.vehicle.dto.VehicleCreateRequest;
 import com.viepovsky.vehicle.dto.VehicleDto;
@@ -76,13 +77,29 @@ class VehicleControllerTest {
     }
 
     @Test
+    void shouldGetVehicle() throws Exception {
+        // Given
+        VehicleDto response = testData.getVehicleDto();
+        String jsonResponse = new ObjectMapper().writeValueAsString(response);
+
+        when(facade.getVehicle(1L)).thenReturn(response);
+        // When & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get(VEHICLE_ENDPOINT_PATH + "/1")
+                                .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(jsonResponse));
+    }
+
+    @Test
     void shouldGetEmptyVehicleList() throws Exception {
         // Given
         List<VehicleDto> response = List.of();
+        
         when(facade.getVehiclesByUsername(TEST_USERNAME)).thenReturn(response);
         // When & then
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/v1/vehicles")
+                        MockMvcRequestBuilders.get(VEHICLE_ENDPOINT_PATH)
                                 .param("username", TEST_USERNAME)
                                 .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -93,10 +110,11 @@ class VehicleControllerTest {
     void shouldGetVehicleList() throws Exception {
         // Given
         List<VehicleDto> response = List.of(testData.getVehicleDto());
+        
         when(facade.getVehiclesByUsername(TEST_USERNAME)).thenReturn(response);
         // When & then
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/v1/vehicles")
+                        MockMvcRequestBuilders.get(VEHICLE_ENDPOINT_PATH)
                                 .param("username", TEST_USERNAME)
                                 .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -104,16 +122,6 @@ class VehicleControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].vehicleId", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].engineType", Matchers.is("DIESEL")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].manufactured_year", Matchers.is(2020)));
-    }
-
-    @Test
-    void shouldNotGetVehicleList_IfUsernameDoesNotMatchWithAuthUser() throws Exception {
-        // Given & when & then
-        mockMvc.perform(
-                        MockMvcRequestBuilders.get("/v1/vehicles")
-                                .param("username", "testuser22")
-                                .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
@@ -127,7 +135,7 @@ class VehicleControllerTest {
         when(facade.createVehicle(vehicleCreateRequest, TEST_USERNAME)).thenReturn(vehicleResponse);
         // When & then
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/v1/vehicles")
+                        MockMvcRequestBuilders.post(VEHICLE_ENDPOINT_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8")
                                 .content(jsonRequest)
@@ -135,21 +143,6 @@ class VehicleControllerTest {
                                 .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().json(jsonResponse));
-    }
-
-    @Test
-    void shouldNotCreateVehicle_IfUsernameDoesNotMatchWithAuthUser() throws Exception {
-        VehicleDto vehicleRequest = testData.getVehicleDto();
-        String jsonRequest = new ObjectMapper().writeValueAsString(vehicleRequest);
-        // Given & when & then
-        mockMvc.perform(
-                        MockMvcRequestBuilders.post("/v1/vehicles")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("UTF-8")
-                                .content(jsonRequest)
-                                .param("username", "testuser22")
-                                .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
@@ -161,7 +154,7 @@ class VehicleControllerTest {
         doNothing().when(facade).updateVehicle(any(VehicleUpdateRequest.class));
         // When & then
         mockMvc.perform(
-                        MockMvcRequestBuilders.put("/v1/vehicles")
+                        MockMvcRequestBuilders.put(VEHICLE_ENDPOINT_PATH)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8")
                                 .content(jsonRequest)

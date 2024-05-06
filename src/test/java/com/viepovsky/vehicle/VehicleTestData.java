@@ -13,6 +13,7 @@ import com.viepovsky.vehicle.model.Vehicle;
 
 class VehicleTestData {
     public static final String TEST_USERNAME = "testuser";
+    public static final String VEHICLE_ENDPOINT_PATH = "/v1/vehicles";
 
     public VehicleCreateRequest getVehicleCreateRequest() {
         return VehicleCreateRequest.builder()
