@@ -44,7 +44,6 @@ import java.util.List;
 @MockBean(ApplicationScheduler.class)
 class CarControllerTest {
     @Autowired private MockMvc mockMvc;
-
     @MockBean private VehicleFacade facade;
     @MockBean private VehicleMapper vehicleMapper;
     @MockBean private UserDetailsService userDetailsService;

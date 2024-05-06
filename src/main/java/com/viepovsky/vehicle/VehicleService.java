@@ -31,7 +31,7 @@ public class VehicleService {
                 .orElseThrow(() -> new MyEntityNotFoundException("Vehicle: " + id));
     }
 
-    public Vehicle saveVehicle(Vehicle vehicle, String username, Long modelId) {
+    public Vehicle createVehicle(Vehicle vehicle, String username, Long modelId) {
         AppUser user = userService.getUser(username);
         Model model =
                 modelRepository

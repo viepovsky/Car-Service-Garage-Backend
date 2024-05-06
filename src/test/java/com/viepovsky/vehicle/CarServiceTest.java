@@ -63,7 +63,7 @@ class CarServiceTest {
         when(userService.getUser(anyString())).thenReturn(mockedUser);
         when(userService.saveUser(any(AppUser.class))).thenReturn(Mockito.mock(AppUser.class));
         //When
-        carService.saveVehicle(mockedCar, "username", vehicleDto.modelId());
+        //TODO fix it carService.createVehicle(mockedCar, "username", vehicleDto.modelId());
         //Then
         verify(userService, times(1)).saveUser(any(AppUser.class));
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));

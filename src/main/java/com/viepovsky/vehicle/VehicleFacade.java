@@ -42,7 +42,7 @@ class VehicleFacade {
         LOGGER.info("Create vehicle endpoint used for username:{}", username);
         Vehicle toCreate = mapper.toVehicle(vehicleDto);
         Vehicle createdVehicle =
-                vehicleService.saveVehicle(toCreate, username, vehicleDto.modelId());
+                vehicleService.createVehicle(toCreate, username, vehicleDto.modelId());
         return mapper.toVehicleDto(createdVehicle);
     }
 
