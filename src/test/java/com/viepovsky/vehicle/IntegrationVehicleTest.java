@@ -1,6 +1,7 @@
 package com.viepovsky.vehicle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
@@ -31,9 +33,9 @@ import java.util.logging.Logger;
 @MockBean(ApplicationScheduler.class)
 @DisplayName("Vehicle Integration Test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class VehicleIntegrationTest {
+public class IntegrationVehicleTest {
     private static final VehicleTestData TEST_DATA = new VehicleTestData();
-    private static final Logger LOGGER = Logger.getLogger(VehicleIntegrationTest.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(IntegrationVehicleTest.class.getName());
     public static final ObjectMapper objectMapper = new ObjectMapper();
     public static final RestClient REST_CLIENT = RestClient.create();
     public static String jwtToken;
@@ -71,6 +73,7 @@ public class VehicleIntegrationTest {
                         .retrieve()
                         .toEntity(AuthenticationResponse.class);
         jwtToken = Objects.requireNonNull(response.getBody()).token();
+        assertNotNull(jwtToken);
     }
 
     @Test
@@ -91,6 +94,10 @@ public class VehicleIntegrationTest {
                         .body(jsonRequest)
                         .retrieve()
                         .toEntity(VehicleDto.class);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(
+                "/v1/vehicles/" + expectedResponse.vehicleId(),
+                Objects.requireNonNull(response.getHeaders().getLocation()).getPath());
         assertEquals(expectedResponse, response.getBody());
     }
 }
