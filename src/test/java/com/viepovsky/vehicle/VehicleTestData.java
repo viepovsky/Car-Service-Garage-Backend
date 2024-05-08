@@ -38,21 +38,6 @@ public class VehicleTestData {
                 .build();
     }
 
-    public VehicleDto getUpdatedVehicleDto() {
-        MakeDto makeDto = new MakeDto(1L, "Test Make 1");
-        ModelDto modelDto = new ModelDto(1L, "Test Model 1", makeDto, Type.SEDAN.name());
-        return VehicleDto.builder()
-                         .vehicleId(5000L)
-                         .vin("VIN")
-                         .userId(5000L)
-                         .licensePlate("NEW_LICENSE_PLATE")
-                         .vehicleModel(modelDto)
-                         .engineType(EngineType.DIESEL.name())
-                         .manufactured_year(2022)
-                         .details("SAMPLE_DETAILS")
-                         .build();
-    }
-
     public VehicleDto getVehicleDto() {
         MakeDto makeDto = new MakeDto(1L, "Test Make 1");
         ModelDto modelDto = new ModelDto(1L, "Test Model 1", makeDto, Type.SEDAN.name());

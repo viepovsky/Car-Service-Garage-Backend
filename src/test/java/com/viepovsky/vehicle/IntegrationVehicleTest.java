@@ -1,5 +1,7 @@
 package com.viepovsky.vehicle;
 
+import static com.viepovsky.vehicle.VehicleTestData.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -10,14 +12,15 @@ import com.viepovsky.user.dto.RegisterUserRequest;
 import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.vehicle.dto.VehicleCreateRequest;
 import com.viepovsky.vehicle.dto.VehicleDto;
-
 import com.viepovsky.vehicle.dto.VehicleUpdateRequest;
+
 import jakarta.annotation.PostConstruct;
 
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +30,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -61,7 +65,7 @@ public class IntegrationVehicleTest {
                         .firstName("TestName")
                         .lastName("TestLastName")
                         .email("test-mail@mail.com")
-                        .username(VehicleTestData.TEST_USERNAME)
+                        .username(TEST_USERNAME)
                         .password("zaq1@WSXExample")
                         .build();
         String jsonRequest = objectMapper.writeValueAsString(registerUserRequest);
@@ -86,7 +90,7 @@ public class IntegrationVehicleTest {
         VehicleDto expectedResponse = TEST_DATA.getVehicleDto();
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/vehicles")
-                        .queryParam("username", "testuser");
+                        .queryParam("username", TEST_USERNAME);
         ResponseEntity<VehicleDto> response =
                 REST_CLIENT
                         .post()
@@ -106,7 +110,7 @@ public class IntegrationVehicleTest {
 
     @Test
     @Order(3)
-    void shouldRetrieveVehicle() throws JsonProcessingException {
+    void shouldRetrieveVehicle() {
         VehicleDto expectedResponse = TEST_DATA.getVehicleDto();
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl(
@@ -133,8 +137,8 @@ public class IntegrationVehicleTest {
 
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/vehicles")
-                                    .queryParam("username", "testuser");
-        ResponseEntity<VehicleDto> response =
+                        .queryParam("username", TEST_USERNAME);
+        ResponseEntity<Void> response =
                 REST_CLIENT
                         .put()
                         .uri(url.build().toUri())
@@ -142,10 +146,80 @@ public class IntegrationVehicleTest {
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
                         .body(jsonRequest)
                         .retrieve()
-                        .toEntity(VehicleDto.class);
+                        .toEntity(Void.class);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 
+    @Test
+    @Order(5)
+    void shouldCreateNewVehicle() throws JsonProcessingException {
+        VehicleCreateRequest request = TEST_DATA.getVehicleCreateRequest();
+        String jsonRequest = objectMapper.writeValueAsString(request);
 
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/vehicles")
+                        .queryParam("username", TEST_USERNAME);
+        ResponseEntity<VehicleDto> response =
+                REST_CLIENT
+                        .post()
+                        .uri(url.build().toUri())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .body(jsonRequest)
+                        .retrieve()
+                        .toEntity(VehicleDto.class);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    }
+
+    @Test
+    @Order(6)
+    void shouldRetrieveAllVehicles() {
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/vehicles")
+                        .queryParam("username", TEST_USERNAME);
+        ResponseEntity<List<VehicleDto>> response =
+                REST_CLIENT
+                        .get()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .retrieve()
+                        .toEntity(new ParameterizedTypeReference<>() {});
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(2, Objects.requireNonNull(response.getBody()).size());
+    }
+
+    @Test
+    @Order(7)
+    void shouldDeleteVehicle() {
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                        "http://localhost:" + port + "/v1/vehicles/" + 5000);
+        ResponseEntity<Void> response =
+                REST_CLIENT
+                        .delete()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .retrieve()
+                        .toEntity(Void.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @Order(8)
+    void shouldRetrieveOneVehicle() {
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/vehicles")
+                        .queryParam("username", TEST_USERNAME);
+        ResponseEntity<List<VehicleDto>> response =
+                REST_CLIENT
+                        .get()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .retrieve()
+                        .toEntity(new ParameterizedTypeReference<>() {});
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, Objects.requireNonNull(response.getBody()).size());
+    }
 }
