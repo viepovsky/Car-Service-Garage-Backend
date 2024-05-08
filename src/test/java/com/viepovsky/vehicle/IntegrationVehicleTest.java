@@ -11,6 +11,7 @@ import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.vehicle.dto.VehicleCreateRequest;
 import com.viepovsky.vehicle.dto.VehicleDto;
 
+import com.viepovsky.vehicle.dto.VehicleUpdateRequest;
 import jakarta.annotation.PostConstruct;
 
 import org.junit.jupiter.api.*;
@@ -42,7 +43,7 @@ public class IntegrationVehicleTest {
     @LocalServerPort private int port;
 
     @BeforeAll
-    static void beforeAll() throws JsonProcessingException {
+    static void beforeAll() {
         LOGGER.info("Before All");
     }
 
@@ -81,10 +82,11 @@ public class IntegrationVehicleTest {
     void shouldCreateVehicle() throws JsonProcessingException {
         VehicleCreateRequest request = TEST_DATA.getVehicleCreateRequest();
         String jsonRequest = objectMapper.writeValueAsString(request);
+
+        VehicleDto expectedResponse = TEST_DATA.getVehicleDto();
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/vehicles")
                         .queryParam("username", "testuser");
-        VehicleDto expectedResponse = TEST_DATA.getVehicleDto();
         ResponseEntity<VehicleDto> response =
                 REST_CLIENT
                         .post()
@@ -94,10 +96,56 @@ public class IntegrationVehicleTest {
                         .body(jsonRequest)
                         .retrieve()
                         .toEntity(VehicleDto.class);
+
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(
                 "/v1/vehicles/" + expectedResponse.vehicleId(),
                 Objects.requireNonNull(response.getHeaders().getLocation()).getPath());
         assertEquals(expectedResponse, response.getBody());
     }
+
+    @Test
+    @Order(3)
+    void shouldRetrieveVehicle() throws JsonProcessingException {
+        VehicleDto expectedResponse = TEST_DATA.getVehicleDto();
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                        "http://localhost:"
+                                + port
+                                + "/v1/vehicles/"
+                                + expectedResponse.vehicleId());
+        ResponseEntity<VehicleDto> response =
+                REST_CLIENT
+                        .get()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .retrieve()
+                        .toEntity(VehicleDto.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedResponse, response.getBody());
+    }
+
+    @Test
+    @Order(4)
+    void shouldUpdateVehicle() throws JsonProcessingException {
+        VehicleUpdateRequest request = TEST_DATA.getVehicleUpdateRequest();
+        String jsonRequest = objectMapper.writeValueAsString(request);
+
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/vehicles")
+                                    .queryParam("username", "testuser");
+        ResponseEntity<VehicleDto> response =
+                REST_CLIENT
+                        .put()
+                        .uri(url.build().toUri())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
+                        .body(jsonRequest)
+                        .retrieve()
+                        .toEntity(VehicleDto.class);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
+
+
 }
