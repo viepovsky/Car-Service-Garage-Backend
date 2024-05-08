@@ -70,7 +70,7 @@ class BookingControllerTest {
                 .builder()
                 .setClaims(new HashMap<>())
                 .setSubject(username)
-                .setIssuer("medical-app.com")
+                .setIssuer("garage-app.com")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getSignInKey(secretKey), SignatureAlgorithm.HS256)

@@ -5,6 +5,7 @@ import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.UserService;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;
+import com.viepovsky.user.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,9 @@ class AuthenticationService {
                         .mobile(request.getPhoneNumber())
                         .username(request.getUsername())
                         .password(passwordEncoder.encode(request.getPassword()))
+                        .role(Role.ROLE_USER)
                         .build();
+        //TODO: if username is the same as already in db it throws exception
         var createdUser = userService.saveUser(user);
         var jwtToken = jwtService.generateJwtToken(createdUser);
         return AuthenticationResponse.builder().token(jwtToken).build();

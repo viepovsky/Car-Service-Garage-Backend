@@ -119,7 +119,7 @@ class VehicleControllerTest {
                                 .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].vehicleId", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].vehicleId", Matchers.is(5000)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].engineType", Matchers.is("DIESEL")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].manufactured_year", Matchers.is(2020)));
     }

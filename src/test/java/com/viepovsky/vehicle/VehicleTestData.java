@@ -11,7 +11,7 @@ import com.viepovsky.vehicle.model.Model;
 import com.viepovsky.vehicle.model.Type;
 import com.viepovsky.vehicle.model.Vehicle;
 
-class VehicleTestData {
+public class VehicleTestData {
     public static final String TEST_USERNAME = "testuser";
     public static final String VEHICLE_ENDPOINT_PATH = "/v1/vehicles";
 
@@ -28,7 +28,7 @@ class VehicleTestData {
 
     public VehicleUpdateRequest getVehicleUpdateRequest() {
         return VehicleUpdateRequest.builder()
-                .vehicleId(1L)
+                .vehicleId(5000L)
                 .vin("VIN")
                 .licensePlate("LICENSE_PLATE")
                 .modelId(1L)
@@ -39,11 +39,12 @@ class VehicleTestData {
     }
 
     public VehicleDto getVehicleDto() {
-        MakeDto makeDto = new MakeDto(1L, "MAKE");
-        ModelDto modelDto = new ModelDto(1L, "MODEL", makeDto, Type.SEDAN.name());
+        MakeDto makeDto = new MakeDto(1L, "Test Make 1");
+        ModelDto modelDto = new ModelDto(1L, "Test Model 1", makeDto, Type.SEDAN.name());
         return VehicleDto.builder()
-                .vehicleId(1L)
+                .vehicleId(5000L)
                 .vin("VIN")
+                .userId(5000L)
                 .licensePlate("LICENSE_PLATE")
                 .vehicleModel(modelDto)
                 .engineType(EngineType.DIESEL.name())
@@ -53,10 +54,10 @@ class VehicleTestData {
     }
 
     public Vehicle getVehicle() {
-        Make make = new Make(1L, "MAKE");
-        Model modelDto = new Model(1L, "MODEL", make, Type.SEDAN);
+        Make make = new Make(1L, "Test Make 1");
+        Model modelDto = new Model(1L, "Test Model 1", make, Type.SEDAN);
         return Vehicle.builder()
-                .id(1L)
+                .id(5000L)
                 .vin("VIN")
                 .licensePlate("LICENSE_PLATE")
                 .model(modelDto)

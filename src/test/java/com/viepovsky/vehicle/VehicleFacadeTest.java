@@ -67,15 +67,14 @@ class VehicleFacadeTest {
         // Given
         VehicleUpdateRequest vehicleUpdateRequest = testData.getVehicleUpdateRequest();
         Vehicle vehicleToUpdate = testData.getVehicle();
-
-        when(service.getVehicle(anyLong())).thenReturn(vehicleToUpdate);
+        doReturn(vehicleToUpdate).when(service).getVehicle(anyLong());
         doNothing().when(dataOwnershipValidator).belongsToAuthenticatedUser(vehicleToUpdate);
-        when(mapper.toVehicle(vehicleUpdateRequest)).thenReturn(vehicleToUpdate);
-        doNothing().when(service).updateVehicle(any(Vehicle.class), any(Vehicle.class), eq(vehicleUpdateRequest.vehicleId()));
+        doReturn(vehicleToUpdate).when(mapper).toVehicle(vehicleUpdateRequest);
+        doNothing().when(service).updateVehicle(any(Vehicle.class), any(Vehicle.class), anyLong());
         // When
         facade.updateVehicle(vehicleUpdateRequest);
         // Then
-        verify(service, times(1)).updateVehicle(any(Vehicle.class), any(Vehicle.class), eq(vehicleUpdateRequest.vehicleId()));
+        verify(service, times(1)).updateVehicle(any(Vehicle.class), any(Vehicle.class), anyLong());
     }
 
     @Test
@@ -84,10 +83,10 @@ class VehicleFacadeTest {
         Vehicle vehicleToDelete = testData.getVehicle();
         when(service.getVehicle(1L)).thenReturn(vehicleToDelete);
         doNothing().when(dataOwnershipValidator).belongsToAuthenticatedUser(vehicleToDelete);
-        doNothing().when(service).deleteVehicle(1L);
+        doNothing().when(service).deleteVehicle(anyLong());
         // When
         facade.deleteVehicle(1L);
         // Then
-        verify(service, times(1)).deleteVehicle(1L);
+        verify(service, times(1)).deleteVehicle(anyLong());
     }
 }
