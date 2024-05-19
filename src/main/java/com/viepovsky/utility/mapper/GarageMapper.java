@@ -4,6 +4,7 @@ import com.viepovsky.garage.dto.AddressCreateRequest;
 import com.viepovsky.garage.dto.CreateScheduleRequest;
 import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
+import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.garage.model.Address;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.model.Schedule;
@@ -18,18 +19,12 @@ import java.util.List;
 @AllArgsConstructor
 public class GarageMapper {
 
-    private ScheduleMapper garageWorkTimeMapper;
-
-    public GarageDto mapToGarageDto(Garage garage) {
-        // TODO fixthis
-        return null;
-        //        return new GarageDto(
-        //                garage.getId(),
-        //                garage.getName(),
-        //                garage.getAddress(),
-        //
-        // garageWorkTimeMapper.mapToGarageWorkTimeDtoList(garage.getGarageWorkTimeList())
-        //        );
+    public GarageDto toGarageDto(Garage garage) {
+        return new GarageDto(
+                garage.getId(),
+                garage.getName(),
+                garage.getDescription(),
+                toScheduleDto(garage.getGarageSchedules()));
     }
 
     private Address toAddress(AddressCreateRequest addressDto) {
@@ -48,17 +43,8 @@ public class GarageMapper {
         return garage;
     }
 
-    public Garage mapToGarage(GarageDto garageDto) {
-        // TODO fix this
-        return null;
-        //        return new Garage(
-        //                garageDto.getName(),
-        //                garageDto.getAddress()
-        //        );
-    }
-
-    public List<GarageDto> mapToGarageDtoList(List<Garage> garageList) {
-        return garageList.stream().map(this::mapToGarageDto).toList();
+    public List<GarageDto> toGarageDtoList(List<Garage> garages) {
+        return garages.stream().map(this::toGarageDto).toList();
     }
 
     public Schedule toSchedule(CreateScheduleRequest request) {
@@ -67,5 +53,17 @@ public class GarageMapper {
                 .openFrom(request.openFrom())
                 .openTill(request.openTill())
                 .build();
+    }
+
+    public List<ScheduleDto> toScheduleDto(List<Schedule> schedules) {
+        return schedules.stream().map(this::toScheduleDto).toList();
+    }
+
+    public ScheduleDto toScheduleDto(Schedule schedule) {
+        return new ScheduleDto(
+                schedule.getId(),
+                schedule.getDay(),
+                schedule.getOpenFrom(),
+                schedule.getOpenTill());
     }
 }

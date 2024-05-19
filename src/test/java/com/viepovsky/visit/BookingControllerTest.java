@@ -132,7 +132,7 @@ class BookingControllerTest {
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/bookings/available-times")
-                        .param("date", LocalDate.of(2022, 10, 15).toString())
+                        .param("day", LocalDate.of(2022, 10, 15).toString())
                         .param("repair-duration", "50")
                         .param("garage-id", "1")
                         .param("car-service-id", "22")
@@ -151,7 +151,7 @@ class BookingControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/bookings")
                         .param("service-id", "1", "2", "5")
-                        .param("date", LocalDate.of(2022, 10, 15).toString())
+                        .param("day", LocalDate.of(2022, 10, 15).toString())
                         .param("start-hour", LocalTime.of(10, 0).toString())
                         .param("garage-id", "33")
                         .param("car-id", "4")
@@ -167,7 +167,7 @@ class BookingControllerTest {
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/bookings/admin")
-                        .param("date", LocalDate.of(2022, 10, 15).toString())
+                        .param("day", LocalDate.of(2022, 10, 15).toString())
                         .param("start-hour", LocalTime.of(10, 0).toString())
                         .param("end-hour", LocalTime.of(15, 0).toString())
                         .param("garage-id", "20")
@@ -182,7 +182,7 @@ class BookingControllerTest {
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/v1/bookings/1")
-                        .param("date", LocalDate.of(2022, 10, 15).toString())
+                        .param("day", LocalDate.of(2022, 10, 15).toString())
                         .param("start-hour", LocalTime.of(10, 0).toString())
                         .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());

@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ForecastsDto {
 
-    @JsonProperty("date")
+    @JsonProperty("day")
     private LocalDate date;
 
     @JsonProperty("symbol")

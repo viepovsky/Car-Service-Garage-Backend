@@ -81,7 +81,7 @@ class WeatherApiControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/weather-api")
                         .param("city", "Poznan")
-                        .param("date", LocalDate.of(2022, 10, 15).toString())
+                        .param("day", LocalDate.of(2022, 10, 15).toString())
                         .header("Authorization", "Bearer " + jwtToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.symbol", Matchers.is("R20")))

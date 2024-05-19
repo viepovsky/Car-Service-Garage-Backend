@@ -117,7 +117,7 @@ CREATE SEQUENCE IF NOT EXISTS bookings_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE IF NOT EXISTS date_seq START WITH 0 INCREMENT BY 1 MINVALUE 0;
 CREATE SEQUENCE IF NOT EXISTS date2_seq START WITH 0 INCREMENT BY 1 MINVALUE 0;
 
--- INSERT INTO visit (id, status, date, garage_id, user_id) VALUES
+-- INSERT INTO visit (id, status, day, garage_id, user_id) VALUES
 -- (NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 1, 1),
 -- (NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 1, 1),
 -- (NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date_seq') || ' days' AS INTERVAL), 1, 1),
@@ -241,29 +241,29 @@ CREATE SEQUENCE IF NOT EXISTS date2_seq START WITH 0 INCREMENT BY 1 MINVALUE 0;
 -- (NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2, 1),
 -- (NEXTVAL('bookings_seq'), 3 , CURRENT_DATE + CAST(NEXTVAL('date2_seq') || ' days' AS INTERVAL), 2, 1);
 --
--- UPDATE visit SET status = 4 WHERE EXTRACT(DOW FROM date) = 7;
+-- UPDATE visit SET status = 4 WHERE EXTRACT(DOW FROM day) = 7;
 --
--- UPDATE visit SET start_hour = '07:00:00' WHERE EXTRACT(DOW FROM date) < 6 AND garage_id = 1;
--- UPDATE visit SET start_hour = '09:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 1;
--- UPDATE visit SET start_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 7 AND garage_id = 1;
--- UPDATE visit SET end_hour = '15:00:00' WHERE EXTRACT(DOW FROM date) < 6 AND garage_id = 1;
--- UPDATE visit SET end_hour = '13:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 1;
--- UPDATE visit SET end_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 7 AND garage_id = 1;
+-- UPDATE visit SET start_hour = '07:00:00' WHERE EXTRACT(DOW FROM day) < 6 AND garage_id = 1;
+-- UPDATE visit SET start_hour = '09:00:00' WHERE EXTRACT(DOW FROM day) = 6 AND garage_id = 1;
+-- UPDATE visit SET start_hour = '00:00:00' WHERE EXTRACT(DOW FROM day) = 7 AND garage_id = 1;
+-- UPDATE visit SET end_hour = '15:00:00' WHERE EXTRACT(DOW FROM day) < 6 AND garage_id = 1;
+-- UPDATE visit SET end_hour = '13:00:00' WHERE EXTRACT(DOW FROM day) = 6 AND garage_id = 1;
+-- UPDATE visit SET end_hour = '00:00:00' WHERE EXTRACT(DOW FROM day) = 7 AND garage_id = 1;
 --
--- UPDATE visit SET start_hour = '08:00:00' WHERE EXTRACT(DOW FROM date) <= 6 AND garage_id = 2;
--- UPDATE visit SET start_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 7 AND garage_id = 2;
--- UPDATE visit SET end_hour = '16:00:00' WHERE EXTRACT(DOW FROM date) < 6 AND garage_id = 2;
--- UPDATE visit SET end_hour = '12:00:00' WHERE EXTRACT(DOW FROM date) = 6 AND garage_id = 2;
--- UPDATE visit SET end_hour = '00:00:00' WHERE EXTRACT(DOW FROM date) = 7 AND garage_id = 2;
+-- UPDATE visit SET start_hour = '08:00:00' WHERE EXTRACT(DOW FROM day) <= 6 AND garage_id = 2;
+-- UPDATE visit SET start_hour = '00:00:00' WHERE EXTRACT(DOW FROM day) = 7 AND garage_id = 2;
+-- UPDATE visit SET end_hour = '16:00:00' WHERE EXTRACT(DOW FROM day) < 6 AND garage_id = 2;
+-- UPDATE visit SET end_hour = '12:00:00' WHERE EXTRACT(DOW FROM day) = 6 AND garage_id = 2;
+-- UPDATE visit SET end_hour = '00:00:00' WHERE EXTRACT(DOW FROM day) = 7 AND garage_id = 2;
 --
--- INSERT INTO visit (id, status, date, start_hour, end_hour, total_cost, garage_id, user_id) VALUES
+-- INSERT INTO visit (id, status, day, start_hour, end_hour, total_cost, garage_id, user_id) VALUES
 -- (123, 0, CURRENT_DATE + INTERVAL '5 days', '07:50:00', '09:10:00', 320.00, 1, 1),
 -- (124, 0, CURRENT_DATE + INTERVAL '9 days', '09:40:00', '12:40:00', 1700.00, 2, 1),
 -- (125, 2, CURRENT_DATE + INTERVAL '-10 days', '12:20:00', '15:20:00', 2100.00, 2, 1),
 -- (126, 4, CURRENT_DATE, '03:00:00', '23:30:00', 5500.00, 1, 1);
 --
--- UPDATE visit SET date = CURRENT_DATE + INTERVAL '7 days' WHERE EXTRACT(DOW FROM date) >= 6 AND status = 0;
--- UPDATE visit SET date = CURRENT_DATE + INTERVAL '-12 days' WHERE EXTRACT(DOW FROM date) >= 6 AND status = 2;
+-- UPDATE visit SET day = CURRENT_DATE + INTERVAL '7 days' WHERE EXTRACT(DOW FROM day) >= 6 AND status = 0;
+-- UPDATE visit SET day = CURRENT_DATE + INTERVAL '-12 days' WHERE EXTRACT(DOW FROM day) >= 6 AND status = 2;
 
 -- INSERT INTO CARS_REPAIRS (id, name, description, cost, repair_time, car_id, booking_id, service_status) VALUES
 -- (1, 'Oil change', 'Oil change description', 120.00, 30, 1, 123, 2),

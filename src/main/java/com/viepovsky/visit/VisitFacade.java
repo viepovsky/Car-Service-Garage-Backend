@@ -38,7 +38,7 @@ class VisitFacade {
                                                     int repairDuration,
                                                     Long garageId,
                                                     Long carServiceId) {
-        LOGGER.info("Get available booking times endpoint used with date:{}, repair duration:{}, garage id:{}, car service id:{}", date, repairDuration, garageId, carServiceId);
+        LOGGER.info("Get available booking times endpoint used with day:{}, repair duration:{}, garage id:{}, car service id:{}", date, repairDuration, garageId, carServiceId);
         if (carServiceId != 0L) {
             return bookingService.getAvailableBookingTimesByDayAndRepairDuration(date, carServiceId);
         } else {
@@ -52,7 +52,7 @@ class VisitFacade {
                               Long garageId,
                               Long carId,
                               int repairDuration) {
-        LOGGER.info("Create booking endpoint used for service ids:{}, date:{}, garage id:{}, and car id:{}.", selectedCarRepairIdList, date, garageId, carId);
+        LOGGER.info("Create booking endpoint used for service ids:{}, day:{}, garage id:{}, and car id:{}.", selectedCarRepairIdList, date, garageId, carId);
         bookingService.createBooking(selectedCarRepairIdList, date, startHour, garageId, carId, repairDuration);
     }
 
@@ -60,7 +60,7 @@ class VisitFacade {
                                           LocalTime startHour,
                                           LocalTime endHour,
                                           Long garageId) {
-        LOGGER.info("Create working hours booking used for date:{}, garageId:{}", date, garageId);
+        LOGGER.info("Create working hours booking used for day:{}, garageId:{}", date, garageId);
         bookingService.createWorkingHoursBooking(date, startHour, endHour, garageId);
     }
 

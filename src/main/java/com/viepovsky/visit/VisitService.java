@@ -73,7 +73,7 @@ public class VisitService {
                 .sum();
         Long garageId = reservedBooking.getGarage().getId();
 
-        LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
+        LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
         List<Visit> allBookingsForDay = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
         allBookingsForDay.remove(reservedBooking);
 
@@ -83,7 +83,7 @@ public class VisitService {
     }
 
     public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
-        LOGGER.info("Given parameters to get available times, date: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
+        LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
         List<Visit> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
         return checkAvailableBookingTimes(bookingList, date, repairDuration);
     }
@@ -174,7 +174,7 @@ public class VisitService {
             List<Long> bookingIdList = bookingList.stream()
                     .map(Visit::getId)
                     .toList();
-            throw new WrongInputDataException("Work times of given date: " + date + ", are already declared. " +
+            throw new WrongInputDataException("Work times of given day: " + date + ", are already declared. " +
                     "To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingIdList);
         }
     }
@@ -201,7 +201,7 @@ public class VisitService {
         booking.setVisitStartDate(date);
         booking.setVisitStartTime(startHour);
         booking.setVisitEndTime(startHour.plusMinutes(repairTime));
-        LOGGER.info("Updated booking with values, date: " + date + ", time: " + startHour);
+        LOGGER.info("Updated booking with values, day: " + date + ", time: " + startHour);
         bookingRepository.save(booking);
     }
 
@@ -220,7 +220,7 @@ public class VisitService {
             bookingRepository.save(booking);
             saveBookingAndCarRepairsForCarAndUser(selectedCarRepairIdList, car, user, booking);
         } else {
-            throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another date.");
+            throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another day.");
         }
     }
 

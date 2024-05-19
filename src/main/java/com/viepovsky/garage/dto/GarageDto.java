@@ -8,7 +8,4 @@ import java.util.List;
 
 @Builder
 public record GarageDto(
-        Long id,
-        @NotBlank String name,
-        @NotBlank String address,
-        List<ScheduleDto> garageWorkTimeDtoList) {}
+        Long id, @NotBlank String name, @NotBlank String address, List<ScheduleDto> schedules) {}

@@ -14,18 +14,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GarageService {
-
     private final GarageRepository garageRepository;
     private final ScheduleRepository scheduleRepository;
-
-    public List<Garage> getAllGarages() {
-        return garageRepository.findAll();
-    }
 
     public Garage getGarage(Long id) {
         return garageRepository
                 .findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("Garage " + id));
+    }
+
+    public List<Garage> getAllGarages() {
+        return garageRepository.findAll();
     }
 
     public List<String> getAllGarageCities() {
@@ -47,10 +46,18 @@ public class GarageService {
         }
     }
 
+    List<Schedule> getSchedulesFor(Long garageId) {
+        return scheduleRepository.findAllByGarageId(garageId);
+    }
+
     public Schedule saveSchedule(Schedule schedule, Long garageId) {
         Garage garage = getGarage(garageId);
         garage.getGarageSchedules().add(schedule);
         schedule.setGarage(garage);
         return scheduleRepository.save(schedule);
+    }
+
+    void deleteSchedule(Long scheduleId) {
+        scheduleRepository.deleteById(scheduleId);
     }
 }

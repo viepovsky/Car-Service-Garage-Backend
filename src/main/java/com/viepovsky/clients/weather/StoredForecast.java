@@ -21,7 +21,7 @@ class StoredForecast {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "date")
+    @Column(name = "day")
     private LocalDate date;
 
     @Column(name = "symbol")

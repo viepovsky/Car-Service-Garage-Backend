@@ -7,7 +7,6 @@ import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.model.Schedule;
 import com.viepovsky.utility.mapper.GarageMapper;
-import com.viepovsky.utility.mapper.ScheduleMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,18 +22,17 @@ class GarageFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(GarageFacade.class);
     private final GarageService garageService;
     private final GarageMapper mapper;
-    private final ScheduleMapper schedulemapper;
-
-    List<GarageDto> getAllGarages() {
-        LOGGER.info("Get all garages endpoint used.");
-        List<Garage> garageList = garageService.getAllGarages();
-        return mapper.mapToGarageDtoList(garageList);
-    }
 
     GarageDto getGarage(Long id) {
         LOGGER.info("Get garage endpoint used with id:{}", id);
         var retrievedGarage = garageService.getGarage(id);
-        return mapper.mapToGarageDto(retrievedGarage);
+        return mapper.toGarageDto(retrievedGarage);
+    }
+
+    List<GarageDto> getAllGarages() {
+        LOGGER.info("Get all garages endpoint used.");
+        List<Garage> garageList = garageService.getAllGarages();
+        return mapper.toGarageDtoList(garageList);
     }
 
     Garage createGarage(GarageCreateRequest request) {
@@ -48,25 +46,21 @@ class GarageFacade {
         garageService.deleteGarage(id);
     }
 
-    Schedule createSchedule(CreateScheduleRequest request, Long garageId) {
+    List<ScheduleDto> getSchedulesFor(Long garageId) {
+        LOGGER.info("Get schedules endpoint used for garage id:{}", garageId);
+        List<Schedule> workTimes = garageService.getSchedulesFor(garageId);
+        return mapper.toScheduleDto(workTimes);
+    }
+
+    ScheduleDto createSchedule(CreateScheduleRequest request, Long garageId) {
         LOGGER.info("Create schedule endpoint used for garage id:{}", garageId);
         var schedule = mapper.toSchedule(request);
-        return garageService.saveSchedule(schedule, garageId);
+        var createdSchedule = garageService.saveSchedule(schedule, garageId);
+        return mapper.toScheduleDto(createdSchedule);
     }
 
-    List<ScheduleDto> getGarageSchedules(Long garageId) {
-        List<Schedule> workTimes = garageService.getAllGarageWorkTimes(garageId);
-        return schedulemapper.mapToGarageWorkTimeDtoList(workTimes);
-    }
-
-    void createGarageWorkTime(ScheduleDto garageWorkTimeDto, Long garageId) {
-        LOGGER.info("Create garage work time endpoint used with garage id:{}", garageId);
-        Schedule garageWorkTime = schedulemapper.mapToGarageWorkTime(garageWorkTimeDto);
-        garageService.saveGarageWorkTime(garageWorkTime, garageId);
-    }
-
-    void deleteSchedule(Long id) {
-        LOGGER.info("Delete garage work time used for id:{}", id);
-        garageService.deleteGarageWorkTime(id);
+    void deleteSchedule(Long scheduleId) {
+        LOGGER.info("Delete schedule used with id:{}", scheduleId);
+        garageService.deleteSchedule(scheduleId);
     }
 }

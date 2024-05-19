@@ -36,7 +36,7 @@ class StoredCarApi {
     @ElementCollection
     private List<String> carTypesList = new ArrayList<>();
 
-    @Column(name = "date")
+    @Column(name = "day")
     private LocalDate dateFetched;
 
     public StoredCarApi(List<Integer> carYearsList,

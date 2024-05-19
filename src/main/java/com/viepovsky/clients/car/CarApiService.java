@@ -25,17 +25,17 @@ public class CarApiService {
     private final TimeKeeper timeKeeper = TimeKeeper.getInstance();
 
     public List<String> getCarMakes() {
-        LOGGER.info("Getting car makes with TimeKeeper date: " + timeKeeper.getCurrentDate());
+        LOGGER.info("Getting car makes with TimeKeeper day: " + timeKeeper.getCurrentDate());
         return storedCarApiRepository.findByDateFetched(timeKeeper.getCurrentDate()).getCarMakesList();
     }
 
     public List<String> getCarTypes() {
-        LOGGER.info("Getting car types with TimeKeeper date: " + timeKeeper.getCurrentDate());
+        LOGGER.info("Getting car types with TimeKeeper day: " + timeKeeper.getCurrentDate());
         return storedCarApiRepository.findByDateFetched(timeKeeper.getCurrentDate()).getCarTypesList();
     }
 
     public List<Integer> getCarYears() {
-        LOGGER.info("Getting car years with TimeKeeper date: " + timeKeeper.getCurrentDate());
+        LOGGER.info("Getting car years with TimeKeeper day: " + timeKeeper.getCurrentDate());
         return storedCarApiRepository.findByDateFetched(timeKeeper.getCurrentDate()).getCarYearsList();
     }
 

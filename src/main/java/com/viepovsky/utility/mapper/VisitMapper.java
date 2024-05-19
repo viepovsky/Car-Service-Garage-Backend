@@ -25,7 +25,7 @@ public class VisitMapper {
                 booking.getSelectedOffers().stream()
                        .map(SelectedOffer::getId)
                        .toList(),
-                garageMapper.mapToGarageDto(booking.getGarage())
+                garageMapper.toGarageDto(booking.getGarage())
         );
     }
 

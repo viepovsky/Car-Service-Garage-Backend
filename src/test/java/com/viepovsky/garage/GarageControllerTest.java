@@ -9,8 +9,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import com.viepovsky.garage.dto.CreateScheduleRequest;
 import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
+import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;
@@ -24,6 +29,7 @@ import io.jsonwebtoken.security.Keys;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,6 +41,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.io.IOException;
 import java.security.Key;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
@@ -170,5 +177,60 @@ class GarageControllerTest {
                         .delete("/v1/garages/1")
                         .header("Authorization", "Bearer " + jwtTokenAdmin))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void getGarageWorkTimes() throws Exception {
+        //Given
+        List<ScheduleDto> workTimesResponse = List.of(ScheduleDto.builder().build());
+        var jsonResponse = new ObjectMapper().writeValueAsString(workTimesResponse);
+        when(facade.getSchedulesFor(anyLong())).thenReturn(workTimesResponse);
+        //When
+        mockMvc.perform(MockMvcRequestBuilders
+                       .get("/v1/schedule/1")
+                       .header("Authorization", "Bearer " + jwtTokenUser))
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.content().json(jsonResponse));
+    }
+
+    @Test
+    void testCreateGarageWorkTime() throws Exception {
+        //Given
+        ScheduleDto garageWorkTimeDto = Mockito.mock(ScheduleDto.class);
+        //TODO fix this
+        //new ScheduleDto(1L, WorkDays.MONDAY, LocalTime.of(10, 0), LocalTime.of(15, 0));
+        doNothing().when(facade).createSchedule(any(CreateScheduleRequest.class), anyLong());
+        Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new TypeAdapter<LocalTime>() {
+            @Override
+            public void write(JsonWriter out, LocalTime value) throws IOException {
+                out.value(value.toString());
+            }
+
+            @Override
+            public LocalTime read(JsonReader in) throws IOException {
+                return LocalTime.parse(in.nextString());
+            }
+        }).create();
+        String jsonContent = gson.toJson(garageWorkTimeDto);
+
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                       .post("/v1/schedule/1")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(jsonContent)
+                       .characterEncoding("UTF-8")
+                       .header("Authorization", "Bearer " + jwtTokenAdmin))
+               .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    void testDeleteGarageWorkTime() throws Exception {
+        //Given
+        doNothing().when(facade).deleteSchedule(anyLong());
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                       .delete("/v1/schedule/1")
+                       .header("Authorization", "Bearer " + jwtTokenAdmin))
+               .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

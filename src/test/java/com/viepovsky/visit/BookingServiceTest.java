@@ -173,7 +173,7 @@ class BookingServiceTest {
             bookingService.createWorkingHoursBooking(localDate, LocalTime.of(8, 0), LocalTime.of(15, 0), 50L);
             fail("Expected an WrongInputDataException to be thrown");
         } catch (WrongInputDataException e) {
-            assertThat(e.getMessage(), containsString("Work times of given date: " + localDate + ", are already declared"));
+            assertThat(e.getMessage(), containsString("Work times of given day: " + localDate + ", are already declared"));
         }
         verify(bookingRepository, times(0)).save(any());
     }

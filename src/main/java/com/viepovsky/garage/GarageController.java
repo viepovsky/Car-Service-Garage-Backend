@@ -61,17 +61,16 @@ class GarageController {
 
     @GetMapping(path = "/schedule/{garageId}")
     ResponseEntity<List<ScheduleDto>> getGarageSchedules(@PathVariable @Min(1) Long garageId) {
-        return ResponseEntity.ok(garageFacade.getGarageSchedules(garageId));
+        return ResponseEntity.ok(garageFacade.getSchedulesFor(garageId));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/schedule/{garageId}")
-    ResponseEntity<String> createSchedule(
+    ResponseEntity<ScheduleDto> createSchedule(
             @Valid @RequestBody CreateScheduleRequest request,
             @PathVariable @Min(1) Long garageId) {
         var createdSchedule = garageFacade.createSchedule(request, garageId);
-        return ResponseEntity.created(URI.create("/v1/schedule/" + createdSchedule.getId()))
-                .build();
+        return ResponseEntity.created(URI.create("/v1/schedule/" + garageId)).body(createdSchedule);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

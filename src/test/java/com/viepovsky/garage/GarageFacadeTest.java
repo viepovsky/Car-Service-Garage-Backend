@@ -35,7 +35,7 @@ class GarageFacadeTest {
         List<Garage> mockedGarageList = List.of(Mockito.mock(Garage.class));
         List<GarageDto> mockedGarageDtoList = List.of(Mockito.mock(GarageDto.class));
         when(service.getAllGarages()).thenReturn(mockedGarageList);
-        when(mapper.mapToGarageDtoList(mockedGarageList)).thenReturn(mockedGarageDtoList);
+        when(mapper.toGarageDtoList(mockedGarageList)).thenReturn(mockedGarageDtoList);
         //When
         List<GarageDto> retrievedList = facade.getAllGarages();
         //Then
@@ -47,9 +47,9 @@ class GarageFacadeTest {
     void shouldGetGarage() {
         //Given
         var garage = new Garage();
-        var responseGarage = new GarageDto();
+        var responseGarage = Mockito.mock(GarageDto.class);
         when(service.getGarage(anyLong())).thenReturn(garage);
-        when(mapper.mapToGarageDto(any(Garage.class))).thenReturn(responseGarage);
+        when(mapper.toGarageDto(any(Garage.class))).thenReturn(responseGarage);
         //When
         var retrievedGarage = facade.getGarage(5L);
         //Then
