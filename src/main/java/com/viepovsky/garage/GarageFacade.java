@@ -35,10 +35,11 @@ class GarageFacade {
         return mapper.toGarageDtoList(garageList);
     }
 
-    Garage createGarage(GarageCreateRequest request) {
+    GarageDto createGarage(GarageCreateRequest request) {
         LOGGER.info("Create garage endpoint used.");
         var garageToSave = mapper.toGarage(request);
-        return garageService.saveGarage(garageToSave);
+        var savedGarage = garageService.saveGarage(garageToSave);
+        return mapper.toGarageDto(savedGarage);
     }
 
     void deleteGarage(Long id) {

@@ -14,8 +14,6 @@ import com.viepovsky.vehicle.dto.VehicleCreateRequest;
 import com.viepovsky.vehicle.dto.VehicleDto;
 import com.viepovsky.vehicle.dto.VehicleUpdateRequest;
 
-import jakarta.annotation.PostConstruct;
-
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,29 +30,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @MockBean(ApplicationScheduler.class)
 @DisplayName("Vehicle Integration Test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class IntegrationVehicleTest {
+class IntegrationVehicleTest {
     private static final VehicleTestData TEST_DATA = new VehicleTestData();
-    private static final Logger LOGGER = Logger.getLogger(IntegrationVehicleTest.class.getName());
     public static final ObjectMapper objectMapper = new ObjectMapper();
     public static final RestClient REST_CLIENT = RestClient.create();
     public static String jwtToken;
     @LocalServerPort private int port;
-
-    @BeforeAll
-    static void beforeAll() {
-        LOGGER.info("Before All");
-    }
-
-    @PostConstruct
-    public void init() {
-        LOGGER.info("Post Construct");
-    }
 
     @Test
     @Order(1)

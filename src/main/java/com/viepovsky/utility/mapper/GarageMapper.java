@@ -1,9 +1,10 @@
 package com.viepovsky.utility.mapper;
 
 import com.viepovsky.garage.dto.AddressCreateRequest;
-import com.viepovsky.garage.dto.ScheduleCreateRequest;
+import com.viepovsky.garage.dto.AddressDto;
 import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
+import com.viepovsky.garage.dto.ScheduleCreateRequest;
 import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.garage.model.Address;
 import com.viepovsky.garage.model.Garage;
@@ -24,6 +25,7 @@ public class GarageMapper {
                 garage.getId(),
                 garage.getName(),
                 garage.getDescription(),
+                toAddressDto(garage.getAddress()),
                 toScheduleDto(garage.getGarageSchedules()));
     }
 
@@ -33,12 +35,10 @@ public class GarageMapper {
 
     public Garage toGarage(GarageCreateRequest garageDto) {
         Address address = toAddress(garageDto.address());
-        Garage garage =
-                Garage.builder()
-                        .name(garageDto.name())
-                        .description(garageDto.description())
-                        .address(address)
-                        .build();
+        Garage garage = new Garage();
+        garage.setName(garageDto.name());
+        garage.setDescription(garageDto.description());
+        garage.setAddress(address);
         address.setGarage(garage);
         return garage;
     }
@@ -65,5 +65,10 @@ public class GarageMapper {
                 schedule.getDay(),
                 schedule.getOpenFrom(),
                 schedule.getOpenTill());
+    }
+
+    public AddressDto toAddressDto(Address address) {
+        return new AddressDto(
+                address.getId(), address.getCity(), address.getCode(), address.getStreet());
     }
 }

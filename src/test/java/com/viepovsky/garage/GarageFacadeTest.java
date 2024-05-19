@@ -64,7 +64,7 @@ class GarageFacadeTest {
         when(mapper.toGarage(mockedGarageDto)).thenReturn(mockedGarage);
         when(service.saveGarage(any(Garage.class))).thenReturn(Mockito.mock(Garage.class));
         //When
-        Garage createdGarage = facade.createGarage(mockedGarageDto);
+        GarageDto createdGarage = facade.createGarage(mockedGarageDto);
         //Then
         assertNotNull(createdGarage);
         verify(service, times(1)).saveGarage(any(Garage.class));

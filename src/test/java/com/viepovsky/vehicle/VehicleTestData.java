@@ -11,7 +11,7 @@ import com.viepovsky.vehicle.model.Model;
 import com.viepovsky.vehicle.model.Type;
 import com.viepovsky.vehicle.model.Vehicle;
 
-public class VehicleTestData {
+class VehicleTestData {
     public static final String TEST_USERNAME = "testuser";
     public static final String VEHICLE_ENDPOINT_PATH = "/v1/vehicles";
 
