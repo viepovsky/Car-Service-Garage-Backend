@@ -6,6 +6,7 @@ import com.viepovsky.user.UserService;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;
 import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.exceptions.UsernameAlreadyTakenException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,9 @@ class AuthenticationService {
 
     AuthenticationResponse register(RegisterUserRequest request) {
         LOGGER.info("Register request received.");
+        if (userService.isUserInDatabase(request.username())) {
+            throw new UsernameAlreadyTakenException("Username is already taken.");
+        }
         var user =
                 AppUser.builder()
                         .firstName(request.firstName())
@@ -40,7 +44,6 @@ class AuthenticationService {
                         .password(passwordEncoder.encode(request.password()))
                         .role(Role.ROLE_USER)
                         .build();
-        //TODO: if username is the same as already in db it throws exception
         var createdUser = userService.saveUser(user);
         var jwtToken = jwtService.generateJwtToken(createdUser);
         return AuthenticationResponse.builder().token(jwtToken).build();
