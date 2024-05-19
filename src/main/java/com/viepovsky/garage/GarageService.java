@@ -1,6 +1,8 @@
 package com.viepovsky.garage;
 
+import com.viepovsky.garage.model.Address;
 import com.viepovsky.garage.model.Garage;
+import com.viepovsky.garage.model.Schedule;
 import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -14,23 +16,23 @@ import java.util.List;
 public class GarageService {
 
     private final GarageRepository garageRepository;
+    private final ScheduleRepository scheduleRepository;
 
     public List<Garage> getAllGarages() {
         return garageRepository.findAll();
     }
 
     public Garage getGarage(Long id) {
-        return garageRepository.findById(id)
+        return garageRepository
+                .findById(id)
                 .orElseThrow(() -> new MyEntityNotFoundException("Garage " + id));
     }
 
     public List<String> getAllGarageCities() {
-        //TODO:fixthis
-        return null;
-//        return garageRepository.findAll()
-//                .stream()
-//                .map(n -> n.getAddress().substring(0, n.getAddress().indexOf(" ")))
-//                .toList();
+        return garageRepository.findAll().stream()
+                .map(Garage::getAddress)
+                .map(Address::getCity)
+                .toList();
     }
 
     public Garage saveGarage(Garage garage) {
@@ -43,5 +45,12 @@ public class GarageService {
         } else {
             throw new MyEntityNotFoundException("Garage", id);
         }
+    }
+
+    public Schedule saveSchedule(Schedule schedule, Long garageId) {
+        Garage garage = getGarage(garageId);
+        garage.getGarageSchedules().add(schedule);
+        schedule.setGarage(garage);
+        return scheduleRepository.save(schedule);
     }
 }

@@ -5,6 +5,7 @@ import com.viepovsky.utility.entity_audit.BaseEntityAudit;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "GarageSchedule")
@@ -28,7 +30,7 @@ public class Schedule extends BaseEntityAudit {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "garage_schedule_id_sequence")
     private Long id;
 
-    @Column(name = "date")
+    @Column(name = "date", unique = true)
     private LocalDate day;
 
     @Column(name = "start_hour")

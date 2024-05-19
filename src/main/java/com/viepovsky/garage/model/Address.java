@@ -36,4 +36,10 @@ public class Address extends BaseEntityAudit {
             fetch = FetchType.LAZY,
             mappedBy = "address")
     private Garage garage;
+
+    public Address(String city, String code, String street) {
+        this.city = city;
+        this.code = code;
+        this.street = street;
+    }
 }

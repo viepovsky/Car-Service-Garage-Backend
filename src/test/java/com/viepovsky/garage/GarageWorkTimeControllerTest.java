@@ -95,7 +95,7 @@ class GarageWorkTimeControllerTest {
         when(facade.getGarageWorkTimes(anyLong())).thenReturn(workTimesResponse);
         //When
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/garage-work-time/1")
+                        .get("/v1/schedule/1")
                         .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(jsonResponse));
@@ -123,7 +123,7 @@ class GarageWorkTimeControllerTest {
 
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/garage-work-time/1")
+                        .post("/v1/schedule/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent)
                         .characterEncoding("UTF-8")
@@ -137,7 +137,7 @@ class GarageWorkTimeControllerTest {
         doNothing().when(facade).deleteGarageWorkTime(anyLong());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/v1/garage-work-time/1")
+                        .delete("/v1/schedule/1")
                         .header("Authorization", "Bearer " + jwtTokenAdmin))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }

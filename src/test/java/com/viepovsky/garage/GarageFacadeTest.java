@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.utility.mapper.GarageMapper;
@@ -58,9 +59,9 @@ class GarageFacadeTest {
     @Test
     void shouldCreateGarage() {
         //Given
-        GarageDto mockedGarageDto = Mockito.mock(GarageDto.class);
+        GarageCreateRequest mockedGarageDto = Mockito.mock(GarageCreateRequest.class);
         Garage mockedGarage = Mockito.mock(Garage.class);
-        when(mapper.mapToGarage(mockedGarageDto)).thenReturn(mockedGarage);
+        when(mapper.toGarage(mockedGarageDto)).thenReturn(mockedGarage);
         when(service.saveGarage(any(Garage.class))).thenReturn(Mockito.mock(Garage.class));
         //When
         Garage createdGarage = facade.createGarage(mockedGarageDto);

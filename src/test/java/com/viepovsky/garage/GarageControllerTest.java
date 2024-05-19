@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.user.model.AppUser;
@@ -146,7 +147,7 @@ class GarageControllerTest {
                 ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalTime()).create();
         var jsonRequest = gson.toJson(garageRequest);
 
-        when(facade.createGarage(any(GarageDto.class))).thenReturn(garageResponse);
+        when(facade.createGarage(any(GarageCreateRequest.class))).thenReturn(garageResponse);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/garages")
