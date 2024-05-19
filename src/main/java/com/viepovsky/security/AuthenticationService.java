@@ -32,12 +32,12 @@ class AuthenticationService {
         LOGGER.info("Register request received.");
         var user =
                 AppUser.builder()
-                        .firstName(request.getFirstName())
-                        .lastName(request.getLastName())
-                        .email(request.getEmail())
-                        .mobile(request.getPhoneNumber())
-                        .username(request.getUsername())
-                        .password(passwordEncoder.encode(request.getPassword()))
+                        .firstName(request.firstName())
+                        .lastName(request.lastName())
+                        .email(request.email())
+                        .mobile(request.phoneNumber())
+                        .username(request.username())
+                        .password(passwordEncoder.encode(request.password()))
                         .role(Role.ROLE_USER)
                         .build();
         //TODO: if username is the same as already in db it throws exception
