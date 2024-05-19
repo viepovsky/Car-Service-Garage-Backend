@@ -1,7 +1,7 @@
 package com.viepovsky.utility.mapper;
 
 import com.viepovsky.garage.dto.AddressCreateRequest;
-import com.viepovsky.garage.dto.CreateScheduleRequest;
+import com.viepovsky.garage.dto.ScheduleCreateRequest;
 import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.dto.ScheduleDto;
@@ -47,7 +47,7 @@ public class GarageMapper {
         return garages.stream().map(this::toGarageDto).toList();
     }
 
-    public Schedule toSchedule(CreateScheduleRequest request) {
+    public Schedule toSchedule(ScheduleCreateRequest request) {
         return Schedule.builder()
                 .day(request.day())
                 .openFrom(request.openFrom())

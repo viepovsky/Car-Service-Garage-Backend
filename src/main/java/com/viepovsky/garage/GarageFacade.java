@@ -1,6 +1,6 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.garage.dto.CreateScheduleRequest;
+import com.viepovsky.garage.dto.ScheduleCreateRequest;
 import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.dto.ScheduleDto;
@@ -52,7 +52,7 @@ class GarageFacade {
         return mapper.toScheduleDto(workTimes);
     }
 
-    ScheduleDto createSchedule(CreateScheduleRequest request, Long garageId) {
+    ScheduleDto createSchedule(ScheduleCreateRequest request, Long garageId) {
         LOGGER.info("Create schedule endpoint used for garage id:{}", garageId);
         var schedule = mapper.toSchedule(request);
         var createdSchedule = garageService.saveSchedule(schedule, garageId);

@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public record CreateScheduleRequest(
+public record ScheduleCreateRequest(
         @NotNull LocalDate day, @NotNull LocalTime openFrom, @NotNull LocalTime openTill) {}

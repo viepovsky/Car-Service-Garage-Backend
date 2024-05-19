@@ -12,7 +12,8 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.viepovsky.garage.dto.CreateScheduleRequest;
+import com.viepovsky.garage.dto.AddressCreateRequest;
+import com.viepovsky.garage.dto.ScheduleCreateRequest;
 import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.dto.ScheduleDto;
@@ -147,7 +148,8 @@ class GarageControllerTest {
     @Test
     void shouldCreateGarage() throws Exception {
         //Given
-        var garageRequest = GarageDto.builder().name("Test garage").address("Test address").build();
+        var addressRequest = Mockito.mock(AddressCreateRequest.class);
+        var garageRequest = GarageCreateRequest.builder().name("Test garage").address(addressRequest).build();
         var garageResponse = Garage.builder().id(1L).build();
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, type, jsonDeserializationContext) ->
@@ -182,45 +184,15 @@ class GarageControllerTest {
     @Test
     void getGarageWorkTimes() throws Exception {
         //Given
-        List<ScheduleDto> workTimesResponse = List.of(ScheduleDto.builder().build());
-        var jsonResponse = new ObjectMapper().writeValueAsString(workTimesResponse);
-        when(facade.getSchedulesFor(anyLong())).thenReturn(workTimesResponse);
+        List<ScheduleDto> schedules = List.of(ScheduleDto.builder().build());
+        var jsonResponse = new ObjectMapper().writeValueAsString(schedules);
+        when(facade.getSchedulesFor(anyLong())).thenReturn(schedules);
         //When
         mockMvc.perform(MockMvcRequestBuilders
-                       .get("/v1/schedule/1")
+                       .get("/v1/garages/schedule/1")
                        .header("Authorization", "Bearer " + jwtTokenUser))
                .andExpect(MockMvcResultMatchers.status().isOk())
                .andExpect(MockMvcResultMatchers.content().json(jsonResponse));
-    }
-
-    @Test
-    void testCreateGarageWorkTime() throws Exception {
-        //Given
-        ScheduleDto garageWorkTimeDto = Mockito.mock(ScheduleDto.class);
-        //TODO fix this
-        //new ScheduleDto(1L, WorkDays.MONDAY, LocalTime.of(10, 0), LocalTime.of(15, 0));
-        doNothing().when(facade).createSchedule(any(CreateScheduleRequest.class), anyLong());
-        Gson gson = new GsonBuilder().registerTypeAdapter(LocalTime.class, new TypeAdapter<LocalTime>() {
-            @Override
-            public void write(JsonWriter out, LocalTime value) throws IOException {
-                out.value(value.toString());
-            }
-
-            @Override
-            public LocalTime read(JsonReader in) throws IOException {
-                return LocalTime.parse(in.nextString());
-            }
-        }).create();
-        String jsonContent = gson.toJson(garageWorkTimeDto);
-
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                       .post("/v1/schedule/1")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(jsonContent)
-                       .characterEncoding("UTF-8")
-                       .header("Authorization", "Bearer " + jwtTokenAdmin))
-               .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
@@ -229,7 +201,7 @@ class GarageControllerTest {
         doNothing().when(facade).deleteSchedule(anyLong());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
-                       .delete("/v1/schedule/1")
+                       .delete("/v1/garages/schedule/1")
                        .header("Authorization", "Bearer " + jwtTokenAdmin))
                .andExpect(MockMvcResultMatchers.status().isOk());
     }

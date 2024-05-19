@@ -1,6 +1,6 @@
 package com.viepovsky.garage;
 
-import com.viepovsky.garage.dto.CreateScheduleRequest;
+import com.viepovsky.garage.dto.ScheduleCreateRequest;
 import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.dto.ScheduleDto;
@@ -67,7 +67,7 @@ class GarageController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/schedule/{garageId}")
     ResponseEntity<ScheduleDto> createSchedule(
-            @Valid @RequestBody CreateScheduleRequest request,
+            @Valid @RequestBody ScheduleCreateRequest request,
             @PathVariable @Min(1) Long garageId) {
         var createdSchedule = garageFacade.createSchedule(request, garageId);
         return ResponseEntity.created(URI.create("/v1/schedule/" + garageId)).body(createdSchedule);

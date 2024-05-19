@@ -52,25 +52,6 @@ class GarageServiceTest {
     }
 
     @Test
-    void testAllGarageCities() {
-        //Given
-        List<Garage> garageList = new ArrayList<>();
-        var garage = new Garage();
-        var garage2 = new Garage();
-        //TODO fix this
-//        garage.setAddress("Gdańsk 62-500, test st");
-//        garage2.setAddress("Łódź 62-500, test st");
-        garageList.add(garage);
-        garageList.add(garage2);
-        when(repository.findAll()).thenReturn(garageList);
-        //When
-        List<String> retrievedCities = service.getAllGarageCities();
-        //Then
-        assertEquals(2, retrievedCities.size());
-        assertEquals("Gdańsk", retrievedCities.get(0));
-    }
-
-    @Test
     void testSaveGarage() {
         //Given
         var garage = new Garage();

@@ -8,5 +8,5 @@ import lombok.Builder;
 @Builder
 public record GarageCreateRequest(
         @NotBlank String name,
-        @NotBlank String description,
+        String description,
         @NotNull AddressCreateRequest address) {}
