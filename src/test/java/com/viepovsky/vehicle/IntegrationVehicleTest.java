@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.security.dto.AuthenticationResponse;
+import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;
 import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.vehicle.dto.VehicleCreateRequest;
@@ -37,28 +38,22 @@ import java.util.Objects;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class IntegrationVehicleTest {
     private static final VehicleTestData TEST_DATA = new VehicleTestData();
-    public static final ObjectMapper objectMapper = new ObjectMapper();
-    public static final RestClient REST_CLIENT = RestClient.create();
-    public static String jwtToken;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final RestClient REST_CLIENT = RestClient.create();
+    private static String jwtToken;
     @LocalServerPort private int port;
 
     @Test
     @Order(1)
     @Sql("classpath:init-vehicle-integration.sql")
-    void shouldRegisterUser() throws JsonProcessingException {
-        RegisterUserRequest registerUserRequest =
-                RegisterUserRequest.builder()
-                        .firstName("TestName")
-                        .lastName("TestLastName")
-                        .email("test-mail@mail.com")
-                        .username(TEST_USERNAME)
-                        .password("zaq1@WSXExample")
-                        .build();
-        String jsonRequest = objectMapper.writeValueAsString(registerUserRequest);
+    void shouldGetJwtForNormalUser() throws JsonProcessingException {
+        AuthenticationUserRequest authenticationUserRequest =
+                new AuthenticationUserRequest(TEST_USERNAME, "testpassword");
+        String jsonRequest = objectMapper.writeValueAsString(authenticationUserRequest);
         ResponseEntity<AuthenticationResponse> response =
                 REST_CLIENT
                         .post()
-                        .uri(URI.create("http://localhost:" + port + "/v1/auth/register"))
+                        .uri(URI.create("http://localhost:" + port + "/v1/auth/authenticate"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(jsonRequest)
                         .retrieve()

@@ -39,12 +39,12 @@ import java.util.Objects;
 @DisplayName("Garage Integration Test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class IntegrationGarageTest {
-    public static final String TEST_USERNAME = "testuser";
-    public static final String TEST_ADMIN_USERNAME = "testadmin";
-    public static final ObjectMapper objectMapper = new ObjectMapper();
-    public static final RestClient REST_CLIENT = RestClient.create();
-    public static String jwtUserToken;
-    public static String jwtAdminToken;
+    private static final String TEST_USERNAME = "testuser";
+    private static final String TEST_ADMIN_USERNAME = "testadmin";
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final RestClient REST_CLIENT = RestClient.create();
+    private static String jwtUserToken;
+    private static String jwtAdminToken;
     @LocalServerPort private int port;
 
     @Test
@@ -74,7 +74,7 @@ class IntegrationGarageTest {
     @Test
     @Order(2)
     @Sql("classpath:init-admin.sql")
-    void shouldLogInAsAdmin() throws JsonProcessingException {
+    void shouldGetJwtForAdminUser() throws JsonProcessingException {
         AuthenticationUserRequest authenticationAdminRequest =
                 new AuthenticationUserRequest(TEST_ADMIN_USERNAME, "testpassword");
         String jsonRequest = objectMapper.writeValueAsString(authenticationAdminRequest);
