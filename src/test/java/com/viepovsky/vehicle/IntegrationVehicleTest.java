@@ -7,24 +7,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.viepovsky.BaseIntegrationTest;
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
-import com.viepovsky.user.dto.RegisterUserRequest;
-import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.vehicle.dto.VehicleCreateRequest;
 import com.viepovsky.vehicle.dto.VehicleDto;
 import com.viepovsky.vehicle.dto.VehicleUpdateRequest;
 
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,11 +28,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@MockBean(ApplicationScheduler.class)
-@DisplayName("Vehicle Integration Test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class IntegrationVehicleTest {
+class IntegrationVehicleTest extends BaseIntegrationTest {
     private static final VehicleTestData TEST_DATA = new VehicleTestData();
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final RestClient REST_CLIENT = RestClient.create();
@@ -45,7 +37,6 @@ class IntegrationVehicleTest {
 
     @Test
     @Order(1)
-    @Sql("classpath:init-vehicle-integration.sql")
     void shouldGetJwtForNormalUser() throws JsonProcessingException {
         AuthenticationUserRequest authenticationUserRequest =
                 new AuthenticationUserRequest(TEST_USERNAME, "testpassword");
