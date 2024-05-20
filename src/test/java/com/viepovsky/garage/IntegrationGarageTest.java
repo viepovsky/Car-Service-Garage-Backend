@@ -1,5 +1,6 @@
 package com.viepovsky.garage;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -11,7 +12,6 @@ import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
-import com.viepovsky.user.dto.RegisterUserRequest;
 import com.viepovsky.utility.scheduler.ApplicationScheduler;
 
 import org.junit.jupiter.api.DisplayName;
@@ -49,20 +49,15 @@ class IntegrationGarageTest {
 
     @Test
     @Order(1)
-    void shouldRegisterUser() throws JsonProcessingException {
-        RegisterUserRequest registerUserRequest =
-                RegisterUserRequest.builder()
-                        .firstName("TestName")
-                        .lastName("TestLastName")
-                        .email("test-mail@mail.com")
-                        .username(TEST_USERNAME)
-                        .password("zaq1@WSXExample")
-                        .build();
-        String jsonRequest = objectMapper.writeValueAsString(registerUserRequest);
+    @Sql("classpath:init-admin.sql")
+    void shouldGetJwtForNormalUser() throws JsonProcessingException {
+        AuthenticationUserRequest authenticationUserRequest =
+                new AuthenticationUserRequest(TEST_USERNAME, "testpassword");
+        String jsonRequest = objectMapper.writeValueAsString(authenticationUserRequest);
         ResponseEntity<AuthenticationResponse> response =
                 REST_CLIENT
                         .post()
-                        .uri(URI.create("http://localhost:" + port + "/v1/auth/register"))
+                        .uri(URI.create("http://localhost:" + port + "/v1/auth/authenticate"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(jsonRequest)
                         .retrieve()
@@ -73,7 +68,6 @@ class IntegrationGarageTest {
 
     @Test
     @Order(2)
-    @Sql("classpath:init-admin.sql")
     void shouldGetJwtForAdminUser() throws JsonProcessingException {
         AuthenticationUserRequest authenticationAdminRequest =
                 new AuthenticationUserRequest(TEST_ADMIN_USERNAME, "testpassword");
@@ -91,7 +85,7 @@ class IntegrationGarageTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void shouldCreateGarage() throws JsonProcessingException {
         AddressCreateRequest addressRequest = new AddressCreateRequest("City1", "Code1", "Street1");
         GarageCreateRequest garageRequest =

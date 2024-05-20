@@ -3,6 +3,7 @@ package com.viepovsky.security;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.security.dto.AuthenticationResponse;
+import com.viepovsky.user.UserService;
 import com.viepovsky.user.dto.RegisterUserRequest;
 import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import org.junit.jupiter.api.AfterAll;
@@ -30,13 +31,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DisplayName("Vehicle Integration Test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class IntegrationAuthTest {
-    @Autowired
-    private static final String TEST_USERNAME = "testuser";
+    private static final String TEST_USERNAME = "testuser22";
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final RestClient REST_CLIENT = RestClient.create();
     private static String jwtToken;
-    @LocalServerPort
-    private int port;
+    @LocalServerPort private int port;
+    private static UserService userService;
+
+    IntegrationAuthTest(@Autowired UserService service) {
+        userService = service;
+    }
 
     @Test
     @Order(1)
@@ -44,12 +48,12 @@ class IntegrationAuthTest {
     void shouldRegisterUser() throws JsonProcessingException {
         RegisterUserRequest registerUserRequest =
                 RegisterUserRequest.builder()
-                                   .firstName("TestName")
-                                   .lastName("TestLastName")
-                                   .email("test-mail@mail.com")
-                                   .username(TEST_USERNAME)
-                                   .password("zaq1@WSXExample")
-                                   .build();
+                        .firstName("TestName")
+                        .lastName("TestLastName")
+                        .email("test-mail@mail.com")
+                        .username(TEST_USERNAME)
+                        .password("zaq1@WSXExample")
+                        .build();
         String jsonRequest = objectMapper.writeValueAsString(registerUserRequest);
         ResponseEntity<AuthenticationResponse> response =
                 REST_CLIENT
@@ -64,7 +68,7 @@ class IntegrationAuthTest {
     }
 
     @AfterAll
-    static void afterALl() {
-
+    static void deleteUserAfterRegistration() {
+        userService.deleteUser(TEST_USERNAME);
     }
 }

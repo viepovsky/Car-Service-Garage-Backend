@@ -44,7 +44,7 @@ class VehicleTestData {
         return VehicleDto.builder()
                 .vehicleId(5000L)
                 .vin("VIN")
-                .userId(5000L)
+                .userId(2L)
                 .licensePlate("LICENSE_PLATE")
                 .vehicleModel(modelDto)
                 .engineType(EngineType.DIESEL.name())
