@@ -220,4 +220,52 @@ class IntegrationGarageTest extends BaseIntegrationTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedResponse, Objects.requireNonNull(response.getBody()).get(0));
     }
+
+    @Test
+    @Order(7)
+    void shouldDeleteSchedule() {
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                        "http://localhost:" + port + "/v1/garages/schedule/" + 5000);
+        ResponseEntity<Void> response =
+                REST_CLIENT
+                        .delete()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAdminToken)
+                        .retrieve()
+                        .toEntity(Void.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @Order(7)
+    void shouldDeleteGarage() {
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                        "http://localhost:" + port + "/v1/garages/" + 5000);
+        ResponseEntity<Void> response =
+                REST_CLIENT
+                        .delete()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAdminToken)
+                        .retrieve()
+                        .toEntity(Void.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @Order(8)
+    void shouldRetrieveNoneGarages() {
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/garages");
+        ResponseEntity<List<GarageDto>> response =
+                REST_CLIENT
+                        .get()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAdminToken)
+                        .retrieve()
+                        .toEntity(new ParameterizedTypeReference<>() {});
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(0, Objects.requireNonNull(response.getBody()).size());
+    }
 }
