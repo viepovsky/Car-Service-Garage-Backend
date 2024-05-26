@@ -5,11 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.viepovsky.BaseIntegrationTest;
 import com.viepovsky.garage.dto.AddressCreateRequest;
 import com.viepovsky.garage.dto.AddressDto;
 import com.viepovsky.garage.dto.GarageCreateRequest;
 import com.viepovsky.garage.dto.GarageDto;
+import com.viepovsky.garage.dto.ScheduleCreateRequest;
+import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 
@@ -24,6 +29,9 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -82,12 +90,7 @@ class IntegrationGarageTest extends BaseIntegrationTest {
 
         AddressDto addressDto = new AddressDto(5000L, "City1", "Code1", "Street1");
         GarageDto expectedResponse =
-                GarageDto.builder()
-                        .id(5000L)
-                        .name("Garage1")
-                        .address(addressDto)
-                        .schedules(new ArrayList<>())
-                        .build();
+                GarageDto.builder().id(5000L).name("Garage1").address(addressDto).build();
 
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/garages");
@@ -104,6 +107,87 @@ class IntegrationGarageTest extends BaseIntegrationTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(
                 "/v1/garages/" + expectedResponse.id(),
+                Objects.requireNonNull(response.getHeaders().getLocation()).getPath());
+        assertEquals(expectedResponse, response.getBody());
+    }
+
+    @Test
+    @Order(4)
+    void shouldRetrieveGarage() {
+        AddressDto addressDto = new AddressDto(5000L, "City1", "Code1", "Street1");
+        GarageDto expectedResponse =
+                GarageDto.builder().id(5000L).name("Garage1").address(addressDto).build();
+
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                        "http://localhost:" + port + "/v1/garages/" + expectedResponse.id());
+        ResponseEntity<GarageDto> response =
+                REST_CLIENT
+                        .get()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAdminToken)
+                        .retrieve()
+                        .toEntity(GarageDto.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedResponse, response.getBody());
+    }
+
+    @Test
+    @Order(5)
+    void shouldCreateSchedule() throws JsonProcessingException {
+        ScheduleCreateRequest scheduleCreateRequest =
+                ScheduleCreateRequest.builder()
+                        .day(LocalDate.now())
+                        .openFrom(LocalTime.of(8, 0))
+                        .openTill(LocalTime.of(18, 0))
+                        .build();
+
+        Gson gson =
+                new GsonBuilder()
+                        .registerTypeAdapter(
+                                LocalTime.class,
+                                (JsonDeserializer<LocalTime>)
+                                        (json, type, jsonDeserializationContext) ->
+                                                ZonedDateTime.parse(
+                                                                json.getAsJsonPrimitive()
+                                                                        .getAsString())
+                                                        .toLocalTime())
+                        .registerTypeAdapter(
+                                LocalDate.class,
+                                (JsonDeserializer<LocalDate>)
+                                        (json, type, jsonDeserializationContext) ->
+                                                ZonedDateTime.parse(
+                                                                json.getAsJsonPrimitive()
+                                                                        .getAsString())
+                                                        .toLocalDate())
+                        .create();
+        String jsonRequest = gson.toJson(scheduleCreateRequest);
+
+        ScheduleDto expectedResponse =
+                ScheduleDto.builder()
+                        .id(5000L)
+                        .day(LocalDate.now())
+                        .openFrom(LocalTime.of(8, 0))
+                        .openTill(LocalTime.of(18, 0))
+                        .build();
+
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                        "http://localhost:" + port + "/v1/garages/schedule/5000");
+        ResponseEntity<ScheduleDto> response =
+                REST_CLIENT
+                        .post()
+                        .uri(url.build().toUri())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAdminToken)
+                        .body(jsonRequest)
+                        .retrieve()
+                        .toEntity(ScheduleDto.class);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(
+                "/v1/schedule/5000",
                 Objects.requireNonNull(response.getHeaders().getLocation()).getPath());
         assertEquals(expectedResponse, response.getBody());
     }

@@ -25,8 +25,7 @@ public class GarageMapper {
                 garage.getId(),
                 garage.getName(),
                 garage.getDescription(),
-                toAddressDto(garage.getAddress()),
-                toScheduleDto(garage.getGarageSchedules()));
+                toAddressDto(garage.getAddress()));
     }
 
     private Address toAddress(AddressCreateRequest addressDto) {
