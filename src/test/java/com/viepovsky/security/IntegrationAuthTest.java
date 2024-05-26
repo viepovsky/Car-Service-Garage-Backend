@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.BaseIntegrationTest;
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.UserService;
+import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;
 
 import org.junit.jupiter.api.AfterAll;
@@ -49,6 +50,27 @@ class IntegrationAuthTest extends BaseIntegrationTest {
                 REST_CLIENT
                         .post()
                         .uri(URI.create("http://localhost:" + port + "/v1/auth/register"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(jsonRequest)
+                        .retrieve()
+                        .toEntity(AuthenticationResponse.class);
+        jwtToken = Objects.requireNonNull(response.getBody()).token();
+        assertNotNull(jwtToken);
+    }
+
+    @Test
+    @Order(2)
+    void shouldRetrieveTokenAfterRegistration() throws JsonProcessingException {
+        AuthenticationUserRequest authenticationUserRequest =
+                AuthenticationUserRequest.builder()
+                        .username(TEST_USERNAME)
+                        .password("zaq1@WSXExample")
+                        .build();
+        String jsonRequest = objectMapper.writeValueAsString(authenticationUserRequest);
+        ResponseEntity<AuthenticationResponse> response =
+                REST_CLIENT
+                        .post()
+                        .uri(URI.create("http://localhost:" + port + "/v1/auth/authenticate"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(jsonRequest)
                         .retrieve()
