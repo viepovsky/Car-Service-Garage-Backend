@@ -2,7 +2,9 @@ package com.viepovsky.utility.mapper;
 
 import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.offer.model.SelectedOffer;
+
 import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,23 +12,20 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class SelectedOfferMapper {
-    private VehicleMapper carMapper;
-    private VisitMapper bookingMapper;
 
-    public List<SelectedOfferDto> mapToCarServiceDtoList(List<SelectedOffer> carRepairList) {
-        //TODO fix this
-        return null;
-//        return carRepairList.stream()
-//                .map(n -> new CarRepairDto(
-//                        n.getId(),
-//                        n.getName(),
-//                        n.getDescription(),
-//                        n.getCost(),
-//                        n.getRepairTimeInMinutes(),
-//                        carMapper.mapToCarDto(n.getCar()),
-//                        bookingMapper.mapToBookingDto(n.getBooking()),
-//                        n.getStatus().getServiceStatus()
-//                ))
-//                .toList();
+    public List<SelectedOfferDto> toSelectedOffer(List<SelectedOffer> selectedOffers) {
+        return selectedOffers.stream().map(this::toSelectedOffer).toList();
+    }
+
+    public SelectedOfferDto toSelectedOffer(SelectedOffer selectedOffer) {
+        return new SelectedOfferDto(
+                selectedOffer.getId(),
+                selectedOffer.getPrice(),
+                selectedOffer.getDiscount(),
+                selectedOffer.getProbableRepairTime(),
+                selectedOffer.getStatus().name(),
+                selectedOffer.getDetails(),
+                selectedOffer.getCatalogOffer().getId(),
+                selectedOffer.getVisit().getId());
     }
 }

@@ -26,7 +26,7 @@ class SelectedOfferFacade {
         dataOwnershipValidator.belongsToAuthenticatedUser(username);
         LOGGER.info("Get all selected offers endpoint used for username:{}", username);
         List<SelectedOffer> carRepairList = selectedOfferService.getAllSelectedOffers(username);
-        return mapper.mapToCarServiceDtoList(carRepairList);
+        return mapper.toSelectedOffer(carRepairList);
     }
 
     public void deleteSelectedOffer(Long selectedOfferId) {
@@ -39,6 +39,6 @@ class SelectedOfferFacade {
     public SelectedOfferDto createSelectedOffer(
             SelectedOfferCreateRequest request, String username) {
         // TODO: implement this possibility
-        return new SelectedOfferDto();
+        return null;
     }
 }

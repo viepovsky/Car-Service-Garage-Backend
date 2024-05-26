@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import com.google.gson.Gson;
+import com.viepovsky.offer.dto.CatalogOfferCreateRequest;
 import com.viepovsky.offer.dto.CatalogOfferDto;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;
@@ -40,13 +41,10 @@ import java.util.List;
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
 class AvailableCarRepairControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    @MockBean
-    private CatalogOfferFacade facade;
-    @MockBean
-    private UserDetailsService userDetailsService;
+    @MockBean private CatalogOfferFacade facade;
+    @MockBean private UserDetailsService userDetailsService;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -65,8 +63,7 @@ class AvailableCarRepairControllerTest {
     }
 
     public static String generateToken(String username, String secretKey) {
-        return Jwts
-                .builder()
+        return Jwts.builder()
                 .setClaims(new HashMap<>())
                 .setSubject(username)
                 .setIssuer("garage-app.com")
@@ -83,60 +80,73 @@ class AvailableCarRepairControllerTest {
 
     @Test
     void testShouldGetEmptyListAvailableCarServices() throws Exception {
-        //Given
+        // Given
         when(facade.getAllCatalogOffers(1L)).thenReturn(List.of());
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/available-car-service/1")
-                        .header("Authorization", "Bearer " + jwtTokenUser))
+        // When & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/v1/available-car-service/1")
+                                .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
     }
 
     @Test
-    void testShouldGetAllAvailableCarServices() throws Exception {
-        //Given
-        List<CatalogOfferDto> carServiceList = List.of(new CatalogOfferDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), 22L));
-        when(facade.getAllCatalogOffers(1L)).thenReturn(carServiceList);
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/available-car-service/1")
-                        .header("Authorization", "Bearer " + jwtTokenUser))
+    void testShouldGetAllCatalogOffers() throws Exception {
+        // Given
+        List<CatalogOfferDto> catalogOffers =
+                List.of(
+                        new CatalogOfferDto(
+                                1L,
+                                "Test service",
+                                "Test description",
+                                BigDecimal.valueOf(50),
+                                40,
+                                22L));
+        when(facade.getAllCatalogOffers(1L)).thenReturn(catalogOffers);
+        // When & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/v1/catalog-offer/1")
+                                .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("Test service")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].cost", Matchers.is(50)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].repairTimeInMinutes", Matchers.is(40)))
+                .andExpect(
+                        MockMvcResultMatchers.jsonPath("$[0].repairTimeInMinutes", Matchers.is(40)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].makeMultiplier", Matchers.is(1.2)));
     }
 
     @Test
     void testShouldCreateAvailableCarService() throws Exception {
-        //Given
-        CatalogOfferDto availableCarRepairDto = new CatalogOfferDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
-        doNothing().when(facade).createCatalogOffer(any(CatalogOfferDto.class), anyLong());
+        // Given
+        CatalogOfferCreateRequest catalogOfferCreateRequest =
+                new CatalogOfferCreateRequest(
+                        "Test service", "Test description", BigDecimal.valueOf(50), 40);
+        doNothing()
+                .when(facade)
+                .createCatalogOffer(any(CatalogOfferCreateRequest.class), anyLong());
         Gson gson = new Gson();
-        String jsonContent = gson.toJson(availableCarRepairDto);
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/v1/available-car-service")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .content(jsonContent)
-                        .param("garage-id", "22")
-                        .header("Authorization", "Bearer " + jwtTokenAdmin))
+        String jsonContent = gson.toJson(catalogOfferCreateRequest);
+        // When & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/v1/catalog-offer")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8")
+                                .content(jsonContent)
+                                .param("garage-id", "22")
+                                .header("Authorization", "Bearer " + jwtTokenAdmin))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     void shouldDeleteAvailableCarService() throws Exception {
-        //Given
+        // Given
         doNothing().when(facade).deleteCatalogOffer(anyLong());
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/v1/available-car-service/20")
-                        .header("Authorization", "Bearer " + jwtTokenAdmin))
+        // When & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete("/v1/available-car-service/20")
+                                .header("Authorization", "Bearer " + jwtTokenAdmin))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
