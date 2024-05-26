@@ -23,13 +23,15 @@ class CatalogOfferFacade {
     public List<CatalogOfferDto> getAllCatalogOffers(Long garageId) {
         LOGGER.info("Get all catalog offers endpoint used with garage id:{}", garageId);
         List<CatalogOffer> catalogOffers = catalogOfferService.getAllCatalogOffers(garageId);
-        return mapper.mapToAvailableCarServiceDtoList(catalogOffers);
+        return mapper.toCatalogOffer(catalogOffers);
     }
 
-    public void createCatalogOffer(CatalogOfferCreateRequest catalogOfferCreateRequest, Long garageId) {
+    public CatalogOfferDto createCatalogOffer(
+            CatalogOfferCreateRequest catalogOfferCreateRequest, Long garageId) {
         LOGGER.info("Create catalog offer service endpoint used with garage id:{}", garageId);
         CatalogOffer catalogOffer = mapper.toCatalogOffer(catalogOfferCreateRequest);
-        catalogOfferService.save(catalogOffer, garageId);
+        CatalogOffer createdCatalogOffer = catalogOfferService.save(catalogOffer, garageId);
+        return mapper.toCatalogDto(createdCatalogOffer);
     }
 
     public void deleteCatalogOffer(Long id) {

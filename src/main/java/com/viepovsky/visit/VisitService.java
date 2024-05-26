@@ -246,7 +246,7 @@ public class VisitService {
         List<CatalogOffer> selectedAvailableCarRepairs = new ArrayList<>();
         List<BigDecimal> repairCosts = new ArrayList<>();
         selectedCarRepairIdList.stream()
-                .map(id -> new CatalogOffer(availableCarRepairService.getAvailableCarRepair(id)))
+                .map(id -> new CatalogOffer(availableCarRepairService.getById(id)))
                 .peek(repair -> multiplyCarRepairCostIfCarIsPremiumMake(car, repair))
                 .peek(selectedAvailableCarRepairs::add)
                 .map(CatalogOffer::getPrice)

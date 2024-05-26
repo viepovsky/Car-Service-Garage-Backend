@@ -34,7 +34,7 @@ class CatalogOfferFacadeTest {
         List<CatalogOffer> carServiceList = List.of(Mockito.mock(CatalogOffer.class));
         List<CatalogOfferDto> carServiceDtoList = List.of(Mockito.mock(CatalogOfferDto.class));
         when(service.getAllCatalogOffers(1L)).thenReturn(carServiceList);
-        when(mapper.mapToAvailableCarServiceDtoList(carServiceList)).thenReturn(carServiceDtoList);
+        when(mapper.toCatalogOffer(carServiceList)).thenReturn(carServiceDtoList);
         //When
         List<CatalogOfferDto> retrievedList = facade.getAllCatalogOffers(1L);
         //Then

@@ -60,13 +60,11 @@ public class CatalogOffer extends BaseEntityAudit {
             String name,
             String description,
             BigDecimal price,
-            int probableRepairTime,
-            Garage garage) {
+            int probableRepairTime) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.probableRepairTime = probableRepairTime;
-        this.garage = garage;
     }
 
     public CatalogOffer(CatalogOffer availableCarRepair) {

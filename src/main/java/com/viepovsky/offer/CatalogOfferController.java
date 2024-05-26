@@ -33,11 +33,11 @@ import java.util.List;
 @Validated
 class CatalogOfferController {
 
-    private final CatalogOfferFacade availableCarRepairFacade;
+    private final CatalogOfferFacade catalogOfferFacade;
 
     @GetMapping(path = "/{garageId}")
     ResponseEntity<List<CatalogOfferDto>> getAllCatalogOffers(@PathVariable @Min(1) Long garageId) {
-        return ResponseEntity.ok(availableCarRepairFacade.getAllCatalogOffers(garageId));
+        return ResponseEntity.ok(catalogOfferFacade.getAllCatalogOffers(garageId));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -45,13 +45,13 @@ class CatalogOfferController {
     ResponseEntity<CatalogOfferDto> createCatalogOffer(
             @Valid @RequestBody CatalogOfferCreateRequest request,
             @RequestParam(name = "garage-id") @NotNull @Min(1) Long garageId) {
-        availableCarRepairFacade.createCatalogOffer(request, garageId);
-        return ResponseEntity.created(URI.create("/v1/catalog-offer/" + garageId)).build();
+        CatalogOfferDto response = catalogOfferFacade.createCatalogOffer(request, garageId);
+        return ResponseEntity.created(URI.create("/v1/catalog-offer/" + garageId)).body(response);
     }
 
     @DeleteMapping(path = "/{catalogOfferId}")
     ResponseEntity<Void> deleteCatalogOffer(@PathVariable @Min(1) Long catalogOfferId) {
-        availableCarRepairFacade.deleteCatalogOffer(catalogOfferId);
+        catalogOfferFacade.deleteCatalogOffer(catalogOfferId);
         return ResponseEntity.ok().build();
     }
 }

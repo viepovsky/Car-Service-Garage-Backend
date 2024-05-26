@@ -215,8 +215,8 @@ class BookingServiceTest {
         VisitService bookingService = Mockito.spy(new VisitService(bookingRepository, garageService, carRepairService, carService, userService, availableCarRepairService));
         Mockito.doReturn(localTimeList).when(bookingService).getAvailableBookingTimesByDayAndRepairDuration(localDate, repairDuration, 5L);
         when(bookingRepository.save(any())).thenReturn(any());
-        when(availableCarRepairService.getAvailableCarRepair(10L)).thenReturn(availableCarRepair);
-        when(availableCarRepairService.getAvailableCarRepair(11L)).thenReturn(availableCarRepair2);
+        when(availableCarRepairService.getById(10L)).thenReturn(availableCarRepair);
+        when(availableCarRepairService.getById(11L)).thenReturn(availableCarRepair2);
         when(userService.saveUser(any(AppUser.class))).thenReturn(Mockito.mock(AppUser.class));
         //When
         bookingService.createBooking(List.of(10L, 11L), localDate, LocalTime.of(10, 0), 5L, 2L, repairDuration);

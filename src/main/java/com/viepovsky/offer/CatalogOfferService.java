@@ -14,32 +14,31 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CatalogOfferService {
-
-    private final CatalogOfferRepository availableCarRepairRepository;
-
+    private final CatalogOfferRepository catalogOfferRepository;
     private final GarageService garageService;
 
     public List<CatalogOffer> getAllCatalogOffers(Long garageId) {
-        return availableCarRepairRepository.findAllByGarageId(garageId);
+        return catalogOfferRepository.findAllByGarageId(garageId);
     }
 
-    public CatalogOffer getAvailableCarRepair(Long id) {
-        return availableCarRepairRepository.findById(id)
-                .orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", id));
+    public CatalogOffer getById(Long id) {
+        return catalogOfferRepository
+                .findById(id)
+                .orElseThrow(() -> new MyEntityNotFoundException("CatalogOffer", id));
     }
 
-    public void save(CatalogOffer availableCarRepair, Long garageId) {
+    public CatalogOffer save(CatalogOffer catalogOffer, Long garageId) {
         Garage garage = garageService.getGarage(garageId);
-        availableCarRepair.setGarage(garage);
-        garage.getAvailableServices().add(availableCarRepair);
-        garageService.saveGarage(garage);
+        garage.getCatalogOffers().add(catalogOffer);
+        catalogOffer.setGarage(garage);
+        return catalogOfferRepository.save(catalogOffer);
     }
 
     public void delete(Long id) {
-        if (availableCarRepairRepository.existsById(id)) {
-            availableCarRepairRepository.deleteById(id);
+        if (catalogOfferRepository.existsById(id)) {
+            catalogOfferRepository.deleteById(id);
         } else {
-            throw new MyEntityNotFoundException("AvailableCarRepair", id);
+            throw new MyEntityNotFoundException("CatalogOffer", id);
         }
     }
 }

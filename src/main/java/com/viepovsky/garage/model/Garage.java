@@ -69,7 +69,7 @@ public class Garage extends BaseEntityAudit {
             targetEntity = CatalogOffer.class,
             mappedBy = "garage",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    private List<CatalogOffer> availableServices = new ArrayList<>();
+    private List<CatalogOffer> catalogOffers = new ArrayList<>();
 
     public Garage(String name, Address address) {
         this.name = name;
@@ -81,11 +81,11 @@ public class Garage extends BaseEntityAudit {
             Address address,
             List<Visit> visits,
             List<Schedule> garageSchedules,
-            List<CatalogOffer> availableServices) {
+            List<CatalogOffer> catalogOffers) {
         this.name = name;
         this.address = address;
         this.visits = visits;
         this.garageSchedules = garageSchedules;
-        this.availableServices = availableServices;
+        this.catalogOffers = catalogOffers;
     }
 }

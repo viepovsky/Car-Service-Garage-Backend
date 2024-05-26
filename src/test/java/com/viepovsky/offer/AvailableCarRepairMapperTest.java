@@ -29,7 +29,7 @@ class AvailableCarRepairMapperTest {
         //TODO fithis//new CatalogOffer(1L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), mockedGarage);
         when(mockedGarage.getId()).thenReturn(2L);
         //When
-        CatalogOfferDto mappedService = CATALOG_OFFER_MAPPER.mapToAvailableCarServiceDto(availableCarRepair);
+        CatalogOfferDto mappedService = CATALOG_OFFER_MAPPER.toCatalogDto(availableCarRepair);
         //Then
         assertEquals(1L, mappedService.getId());
         assertEquals("Testname", mappedService.getName());
@@ -59,7 +59,7 @@ class AvailableCarRepairMapperTest {
         //TODO fix this
         // new CatalogOffer(2L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), mockedGarage);
         //When
-        List<CatalogOfferDto> mappedList = CATALOG_OFFER_MAPPER.mapToAvailableCarServiceDtoList(List.of(availableCarRepair, availableCarRepair2));
+        List<CatalogOfferDto> mappedList = CATALOG_OFFER_MAPPER.toCatalogOffer(List.of(availableCarRepair, availableCarRepair2));
         //Then
         assertEquals(2, mappedList.size());
     }

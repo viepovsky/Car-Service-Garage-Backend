@@ -1,7 +1,9 @@
 package com.viepovsky.utility.mapper;
 
+import com.viepovsky.offer.dto.CatalogOfferCreateRequest;
 import com.viepovsky.offer.dto.CatalogOfferDto;
 import com.viepovsky.offer.model.CatalogOffer;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,29 +11,25 @@ import java.util.List;
 @Service
 public class CatalogOfferMapper {
 
-    public CatalogOfferDto mapToAvailableCarServiceDto(CatalogOffer availableCarRepair) {
-        //TODO fix this
-        return null;
-//        return new AvailableCarRepairDto(
-//                availableCarRepair.getId(),
-//                availableCarRepair.getName(),
-//                availableCarRepair.getDescription(),
-//                availableCarRepair.getPrice(),
-//                availableCarRepair.getProbableRepairTime(),
-//                availableCarRepair.getPremiumMakes(),
-//                availableCarRepair.getMakeMultiplier(),
-//                availableCarRepair.getGarage().getId()
-//        );
+    public CatalogOfferDto toCatalogDto(CatalogOffer catalogOffer) {
+        return new CatalogOfferDto(
+                catalogOffer.getId(),
+                catalogOffer.getName(),
+                catalogOffer.getDescription(),
+                catalogOffer.getPrice(),
+                catalogOffer.getProbableRepairTime(),
+                catalogOffer.getGarage().getId());
     }
 
-    public CatalogOffer toCatalogOffer(CatalogOfferDto availableCarRepairDto) {
-        //TODO fix this
-        return null;
+    public CatalogOffer toCatalogOffer(CatalogOfferCreateRequest catalogOfferCreateRequest) {
+        return new CatalogOffer(
+                catalogOfferCreateRequest.name(),
+                catalogOfferCreateRequest.description(),
+                catalogOfferCreateRequest.price(),
+                catalogOfferCreateRequest.probableRepairTime());
     }
 
-    public List<CatalogOfferDto> mapToAvailableCarServiceDtoList(List<CatalogOffer> availableCarRepairList) {
-        return availableCarRepairList.stream()
-                .map(this::mapToAvailableCarServiceDto)
-                .toList();
+    public List<CatalogOfferDto> toCatalogOffer(List<CatalogOffer> catalogOffers) {
+        return catalogOffers.stream().map(this::toCatalogDto).toList();
     }
 }
