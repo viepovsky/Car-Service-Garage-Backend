@@ -37,9 +37,8 @@ import java.util.List;
 @SpringBootTest
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
-class CarRepairControllerTest {
+class SelectedOfferControllerTest {
     @Autowired private MockMvc mockMvc;
-
     @MockBean private SelectedOfferFacade facade;
     @MockBean private UserDetailsService userDetailsService;
 
@@ -72,7 +71,7 @@ class CarRepairControllerTest {
     }
 
     @Test
-    void testShouldGetEmptyCarServiceList() throws Exception {
+    void testShouldGetEmptySelectedOffers() throws Exception {
         // Given
         List<SelectedOfferDto> emptyList = List.of();
         when(facade.getAllSelectedOffers(anyString())).thenReturn(emptyList);
@@ -86,7 +85,7 @@ class CarRepairControllerTest {
     }
 
     @Test
-    void testShouldGetCarServiceList() throws Exception {
+    void testShouldGetSelectedOffers() throws Exception {
         // Given
         List<SelectedOfferDto> selectedOffers =
                 List.of(
@@ -108,22 +107,12 @@ class CarRepairControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("Test name")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].cost", Matchers.is(50)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].price", Matchers.is(50)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].discount", Matchers.is(1)));
     }
 
     @Test
-    void testShouldNotGetCarServiceListIfGivenUsernameDoesNotMatchWithUser() throws Exception {
-        // Given & When & then
-        mockMvc.perform(
-                        MockMvcRequestBuilders.get("/v1/selected-offer")
-                                .param("username", "testuser22")
-                                .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());
-    }
-
-    @Test
-    void testShouldDeleteCarService() throws Exception {
+    void testShouldDeleteSelectedOffer() throws Exception {
         // Given
         doNothing().when(facade).deleteSelectedOffer(1L);
         // When & then

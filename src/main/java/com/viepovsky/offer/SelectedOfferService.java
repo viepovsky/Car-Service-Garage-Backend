@@ -35,7 +35,6 @@ public class SelectedOfferService {
         AppUser user = userService.getUser(username);
         // TODO fix it
         return null;
-        //        return carRepairRepository.findAllOfferSelected(user.getId());
     }
 
     public SelectedOffer getById(Long id) {

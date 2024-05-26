@@ -40,9 +40,8 @@ import java.util.List;
 @SpringBootTest
 @AutoConfigureMockMvc
 @MockBean(ApplicationScheduler.class)
-class AvailableCarRepairControllerTest {
+class CatalogOfferControllerTest {
     @Autowired private MockMvc mockMvc;
-
     @MockBean private CatalogOfferFacade facade;
     @MockBean private UserDetailsService userDetailsService;
 
@@ -79,12 +78,12 @@ class AvailableCarRepairControllerTest {
     }
 
     @Test
-    void testShouldGetEmptyListAvailableCarServices() throws Exception {
+    void testShouldGetEmptyListCatalogOffers() throws Exception {
         // Given
         when(facade.getAllCatalogOffers(1L)).thenReturn(List.of());
         // When & then
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/v1/available-car-service/1")
+                        MockMvcRequestBuilders.get("/v1/catalog-offer/1")
                                 .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(0)));
@@ -111,21 +110,27 @@ class AvailableCarRepairControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("Test service")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].cost", Matchers.is(50)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].price", Matchers.is(50)))
                 .andExpect(
-                        MockMvcResultMatchers.jsonPath("$[0].repairTimeInMinutes", Matchers.is(40)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].makeMultiplier", Matchers.is(1.2)));
+                        MockMvcResultMatchers.jsonPath("$[0].probableRepairTime", Matchers.is(40)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].garageId", Matchers.is(22)));
     }
 
     @Test
-    void testShouldCreateAvailableCarService() throws Exception {
+    void testShouldCreateCatalogOffer() throws Exception {
         // Given
         CatalogOfferCreateRequest catalogOfferCreateRequest =
                 new CatalogOfferCreateRequest(
                         "Test service", "Test description", BigDecimal.valueOf(50), 40);
-        doNothing()
-                .when(facade)
-                .createCatalogOffer(any(CatalogOfferCreateRequest.class), anyLong());
+        when(facade.createCatalogOffer(any(CatalogOfferCreateRequest.class), anyLong()))
+                .thenReturn(
+                        new CatalogOfferDto(
+                                1L,
+                                "Test service",
+                                "Test description",
+                                BigDecimal.valueOf(50),
+                                40,
+                                22L));
         Gson gson = new Gson();
         String jsonContent = gson.toJson(catalogOfferCreateRequest);
         // When & then
@@ -140,12 +145,12 @@ class AvailableCarRepairControllerTest {
     }
 
     @Test
-    void shouldDeleteAvailableCarService() throws Exception {
+    void shouldDeleteCatalogOffer() throws Exception {
         // Given
         doNothing().when(facade).deleteCatalogOffer(anyLong());
         // When & then
         mockMvc.perform(
-                        MockMvcRequestBuilders.delete("/v1/available-car-service/20")
+                        MockMvcRequestBuilders.delete("/v1/catalog-offer/20")
                                 .header("Authorization", "Bearer " + jwtTokenAdmin))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
