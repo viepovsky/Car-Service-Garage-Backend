@@ -17,50 +17,55 @@ import java.util.List;
 
 @Service
 public class SelectedOfferService {
-    private final SelectedOfferRepository carRepairRepository;
+    private final SelectedOfferRepository selectedOfferRepository;
     private final UserService userService;
-    private final VisitService bookingService;
+    private final VisitService visitService;
 
     @Autowired
-    public SelectedOfferService(@Lazy VisitService bookingService,
-                                UserService userService,
-                                SelectedOfferRepository carRepairRepository) {
-        this.carRepairRepository = carRepairRepository;
+    public SelectedOfferService(
+            @Lazy VisitService visitService,
+            UserService userService,
+            SelectedOfferRepository selectedOfferRepository) {
+        this.selectedOfferRepository = selectedOfferRepository;
         this.userService = userService;
-        this.bookingService = bookingService;
+        this.visitService = visitService;
     }
 
-    public List<SelectedOffer> getCarRepairs(String username) {
+    public List<SelectedOffer> getAllSelectedOffers(String username) {
         AppUser user = userService.getUser(username);
-        //TODO fix it
+        // TODO fix it
         return null;
-//        return carRepairRepository.findAllOfferSelected(user.getId());
+        //        return carRepairRepository.findAllOfferSelected(user.getId());
     }
 
-    public SelectedOffer getCarRepair(Long id) {
-        return carRepairRepository.findById(id)
-                .orElseThrow(() -> new MyEntityNotFoundException("CarRepair" + id));
+    public SelectedOffer getById(Long id) {
+        return selectedOfferRepository
+                .findById(id)
+                .orElseThrow(() -> new MyEntityNotFoundException("SelectedOffer" + id));
     }
 
-    public void deleteCarRepair(Long carRepairId) {
-        SelectedOffer carRepair = carRepairRepository.findById(carRepairId)
-                                                     .orElseThrow(() -> new MyEntityNotFoundException("CarRepair", carRepairId));
-        Visit booking = carRepair.getVisit();
-        if (booking.getSelectedOffers().size() > 1) {
-            LocalTime endHour = booking.getVisitEndTime();
-            endHour = endHour.minusMinutes(carRepair.getProbableRepairTime());
-            booking.setVisitEndTime(endHour);
+    public void delete(Long selectedOfferId) {
+        SelectedOffer selectedOffer =
+                selectedOfferRepository
+                        .findById(selectedOfferId)
+                        .orElseThrow(
+                                () -> new MyEntityNotFoundException("SelectedOffer", selectedOfferId));
+        Visit visit = selectedOffer.getVisit();
+        if (visit.getSelectedOffers().size() > 1) {
+            LocalTime endHour = visit.getVisitEndTime();
+            endHour = endHour.minusMinutes(selectedOffer.getProbableRepairTime());
+            visit.setVisitEndTime(endHour);
 
-            BigDecimal totalCost = booking.getTotalPrice();
-            totalCost = totalCost.subtract(carRepair.getPrice());
-            booking.setTotalPrice(totalCost);
+            BigDecimal totalCost = visit.getTotalPrice();
+            totalCost = totalCost.subtract(selectedOffer.getPrice());
+            visit.setTotalPrice(totalCost);
 
-            booking.getSelectedOffers().remove(carRepair);
-            carRepairRepository.delete(carRepair);
-            bookingService.save(booking);
+            visit.getSelectedOffers().remove(selectedOffer);
+            selectedOfferRepository.delete(selectedOffer);
+            visitService.save(visit);
         } else {
-            carRepairRepository.delete(carRepair);
-            bookingService.delete(booking);
+            selectedOfferRepository.delete(selectedOffer);
+            visitService.delete(visit);
         }
     }
 }

@@ -101,7 +101,7 @@ class BookingServiceTest {
         bookingList.add(booking);
         bookingList.add(bookedService);
 
-        when(carRepairService.getCarRepair(anyLong())).thenReturn(carRepair);
+        when(carRepairService.getById(anyLong())).thenReturn(carRepair);
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(bookedService));
         when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingList);
         //When

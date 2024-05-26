@@ -54,7 +54,7 @@ class CarRepairServiceTest {
         //TODO fix it
 //        when(carRepairRepository.findAllOfferSelected(1L)).thenReturn(carRepairList);
         //When
-        List<SelectedOffer> retrievedCarRepairList = carRepairService.getCarRepairs("username");
+        List<SelectedOffer> retrievedCarRepairList = carRepairService.getAllSelectedOffers("username");
         //Then
         assertEquals(1, retrievedCarRepairList.size());
     }
@@ -65,7 +65,7 @@ class CarRepairServiceTest {
         var carRepair = new SelectedOffer();
         when(selectedOfferRepository.findById(anyLong())).thenReturn(Optional.of(carRepair));
         //When
-        var retrievedCarRepair = carRepairService.getCarRepair(5L);
+        var retrievedCarRepair = carRepairService.getById(5L);
         //Then
         assertNotNull(retrievedCarRepair);
     }
@@ -83,7 +83,7 @@ class CarRepairServiceTest {
         doNothing().when(selectedOfferRepository).delete(carRepair);
         doNothing().when(bookingService).save(any(Visit.class));
         //When
-        carRepairService.deleteCarRepair(1L);
+        carRepairService.delete(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("CarService", 1L));
         assertEquals(1, booking.getSelectedOffers().size());
@@ -105,7 +105,7 @@ class CarRepairServiceTest {
         doNothing().when(selectedOfferRepository).delete(carRepair);
         doNothing().when(bookingService).delete(booking);
         //When
-        carRepairService.deleteCarRepair(1L);
+        carRepairService.delete(1L);
         //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("CarService", 1L));
         verify(selectedOfferRepository, times(1)).delete(carRepair);

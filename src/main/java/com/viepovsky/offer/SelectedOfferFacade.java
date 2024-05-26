@@ -1,7 +1,9 @@
 package com.viepovsky.offer;
 
+import com.viepovsky.offer.dto.SelectedOfferCreateRequest;
 import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.offer.model.SelectedOffer;
+import com.viepovsky.security.DataOwnershipValidator;
 import com.viepovsky.utility.mapper.SelectedOfferMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -16,17 +18,27 @@ import java.util.List;
 @RequiredArgsConstructor
 class SelectedOfferFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(SelectedOfferFacade.class);
-    private final SelectedOfferService carRepairService;
+    private final SelectedOfferService selectedOfferService;
     private final SelectedOfferMapper mapper;
+    private final DataOwnershipValidator dataOwnershipValidator;
 
-    public List<SelectedOfferDto> getCarRepairs(String username) {
-        LOGGER.info("Get car repairs endpoint used for username:{}", username);
-        List<SelectedOffer> carRepairList = carRepairService.getCarRepairs(username);
+    public List<SelectedOfferDto> getAllSelectedOffers(String username) {
+        dataOwnershipValidator.belongsToAuthenticatedUser(username);
+        LOGGER.info("Get all selected offers endpoint used for username:{}", username);
+        List<SelectedOffer> carRepairList = selectedOfferService.getAllSelectedOffers(username);
         return mapper.mapToCarServiceDtoList(carRepairList);
     }
 
-    public void deleteCarRepair(Long id) {
-        LOGGER.info("Delete car repair used for car repair id:{}", id);
-        carRepairService.deleteCarRepair(id);
+    public void deleteSelectedOffer(Long selectedOfferId) {
+        LOGGER.info("Delete selected offer used for selected offer id:{}", selectedOfferId);
+        SelectedOffer selectedOffer = selectedOfferService.getById(selectedOfferId);
+        dataOwnershipValidator.belongsToAuthenticatedUser(selectedOffer);
+        selectedOfferService.delete(selectedOfferId);
+    }
+
+    public SelectedOfferDto createSelectedOffer(
+            SelectedOfferCreateRequest request, String username) {
+        // TODO: implement this possibility
+        return new SelectedOfferDto();
     }
 }

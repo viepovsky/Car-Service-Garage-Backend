@@ -1,5 +1,6 @@
 package com.viepovsky.security;
 
+import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.utility.exceptions.ForbiddenRequestException;
 import com.viepovsky.vehicle.model.Vehicle;
 
@@ -31,5 +32,15 @@ public class DataOwnershipValidator {
             throw new ForbiddenRequestException();
         }
         LOGGER.info("Token belongs to given vehicle.");
+    }
+
+    public void belongsToAuthenticatedUser(SelectedOffer selectedOffer) {
+        LOGGER.info("Validating if token belongs to selected offer.");
+        String authTokenUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!authTokenUsername.equals(selectedOffer.getVisit().getUser().getUsername())) {
+            LOGGER.warn("Token doesn't belong to selected offer.");
+            throw new ForbiddenRequestException();
+        }
+        LOGGER.info("Token belongs to selected offer.");
     }
 }

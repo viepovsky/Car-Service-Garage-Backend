@@ -65,7 +65,7 @@ public class VisitService {
     }
 
     public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, Long serviceId) {
-        var carRepair = carRepairService.getCarRepair(serviceId);
+        var carRepair = carRepairService.getById(serviceId);
         var reservedBooking = getBookingById(carRepair.getVisit().getId());
         int repairDuration = reservedBooking.getSelectedOffers()
                 .stream()

@@ -33,10 +33,10 @@ class CarRepairFacadeTest {
         //Given
         List<SelectedOffer> mockedCarRepairList = List.of(Mockito.mock(SelectedOffer.class));
         List<SelectedOfferDto> mockedCarRepairDtoList = List.of(Mockito.mock(SelectedOfferDto.class));
-        when(service.getCarRepairs("username")).thenReturn(mockedCarRepairList);
+        when(service.getAllSelectedOffers("username")).thenReturn(mockedCarRepairList);
         when(mapper.mapToCarServiceDtoList(mockedCarRepairList)).thenReturn(mockedCarRepairDtoList);
         //When
-        List<SelectedOfferDto> retrievedList = facade.getCarRepairs("username");
+        List<SelectedOfferDto> retrievedList = facade.getAllSelectedOffers("username");
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -45,11 +45,11 @@ class CarRepairFacadeTest {
     @Test
     void shouldDeleteCarService() {
         //Given
-        doNothing().when(service).deleteCarRepair(1L);
+        doNothing().when(service).delete(1L);
         //When
-        facade.deleteCarRepair(1L);
+        facade.deleteSelectedOffer(1L);
         //Then
-        verify(service, times(1)).deleteCarRepair(1L);
+        verify(service, times(1)).delete(1L);
     }
 
 }
