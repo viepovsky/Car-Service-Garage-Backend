@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 import com.viepovsky.BaseIntegrationTest;
 import com.viepovsky.garage.dto.AddressCreateRequest;
 import com.viepovsky.garage.dto.AddressDto;
@@ -32,6 +34,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -146,21 +149,15 @@ class IntegrationGarageTest extends BaseIntegrationTest {
         Gson gson =
                 new GsonBuilder()
                         .registerTypeAdapter(
-                                LocalTime.class,
-                                (JsonDeserializer<LocalTime>)
-                                        (json, type, jsonDeserializationContext) ->
-                                                ZonedDateTime.parse(
-                                                                json.getAsJsonPrimitive()
-                                                                        .getAsString())
-                                                        .toLocalTime())
-                        .registerTypeAdapter(
                                 LocalDate.class,
-                                (JsonDeserializer<LocalDate>)
-                                        (json, type, jsonDeserializationContext) ->
-                                                ZonedDateTime.parse(
-                                                                json.getAsJsonPrimitive()
-                                                                        .getAsString())
-                                                        .toLocalDate())
+                                (JsonSerializer<LocalDate>)
+                                        (src, type, jsonSerializationContext) ->
+                                                new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+                        .registerTypeAdapter(
+                                LocalTime.class,
+                                (JsonSerializer<LocalTime>)
+                                        (src, type, jsonSerializationContext) ->
+                                                new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_TIME)))
                         .create();
         String jsonRequest = gson.toJson(scheduleCreateRequest);
 
