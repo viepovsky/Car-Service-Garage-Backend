@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 import com.viepovsky.BaseIntegrationTest;
@@ -23,6 +22,7 @@ import com.viepovsky.user.dto.AuthenticationUserRequest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,9 +33,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 class IntegrationGarageTest extends BaseIntegrationTest {
@@ -128,7 +127,7 @@ class IntegrationGarageTest extends BaseIntegrationTest {
                 REST_CLIENT
                         .get()
                         .uri(url.build().toUri())
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAdminToken)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUserToken)
                         .retrieve()
                         .toEntity(GarageDto.class);
 
@@ -138,7 +137,7 @@ class IntegrationGarageTest extends BaseIntegrationTest {
 
     @Test
     @Order(5)
-    void shouldCreateSchedule() throws JsonProcessingException {
+    void shouldCreateSchedule() {
         ScheduleCreateRequest scheduleCreateRequest =
                 ScheduleCreateRequest.builder()
                         .day(LocalDate.now())
@@ -152,12 +151,16 @@ class IntegrationGarageTest extends BaseIntegrationTest {
                                 LocalDate.class,
                                 (JsonSerializer<LocalDate>)
                                         (src, type, jsonSerializationContext) ->
-                                                new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+                                                new JsonPrimitive(
+                                                        src.format(
+                                                                DateTimeFormatter.ISO_LOCAL_DATE)))
                         .registerTypeAdapter(
                                 LocalTime.class,
                                 (JsonSerializer<LocalTime>)
                                         (src, type, jsonSerializationContext) ->
-                                                new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_TIME)))
+                                                new JsonPrimitive(
+                                                        src.format(
+                                                                DateTimeFormatter.ISO_LOCAL_TIME)))
                         .create();
         String jsonRequest = gson.toJson(scheduleCreateRequest);
 
@@ -184,8 +187,37 @@ class IntegrationGarageTest extends BaseIntegrationTest {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(
-                "/v1/schedule/5000",
+                "/v1/garages/schedule/5000",
                 Objects.requireNonNull(response.getHeaders().getLocation()).getPath());
         assertEquals(expectedResponse, response.getBody());
+    }
+
+    @Test
+    @Order(6)
+    void shouldRetrieveSchedule() {
+        ScheduleDto expectedResponse =
+                ScheduleDto.builder()
+                        .id(5000L)
+                        .day(LocalDate.now())
+                        .openFrom(LocalTime.of(8, 0))
+                        .openTill(LocalTime.of(18, 0))
+                        .build();
+
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                        "http://localhost:"
+                                + port
+                                + "/v1/garages/schedule/"
+                                + expectedResponse.id());
+        ResponseEntity<List<ScheduleDto>> response =
+                REST_CLIENT
+                        .get()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUserToken)
+                        .retrieve()
+                        .toEntity(new ParameterizedTypeReference<>() {});
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedResponse, Objects.requireNonNull(response.getBody()).get(0));
     }
 }

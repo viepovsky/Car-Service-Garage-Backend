@@ -71,7 +71,7 @@ class GarageController {
             @Valid @RequestBody ScheduleCreateRequest request,
             @PathVariable @Min(1) Long garageId) {
         var createdSchedule = garageFacade.createSchedule(request, garageId);
-        return ResponseEntity.created(URI.create("/v1/schedule/" + garageId)).body(createdSchedule);
+        return ResponseEntity.created(URI.create("/v1/garages/schedule/" + garageId)).body(createdSchedule);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
