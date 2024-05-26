@@ -84,7 +84,7 @@ class AvailableCarRepairControllerTest {
     @Test
     void testShouldGetEmptyListAvailableCarServices() throws Exception {
         //Given
-        when(facade.getAvailableCarServices(1L)).thenReturn(List.of());
+        when(facade.getAllCatalogOffers(1L)).thenReturn(List.of());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/available-car-service/1")
@@ -97,7 +97,7 @@ class AvailableCarRepairControllerTest {
     void testShouldGetAllAvailableCarServices() throws Exception {
         //Given
         List<CatalogOfferDto> carServiceList = List.of(new CatalogOfferDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), 22L));
-        when(facade.getAvailableCarServices(1L)).thenReturn(carServiceList);
+        when(facade.getAllCatalogOffers(1L)).thenReturn(carServiceList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/available-car-service/1")
@@ -115,7 +115,7 @@ class AvailableCarRepairControllerTest {
     void testShouldCreateAvailableCarService() throws Exception {
         //Given
         CatalogOfferDto availableCarRepairDto = new CatalogOfferDto(1L, "Test service", "Test description", BigDecimal.valueOf(50), 40, "BMW", BigDecimal.valueOf(1.2), null);
-        doNothing().when(facade).createAvailableCarService(any(CatalogOfferDto.class), anyLong());
+        doNothing().when(facade).createCatalogOffer(any(CatalogOfferDto.class), anyLong());
         Gson gson = new Gson();
         String jsonContent = gson.toJson(availableCarRepairDto);
         //When & then
@@ -132,7 +132,7 @@ class AvailableCarRepairControllerTest {
     @Test
     void shouldDeleteAvailableCarService() throws Exception {
         //Given
-        doNothing().when(facade).deleteAvailableCarService(anyLong());
+        doNothing().when(facade).deleteCatalogOffer(anyLong());
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/v1/available-car-service/20")

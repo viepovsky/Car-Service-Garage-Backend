@@ -42,7 +42,7 @@ class AvailableCarRepairMapperTest {
         //Given
         CatalogOfferDto availableCarRepairDto = new CatalogOfferDto(1L, "Testname", "Testdesc", BigDecimal.valueOf(50), 60, "BMW, AUDI", BigDecimal.valueOf(1.2), 2L);
         //When
-        CatalogOffer mappedService = CATALOG_OFFER_MAPPER.mapToAvailableCarService(availableCarRepairDto);
+        CatalogOffer mappedService = CATALOG_OFFER_MAPPER.toCatalogOffer(availableCarRepairDto);
         //Then
         assertEquals(1L, mappedService.getId());
         assertEquals("Testname", mappedService.getName());

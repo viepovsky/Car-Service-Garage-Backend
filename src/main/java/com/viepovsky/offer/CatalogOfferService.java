@@ -19,7 +19,7 @@ public class CatalogOfferService {
 
     private final GarageService garageService;
 
-    public List<CatalogOffer> getAllAvailableCarRepair(Long garageId) {
+    public List<CatalogOffer> getAllCatalogOffers(Long garageId) {
         return availableCarRepairRepository.findAllByGarageId(garageId);
     }
 
@@ -28,14 +28,14 @@ public class CatalogOfferService {
                 .orElseThrow(() -> new MyEntityNotFoundException("AvailableCarService", id));
     }
 
-    public void saveAvailableCarRepair(CatalogOffer availableCarRepair, Long garageId) {
+    public void save(CatalogOffer availableCarRepair, Long garageId) {
         Garage garage = garageService.getGarage(garageId);
         availableCarRepair.setGarage(garage);
         garage.getAvailableServices().add(availableCarRepair);
         garageService.saveGarage(garage);
     }
 
-    public void deleteAvailableCarRepair(Long id) {
+    public void delete(Long id) {
         if (availableCarRepairRepository.existsById(id)) {
             availableCarRepairRepository.deleteById(id);
         } else {

@@ -24,7 +24,7 @@ public class CatalogOfferMapper {
 //        );
     }
 
-    public CatalogOffer mapToAvailableCarService(CatalogOfferDto availableCarRepairDto) {
+    public CatalogOffer toCatalogOffer(CatalogOfferDto availableCarRepairDto) {
         //TODO fix this
         return null;
     }

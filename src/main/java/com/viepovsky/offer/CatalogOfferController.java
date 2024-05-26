@@ -1,6 +1,6 @@
 package com.viepovsky.offer;
 
-
+import com.viepovsky.offer.dto.CatalogOfferCreateRequest;
 import com.viepovsky.offer.dto.CatalogOfferDto;
 
 import jakarta.validation.Valid;
@@ -28,7 +28,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/v1/available-car-service")
+@RequestMapping("/v1/catalog-offer")
 @RequiredArgsConstructor
 @Validated
 class CatalogOfferController {
@@ -36,23 +36,22 @@ class CatalogOfferController {
     private final CatalogOfferFacade availableCarRepairFacade;
 
     @GetMapping(path = "/{garageId}")
-    ResponseEntity<List<CatalogOfferDto>> getAvailableCarServices(@PathVariable @Min(1) Long garageId) {
-        return ResponseEntity.ok(availableCarRepairFacade.getAvailableCarServices(garageId));
+    ResponseEntity<List<CatalogOfferDto>> getAllCatalogOffers(@PathVariable @Min(1) Long garageId) {
+        return ResponseEntity.ok(availableCarRepairFacade.getAllCatalogOffers(garageId));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<String> createAvailableCarService(
-            @Valid @RequestBody CatalogOfferDto availableCarRepairDto,
-            @RequestParam(name = "garage-id") @NotNull @Min(1) Long garageId
-    ) {
-        availableCarRepairFacade.createAvailableCarService(availableCarRepairDto, garageId);
-        return ResponseEntity.created(URI.create("/v1/available-car-service/" + garageId)).build();
+    ResponseEntity<CatalogOfferDto> createCatalogOffer(
+            @Valid @RequestBody CatalogOfferCreateRequest request,
+            @RequestParam(name = "garage-id") @NotNull @Min(1) Long garageId) {
+        availableCarRepairFacade.createCatalogOffer(request, garageId);
+        return ResponseEntity.created(URI.create("/v1/catalog-offer/" + garageId)).build();
     }
 
-    @DeleteMapping(path = "/{availableCarServiceId}")
-    ResponseEntity<String> deleteAvailableCarService(@PathVariable @Min(1) Long availableCarServiceId) {
-        availableCarRepairFacade.deleteAvailableCarService(availableCarServiceId);
+    @DeleteMapping(path = "/{catalogOfferId}")
+    ResponseEntity<Void> deleteCatalogOffer(@PathVariable @Min(1) Long catalogOfferId) {
+        availableCarRepairFacade.deleteCatalogOffer(catalogOfferId);
         return ResponseEntity.ok().build();
     }
 }

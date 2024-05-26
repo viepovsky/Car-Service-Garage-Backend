@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum RepairStatus {
-    NOT_ASSIGNED("Not assigned to booking table."),
-    ASSIGNED("Assigned to booking table."),
+    NOT_ASSIGNED("Not assigned to visit table."),
+    ASSIGNED("Assigned to visit table."),
     AWAITING("Awaiting customer"),
     NOT_STARTED("Service not started"),
     STARTED("Service started"),

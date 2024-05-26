@@ -1,5 +1,6 @@
 package com.viepovsky.offer;
 
+import com.viepovsky.offer.dto.CatalogOfferCreateRequest;
 import com.viepovsky.offer.dto.CatalogOfferDto;
 import com.viepovsky.offer.model.CatalogOffer;
 import com.viepovsky.utility.mapper.CatalogOfferMapper;
@@ -15,27 +16,24 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 class CatalogOfferFacade {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(CatalogOfferFacade.class);
-
-    private final CatalogOfferService availableCarRepairService;
-
+    private final CatalogOfferService catalogOfferService;
     private final CatalogOfferMapper mapper;
 
-    public List<CatalogOfferDto> getAvailableCarServices(Long garageId) {
-        LOGGER.info("Get available car services enpoint used with garage id:{}", garageId);
-        List<CatalogOffer> availableCarRepairList = availableCarRepairService.getAllAvailableCarRepair(garageId);
-        return mapper.mapToAvailableCarServiceDtoList(availableCarRepairList);
+    public List<CatalogOfferDto> getAllCatalogOffers(Long garageId) {
+        LOGGER.info("Get all catalog offers endpoint used with garage id:{}", garageId);
+        List<CatalogOffer> catalogOffers = catalogOfferService.getAllCatalogOffers(garageId);
+        return mapper.mapToAvailableCarServiceDtoList(catalogOffers);
     }
 
-    public void createAvailableCarService(CatalogOfferDto availableCarRepairDto, Long garageId) {
-        LOGGER.info("Create available car service endpoint used with garage id:{}", garageId);
-        CatalogOffer availableCarRepair = mapper.mapToAvailableCarService(availableCarRepairDto);
-        availableCarRepairService.saveAvailableCarRepair(availableCarRepair, garageId);
+    public void createCatalogOffer(CatalogOfferCreateRequest catalogOfferCreateRequest, Long garageId) {
+        LOGGER.info("Create catalog offer service endpoint used with garage id:{}", garageId);
+        CatalogOffer catalogOffer = mapper.toCatalogOffer(catalogOfferCreateRequest);
+        catalogOfferService.save(catalogOffer, garageId);
     }
 
-    public void deleteAvailableCarService(Long id) {
-        LOGGER.info("Delete available car service endpoint used with id:{}", id);
-        availableCarRepairService.deleteAvailableCarRepair(id);
+    public void deleteCatalogOffer(Long id) {
+        LOGGER.info("Delete catalog offer service endpoint used with catalog offer id:{}", id);
+        catalogOfferService.delete(id);
     }
 }
