@@ -32,8 +32,8 @@ class WeatherApiController {
     @GetMapping
     ResponseEntity<CityForecastDto> getForecastForCityAndDate(
             @RequestParam(name = "city") @NotBlank String city,
-            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
-    ) {
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate date) {
         LOGGER.info("GET Endpoint getForecastForCityAndDate used.");
         CityForecastDto cityForecastDto = weatherApiService.getForecastForCityAndDate(city, date);
         return ResponseEntity.ok(cityForecastDto);
