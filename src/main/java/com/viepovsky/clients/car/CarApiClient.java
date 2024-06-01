@@ -2,8 +2,6 @@ package com.viepovsky.clients.car;
 
 import com.viepovsky.clients.car.dto.CarApiDto;
 
-import lombok.AllArgsConstructor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +21,15 @@ class CarApiClient {
     private static final String HEADER_KEY = "X-RapidAPI-Key";
     private static final String HEADER_HOST = "X-RapidAPI-Host";
     private static final Logger LOGGER = LoggerFactory.getLogger(CarApiClient.class);
+    private final CarApiConfig carApiConfig;
     private final RestClient restClient;
 
     @Autowired
     CarApiClient(CarApiConfig carApiConfig) {
+        this.carApiConfig = carApiConfig;
         restClient =
                 RestClient.builder()
                         .requestFactory(new HttpComponentsClientHttpRequestFactory())
-                        .baseUrl(carApiConfig.getCarApiEndpoint())
                         .defaultHeaders(
                                 httpHeaders -> {
                                     httpHeaders.set(HEADER_KEY, carApiConfig.getCarApiKey());
@@ -41,11 +40,11 @@ class CarApiClient {
 
     public List<CarApiDto> getCarModels(int year, String make, String type) {
         URI url =
-                UriComponentsBuilder.fromHttpUrl("")
+                UriComponentsBuilder.fromHttpUrl(carApiConfig.getCarApiEndpoint())
                         .queryParam("limit", 20)
                         .queryParam("page", 0)
                         .queryParam("year", year)
-                        .queryParam("vehicleMake", make)
+                        .queryParam("make", make)
                         .queryParam("type", type)
                         .build()
                         .encode()
