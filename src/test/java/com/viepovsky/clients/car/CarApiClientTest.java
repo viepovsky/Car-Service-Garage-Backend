@@ -1,62 +1,95 @@
 package com.viepovsky.clients.car;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viepovsky.clients.car.dto.CarApiDto;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
-class CarApiClientTest {
-    @InjectMocks
-    private CarApiClient client;
+@RestClientTest(CarApiClient.class)
+public class CarApiClientTest {
 
-    @Mock
-    private RestTemplate restTemplate;
+    @Autowired private CarApiClient carApiClient;
 
-    @Mock
-    private CarApiConfig config;
+    @Autowired private MockRestServiceServer mockServer;
+
+    @Autowired private ObjectMapper objectMapper;
+
+    private URI url;
 
     @BeforeEach
-    void beforeEach() {
-        when(config.getCarApiEndpoint()).thenReturn("https://test.com");
-        when(config.getCarApiKey()).thenReturn("testkey");
-        when(config.getCarApiHost()).thenReturn("testhost");
+    public void setUp() throws Exception {
+        int year = 2021;
+        String make = "Tesla";
+        String type = "Sedan";
+        url =
+                UriComponentsBuilder.fromHttpUrl("https://api.example.com/cars")
+                        .queryParam("limit", 20)
+                        .queryParam("page", 0)
+                        .queryParam("year", year)
+                        .queryParam("make", make)
+                        .queryParam("type", type)
+                        .build()
+                        .encode()
+                        .toUri();
+
+        String detailsString = objectMapper.writeValueAsString(new CarApiDto("Tesla S"));
+
+        this.mockServer
+                .expect(requestTo(url))
+                .andRespond(withSuccess(detailsString, MediaType.APPLICATION_JSON));
+    }
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public CarApiConfig carApiConfig() {
+            CarApiConfig config = new CarApiConfig();
+            config.setCarApiEndpoint("https://api.example.com/cars");
+            config.setCarApiKey("api-key");
+            config.setCarApiHost("api-host");
+            return config;
+        }
+
+        @Bean
+        public RestClient restClient() {
+            return RestClient.create();
+        }
+
+        @Bean
+        public MockRestServiceServer mockRestServiceServer(RestClient restClient) {
+            return MockRestServiceServer.createServer(restClient);
+        }
     }
 
     @Test
-    public void testGetCarModels() throws URISyntaxException {
-        //Given
-        CarApiDto[] modelTable = new CarApiDto[2];
-        modelTable[0] = new CarApiDto("3 Series");
-        modelTable[1] = new CarApiDto("5 Series");
+    public void testGetCarModels() {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-RapidAPI-Key", config.getCarApiKey());
-        headers.set("X-RapidAPI-Host", config.getCarApiHost());
-        HttpEntity<String> requestEntityHeaders = new HttpEntity<>(headers);
+        String jsonResponse = "[{\"model\":\"Model S\"}, {\"model\":\"Model 3\"}]";
 
-        ResponseEntity<CarApiDto[]> response = new ResponseEntity<>(modelTable, HttpStatus.OK);
+        mockServer
+                .expect(requestTo(url))
+                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
 
-        URI url = new URI("https://test.com?limit=20&page=0&year=2020&make=BMW&type=Sedan");
-        when(restTemplate.exchange(url, HttpMethod.GET, requestEntityHeaders, CarApiDto[].class)).thenReturn(response);
-        //When
-        List<CarApiDto> retrievedList = client.getCarModels(2020, "BMW", "Sedan");
-        //Then
-        assertFalse(retrievedList.isEmpty());
-        assertEquals("3 Series", retrievedList.get(0).model());
-        assertEquals("5 Series", retrievedList.get(1).model());
+        List<CarApiDto> carModels = carApiClient.getCarModels(year, make, type);
+
+        assertEquals(2, carModels.size());
+        assertEquals("Model S", carModels.get(0).model());
+        assertEquals("Model 3", carModels.get(1).model());
     }
 }
