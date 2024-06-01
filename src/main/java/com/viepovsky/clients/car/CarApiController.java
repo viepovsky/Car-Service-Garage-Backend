@@ -28,8 +28,7 @@ class CarApiController {
     ResponseEntity<List<String>> getCarModels(
             @RequestParam @Min(1900) Integer year,
             @RequestParam @NotBlank String make,
-            @RequestParam @NotBlank String type
-    ) {
+            @RequestParam @NotBlank String type) {
         return ResponseEntity.ok(carApiService.getCarModels(year, make, type));
     }
 }
