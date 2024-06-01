@@ -17,9 +17,7 @@ import java.time.LocalDate;
 @Table(name = "FORECAST")
 class StoredForecast {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @Id @GeneratedValue private Long id;
 
     @Column(name = "forecast_day")
     private LocalDate date;
@@ -42,13 +40,14 @@ class StoredForecast {
     @Column(name = "city")
     private String city;
 
-    public StoredForecast(LocalDate date,
-                          String symbol,
-                          String symbolPhrase,
-                          int maxTemp,
-                          int minTemp,
-                          int maxWindSpeed,
-                          String city) {
+    public StoredForecast(
+            LocalDate date,
+            String symbol,
+            String symbolPhrase,
+            int maxTemp,
+            int minTemp,
+            int maxWindSpeed,
+            String city) {
         this.date = date;
         this.symbol = symbol;
         this.symbolPhrase = symbolPhrase;
