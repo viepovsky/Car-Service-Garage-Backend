@@ -43,9 +43,8 @@ class WeatherApiClientTest {
     @Test
     void testGet14DaysForecast() throws URISyntaxException {
         //Given
-        ForecastDto forecastDto = new ForecastDto();
         ForecastsDto forecastsDto = new ForecastsDto(LocalDate.of(2022, 10, 15), "R20", "Raining", 8, 2, 30);
-        forecastDto.setForecasts(List.of(forecastsDto));
+        ForecastDto forecastDto = new ForecastDto(List.of(forecastsDto));
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-RapidAPI-Key", config.getWeatherApiKey());
@@ -61,17 +60,16 @@ class WeatherApiClientTest {
         //When
         ForecastDto retrievedForecast = client.get14DaysForecast(12050);
         //Then
-        assertEquals(1, retrievedForecast.getForecasts().size());
-        assertEquals(LocalDate.of(2022, 10, 15), retrievedForecast.getForecasts().get(0).getDate());
-        assertEquals("Raining", retrievedForecast.getForecasts().get(0).getSymbolPhrase());
+        assertEquals(1, retrievedForecast.forecasts().size());
+        assertEquals(LocalDate.of(2022, 10, 15), retrievedForecast.forecasts().get(0).date());
+        assertEquals("Raining", retrievedForecast.forecasts().get(0).symbolPhrase());
     }
 
     @Test
     void testGetIdForCityName() throws URISyntaxException {
         //Given
-        LocationDto locationDto = new LocationDto();
         LocationsDto locationsDto = new LocationsDto(12050);
-        locationDto.setLocations(List.of(locationsDto));
+        LocationDto locationDto = new LocationDto(List.of(locationsDto));
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-RapidAPI-Key", config.getWeatherApiKey());
@@ -87,7 +85,7 @@ class WeatherApiClientTest {
         //When
         LocationDto retrievedLocationDto = client.getIdForCityName("Poznan");
         //Then
-        assertEquals(1, retrievedLocationDto.getLocations().size());
-        assertEquals(12050, retrievedLocationDto.getLocations().get(0).getCityId());
+        assertEquals(1, retrievedLocationDto.locations().size());
+        assertEquals(12050, retrievedLocationDto.locations().get(0).cityId());
     }
 }

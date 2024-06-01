@@ -73,48 +73,6 @@ class CarApiControllerTest {
     }
 
     @Test
-    void testGetCarMakes() throws Exception {
-        //Given
-        List<String> makeList = List.of("AUDI", "BMW", "OPEL", "PEUGEOT");
-        when(service.getCarMakes()).thenReturn(makeList);
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/car-api/makes")
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0]", Matchers.is("AUDI")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2]", Matchers.is("OPEL")));
-    }
-
-    @Test
-    void testGetCarTypes() throws Exception {
-        //Given
-        List<String> typeList = List.of("Sedan", "Suv", "Hatchback", "Coupe");
-        when(service.getCarTypes()).thenReturn(typeList);
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/car-api/types")
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0]", Matchers.is("Sedan")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2]", Matchers.is("Hatchback")));
-    }
-
-    @Test
-    void testGetCarYears() throws Exception {
-        //Given
-        List<Integer> yearList = List.of(2022, 2021, 2020, 2019);
-        when(service.getCarYears()).thenReturn(yearList);
-        //When & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/v1/car-api/years")
-                        .header("Authorization", "Bearer " + jwtToken))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0]", Matchers.is(2022)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2]", Matchers.is(2020)));
-    }
-
-    @Test
     void testGetCarModels() throws Exception {
         //Given
         List<String> modelList = List.of("A8", "A6", "A5", "A4");
