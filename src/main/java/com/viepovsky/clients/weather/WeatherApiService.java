@@ -22,12 +22,13 @@ public class WeatherApiService {
     private final StoredForecastRepository storedForecastRepository;
     private final ForecastMapper mapper;
 
-    public void getAndStore14DaysForecast(String city) {
+    public void getAndStore14DaysForecast(String city) throws InterruptedException {
         if (!storedForecastRepository.findAllByCity(city).isEmpty()) {
             storedForecastRepository.deleteAllByCity(city);
         }
         LocationDto locationDto = weatherApiClient.getIdForCityName(city);
         int cityId = locationDto.locations().get(0).cityId();
+        Thread.sleep(1000);
         ForecastDto forecastDto = weatherApiClient.get14DaysForecast(cityId);
         List<ForecastsDto> forecastsDtoList = forecastDto.forecasts();
         List<StoredForecast> storedForecastList =
