@@ -23,9 +23,7 @@ import java.util.List;
 
 @RestClientTest(CarApiClient.class)
 public class CarApiClientTest {
-
     @Autowired private CarApiClient carApiClient;
-
     @Autowired private MockRestServiceServer mockServer;
 
     @Autowired private ObjectMapper objectMapper;
