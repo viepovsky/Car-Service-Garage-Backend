@@ -3,6 +3,7 @@ package com.viepovsky.clients.car;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+import com.viepovsky.clients.car.dto.CarApiDto;
 import com.viepovsky.utility.scheduler.TimeKeeper;
 
 import org.junit.jupiter.api.DisplayName;

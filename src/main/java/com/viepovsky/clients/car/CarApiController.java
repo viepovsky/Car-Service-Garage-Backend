@@ -24,24 +24,9 @@ class CarApiController {
 
     private final CarApiService carApiService;
 
-    @GetMapping(path = "/makes")
-    ResponseEntity<List<String>> getCarMakes() {
-        return ResponseEntity.ok(carApiService.getCarMakes());
-    }
-
-    @GetMapping(path = "/types")
-    ResponseEntity<List<String>> getCarTypes() {
-        return ResponseEntity.ok(carApiService.getCarTypes());
-    }
-
-    @GetMapping(path = "/years")
-    ResponseEntity<List<Integer>> getCarYears() {
-        return ResponseEntity.ok(carApiService.getCarYears());
-    }
-
     @GetMapping
     ResponseEntity<List<String>> getCarModels(
-            @RequestParam @Min(1950) Integer year,
+            @RequestParam @Min(1900) Integer year,
             @RequestParam @NotBlank String make,
             @RequestParam @NotBlank String type
     ) {

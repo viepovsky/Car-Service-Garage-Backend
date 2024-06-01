@@ -1,5 +1,6 @@
 package com.viepovsky.clients.car;
 
+import com.viepovsky.clients.car.dto.CarApiDto;
 import com.viepovsky.utility.scheduler.TimeKeeper;
 
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,7 @@ public class CarApiService {
             LOGGER.error("There occurred problem while thread sleeping. Message:{}", e.getMessage());
         }
         return carApiDtoList.stream()
-                .map(CarApiDto::getModel)
+                .map(CarApiDto::model)
                 .toList();
     }
 }

@@ -1,12 +1,12 @@
 package com.viepovsky.clients.car;
 
+import com.viepovsky.clients.car.dto.CarApiDto;
 
 import lombok.AllArgsConstructor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
@@ -20,13 +20,19 @@ import java.util.Objects;
 @Component
 @AllArgsConstructor
 class CarApiClient {
+    private static final String HEADER_KEY = "X-RapidAPI-Key";
+    private static final String HEADER_HOST = "X-RapidAPI-Host";
     private static final Logger LOGGER = LoggerFactory.getLogger(CarApiClient.class);
     private final CarApiConfig carApiConfig;
     private final RestClient restClient =
             RestClient.builder()
                     .requestFactory(new HttpComponentsClientHttpRequestFactory())
                     .baseUrl(carApiConfig.getCarApiEndpoint())
-                    .defaultHeaders(httpHeaders -> headersBuild())
+                    .defaultHeaders(
+                            httpHeaders -> {
+                                httpHeaders.set(HEADER_KEY, carApiConfig.getCarApiKey());
+                                httpHeaders.set(HEADER_HOST, carApiConfig.getCarApiHost());
+                            })
                     .build();
 
     public List<CarApiDto> getCarModels(int year, String make, String type) {
@@ -52,12 +58,5 @@ class CarApiClient {
         LOGGER.info(
                 "Retrieved model list with size {}", Objects.requireNonNull(responseBody).size());
         return responseBody;
-    }
-
-    private HttpHeaders headersBuild() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-RapidAPI-Key", carApiConfig.getCarApiKey());
-        headers.set("X-RapidAPI-Host", carApiConfig.getCarApiHost());
-        return headers;
     }
 }
