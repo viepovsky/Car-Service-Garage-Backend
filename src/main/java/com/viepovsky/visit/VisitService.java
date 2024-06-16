@@ -33,17 +33,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VisitService {
     private static final Logger LOGGER = LoggerFactory.getLogger(VisitService.class);
-
     private final VisitRepository bookingRepository;
-
     private final GarageService garageService;
-
     private final SelectedOfferService carRepairService;
-
     private final VehicleService carService;
-
     private final UserService userService;
-
     private final CatalogOfferService availableCarRepairService;
 
     public List<Visit> getAllBookings() {

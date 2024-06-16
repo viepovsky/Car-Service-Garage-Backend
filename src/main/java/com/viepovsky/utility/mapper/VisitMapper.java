@@ -12,7 +12,6 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class VisitMapper {
-
     private GarageMapper garageMapper;
 
     public VisitOldDto mapToBookingDto(Visit booking) {
