@@ -1,6 +1,7 @@
 package com.viepovsky.visit;
 
 import com.viepovsky.visit.dto.VisitDto;
+import com.viepovsky.visit.dto.VisitOldDto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -46,7 +47,7 @@ class VisitController {
     }
 
     @GetMapping
-    ResponseEntity<List<VisitDto>> getBookings(@RequestParam(name = "name") @NotBlank String username) {
+    ResponseEntity<List<VisitOldDto>> getBookings(@RequestParam(name = "name") @NotBlank String username) {
         String usernameFromToken = SecurityContextHolder.getContext().getAuthentication().getName();
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

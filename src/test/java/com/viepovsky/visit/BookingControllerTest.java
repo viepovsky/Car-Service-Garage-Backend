@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.utility.scheduler.ApplicationScheduler;
-import com.viepovsky.visit.dto.VisitDto;
+import com.viepovsky.visit.dto.VisitOldDto;
 import com.viepovsky.visit.model.VisitStatus;
 
 import io.jsonwebtoken.Jwts;
@@ -86,7 +86,7 @@ class BookingControllerTest {
     @Test
     void shouldGetEmptyListBookings() throws Exception {
         //Given
-        List<VisitDto> bookingDtoList = List.of();
+        List<VisitOldDto> bookingDtoList = List.of();
         when(facade.getBookingsByUsername(anyString())).thenReturn(bookingDtoList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
@@ -100,7 +100,7 @@ class BookingControllerTest {
     @Test
     void shouldGetBookings() throws Exception {
         //Given
-        List<VisitDto> bookingDtoList = List.of(new VisitDto(1L, VisitStatus.WAITING_FOR_CUSTOMER.getStatusName(), LocalDate.of(2022, 12, 30), LocalTime.of(10, 0), LocalTime.of(11, 0), BigDecimal.valueOf(50), null, null));
+        List<VisitOldDto> bookingDtoList = List.of(new VisitOldDto(1L, VisitStatus.WAITING_FOR_CUSTOMER.getStatusName(), LocalDate.of(2022, 12, 30), LocalTime.of(10, 0), LocalTime.of(11, 0), BigDecimal.valueOf(50), null, null));
         when(facade.getBookingsByUsername(anyString())).thenReturn(bookingDtoList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders

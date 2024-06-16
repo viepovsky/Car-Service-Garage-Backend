@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import com.viepovsky.utility.mapper.VisitMapper;
-import com.viepovsky.visit.dto.VisitDto;
+import com.viepovsky.visit.dto.VisitOldDto;
 import com.viepovsky.visit.model.Visit;
 
 import org.junit.jupiter.api.Test;
@@ -33,12 +33,12 @@ class BookingFacadeTest {
     void shouldGetBookingsForGivenDateAndGarageId() {
         //Given
         var booking = new Visit();
-        var bookingDto = new VisitDto();
+        var bookingDto = new VisitOldDto();
 
         when(service.getVisitsForGarageAndDate(anyLong(), any(LocalDate.class))).thenReturn(List.of(booking));
         when(mapper.mapToBookingDtoList(anyList())).thenReturn(List.of(bookingDto));
         //When
-        List<VisitDto> retrievedList = facade.getVisitsForGarageAndDate(5L, LocalDate.now());
+        List<VisitOldDto> retrievedList = facade.getVisitsForGarageAndDate(5L, LocalDate.now());
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -48,12 +48,12 @@ class BookingFacadeTest {
     void shouldGetBookingsForGivenUsername() {
         //Given
         var booking = new Visit();
-        var bookingDto = new VisitDto();
+        var bookingDto = new VisitOldDto();
 
         when(service.getAllBookingsByUsername(anyString())).thenReturn(List.of(booking));
         when(mapper.mapToBookingDtoList(anyList())).thenReturn(List.of(bookingDto));
         //When
-        List<VisitDto> retrievedList = facade.getBookingsByUsername("username");
+        List<VisitOldDto> retrievedList = facade.getBookingsByUsername("username");
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());

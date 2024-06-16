@@ -2,6 +2,7 @@ package com.viepovsky.visit;
 
 import com.viepovsky.utility.mapper.VisitMapper;
 import com.viepovsky.visit.dto.VisitDto;
+import com.viepovsky.visit.dto.VisitOldDto;
 import com.viepovsky.visit.model.Visit;
 
 import lombok.RequiredArgsConstructor;
@@ -17,19 +18,17 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 class VisitFacade {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(VisitFacade.class);
-
     private final VisitService bookingService;
-
     private final VisitMapper mapper;
 
     public List<VisitDto> getVisitsForGarageAndDate(Long garageId, LocalDate date) {
-        List<Visit> bookingList = bookingService.getVisitsForGarageAndDate(garageId, date);
-        return mapper.mapToBookingDtoList(bookingList);
+        LOGGER.info("Retrieving info about visits for garage id:{}, and date:{}", garageId, date);
+        List<Visit> visits = bookingService.getVisitsForGarageAndDate(garageId, date);
+        return mapper.toVisitDto(visits);
     }
 
-    public List<VisitDto> getBookingsByUsername(String username) {
+    public List<VisitOldDto> getBookingsByUsername(String username) {
         List<Visit> bookingList = bookingService.getAllBookingsByUsername(username);
         return mapper.mapToBookingDtoList(bookingList);
     }
