@@ -2,6 +2,7 @@ package com.viepovsky.utility.mapper;
 
 import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.visit.dto.VisitDto;
+import com.viepovsky.visit.dto.VisitFullDetailDto;
 import com.viepovsky.visit.dto.VisitOldDto;
 import com.viepovsky.visit.model.Visit;
 import lombok.AllArgsConstructor;
@@ -48,5 +49,22 @@ public class VisitMapper {
                 .toList();
     }
 
-    ;
+    public VisitFullDetailDto toFullDetailVisitDto(Visit visit) {
+        return new VisitFullDetailDto(
+                visit.getId(),
+                visit.getVisitStartDate(),
+                visit.getVisitStartTime(),
+                visit.getVisitEndDate(),
+                visit.getVisitEndTime(),
+                visit.getLicensePlate(),
+                visit.getTotalPrice(),
+                visit.getStatus().name(),
+                visit.getSelectedOffers().stream().map(SelectedOffer::getId).toList(),
+                visit.getGarage().getId(),
+                visit.getVehicle().getId());
+    }
+
+    public List<VisitFullDetailDto> toFullDetailVisitDto(List<Visit> visits) {
+        return visits.stream().map(this::toFullDetailVisitDto).toList();
+    }
 }

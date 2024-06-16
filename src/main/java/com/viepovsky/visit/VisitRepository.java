@@ -23,8 +23,8 @@ interface VisitRepository extends JpaRepository<Visit, Long> {
             @Param("garageId") Long garageId, @Param("date") LocalDate date);
 
     //    List<Booking> findBookingsByCarRepairListUserId(Long userId);
-    @Query("SELECT v FROM Visit v")
-    List<Visit> findBookingsByCarRepairList(Long valueToChangeTODO);
+    @Query("SELECT v FROM Visit v WHERE v.user.id = :userId")
+    List<Visit> getAllVisits(@Param("userId") Long userId);
 
     // TODO FIX THIS
 

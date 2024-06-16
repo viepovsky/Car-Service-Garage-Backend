@@ -33,7 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VisitService {
     private static final Logger LOGGER = LoggerFactory.getLogger(VisitService.class);
-    private final VisitRepository bookingRepository;
+    private final VisitRepository visitRepository;
     private final GarageService garageService;
     private final SelectedOfferService carRepairService;
     private final VehicleService carService;
@@ -41,21 +41,21 @@ public class VisitService {
     private final CatalogOfferService availableCarRepairService;
 
     public List<Visit> getAllBookings() {
-        return bookingRepository.findAll();
+        return visitRepository.findAll();
     }
 
-    public List<Visit> getAllBookingsByUsername(String username) {
-        AppUser user = userService.getUser(username);
-        return bookingRepository.findBookingsByCarRepairList(user.getId());
+    public List<Visit> getAllVisits(String username) {
+        Long userId = userService.getUser(username).getId();
+        return visitRepository.getAllVisits(userId);
     }
 
     public List<Visit> getVisitsForGarageAndDate(Long garageId, LocalDate date) {
-        return bookingRepository.getVisitsForGarageAndDate(garageId, date);
+        return visitRepository.getVisitsForGarageAndDate(garageId, date);
     }
 
     private Visit getBookingById(Long id) {
-        return bookingRepository.findById(id)
-                .orElseThrow(() -> new MyEntityNotFoundException("Booking" + id));
+        return visitRepository.findById(id)
+                              .orElseThrow(() -> new MyEntityNotFoundException("Booking" + id));
     }
 
     public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, Long serviceId) {
@@ -68,7 +68,7 @@ public class VisitService {
         Long garageId = reservedBooking.getGarage().getId();
 
         LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Visit> allBookingsForDay = bookingRepository.getVisitsForGarageAndDate(garageId, date);
+        List<Visit> allBookingsForDay = visitRepository.getVisitsForGarageAndDate(garageId, date);
         allBookingsForDay.remove(reservedBooking);
 
         List<LocalTime> availableBookingTimes = checkAvailableBookingTimes(allBookingsForDay, date, repairDuration);
@@ -78,7 +78,7 @@ public class VisitService {
 
     public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
         LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Visit> bookingList = bookingRepository.getVisitsForGarageAndDate(garageId, date);
+        List<Visit> bookingList = visitRepository.getVisitsForGarageAndDate(garageId, date);
         return checkAvailableBookingTimes(bookingList, date, repairDuration);
     }
 
@@ -160,10 +160,10 @@ public class VisitService {
                                           LocalTime endHour,
                                           Long garageId) {
         Garage garage = garageService.getGarage(garageId);
-        List<Visit> bookingList = bookingRepository.findBookingsByDateAndStatusAndGarageId(date, VisitStatus.AVAILABLE, garageId);
+        List<Visit> bookingList = visitRepository.findBookingsByDateAndStatusAndGarageId(date, VisitStatus.AVAILABLE, garageId);
         if (!isGarageWorkingHoursPresent(bookingList)) {
             Visit booking = createWorkingHoursBooking(date, startHour, endHour, garage);
-            bookingRepository.save(booking);
+            visitRepository.save(booking);
         } else {
             List<Long> bookingIdList = bookingList.stream()
                     .map(Visit::getId)
@@ -189,14 +189,14 @@ public class VisitService {
     }
 
     public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) {
-        Visit booking = bookingRepository.findById(bookingId)
-                                         .orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
+        Visit booking = visitRepository.findById(bookingId)
+                                       .orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
         int repairTime = (int) Duration.between(booking.getVisitStartTime(), booking.getVisitEndTime()).toMinutes();
         booking.setVisitStartDate(date);
         booking.setVisitStartTime(startHour);
         booking.setVisitEndTime(startHour.plusMinutes(repairTime));
         LOGGER.info("Updated booking with values, day: " + date + ", time: " + startHour);
-        bookingRepository.save(booking);
+        visitRepository.save(booking);
     }
 
     public void createBooking(List<Long> selectedCarRepairIdList,
@@ -211,7 +211,7 @@ public class VisitService {
         List<LocalTime> availableBookingTimes = getAvailableBookingTimesByDayAndRepairDuration(date, repairDuration, garageId);
         if (availableBookingTimes.contains(startHour)) {
             Visit booking = createCarRepairBooking(date, startHour, repairDuration, garage);
-            bookingRepository.save(booking);
+            visitRepository.save(booking);
             saveBookingAndCarRepairsForCarAndUser(selectedCarRepairIdList, car, user, booking);
         } else {
             throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another day.");
@@ -269,7 +269,7 @@ public class VisitService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         booking.setTotalPrice(totalRepairCost);
         booking.getSelectedOffers().addAll(selectedCarRepairs);
-        bookingRepository.save(booking);
+        visitRepository.save(booking);
     }
 
     private void multiplyCarRepairCostIfCarIsPremiumMake(Vehicle car, CatalogOffer availableCarRepair) {
@@ -283,10 +283,10 @@ public class VisitService {
     }
 
     public void save(Visit booking) {
-        bookingRepository.save(booking);
+        visitRepository.save(booking);
     }
 
     public void delete(Visit booking) {
-        bookingRepository.delete(booking);
+        visitRepository.delete(booking);
     }
 }

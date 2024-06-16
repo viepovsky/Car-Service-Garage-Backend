@@ -74,9 +74,9 @@ class BookingServiceTest {
         AppUser mockedUser = Mockito.mock(AppUser.class);
         when(userService.getUser("username")).thenReturn(mockedUser);
         when(mockedUser.getId()).thenReturn(1L);
-        when(bookingRepository.findBookingsByCarRepairList(1L)).thenReturn(List.of(mockedBooking));
+        when(bookingRepository.getAllVisits(1L)).thenReturn(List.of(mockedBooking));
         //When
-        List<Visit> retrievedList = bookingService.getAllBookingsByUsername("username");
+        List<Visit> retrievedList = bookingService.getAllVisits("username");
         //Then
         assertEquals(1, retrievedList.size());
     }

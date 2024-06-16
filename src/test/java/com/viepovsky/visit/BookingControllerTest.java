@@ -87,7 +87,7 @@ class BookingControllerTest {
     void shouldGetEmptyListBookings() throws Exception {
         //Given
         List<VisitOldDto> bookingDtoList = List.of();
-        when(facade.getBookingsByUsername(anyString())).thenReturn(bookingDtoList);
+        when(facade.getAllVisits(anyString())).thenReturn(bookingDtoList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/bookings")
@@ -101,7 +101,7 @@ class BookingControllerTest {
     void shouldGetBookings() throws Exception {
         //Given
         List<VisitOldDto> bookingDtoList = List.of(new VisitOldDto(1L, VisitStatus.WAITING_FOR_CUSTOMER.getStatusName(), LocalDate.of(2022, 12, 30), LocalTime.of(10, 0), LocalTime.of(11, 0), BigDecimal.valueOf(50), null, null));
-        when(facade.getBookingsByUsername(anyString())).thenReturn(bookingDtoList);
+        when(facade.getAllVisits(anyString())).thenReturn(bookingDtoList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/bookings")
