@@ -35,10 +35,10 @@ class BookingFacadeTest {
         var booking = new Visit();
         var bookingDto = new VisitDto();
 
-        when(service.getBookingsByDateAndGarageId(any(LocalDate.class), anyLong())).thenReturn(List.of(booking));
+        when(service.getVisitsForGarageAndDate(anyLong(), any(LocalDate.class))).thenReturn(List.of(booking));
         when(mapper.mapToBookingDtoList(anyList())).thenReturn(List.of(bookingDto));
         //When
-        List<VisitDto> retrievedList = facade.getBookingsByDateAndGarageId(LocalDate.now(), 5L);
+        List<VisitDto> retrievedList = facade.getVisitsForGarageAndDate(5L, LocalDate.now());
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());

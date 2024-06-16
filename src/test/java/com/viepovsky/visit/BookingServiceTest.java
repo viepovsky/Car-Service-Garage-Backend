@@ -103,7 +103,7 @@ class BookingServiceTest {
 
         when(carRepairService.getById(anyLong())).thenReturn(carRepair);
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(bookedService));
-        when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingList);
+        when(bookingRepository.getVisitsForGarageAndDate(5L, localDate)).thenReturn(bookingList);
         //When
         List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 20L);
         //Then
@@ -118,7 +118,7 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         List<Visit> bookingList = List.of(new Visit(VisitStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null));
-        when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingList);
+        when(bookingRepository.getVisitsForGarageAndDate(5L, localDate)).thenReturn(bookingList);
         //When
         List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 50, 5L);
         //Then
@@ -133,7 +133,7 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         List<Visit> bookingsOfGivenDate = List.of();
-        when(bookingRepository.findBookingsByDateAndGarageId(localDate, 5L)).thenReturn(bookingsOfGivenDate);
+        when(bookingRepository.getVisitsForGarageAndDate(5L, localDate)).thenReturn(bookingsOfGivenDate);
         //When
         List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 50, 5L);
         //Then

@@ -24,8 +24,8 @@ class VisitFacade {
 
     private final VisitMapper mapper;
 
-    public List<VisitDto> getBookingsByDateAndGarageId(LocalDate date, Long garageId) {
-        List<Visit> bookingList = bookingService.getBookingsByDateAndGarageId(date, garageId);
+    public List<VisitDto> getVisitsForGarageAndDate(Long garageId, LocalDate date) {
+        List<Visit> bookingList = bookingService.getVisitsForGarageAndDate(garageId, date);
         return mapper.mapToBookingDtoList(bookingList);
     }
 

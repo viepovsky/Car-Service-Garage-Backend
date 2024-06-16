@@ -55,8 +55,8 @@ public class VisitService {
         return bookingRepository.findBookingsByCarRepairList(user.getId());
     }
 
-    public List<Visit> getBookingsByDateAndGarageId(LocalDate date, Long garageId) {
-        return bookingRepository.findBookingsByDateAndGarageId(date, garageId);
+    public List<Visit> getVisitsForGarageAndDate(Long garageId, LocalDate date) {
+        return bookingRepository.getVisitsForGarageAndDate(garageId, date);
     }
 
     private Visit getBookingById(Long id) {
@@ -74,7 +74,7 @@ public class VisitService {
         Long garageId = reservedBooking.getGarage().getId();
 
         LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Visit> allBookingsForDay = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
+        List<Visit> allBookingsForDay = bookingRepository.getVisitsForGarageAndDate(garageId, date);
         allBookingsForDay.remove(reservedBooking);
 
         List<LocalTime> availableBookingTimes = checkAvailableBookingTimes(allBookingsForDay, date, repairDuration);
@@ -84,7 +84,7 @@ public class VisitService {
 
     public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
         LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Visit> bookingList = bookingRepository.findBookingsByDateAndGarageId(date, garageId);
+        List<Visit> bookingList = bookingRepository.getVisitsForGarageAndDate(garageId, date);
         return checkAvailableBookingTimes(bookingList, date, repairDuration);
     }
 

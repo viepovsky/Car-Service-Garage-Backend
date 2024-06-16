@@ -31,19 +31,18 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/v1/bookings")
+@RequestMapping("/v1/visits")
 @RequiredArgsConstructor
 @Validated
 class VisitController {
-
-    private final VisitFacade bookingFacade;
+    private final VisitFacade visitFacade;
 
     @GetMapping(path = "/work-time")
-    ResponseEntity<List<VisitDto>> getBookings(
-            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(name = "garage-id") @Min(1) Long garageId
-    ) {
-        return ResponseEntity.ok(bookingFacade.getBookingsByDateAndGarageId(date, garageId));
+    ResponseEntity<List<VisitDto>> getVisitsForGarageAndDate(
+            @RequestParam(name = "garage-id") @Min(1) Long garageId,
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate date) {
+        return ResponseEntity.ok(visitFacade.getVisitsForGarageAndDate(garageId, date));
     }
 
     @GetMapping
@@ -52,7 +51,7 @@ class VisitController {
         if (!usernameFromToken.equals(username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        return ResponseEntity.ok(bookingFacade.getBookingsByUsername(username));
+        return ResponseEntity.ok(visitFacade.getBookingsByUsername(username));
     }
 
     @GetMapping(path = "/available-times")
@@ -62,7 +61,7 @@ class VisitController {
             @RequestParam(name = "garage-id", required = false, defaultValue = "0") Long garageId,
             @RequestParam(name = "car-service-id", required = false, defaultValue = "0") Long carServiceId
     ) {
-        return ResponseEntity.ok(bookingFacade.getAvailableBookingTimes(date, repairDuration, garageId, carServiceId));
+        return ResponseEntity.ok(visitFacade.getAvailableBookingTimes(date, repairDuration, garageId, carServiceId));
     }
 
     @PostMapping
@@ -74,7 +73,7 @@ class VisitController {
             @RequestParam(name = "car-id") @Min(1) Long carId,
             @RequestParam(name = "repair-duration") @NotNull int repairDuration
     ) {
-        bookingFacade.createBooking(selectedCarRepairIdList, date, startHour, garageId, carId, repairDuration);
+        visitFacade.createBooking(selectedCarRepairIdList, date, startHour, garageId, carId, repairDuration);
         return ResponseEntity.created(URI.create("")).build();
     }
 
@@ -86,7 +85,7 @@ class VisitController {
             @RequestParam(name = "end-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime endHour,
             @RequestParam(name = "garage-id") @Min(1) Long garageId
     ) {
-        bookingFacade.createWorkingHoursBooking(date, startHour, endHour, garageId);
+        visitFacade.createWorkingHoursBooking(date, startHour, endHour, garageId);
         return ResponseEntity.created(URI.create("/v1/bookings/work-time?date=" + date.toString() + "&garage-id=" + garageId)).build();
 
     }
@@ -97,7 +96,7 @@ class VisitController {
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour
     ) {
-        bookingFacade.updateBooking(bookingId, date, startHour);
+        visitFacade.updateBooking(bookingId, date, startHour);
         return ResponseEntity.noContent().build();
     }
 }
