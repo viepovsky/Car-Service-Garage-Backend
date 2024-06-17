@@ -51,13 +51,20 @@ class VisitController {
     }
 
     @GetMapping(path = "/available-times")
-    ResponseEntity<List<LocalTime>> getAvailableBookingTimes(
+    ResponseEntity<List<LocalTime>> getAvailableVisitTimes(
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(name = "repair-duration", required = false, defaultValue = "0") int repairDuration,
-            @RequestParam(name = "garage-id", required = false, defaultValue = "0") Long garageId,
-            @RequestParam(name = "car-service-id", required = false, defaultValue = "0") Long carServiceId
+            @RequestParam(name = "repair-duration") int repairDuration,
+            @RequestParam(name = "garage-id") Long garageId
     ) {
-        return ResponseEntity.ok(visitFacade.getAvailableBookingTimes(date, repairDuration, garageId, carServiceId));
+        return ResponseEntity.ok(visitFacade.getAvailableVisitTimes(date, repairDuration, garageId));
+    }
+
+    @GetMapping(path = "/available-times")
+    ResponseEntity<List<LocalTime>> getAvailableVisitTimes(
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+            @RequestParam(name = "selectedOfferId") Long selectedOfferId
+    ) {
+        return ResponseEntity.ok(visitFacade.getAvailableVisitTimes(date, selectedOfferId));
     }
 
     @PostMapping

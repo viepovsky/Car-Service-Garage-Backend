@@ -19,7 +19,7 @@ interface VisitRepository extends JpaRepository<Visit, Long> {
 
     @Query(
             "SELECT v FROM Visit v WHERE v.garage.id = :garageId AND :date BETWEEN v.visitStartDate AND v.visitEndDate")
-    List<Visit> getVisitsForGarageAndDate(
+    List<Visit> getAllVisitsForGarageAndDate(
             @Param("garageId") Long garageId, @Param("date") LocalDate date);
 
     //    List<Booking> findBookingsByCarRepairListUserId(Long userId);

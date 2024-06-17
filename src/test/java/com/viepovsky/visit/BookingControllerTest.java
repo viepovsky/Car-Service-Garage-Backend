@@ -128,7 +128,7 @@ class BookingControllerTest {
     void shouldGetAvailableBookingTimes() throws Exception {
         //Given
         List<LocalTime> localTimeList = List.of(LocalTime.of(10, 0), LocalTime.of(11, 0));
-        when(facade.getAvailableBookingTimes(LocalDate.of(2022, 10, 15), 50, 1L, 22L)).thenReturn(localTimeList);
+        when(facade.getAvailableVisitTimes(LocalDate.of(2022, 10, 15), 50, 1L, 22L)).thenReturn(localTimeList);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1/bookings/available-times")

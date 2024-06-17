@@ -63,9 +63,9 @@ class BookingFacadeTest {
     void shouldGetAvailableBookingTimesTwoParams() {
         //Given
         LocalDate date = LocalDate.now();
-        when(service.getAvailableBookingTimesByDayAndRepairDuration(any(LocalDate.class), anyLong())).thenReturn(List.of(LocalTime.now()));
+        when(service.getAvailableVisitTimes(any(LocalDate.class), anyLong())).thenReturn(List.of(LocalTime.now()));
         //When
-        List<LocalTime> retrievedList = facade.getAvailableBookingTimes(date, 50, 2L, 1L);
+        List<LocalTime> retrievedList = facade.getAvailableVisitTimes(date, 50, 2L, 1L);
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());
@@ -75,9 +75,9 @@ class BookingFacadeTest {
     void shouldGetAvailableBookingTimesThreeParams() {
         //Given
         LocalDate date = LocalDate.now();
-        when(service.getAvailableBookingTimesByDayAndRepairDuration(any(LocalDate.class), anyInt(), anyLong())).thenReturn(List.of(LocalTime.now()));
+        when(service.getAvailableVisitTimes(any(LocalDate.class), anyInt(), anyLong())).thenReturn(List.of(LocalTime.now()));
         //When
-        List<LocalTime> retrievedList = facade.getAvailableBookingTimes(date, 50, 2L, 0L);
+        List<LocalTime> retrievedList = facade.getAvailableVisitTimes(date, 50, 2L, 0L);
         //Then
         assertNotNull(retrievedList);
         assertEquals(1, retrievedList.size());

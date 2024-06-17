@@ -103,9 +103,9 @@ class BookingServiceTest {
 
         when(carRepairService.getById(anyLong())).thenReturn(carRepair);
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(bookedService));
-        when(bookingRepository.getVisitsForGarageAndDate(5L, localDate)).thenReturn(bookingList);
+        when(bookingRepository.getAllVisitsForGarageAndDate(5L, localDate)).thenReturn(bookingList);
         //When
-        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 20L);
+        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableVisitTimes(localDate, 20L);
         //Then
         List<LocalTime> expectedTimes = List.of(LocalTime.of(9, 50), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50));
         assertFalse(retrievedAvailableTimeList.isEmpty());
@@ -118,9 +118,9 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         List<Visit> bookingList = List.of(new Visit(VisitStatus.AVAILABLE, localDate, LocalTime.of(9, 50), LocalTime.of(11, 40), null, null, null));
-        when(bookingRepository.getVisitsForGarageAndDate(5L, localDate)).thenReturn(bookingList);
+        when(bookingRepository.getAllVisitsForGarageAndDate(5L, localDate)).thenReturn(bookingList);
         //When
-        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 50, 5L);
+        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableVisitTimes(localDate, 50, 5L);
         //Then
         List<LocalTime> expectedTimes = List.of(LocalTime.of(9, 50), LocalTime.of(10, 0), LocalTime.of(10, 10), LocalTime.of(10, 20), LocalTime.of(10, 30), LocalTime.of(10, 40), LocalTime.of(10, 50));
         assertFalse(retrievedAvailableTimeList.isEmpty());
@@ -133,9 +133,9 @@ class BookingServiceTest {
         //Given
         LocalDate localDate = LocalDate.now().plusDays(1);
         List<Visit> bookingsOfGivenDate = List.of();
-        when(bookingRepository.getVisitsForGarageAndDate(5L, localDate)).thenReturn(bookingsOfGivenDate);
+        when(bookingRepository.getAllVisitsForGarageAndDate(5L, localDate)).thenReturn(bookingsOfGivenDate);
         //When
-        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableBookingTimesByDayAndRepairDuration(localDate, 50, 5L);
+        List<LocalTime> retrievedAvailableTimeList = bookingService.getAvailableVisitTimes(localDate, 50, 5L);
         //Then
         assertTrue(retrievedAvailableTimeList.isEmpty());
     }
@@ -213,7 +213,7 @@ class BookingServiceTest {
         when(carService.getVehicle(anyLong())).thenReturn(car);
         when(userService.getUser(anyLong())).thenReturn(user);
         VisitService bookingService = Mockito.spy(new VisitService(bookingRepository, garageService, carRepairService, carService, userService, availableCarRepairService));
-        Mockito.doReturn(localTimeList).when(bookingService).getAvailableBookingTimesByDayAndRepairDuration(localDate, repairDuration, 5L);
+        Mockito.doReturn(localTimeList).when(bookingService).getAvailableVisitTimes(localDate, repairDuration, 5L);
         when(bookingRepository.save(any())).thenReturn(any());
         when(availableCarRepairService.getById(10L)).thenReturn(availableCarRepair);
         when(availableCarRepairService.getById(11L)).thenReturn(availableCarRepair2);

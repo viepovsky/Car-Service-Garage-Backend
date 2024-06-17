@@ -50,7 +50,7 @@ public class VisitService {
     }
 
     public List<Visit> getVisitsForGarageAndDate(Long garageId, LocalDate date) {
-        return visitRepository.getVisitsForGarageAndDate(garageId, date);
+        return visitRepository.getAllVisitsForGarageAndDate(garageId, date);
     }
 
     private Visit getBookingById(Long id) {
@@ -58,7 +58,7 @@ public class VisitService {
                               .orElseThrow(() -> new MyEntityNotFoundException("Booking" + id));
     }
 
-    public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, Long serviceId) {
+    public List<LocalTime> getAvailableVisitTimes(LocalDate date, Long serviceId) {
         var carRepair = carRepairService.getById(serviceId);
         var reservedBooking = getBookingById(carRepair.getVisit().getId());
         int repairDuration = reservedBooking.getSelectedOffers()
@@ -68,26 +68,26 @@ public class VisitService {
         Long garageId = reservedBooking.getGarage().getId();
 
         LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Visit> allBookingsForDay = visitRepository.getVisitsForGarageAndDate(garageId, date);
+        List<Visit> allBookingsForDay = visitRepository.getAllVisitsForGarageAndDate(garageId, date);
         allBookingsForDay.remove(reservedBooking);
 
-        List<LocalTime> availableBookingTimes = checkAvailableBookingTimes(allBookingsForDay, date, repairDuration);
+        List<LocalTime> availableBookingTimes = checkAndReturnAvailableVisitTimes(allBookingsForDay, date, repairDuration);
         availableBookingTimes.remove(reservedBooking.getVisitStartTime());
         return availableBookingTimes;
     }
 
-    public List<LocalTime> getAvailableBookingTimesByDayAndRepairDuration(LocalDate date, int repairDuration, Long garageId) {
+    public List<LocalTime> getAvailableVisitTimes(LocalDate date, int repairDuration, Long garageId) {
         LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
-        List<Visit> bookingList = visitRepository.getVisitsForGarageAndDate(garageId, date);
-        return checkAvailableBookingTimes(bookingList, date, repairDuration);
+        List<Visit> visitsOnDate = visitRepository.getAllVisitsForGarageAndDate(garageId, date);
+        return checkAndReturnAvailableVisitTimes(visitsOnDate, date, repairDuration);
     }
 
-    private List<LocalTime> checkAvailableBookingTimes(List<Visit> bookingList, LocalDate date, int repairDuration) {
-        if (!isGarageWorkingHoursPresent(bookingList)) {
+    private List<LocalTime> checkAndReturnAvailableVisitTimes(List<Visit> visitsOnDate, LocalDate date, int repairDuration) {
+        if (!isGarageWorkingHoursPresent(visitsOnDate)) {
             return new ArrayList<>();
         }
 
-        Visit garageWorkTime = bookingList.stream()
+        Visit garageWorkTime = visitsOnDate.stream()
                                           .filter(booking -> booking.getStatus() == VisitStatus.AVAILABLE)
                                           .findFirst()
                                           .orElse(null);
@@ -104,7 +104,7 @@ public class VisitService {
             garageOpenTime = roundUpTimeToNearest10Minutes();
         }
 
-        List<Visit> unavailableBookingTimeList = bookingList.stream()
+        List<Visit> unavailableBookingTimeList = visitsOnDate.stream()
                                                             .filter(booking -> booking.getStatus() == VisitStatus.UNAVAILABLE || booking.getStatus() == VisitStatus.WAITING_FOR_CUSTOMER)
                                                             .toList();
 
@@ -208,7 +208,7 @@ public class VisitService {
         Garage garage = garageService.getGarage(garageId);
         Vehicle car = carService.getVehicle(carId);
         AppUser user = userService.getUser(car.getUser().getId());
-        List<LocalTime> availableBookingTimes = getAvailableBookingTimesByDayAndRepairDuration(date, repairDuration, garageId);
+        List<LocalTime> availableBookingTimes = getAvailableVisitTimes(date, repairDuration, garageId);
         if (availableBookingTimes.contains(startHour)) {
             Visit booking = createCarRepairBooking(date, startHour, repairDuration, garage);
             visitRepository.save(booking);

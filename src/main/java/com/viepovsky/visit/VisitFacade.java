@@ -37,16 +37,23 @@ class VisitFacade {
         return mapper.toFullDetailVisitDto(visits);
     }
 
-    public List<LocalTime> getAvailableBookingTimes(LocalDate date,
-                                                    int repairDuration,
-                                                    Long garageId,
-                                                    Long carServiceId) {
-        LOGGER.info("Get available booking times endpoint used with day:{}, repair duration:{}, garage id:{}, car service id:{}", date, repairDuration, garageId, carServiceId);
-        if (carServiceId != 0L) {
-            return visitService.getAvailableBookingTimesByDayAndRepairDuration(date, carServiceId);
-        } else {
-            return visitService.getAvailableBookingTimesByDayAndRepairDuration(date, repairDuration, garageId);
-        }
+    public List<LocalTime> getAvailableVisitTimes(
+            LocalDate date, int repairDuration, Long garageId) {
+        LOGGER.info(
+                "Get available booking times endpoint used with day:{}, repair duration:{}, garage id:{}",
+                date,
+                repairDuration,
+                garageId);
+        return visitService.getAvailableVisitTimes(
+                date, repairDuration, garageId);
+    }
+
+    public List<LocalTime> getAvailableVisitTimes(LocalDate date, Long selectedOfferId) {
+        LOGGER.info(
+                "Get available booking times endpoint used with day:{}, selected offer id:{}",
+                date,
+                selectedOfferId);
+        return visitService.getAvailableVisitTimes(date, selectedOfferId);
     }
 
     public void createBooking(List<Long> selectedCarRepairIdList,
