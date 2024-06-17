@@ -66,14 +66,6 @@ class VisitFacade {
         visitService.createBooking(selectedCarRepairIdList, date, startHour, garageId, carId, repairDuration);
     }
 
-    public void createWorkingHoursBooking(LocalDate date,
-                                          LocalTime startHour,
-                                          LocalTime endHour,
-                                          Long garageId) {
-        LOGGER.info("Create working hours booking used for day:{}, garageId:{}", date, garageId);
-        visitService.createWorkingHoursBooking(date, startHour, endHour, garageId);
-    }
-
     public void updateBooking(Long bookingId,
                               LocalDate date,
                               LocalTime startHour) {

@@ -80,19 +80,6 @@ class VisitController {
         return ResponseEntity.created(URI.create("")).build();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(path = "/admin")
-    ResponseEntity<String> createWorkingHoursBooking(
-            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour,
-            @RequestParam(name = "end-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime endHour,
-            @RequestParam(name = "garage-id") @Min(1) Long garageId
-    ) {
-        visitFacade.createWorkingHoursBooking(date, startHour, endHour, garageId);
-        return ResponseEntity.created(URI.create("/v1/bookings/work-time?date=" + date.toString() + "&garage-id=" + garageId)).build();
-
-    }
-
     @PutMapping(path = "/{bookingId}")
     ResponseEntity<Void> updateBooking(
             @PathVariable @Min(1) Long bookingId,

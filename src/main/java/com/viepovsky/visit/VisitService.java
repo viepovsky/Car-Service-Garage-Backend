@@ -110,8 +110,8 @@ public class VisitService {
         }
     }
 
-    private boolean isGarageWorkingHoursPresent(List<Visit> bookingList) {
-        return bookingList.size() != 0;
+    private boolean isCloseTimeBeforeNow(LocalTime closeTime) {
+        return closeTime.isBefore(LocalTime.now());
     }
 
     private boolean isOpenTimeBeforeNow(LocalDate date, LocalTime openTime) {
@@ -123,10 +123,6 @@ public class VisitService {
         int minutes = timeNow.getMinute() + timeNow.getHour() * 60;
         minutes = ((minutes + 10) / 10) * 10;
         return LocalTime.of(minutes / 60, minutes % 60);
-    }
-
-    private boolean isCloseTimeBeforeNow(LocalTime closeTime) {
-        return closeTime.isBefore(LocalTime.now());
     }
 
     private List<LocalTime> getAvailableTimesForVisit(
@@ -151,39 +147,6 @@ public class VisitService {
             currentTime = currentTime.plusMinutes(10);
         }
         return availableVisitTimes;
-    }
-
-    public void createWorkingHoursBooking(LocalDate date,
-                                          LocalTime startHour,
-                                          LocalTime endHour,
-                                          Long garageId) {
-        Garage garage = garageService.getGarage(garageId);
-        List<Visit> bookingList = visitRepository.findBookingsByDateAndStatusAndGarageId(date, VisitStatus.AVAILABLE, garageId);
-        if (!isGarageWorkingHoursPresent(bookingList)) {
-            Visit booking = createWorkingHoursBooking(date, startHour, endHour, garage);
-            visitRepository.save(booking);
-        } else {
-            List<Long> bookingIdList = bookingList.stream()
-                    .map(Visit::getId)
-                    .toList();
-            throw new WrongInputDataException("Work times of given day: " + date + ", are already declared. " +
-                    "To change them you need to use PUT request or if there are more than one also DELETE request, check given booking id(s): " + bookingIdList);
-        }
-    }
-
-    private Visit createWorkingHoursBooking(LocalDate date,
-                                            LocalTime startHour,
-                                            LocalTime endHour,
-                                            Garage garage) {
-        return new Visit(
-                VisitStatus.AVAILABLE,
-                date,
-                startHour,
-                endHour,
-                BigDecimal.ZERO,
-                new ArrayList<>(),
-                garage
-        );
     }
 
     public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) {
