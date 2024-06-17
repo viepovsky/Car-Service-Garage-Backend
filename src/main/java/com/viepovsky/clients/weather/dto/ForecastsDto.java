@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ForecastsDto(
-        @JsonProperty("day") LocalDate date,
+        @JsonProperty("date") LocalDate date,
         @JsonProperty("symbol") String symbol,
         @JsonProperty("symbolPhrase") String symbolPhrase,
         @JsonProperty("maxTemp") int maxTemp,

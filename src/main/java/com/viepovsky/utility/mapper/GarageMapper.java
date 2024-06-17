@@ -48,9 +48,9 @@ public class GarageMapper {
 
     public Schedule toSchedule(ScheduleCreateRequest request) {
         return Schedule.builder()
-                .day(request.day())
-                .openFrom(request.openFrom())
-                .openTill(request.openTill())
+                .date(request.date())
+                .openTime(request.openTime())
+                .closeTime(request.closeTime())
                 .build();
     }
 

@@ -36,7 +36,7 @@ import java.util.List;
 class VisitController {
     private final VisitFacade visitFacade;
 
-    @GetMapping(path = "/work-time")
+    @GetMapping(path = "/garage-date")
     ResponseEntity<List<VisitDto>> getVisitsForGarageAndDate(
             @RequestParam(name = "garage-id") @Min(1) Long garageId,
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -50,7 +50,7 @@ class VisitController {
         return ResponseEntity.ok(visitFacade.getAllVisits(username));
     }
 
-    @GetMapping(path = "/available-times")
+    @GetMapping(path = "/new-offer-available-times")
     ResponseEntity<List<LocalTime>> getAvailableVisitTimes(
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam(name = "repair-duration") int repairDuration,

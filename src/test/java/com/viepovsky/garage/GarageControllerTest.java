@@ -126,7 +126,7 @@ class GarageControllerTest {
 //                .andExpect(MockMvcResultMatchers.jsonPath("$[0].address", Matchers.is("Test address")))
 //
 //                .andExpect(MockMvcResultMatchers.jsonPath("$[0].garageWorkTimeDtoList[0].id", Matchers.is(20)))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].garageWorkTimeDtoList[0].day", Matchers.is("MONDAY")))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].garageWorkTimeDtoList[0].date", Matchers.is("MONDAY")))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$[0].garageWorkTimeDtoList[0].startHour", Matchers.is(LocalTime.of(10, 0).format(DateTimeFormatter.ofPattern("HH:mm:ss")))))
 //                .andExpect(MockMvcResultMatchers.jsonPath("$[0].garageWorkTimeDtoList[0].endHour", Matchers.is(LocalTime.of(11, 0).format(DateTimeFormatter.ofPattern("HH:mm:ss")))));
     }

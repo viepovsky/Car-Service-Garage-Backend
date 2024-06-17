@@ -37,11 +37,11 @@ public class BookingProcessDbServiceIntegrationTest {
 //        Car car = carDbService.getAllCarsForGivenUsername("Testusername").get(0);
 //        int repairTime = 230;
 //        Garage garage = garageDbService.getAllGarages().get(0);
-//        LocalDate day = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-//        List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(day, repairTime, garage.getId());
+//        LocalDate date = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+//        List<LocalTime> availableTimeToBookList = bookingDbService.getAvailableBookingTimesForSelectedDayAndRepairDuration(date, repairTime, garage.getId());
 //        LocalTime startHour = availableTimeToBookList.get(1);
 //        //When
-//        bookingDbService.createBooking(availableCarServiceIdList, day, startHour, garage.getId(), car.getId(), repairTime);
+//        bookingDbService.createBooking(availableCarServiceIdList, date, startHour, garage.getId(), car.getId(), repairTime);
 //        User user = userDbService.getUser("Testusername");
 //        List<Booking> booking = bookingDbService.getAllBookingsForGivenUser(user.getUsername());
 //        //Then
@@ -158,13 +158,13 @@ public class BookingProcessDbServiceIntegrationTest {
 //        LocalDate startDate = LocalDate.now();
 //        LocalDate endDate = startDate.plusDays(365);
 //        List<GarageWorkTime> garageWorkTimeList = garageWorkTimeDbService.getAllGarageWorkTimes();
-//        for (LocalDate day = startDate; day.isBefore(endDate); day = day.plusDays(1)) {
-//            LocalDate finalDateForLoop = day;
+//        for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
+//            LocalDate finalDateForLoop = date;
 //            GarageWorkTime garageWorkTime = garageWorkTimeList.stream()
 //                    .filter(workTime -> workTime.getDay().toString().equals(finalDateForLoop.getDayOfWeek().toString()))
 //                    .findFirst()
-//                    .orElseThrow(() -> new WrongInputDataException("GarageWorkTime not found for day: " + finalDateForLoop.getDayOfWeek().toString()));
-//            bookingDbService.saveBooking(day, garageWorkTime.getStartHour(), garageWorkTime.getEndHour(), garage.getId());
+//                    .orElseThrow(() -> new WrongInputDataException("GarageWorkTime not found for date: " + finalDateForLoop.getDayOfWeek().toString()));
+//            bookingDbService.saveBooking(date, garageWorkTime.getStartHour(), garageWorkTime.getEndHour(), garage.getId());
 //        }
 //    }
 //

@@ -8,4 +8,4 @@ import java.time.LocalTime;
 
 @Builder
 public record ScheduleCreateRequest(
-        @NotNull LocalDate day, @NotNull LocalTime openFrom, @NotNull LocalTime openTill) {}
+        @NotNull LocalDate date, @NotNull LocalTime openTime, @NotNull LocalTime closeTime) {}

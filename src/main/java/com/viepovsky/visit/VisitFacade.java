@@ -40,7 +40,7 @@ class VisitFacade {
     public List<LocalTime> getAvailableVisitTimes(
             LocalDate date, int repairDuration, Long garageId) {
         LOGGER.info(
-                "Get available booking times endpoint used with day:{}, repair duration:{}, garage id:{}",
+                "Get available booking times endpoint used with date:{}, repair duration:{}, garage id:{}",
                 date,
                 repairDuration,
                 garageId);
@@ -50,7 +50,7 @@ class VisitFacade {
 
     public List<LocalTime> getAvailableVisitTimes(LocalDate date, Long selectedOfferId) {
         LOGGER.info(
-                "Get available booking times endpoint used with day:{}, selected offer id:{}",
+                "Get available booking times endpoint used with date:{}, selected offer id:{}",
                 date,
                 selectedOfferId);
         return visitService.getAvailableVisitTimes(date, selectedOfferId);
@@ -62,7 +62,7 @@ class VisitFacade {
                               Long garageId,
                               Long carId,
                               int repairDuration) {
-        LOGGER.info("Create booking endpoint used for service ids:{}, day:{}, garage id:{}, and car id:{}.", selectedCarRepairIdList, date, garageId, carId);
+        LOGGER.info("Create booking endpoint used for service ids:{}, date:{}, garage id:{}, and car id:{}.", selectedCarRepairIdList, date, garageId, carId);
         visitService.createBooking(selectedCarRepairIdList, date, startHour, garageId, carId, repairDuration);
     }
 

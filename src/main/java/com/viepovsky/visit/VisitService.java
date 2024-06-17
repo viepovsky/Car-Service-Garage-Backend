@@ -37,14 +37,10 @@ public class VisitService {
     private static final Logger LOGGER = LoggerFactory.getLogger(VisitService.class);
     private final VisitRepository visitRepository;
     private final GarageService garageService;
-    private final SelectedOfferService carRepairService;
-    private final VehicleService carService;
+    private final SelectedOfferService selectedOfferService;
+    private final VehicleService vehicleService;
     private final UserService userService;
-    private final CatalogOfferService availableCarRepairService;
-
-    public List<Visit> getAllBookings() {
-        return visitRepository.findAll();
-    }
+    private final CatalogOfferService catalogOfferService;
 
     public List<Visit> getAllVisits(String username) {
         Long userId = userService.getUser(username).getId();
@@ -55,27 +51,38 @@ public class VisitService {
         return visitRepository.getAllVisitsForGarageAndDate(garageId, date);
     }
 
-    private Visit getBookingById(Long id) {
+    private Visit getById(Long id) {
         return visitRepository.findById(id)
-                              .orElseThrow(() -> new MyEntityNotFoundException("Booking" + id));
+                              .orElseThrow(() -> new MyEntityNotFoundException("Visit" + id));
     }
 
-    public List<LocalTime> getAvailableVisitTimes(LocalDate date, Long serviceId) {
-        var carRepair = carRepairService.getById(serviceId);
-        var reservedBooking = getBookingById(carRepair.getVisit().getId());
-        int repairDuration = reservedBooking.getSelectedOffers()
-                .stream()
-                .mapToInt(SelectedOffer::getProbableRepairTime)
-                .sum();
-        Long garageId = reservedBooking.getGarage().getId();
+    public List<LocalTime> getAvailableVisitTimes(LocalDate date, Long selectedOfferId) {
+        SelectedOffer selectedOffer = selectedOfferService.getById(selectedOfferId);
+        Visit reservedVisit = getById(selectedOffer.getVisit().getId());
+        Long garageId = reservedVisit.getGarage().getId();
+        Optional<Schedule> optionalSchedule = garageService.getScheduleFor(date, garageId);
+        if (optionalSchedule.isEmpty()) {
+            LOGGER.info("Garage is closed on date:{}", date);
+            return new ArrayList<>();
+        }
+        int sumRepairDuration =
+                reservedVisit.getSelectedOffers().stream()
+                        .mapToInt(SelectedOffer::getProbableRepairTime)
+                        .sum();
 
-        LOGGER.info("Given parameters to get available times, day: {}, total repair time: {}, garage id: {}", date, repairDuration, garageId);
-        List<Visit> allBookingsForDay = visitRepository.getAllVisitsForGarageAndDate(garageId, date);
-        allBookingsForDay.remove(reservedBooking);
+        LOGGER.info(
+                "Given parameters to get available times, date: {}, total repair time: {}, garage id: {}",
+                date,
+                sumRepairDuration,
+                garageId);
+        List<Visit> visitsOnDate = visitRepository.getAllVisitsForGarageAndDate(garageId, date);
+        visitsOnDate.remove(reservedVisit);
 
-        List<LocalTime> availableBookingTimes = checkAndReturnAvailableVisitTimes(allBookingsForDay, date, repairDuration);
-        availableBookingTimes.remove(reservedBooking.getVisitStartTime());
-        return availableBookingTimes;
+        List<LocalTime> availableVisitTimes =
+                checkAndReturnAvailableVisitTimes(
+                        visitsOnDate, date, sumRepairDuration, optionalSchedule.get());
+        availableVisitTimes.remove(reservedVisit.getVisitStartTime());
+        return availableVisitTimes;
     }
 
     public List<LocalTime> getAvailableVisitTimes(LocalDate date, int repairDuration, Long garageId) {
@@ -156,7 +163,7 @@ public class VisitService {
         booking.setVisitStartDate(date);
         booking.setVisitStartTime(startHour);
         booking.setVisitEndTime(startHour.plusMinutes(repairTime));
-        LOGGER.info("Updated booking with values, day: " + date + ", time: " + startHour);
+        LOGGER.info("Updated booking with values, date: " + date + ", time: " + startHour);
         visitRepository.save(booking);
     }
 
@@ -167,7 +174,7 @@ public class VisitService {
                               Long carId,
                               int repairDuration) {
         Garage garage = garageService.getGarage(garageId);
-        Vehicle car = carService.getVehicle(carId);
+        Vehicle car = vehicleService.getVehicle(carId);
         AppUser user = userService.getUser(car.getUser().getId());
         List<LocalTime> availableBookingTimes = getAvailableVisitTimes(date, repairDuration, garageId);
         if (availableBookingTimes.contains(startHour)) {
@@ -175,7 +182,7 @@ public class VisitService {
             visitRepository.save(booking);
             saveBookingAndCarRepairsForCarAndUser(selectedCarRepairIdList, car, user, booking);
         } else {
-            throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another day.");
+            throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another date.");
         }
     }
 
@@ -201,7 +208,7 @@ public class VisitService {
         List<CatalogOffer> selectedAvailableCarRepairs = new ArrayList<>();
         List<BigDecimal> repairCosts = new ArrayList<>();
         selectedCarRepairIdList.stream()
-                .map(id -> new CatalogOffer(availableCarRepairService.getById(id)))
+                .map(id -> new CatalogOffer(catalogOfferService.getById(id)))
                 .peek(repair -> multiplyCarRepairCostIfCarIsPremiumMake(car, repair))
                 .peek(selectedAvailableCarRepairs::add)
                 .map(CatalogOffer::getPrice)
