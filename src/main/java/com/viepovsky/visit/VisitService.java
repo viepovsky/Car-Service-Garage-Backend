@@ -86,47 +86,39 @@ public class VisitService {
             return new ArrayList<>();
         }
         List<Visit> visitsOnDate = visitRepository.getAllVisitsForGarageAndDate(garageId, date);
-        return checkAndReturnAvailableVisitTimes(visitsOnDate, date, repairDuration);
+        return checkAndReturnAvailableVisitTimes(visitsOnDate, date, repairDuration, optionalSchedule.get());
     }
 
-    private List<LocalTime> checkAndReturnAvailableVisitTimes(List<Visit> visitsOnDate, LocalDate date, int repairDuration) {
-        Visit garageWorkTime = visitsOnDate.stream()
-                                          .filter(booking -> booking.getStatus() == VisitStatus.AVAILABLE)
-                                          .findFirst()
-                                          .orElse(null);
-        if (!isGarageWorkTimePresent(garageWorkTime)) {
+    private List<LocalTime> checkAndReturnAvailableVisitTimes(
+            List<Visit> visitsOnDate, LocalDate date, int repairDuration, Schedule schedule) {
+        LocalTime openTime = schedule.getOpenTime();
+        LocalTime closeTime = schedule.getCloseTime();
+        if (isCloseTimeBeforeNow(closeTime)) {
             return new ArrayList<>();
         }
-
-        LocalTime garageOpenTime = garageWorkTime.getVisitStartTime();
-        LocalTime garageCloseTime = garageWorkTime.getVisitEndTime();
-        if (isOpenTimeBeforeNow(date, garageOpenTime)) {
-            if (isCloseTimeBeforeNow(garageCloseTime)) {
-                return new ArrayList<>();
-            }
-            garageOpenTime = roundUpTimeToNearest10Minutes();
+        List<Visit> visitsNotFinished =
+                visitsOnDate.stream()
+                        .filter(visit -> visit.getStatus() != VisitStatus.COMPLETED)
+                        .toList();
+        if (isOpenTimeBeforeNow(date, openTime)) {
+            LocalTime currentTime = timeNowRoundUpToNearest10Minutes();
+            return getAvailableTimesForVisit(
+                    currentTime, closeTime, repairDuration, visitsNotFinished);
+        } else {
+            return getAvailableTimesForVisit(
+                    openTime, closeTime, repairDuration, visitsNotFinished);
         }
-
-        List<Visit> unavailableBookingTimeList = visitsOnDate.stream()
-                                                            .filter(booking -> booking.getStatus() == VisitStatus.UNAVAILABLE || booking.getStatus() == VisitStatus.WAITING_FOR_CUSTOMER)
-                                                            .toList();
-
-        return getAvailableTimesForBooking(repairDuration, garageCloseTime, unavailableBookingTimeList, garageOpenTime);
     }
 
     private boolean isGarageWorkingHoursPresent(List<Visit> bookingList) {
         return bookingList.size() != 0;
     }
 
-    private boolean isGarageWorkTimePresent(Visit garageWorkTime) {
-        return garageWorkTime != null;
-    }
-
     private boolean isOpenTimeBeforeNow(LocalDate date, LocalTime openTime) {
         return (date.isEqual(LocalDate.now()) && LocalTime.now().isAfter(openTime));
     }
 
-    private LocalTime roundUpTimeToNearest10Minutes() {
+    private LocalTime timeNowRoundUpToNearest10Minutes() {
         LocalTime timeNow = LocalTime.now();
         int minutes = timeNow.getMinute() + timeNow.getHour() * 60;
         minutes = ((minutes + 10) / 10) * 10;
@@ -137,25 +129,28 @@ public class VisitService {
         return closeTime.isBefore(LocalTime.now());
     }
 
-    private List<LocalTime> getAvailableTimesForBooking(int repairDuration,
-                                                        LocalTime closeTime,
-                                                        List<Visit> unavailableBookingTimeList,
-                                                        LocalTime currentTime) {
-        List<LocalTime> availableBookingTimes = new ArrayList<>();
+    private List<LocalTime> getAvailableTimesForVisit(
+            LocalTime currentTime,
+            LocalTime closeTime,
+            int repairDuration,
+            List<Visit> visitsNotFinished) {
+        List<LocalTime> availableVisitTimes = new ArrayList<>();
         while (!currentTime.plusMinutes(repairDuration).isAfter(closeTime)) {
-            boolean isAvailable = true;
-            for (Visit booking : unavailableBookingTimeList) {
-                if (currentTime.plusMinutes(repairDuration).isAfter(booking.getVisitStartTime()) && booking.getVisitEndTime().isAfter(currentTime)) {
-                    isAvailable = false;
+            boolean isCurrentTimeAvailable = true;
+            for (Visit visit : visitsNotFinished) {
+                LocalTime startTime = visit.getVisitStartTime();
+                LocalTime endTime = visit.getVisitEndTime();
+                if (currentTime.plusMinutes(repairDuration).isAfter(startTime) && endTime.isAfter(currentTime)) {
+                    isCurrentTimeAvailable = false;
                     break;
                 }
             }
-            if (isAvailable) {
-                availableBookingTimes.add(currentTime);
+            if (isCurrentTimeAvailable) {
+                availableVisitTimes.add(currentTime);
             }
             currentTime = currentTime.plusMinutes(10);
         }
-        return availableBookingTimes;
+        return availableVisitTimes;
     }
 
     public void createWorkingHoursBooking(LocalDate date,

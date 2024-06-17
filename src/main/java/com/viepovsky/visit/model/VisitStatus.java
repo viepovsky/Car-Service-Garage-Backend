@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum VisitStatus {
     WAITING_FOR_CUSTOMER("Waiting for customer"),
     CUSTOMER_ABSENCE("Customer absence"),
-    COMPLETED("Completed"),
-    AVAILABLE("Available"),
-    UNAVAILABLE("Unavailable");
+    COMPLETED("Completed");
 
     private final String statusName;
 }
