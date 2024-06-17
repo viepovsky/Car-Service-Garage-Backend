@@ -30,8 +30,8 @@ public class Schedule extends BaseEntityAudit {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "garage_schedule_id_sequence")
     private Long id;
 
-    @Column(name = "schedule_day", unique = true)
-    private LocalDate day;
+    @Column(name = "schedule_date", unique = true)
+    private LocalDate date;
 
     @Column(name = "start_hour")
     private LocalTime openFrom;

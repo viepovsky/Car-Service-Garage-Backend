@@ -61,7 +61,7 @@ public class GarageMapper {
     public ScheduleDto toScheduleDto(Schedule schedule) {
         return new ScheduleDto(
                 schedule.getId(),
-                schedule.getDay(),
+                schedule.getDate(),
                 schedule.getOpenFrom(),
                 schedule.getOpenTill());
     }

@@ -2,6 +2,7 @@ package com.viepovsky.visit;
 
 import com.viepovsky.garage.GarageService;
 import com.viepovsky.garage.model.Garage;
+import com.viepovsky.garage.model.Schedule;
 import com.viepovsky.offer.CatalogOfferService;
 import com.viepovsky.offer.SelectedOfferService;
 import com.viepovsky.offer.model.CatalogOffer;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +69,7 @@ public class VisitService {
                 .sum();
         Long garageId = reservedBooking.getGarage().getId();
 
-        LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
+        LOGGER.info("Given parameters to get available times, day: {}, total repair time: {}, garage id: {}", date, repairDuration, garageId);
         List<Visit> allBookingsForDay = visitRepository.getAllVisitsForGarageAndDate(garageId, date);
         allBookingsForDay.remove(reservedBooking);
 
@@ -77,16 +79,17 @@ public class VisitService {
     }
 
     public List<LocalTime> getAvailableVisitTimes(LocalDate date, int repairDuration, Long garageId) {
-        LOGGER.info("Given parameters to get available times, day: " + date + ", total repair time: " + repairDuration + ", garage id: " + garageId);
+        LOGGER.info("Given parameters to get available times, date: {}, total repair time: {}, garage id: {}", date, repairDuration, garageId);
+        Optional<Schedule> optionalSchedule = garageService.getScheduleFor(date, garageId);
+        if (optionalSchedule.isEmpty()) {
+            LOGGER.info("Garage is closed on date:{}", date);
+            return new ArrayList<>();
+        }
         List<Visit> visitsOnDate = visitRepository.getAllVisitsForGarageAndDate(garageId, date);
         return checkAndReturnAvailableVisitTimes(visitsOnDate, date, repairDuration);
     }
 
     private List<LocalTime> checkAndReturnAvailableVisitTimes(List<Visit> visitsOnDate, LocalDate date, int repairDuration) {
-        if (!isGarageWorkingHoursPresent(visitsOnDate)) {
-            return new ArrayList<>();
-        }
-
         Visit garageWorkTime = visitsOnDate.stream()
                                           .filter(booking -> booking.getStatus() == VisitStatus.AVAILABLE)
                                           .findFirst()

@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +50,10 @@ public class GarageService {
 
     List<Schedule> getSchedulesFor(Long garageId) {
         return scheduleRepository.findAllByGarageId(garageId);
+    }
+
+    public Optional<Schedule> getScheduleFor(LocalDate date, Long garageId) {
+        return scheduleRepository.findByDateAndGarageId(date, garageId);
     }
 
     public Schedule saveSchedule(Schedule schedule, Long garageId) {
