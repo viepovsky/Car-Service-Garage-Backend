@@ -2,6 +2,7 @@ package com.viepovsky.utility.mapper;
 
 import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.offer.model.CatalogOffer;
+import com.viepovsky.offer.model.RepairStatus;
 import com.viepovsky.offer.model.SelectedOffer;
 
 import lombok.AllArgsConstructor;
@@ -32,7 +33,9 @@ public class SelectedOfferMapper {
 
     public SelectedOffer toSelectedOffer(CatalogOffer catalogOffer) {
         return new SelectedOffer(
-                ca
-        );
+                catalogOffer.getPrice(),
+                catalogOffer.getProbableRepairTime(),
+                RepairStatus.ASSIGNED,
+                catalogOffer);
     }
 }

@@ -41,7 +41,7 @@ public class SelectedOffer extends BaseEntityAudit {
     @Column(name = "repair_status", nullable = false)
     private RepairStatus status;
 
-    @Column(name = "description", nullable = false, columnDefinition = "text")
+    @Column(name = "description", columnDefinition = "text")
     private String details;
 
     @ManyToOne
@@ -64,12 +64,10 @@ public class SelectedOffer extends BaseEntityAudit {
             BigDecimal price,
             int probableRepairTime,
             RepairStatus status,
-            String details,
             CatalogOffer catalogOffer) {
         this.price = price;
         this.probableRepairTime = probableRepairTime;
         this.status = status;
-        this.details = details;
         this.catalogOffer = catalogOffer;
     }
 

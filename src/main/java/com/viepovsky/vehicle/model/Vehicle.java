@@ -3,9 +3,13 @@ package com.viepovsky.vehicle.model;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.utility.entity_audit.BaseEntityAudit;
 
+import com.viepovsky.visit.model.Visit;
 import jakarta.persistence.*;
 
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -55,6 +59,12 @@ public class Vehicle extends BaseEntityAudit {
 
     @Column(name = "details", columnDefinition = "text")
     private String details;
+
+    @OneToMany(
+            targetEntity = Visit.class,
+            mappedBy = "vehicle",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    private List<Visit> visits = new ArrayList<>();
 
     public Vehicle(Long id, Model model, int manufactured_year) {
         this.id = id;

@@ -12,6 +12,7 @@ import com.viepovsky.user.UserService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 import com.viepovsky.utility.exceptions.WrongInputDataException;
+import com.viepovsky.utility.mapper.SelectedOfferMapper;
 import com.viepovsky.vehicle.VehicleService;
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.visit.model.Visit;
@@ -41,6 +42,7 @@ public class VisitService {
     private final SelectedOfferService selectedOfferService;
     private final VehicleService vehicleService;
     private final UserService userService;
+    private final SelectedOfferMapper selectedOfferMapper;
 
     public List<Visit> getAllVisits(String username) {
         Long userId = userService.getUser(username).getId();
@@ -167,94 +169,52 @@ public class VisitService {
         visitRepository.save(booking);
     }
 
-    public void createVisit(List<Long> catalogOfferIds,
-                            LocalDate date,
-                            LocalTime startHour,
-                            Long garageId,
-                            Long vehicleId,
-                            int repairDuration) {
+    public void createVisit(
+            List<Long> catalogOfferIds,
+            LocalDate date,
+            LocalTime startHour,
+            Long garageId,
+            Long vehicleId,
+            int repairDuration) {
         Garage garage = garageService.getGarage(garageId);
         Vehicle vehicle = vehicleService.getVehicle(vehicleId);
         AppUser user = vehicle.getUser();
-        List<LocalTime> availableVisitTimes = getAvailableVisitTimes(date, repairDuration, garageId);
+        List<LocalTime> availableVisitTimes =
+                getAvailableVisitTimes(date, repairDuration, garageId);
         if (availableVisitTimes.contains(startHour)) {
             List<SelectedOffer> selectedOffers = createSelectedOffers(catalogOfferIds);
-            BigDecimal
-            Visit visit = createVisit(date, startHour, repairDuration, garage);
+            BigDecimal totalPrice =
+                    selectedOffers.stream()
+                            .map(SelectedOffer::getPrice)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+            Visit visit =
+                    new Visit(
+                            date,
+                            startHour,
+                            startHour.plusMinutes(repairDuration),
+                            date,
+                            VisitStatus.WAITING_FOR_CUSTOMER,
+                            garage,
+                            user,
+                            vehicle,
+                            selectedOffers,
+                            totalPrice);
+            garage.getVisits().add(visit);
+            selectedOffers.forEach(selectedOffer -> selectedOffer.setVisit(visit));
+            user.getVisits().add(visit);
+            vehicle.getVisits().add(visit);
             visitRepository.save(visit);
-            saveVisitAndSelectedOfferForVehicleAndUser(catalogOfferIds, vehicle, user, visit);
         } else {
-            throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another date.");
+            throw new WrongInputDataException(
+                    "Given time: " + startHour + " is no longer available. Choose another date.");
         }
     }
 
     private List<SelectedOffer> createSelectedOffers(List<Long> catalogOfferIds) {
-        List<CatalogOffer> catalogOffers = catalogOfferIds.stream().map(catalogOfferService::getById).toList();
-        List<SelectedOffer> selectedOffers = catalogOffers.stream().map()
-    }
-
-    private Visit createVisit(LocalDate date,
-                              LocalTime startHour,
-                              int repairDuration,
-                              Garage garage) {
-        return new Visit(
-                VisitStatus.WAITING_FOR_CUSTOMER,
-                date,
-                startHour,
-                startHour.plusMinutes(repairDuration),
-                BigDecimal.ZERO,
-                new ArrayList<>(),
-                garage
-        );
-    }
-
-    private void saveVisitAndSelectedOfferForVehicleAndUser(List<Long> selectedCarRepairIdList,
-                                                            Vehicle car,
-                                                            AppUser user,
-                                                            Visit booking) {
-        List<CatalogOffer> selectedAvailableCarRepairs = new ArrayList<>();
-        List<BigDecimal> repairCosts = new ArrayList<>();
-        selectedCarRepairIdList.stream()
-                .map(id -> new CatalogOffer(catalogOfferService.getById(id)))
-                .peek(repair -> multiplyCarRepairCostIfCarIsPremiumMake(car, repair))
-                .peek(selectedAvailableCarRepairs::add)
-                .map(CatalogOffer::getPrice)
-                .forEach(repairCosts::add);
-
-        List<SelectedOffer> selectedCarRepairs = selectedAvailableCarRepairs.stream()
-                                                                            .map(selectedService -> new SelectedOffer(
-                                                                                    selectedService.getDescription(),
-                        selectedService.getPrice(),
-                        selectedService.getProbableRepairTime(),
-                                                                                    user,
-                        booking,
-                        RepairStatus.AWAITING
-                ))
-                                                                            .toList();
-//TODO fix it
-//        user.getVehicles()
-//                .stream()
-//                .filter(servicedCar -> Objects.equals(servicedCar.getId(), car.getId()))
-//                .findFirst()
-//                .ifPresent(servicedCar -> servicedCar.getCarServicesList().addAll(selectedCarRepairs));
-//        user.getServicesList().addAll(selectedCarRepairs);
-        userService.saveUser(user);
-
-        BigDecimal totalRepairCost = repairCosts.stream()
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        booking.setTotalPrice(totalRepairCost);
-        booking.getSelectedOffers().addAll(selectedCarRepairs);
-        visitRepository.save(booking);
-    }
-
-    private void multiplyCarRepairCostIfCarIsPremiumMake(Vehicle car, CatalogOffer availableCarRepair) {
-        //TODO fix it
-//        if (availableCarRepair.getPremiumMakes().toLowerCase().contains(car.getMake().toLowerCase())) {
-//            BigDecimal repairCost = availableCarRepair.getCost();
-//            BigDecimal makeMultiplier = availableCarRepair.getMakeMultiplier();
-//            repairCost = repairCost.multiply(makeMultiplier);
-//            availableCarRepair.setCost(repairCost);
-//        }
+        return catalogOfferIds.stream()
+                .map(catalogOfferService::getById)
+                .map(selectedOfferMapper::toSelectedOffer)
+                .toList();
     }
 
     public void save(Visit booking) {
