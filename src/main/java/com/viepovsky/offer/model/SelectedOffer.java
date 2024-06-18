@@ -61,6 +61,19 @@ public class SelectedOffer extends BaseEntityAudit {
     private CatalogOffer catalogOffer;
 
     public SelectedOffer(
+            BigDecimal price,
+            int probableRepairTime,
+            RepairStatus status,
+            String details,
+            CatalogOffer catalogOffer) {
+        this.price = price;
+        this.probableRepairTime = probableRepairTime;
+        this.status = status;
+        this.details = details;
+        this.catalogOffer = catalogOffer;
+    }
+
+    public SelectedOffer(
             String details,
             BigDecimal price,
             int probableRepairTime,

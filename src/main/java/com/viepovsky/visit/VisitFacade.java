@@ -56,14 +56,14 @@ class VisitFacade {
         return visitService.getAvailableVisitTimes(date, selectedOfferId);
     }
 
-    public void createBooking(List<Long> selectedCarRepairIdList,
-                              LocalDate date,
-                              LocalTime startHour,
-                              Long garageId,
-                              Long carId,
-                              int repairDuration) {
-        LOGGER.info("Create booking endpoint used for service ids:{}, date:{}, garage id:{}, and car id:{}.", selectedCarRepairIdList, date, garageId, carId);
-        visitService.createBooking(selectedCarRepairIdList, date, startHour, garageId, carId, repairDuration);
+    public void createVisit(List<Long> catalogOfferIds,
+                            LocalDate date,
+                            LocalTime startHour,
+                            Long garageId,
+                            Long vehicleId,
+                            int repairDuration) {
+        LOGGER.info("Create booking endpoint used for service ids:{}, date:{}, garage id:{}, and car id:{}.", catalogOfferIds, date, garageId, vehicleId);
+        visitService.createVisit(catalogOfferIds, date, startHour, garageId, vehicleId, repairDuration);
     }
 
     public void updateBooking(Long bookingId,

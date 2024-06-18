@@ -37,10 +37,10 @@ public class VisitService {
     private static final Logger LOGGER = LoggerFactory.getLogger(VisitService.class);
     private final VisitRepository visitRepository;
     private final GarageService garageService;
+    private final CatalogOfferService catalogOfferService;
     private final SelectedOfferService selectedOfferService;
     private final VehicleService vehicleService;
     private final UserService userService;
-    private final CatalogOfferService catalogOfferService;
 
     public List<Visit> getAllVisits(String username) {
         Long userId = userService.getUser(username).getId();
@@ -167,29 +167,36 @@ public class VisitService {
         visitRepository.save(booking);
     }
 
-    public void createBooking(List<Long> selectedCarRepairIdList,
-                              LocalDate date,
-                              LocalTime startHour,
-                              Long garageId,
-                              Long carId,
-                              int repairDuration) {
+    public void createVisit(List<Long> catalogOfferIds,
+                            LocalDate date,
+                            LocalTime startHour,
+                            Long garageId,
+                            Long vehicleId,
+                            int repairDuration) {
         Garage garage = garageService.getGarage(garageId);
-        Vehicle car = vehicleService.getVehicle(carId);
-        AppUser user = userService.getUser(car.getUser().getId());
-        List<LocalTime> availableBookingTimes = getAvailableVisitTimes(date, repairDuration, garageId);
-        if (availableBookingTimes.contains(startHour)) {
-            Visit booking = createCarRepairBooking(date, startHour, repairDuration, garage);
-            visitRepository.save(booking);
-            saveBookingAndCarRepairsForCarAndUser(selectedCarRepairIdList, car, user, booking);
+        Vehicle vehicle = vehicleService.getVehicle(vehicleId);
+        AppUser user = vehicle.getUser();
+        List<LocalTime> availableVisitTimes = getAvailableVisitTimes(date, repairDuration, garageId);
+        if (availableVisitTimes.contains(startHour)) {
+            List<SelectedOffer> selectedOffers = createSelectedOffers(catalogOfferIds);
+            BigDecimal
+            Visit visit = createVisit(date, startHour, repairDuration, garage);
+            visitRepository.save(visit);
+            saveVisitAndSelectedOfferForVehicleAndUser(catalogOfferIds, vehicle, user, visit);
         } else {
             throw new WrongInputDataException("Given time: " + startHour + " is no longer available. Choose another date.");
         }
     }
 
-    private Visit createCarRepairBooking(LocalDate date,
-                                         LocalTime startHour,
-                                         int repairDuration,
-                                         Garage garage) {
+    private List<SelectedOffer> createSelectedOffers(List<Long> catalogOfferIds) {
+        List<CatalogOffer> catalogOffers = catalogOfferIds.stream().map(catalogOfferService::getById).toList();
+        List<SelectedOffer> selectedOffers = catalogOffers.stream().map()
+    }
+
+    private Visit createVisit(LocalDate date,
+                              LocalTime startHour,
+                              int repairDuration,
+                              Garage garage) {
         return new Visit(
                 VisitStatus.WAITING_FOR_CUSTOMER,
                 date,
@@ -201,10 +208,10 @@ public class VisitService {
         );
     }
 
-    private void saveBookingAndCarRepairsForCarAndUser(List<Long> selectedCarRepairIdList,
-                                                       Vehicle car,
-                                                       AppUser user,
-                                                       Visit booking) {
+    private void saveVisitAndSelectedOfferForVehicleAndUser(List<Long> selectedCarRepairIdList,
+                                                            Vehicle car,
+                                                            AppUser user,
+                                                            Visit booking) {
         List<CatalogOffer> selectedAvailableCarRepairs = new ArrayList<>();
         List<BigDecimal> repairCosts = new ArrayList<>();
         selectedCarRepairIdList.stream()

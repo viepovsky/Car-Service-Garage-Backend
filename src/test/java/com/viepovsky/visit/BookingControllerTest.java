@@ -8,8 +8,6 @@ import com.viepovsky.user.model.AppUser;
 import com.viepovsky.user.model.Role;
 import com.viepovsky.utility.scheduler.ApplicationScheduler;
 import com.viepovsky.visit.dto.VisitFullDetailDto;
-import com.viepovsky.visit.dto.VisitOldDto;
-import com.viepovsky.visit.model.VisitStatus;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -29,7 +27,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.math.BigDecimal;
 import java.security.Key;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -150,7 +147,7 @@ class BookingControllerTest {
     void shouldCreateBooking() throws Exception {
         //Given
         List<Long> idList = List.of(1L, 2L, 5L);
-        doNothing().when(facade).createBooking(idList, LocalDate.of(2022, 10, 15), LocalTime.of(10, 0), 33L, 4L, 55);
+        doNothing().when(facade).createVisit(idList, LocalDate.of(2022, 10, 15), LocalTime.of(10, 0), 33L, 4L, 55);
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/v1/bookings")

@@ -47,7 +47,7 @@ public class Visit extends BaseEntityAudit {
     @Column(name = "visit_end_time", nullable = false)
     private LocalTime visitEndTime;
 
-    @Column(name = "license_plate", length = 64, nullable = false)
+    @Column(name = "license_plate", length = 64)
     private String licensePlate;
 
     @Column(name = "total_price", nullable = false)
@@ -86,6 +86,29 @@ public class Visit extends BaseEntityAudit {
             referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "visit_vehicle_id_fk"))
     private Vehicle vehicle;
+
+    public Visit(
+            LocalDate visitStartDate,
+            LocalTime visitStartTime,
+            LocalTime visitEndTime,
+            LocalDate visitEndDate,
+            VisitStatus status,
+            Garage garage,
+            AppUser user,
+            Vehicle vehicle,
+            List<SelectedOffer> selectedOffers,
+            BigDecimal totalPrice) {
+        this.visitStartDate = visitStartDate;
+        this.visitStartTime = visitStartTime;
+        this.visitEndTime = visitEndTime;
+        this.visitEndDate = visitEndDate;
+        this.status = status;
+        this.garage = garage;
+        this.user = user;
+        this.vehicle = vehicle;
+        this.selectedOffers = selectedOffers;
+        this.totalPrice = totalPrice;
+    }
 
     public Visit(
             VisitStatus status,

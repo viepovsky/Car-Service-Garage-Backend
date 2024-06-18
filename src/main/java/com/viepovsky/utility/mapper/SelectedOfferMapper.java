@@ -1,6 +1,7 @@
 package com.viepovsky.utility.mapper;
 
 import com.viepovsky.offer.dto.SelectedOfferDto;
+import com.viepovsky.offer.model.CatalogOffer;
 import com.viepovsky.offer.model.SelectedOffer;
 
 import lombok.AllArgsConstructor;
@@ -27,5 +28,11 @@ public class SelectedOfferMapper {
                 selectedOffer.getDetails(),
                 selectedOffer.getCatalogOffer().getId(),
                 selectedOffer.getVisit().getId());
+    }
+
+    public SelectedOffer toSelectedOffer(CatalogOffer catalogOffer) {
+        return new SelectedOffer(
+                ca
+        );
     }
 }

@@ -67,15 +67,15 @@ class VisitController {
     }
 
     @PostMapping
-    ResponseEntity<Void> createBooking(
-            @RequestParam(name = "service-id") @NotEmpty List<Long> selectedCarRepairIdList,
+    ResponseEntity<Void> createVisit(
+            @RequestParam(name = "catalog-offer-id") @NotEmpty List<Long> catalogOfferIds,
             @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
             @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour,
             @RequestParam(name = "garage-id") @Min(1) Long garageId,
-            @RequestParam(name = "car-id") @Min(1) Long carId,
+            @RequestParam(name = "vehicleId") @Min(1) Long vehicleId,
             @RequestParam(name = "repair-duration") @NotNull int repairDuration
     ) {
-        visitFacade.createBooking(selectedCarRepairIdList, date, startHour, garageId, carId, repairDuration);
+        visitFacade.createVisit(catalogOfferIds, date, startHour, garageId, vehicleId, repairDuration);
         return ResponseEntity.created(URI.create("")).build();
     }
 
