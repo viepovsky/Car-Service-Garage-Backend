@@ -5,14 +5,12 @@ import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.model.Schedule;
 import com.viepovsky.offer.CatalogOfferService;
 import com.viepovsky.offer.SelectedOfferService;
-import com.viepovsky.offer.model.CatalogOffer;
-import com.viepovsky.offer.model.RepairStatus;
 import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.user.UserService;
 import com.viepovsky.user.model.AppUser;
 import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
 import com.viepovsky.utility.exceptions.WrongInputDataException;
-import com.viepovsky.utility.mapper.SelectedOfferMapper;
+import com.viepovsky.utility.mappers.SelectedOfferMapper;
 import com.viepovsky.vehicle.VehicleService;
 import com.viepovsky.vehicle.model.Vehicle;
 import com.viepovsky.visit.model.Visit;
@@ -169,7 +167,7 @@ public class VisitService {
         visitRepository.save(booking);
     }
 
-    public void createVisit(
+    public Visit createVisit(
             List<Long> catalogOfferIds,
             LocalDate date,
             LocalTime startHour,
@@ -203,7 +201,7 @@ public class VisitService {
             selectedOffers.forEach(selectedOffer -> selectedOffer.setVisit(visit));
             user.getVisits().add(visit);
             vehicle.getVisits().add(visit);
-            visitRepository.save(visit);
+            return visitRepository.save(visit);
         } else {
             throw new WrongInputDataException(
                     "Given time: " + startHour + " is no longer available. Choose another date.");

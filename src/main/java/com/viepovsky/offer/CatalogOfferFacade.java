@@ -3,7 +3,7 @@ package com.viepovsky.offer;
 import com.viepovsky.offer.dto.CatalogOfferCreateRequest;
 import com.viepovsky.offer.dto.CatalogOfferDto;
 import com.viepovsky.offer.model.CatalogOffer;
-import com.viepovsky.utility.mapper.CatalogOfferMapper;
+import com.viepovsky.utility.mappers.CatalogOfferMapper;
 
 import lombok.RequiredArgsConstructor;
 

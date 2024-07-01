@@ -1,4 +1,4 @@
-package com.viepovsky.utility.mapper;
+package com.viepovsky.utility.mappers;
 
 import com.viepovsky.offer.dto.CatalogOfferCreateRequest;
 import com.viepovsky.offer.dto.CatalogOfferDto;

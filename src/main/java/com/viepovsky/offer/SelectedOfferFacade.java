@@ -4,7 +4,7 @@ import com.viepovsky.offer.dto.SelectedOfferCreateRequest;
 import com.viepovsky.offer.dto.SelectedOfferDto;
 import com.viepovsky.offer.model.SelectedOffer;
 import com.viepovsky.security.DataOwnershipValidator;
-import com.viepovsky.utility.mapper.SelectedOfferMapper;
+import com.viepovsky.utility.mappers.SelectedOfferMapper;
 
 import lombok.RequiredArgsConstructor;
 

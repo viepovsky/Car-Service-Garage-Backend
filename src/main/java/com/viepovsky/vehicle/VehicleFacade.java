@@ -1,7 +1,7 @@
 package com.viepovsky.vehicle;
 
 import com.viepovsky.security.DataOwnershipValidator;
-import com.viepovsky.utility.mapper.VehicleMapper;
+import com.viepovsky.utility.mappers.VehicleMapper;
 import com.viepovsky.vehicle.dto.*;
 import com.viepovsky.vehicle.model.Make;
 import com.viepovsky.vehicle.model.Model;

@@ -6,7 +6,7 @@ import com.viepovsky.garage.dto.GarageDto;
 import com.viepovsky.garage.dto.ScheduleDto;
 import com.viepovsky.garage.model.Garage;
 import com.viepovsky.garage.model.Schedule;
-import com.viepovsky.utility.mapper.GarageMapper;
+import com.viepovsky.utility.mappers.GarageMapper;
 
 import lombok.RequiredArgsConstructor;
 

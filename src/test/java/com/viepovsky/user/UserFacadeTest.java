@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
 import com.viepovsky.user.model.AppUser;
-import com.viepovsky.utility.mapper.UserMapper;
+import com.viepovsky.utility.mappers.UserMapper;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

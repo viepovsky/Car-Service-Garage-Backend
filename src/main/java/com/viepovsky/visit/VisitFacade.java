@@ -1,7 +1,7 @@
 package com.viepovsky.visit;
 
 import com.viepovsky.security.DataOwnershipValidator;
-import com.viepovsky.utility.mapper.VisitMapper;
+import com.viepovsky.utility.mappers.VisitMapper;
 import com.viepovsky.visit.dto.VisitDto;
 import com.viepovsky.visit.dto.VisitFullDetailDto;
 import com.viepovsky.visit.model.Visit;
@@ -62,7 +62,7 @@ class VisitFacade {
                             Long garageId,
                             Long vehicleId,
                             int repairDuration) {
-        LOGGER.info("Create booking endpoint used for service ids:{}, date:{}, garage id:{}, and car id:{}.", catalogOfferIds, date, garageId, vehicleId);
+        LOGGER.info("Create visit endpoint used for service ids:{}, date:{}, garage id:{}, and car id:{}.", catalogOfferIds, date, garageId, vehicleId);
         visitService.createVisit(catalogOfferIds, date, startHour, garageId, vehicleId, repairDuration);
     }
 

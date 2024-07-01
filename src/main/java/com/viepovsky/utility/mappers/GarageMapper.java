@@ -1,4 +1,4 @@
-package com.viepovsky.utility.mapper;
+package com.viepovsky.utility.mappers;
 
 import com.viepovsky.garage.dto.AddressCreateRequest;
 import com.viepovsky.garage.dto.AddressDto;
