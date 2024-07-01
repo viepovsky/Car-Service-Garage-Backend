@@ -24,6 +24,13 @@ class VisitFacade {
     private final VisitMapper mapper;
     private final DataOwnershipValidator dataOwnershipValidator;
 
+    public VisitFullDetailDto getVisit(Long visitId) {
+        LOGGER.info("Retrieving visit of id:{}", visitId);
+        Visit visit = visitService.getVisit(visitId);
+        dataOwnershipValidator.belongsToAuthenticatedUser(visit.getUser().getUsername());
+        return mapper.toFullDetailVisitDto(visit);
+    }
+
     public List<VisitDto> getVisitsForGarageAndDate(Long garageId, LocalDate date) {
         LOGGER.info("Retrieving info about visits for garage id:{}, and date:{}", garageId, date);
         List<Visit> visits = visitService.getVisitsForGarageAndDate(garageId, date);
@@ -56,14 +63,15 @@ class VisitFacade {
         return visitService.getAvailableVisitTimes(date, selectedOfferId);
     }
 
-    public void createVisit(List<Long> catalogOfferIds,
+    public VisitDto createVisit(List<Long> catalogOfferIds,
                             LocalDate date,
                             LocalTime startHour,
                             Long garageId,
                             Long vehicleId,
                             int repairDuration) {
         LOGGER.info("Create visit endpoint used for service ids:{}, date:{}, garage id:{}, and car id:{}.", catalogOfferIds, date, garageId, vehicleId);
-        visitService.createVisit(catalogOfferIds, date, startHour, garageId, vehicleId, repairDuration);
+        Visit createdVisit = visitService.createVisit(catalogOfferIds, date, startHour, garageId, vehicleId, repairDuration);
+        return mapper.toVisitDto(createdVisit);
     }
 
     public void updateBooking(Long bookingId,

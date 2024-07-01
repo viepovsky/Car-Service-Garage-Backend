@@ -35,6 +35,11 @@ import java.util.List;
 class VisitController {
     private final VisitFacade visitFacade;
 
+    @GetMapping(path = "/{visitId}")
+    ResponseEntity<VisitFullDetailDto> getVisit(@PathVariable @Min(1) Long visitId) {
+        return ResponseEntity.ok(visitFacade.getVisit(visitId));
+    }
+
     @GetMapping(path = "/garage-date")
     ResponseEntity<List<VisitDto>> getVisitsForGarageAndDate(
             @RequestParam(name = "garage-id") @Min(1) Long garageId,
@@ -51,32 +56,37 @@ class VisitController {
 
     @GetMapping(path = "/new-offer-available-times")
     ResponseEntity<List<LocalTime>> getAvailableVisitTimes(
-            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate date,
             @RequestParam(name = "repair-duration") int repairDuration,
-            @RequestParam(name = "garage-id") Long garageId
-    ) {
-        return ResponseEntity.ok(visitFacade.getAvailableVisitTimes(date, repairDuration, garageId));
+            @RequestParam(name = "garage-id") Long garageId) {
+        return ResponseEntity.ok(
+                visitFacade.getAvailableVisitTimes(date, repairDuration, garageId));
     }
 
     @GetMapping(path = "/existing-offer-available-times")
     ResponseEntity<List<LocalTime>> getAvailableVisitTimes(
-            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(name = "selectedOfferId") Long selectedOfferId
-    ) {
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate date,
+            @RequestParam(name = "selectedOfferId") Long selectedOfferId) {
         return ResponseEntity.ok(visitFacade.getAvailableVisitTimes(date, selectedOfferId));
     }
 
     @PostMapping
-    ResponseEntity<Void> createVisit(
+    ResponseEntity<VisitDto> createVisit(
             @RequestParam(name = "catalog-offer-id") @NotEmpty List<Long> catalogOfferIds,
-            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour,
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate date,
+            @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm")
+                    LocalTime startHour,
             @RequestParam(name = "garage-id") @Min(1) Long garageId,
             @RequestParam(name = "vehicleId") @Min(1) Long vehicleId,
-            @RequestParam(name = "repair-duration") @NotNull int repairDuration
-    ) {
-        visitFacade.createVisit(catalogOfferIds, date, startHour, garageId, vehicleId, repairDuration);
-        return ResponseEntity.created(URI.create("")).build();
+            @RequestParam(name = "repair-duration") @NotNull int repairDuration) {
+        VisitDto response =
+                visitFacade.createVisit(
+                        catalogOfferIds, date, startHour, garageId, vehicleId, repairDuration);
+        return ResponseEntity.created(URI.create("/v1/visits/" + response.id()))
+                .body(response);
     }
 
     @PutMapping(path = "/{bookingId}")

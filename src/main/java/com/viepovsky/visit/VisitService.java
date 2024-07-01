@@ -42,6 +42,12 @@ public class VisitService {
     private final UserService userService;
     private final SelectedOfferMapper selectedOfferMapper;
 
+    public Visit getVisit(Long visitId) {
+        return visitRepository
+                .findById(visitId)
+                .orElseThrow(() -> new MyEntityNotFoundException("Visit" + visitId));
+    }
+
     public List<Visit> getAllVisits(String username) {
         Long userId = userService.getUser(username).getId();
         return visitRepository.getAllVisits(userId);
