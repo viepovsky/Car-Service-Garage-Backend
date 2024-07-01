@@ -74,10 +74,10 @@ class VisitFacade {
         return mapper.toVisitDto(createdVisit);
     }
 
-    public void updateBooking(Long bookingId,
-                              LocalDate date,
-                              LocalTime startHour) {
-        LOGGER.info("Update booking endpoint used for booking id:{}", bookingId);
-        visitService.updateBooking(bookingId, date, startHour);
+    public void updateVisit(Long visitId, LocalDate date, LocalTime startHour) {
+        LOGGER.info("Update visit endpoint used for visit id:{}", visitId);
+        Visit visit = visitService.getVisit(visitId);
+        dataOwnershipValidator.belongsToAuthenticatedUser(visit.getUser().getUsername());
+        visitService.updateVisit(visit, date, startHour);
     }
 }

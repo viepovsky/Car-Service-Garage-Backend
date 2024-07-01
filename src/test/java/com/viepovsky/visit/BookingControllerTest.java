@@ -164,7 +164,7 @@ class BookingControllerTest {
     @Test
     void shouldUpdateBooking() throws Exception {
         //Given
-        doNothing().when(facade).updateBooking(1L, LocalDate.of(2022, 10, 15), LocalTime.of(10, 0));
+        doNothing().when(facade).updateVisit(1L, LocalDate.of(2022, 10, 15), LocalTime.of(10, 0));
         //When & then
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/v1/bookings/1")

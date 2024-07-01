@@ -89,13 +89,14 @@ class VisitController {
                 .body(response);
     }
 
-    @PutMapping(path = "/{bookingId}")
-    ResponseEntity<Void> updateBooking(
-            @PathVariable @Min(1) Long bookingId,
-            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-            @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm") LocalTime startHour
-    ) {
-        visitFacade.updateBooking(bookingId, date, startHour);
+    @PutMapping(path = "/{visitId}")
+    ResponseEntity<Void> updateVisit(
+            @PathVariable @Min(1) Long visitId,
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")
+                    LocalDate date,
+            @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm")
+                    LocalTime startHour) {
+        visitFacade.updateVisit(visitId, date, startHour);
         return ResponseEntity.noContent().build();
     }
 }

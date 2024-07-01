@@ -162,15 +162,23 @@ public class VisitService {
         return availableVisitTimes;
     }
 
-    public void updateBooking(Long bookingId, LocalDate date, LocalTime startHour) {
-        Visit booking = visitRepository.findById(bookingId)
-                                       .orElseThrow(() -> new MyEntityNotFoundException("Booking" + bookingId));
-        int repairTime = (int) Duration.between(booking.getVisitStartTime(), booking.getVisitEndTime()).toMinutes();
-        booking.setVisitStartDate(date);
-        booking.setVisitStartTime(startHour);
-        booking.setVisitEndTime(startHour.plusMinutes(repairTime));
-        LOGGER.info("Updated booking with values, date: " + date + ", time: " + startHour);
-        visitRepository.save(booking);
+    public void updateVisit(Visit visit, LocalDate date, LocalTime startHour) {
+        int repairDuration =
+                (int)
+                        Duration.between(visit.getVisitStartTime(), visit.getVisitEndTime())
+                                .toMinutes();
+        List<LocalTime> availableVisitTimes =
+                getAvailableVisitTimes(date, repairDuration, visit.getGarage().getId());
+        if (availableVisitTimes.contains(startHour)) {
+            visit.setVisitStartDate(date);
+            visit.setVisitStartTime(startHour);
+            visit.setVisitEndTime(startHour.plusMinutes(repairDuration));
+            visitRepository.save(visit);
+            LOGGER.info("Updated visit with values, date: {}, time: {}", date, startHour);
+        } else {
+            throw new WrongInputDataException(
+                    "Given time: " + startHour + " is no longer available. Choose another date.");
+        }
     }
 
     public Visit createVisit(
