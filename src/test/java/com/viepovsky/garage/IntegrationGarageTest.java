@@ -255,7 +255,7 @@ class IntegrationGarageTest extends BaseIntegrationTest {
 
     @Test
     @Order(8)
-    void shouldRetrieveNoneGarages() {
+    void shouldRetrieveOnePreExistingGarage() {
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/garages");
         ResponseEntity<List<GarageDto>> response =
@@ -266,6 +266,7 @@ class IntegrationGarageTest extends BaseIntegrationTest {
                         .retrieve()
                         .toEntity(new ParameterizedTypeReference<>() {});
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(0, Objects.requireNonNull(response.getBody()).size());
+        assertEquals(1, Objects.requireNonNull(response.getBody()).size());
+        assertEquals(1, Objects.requireNonNull(response.getBody()).get(0).id());
     }
 }

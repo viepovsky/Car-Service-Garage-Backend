@@ -10,6 +10,7 @@ import com.viepovsky.BaseIntegrationTest;
 import com.viepovsky.garage.dto.*;
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
+import com.viepovsky.visit.dto.VisitDto;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -61,14 +62,12 @@ class IntegrationVisitTest extends BaseIntegrationTest {
     @Test
     @Order(2)
     void shouldGetAvailableTimes() throws JsonProcessingException {
-//        LocalDate date = LocalDate.of(2024, 3, 3);
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl(
                                 "http://localhost:" + port + "/v1/visits/new-offer-available-times")
                         .queryParam("date", "2100-03-03")
                         .queryParam("repair-duration",60)
                         .queryParam("garage-id", 1);
-        Logger.getAnonymousLogger().info(url.toUriString());
         ResponseEntity<List<LocalTime>> response =
                 REST_CLIENT
                         .get()
@@ -81,36 +80,38 @@ class IntegrationVisitTest extends BaseIntegrationTest {
         assertEquals(43, response.getBody().size()); //7:00 to 14:00 intervals 10minutes
     }
 
-//    @Test
-//    @Order(3)
-//    void shouldCreateVisit() throws JsonProcessingException {
-//        AddressCreateRequest addressRequest = new AddressCreateRequest("City1", "Code1", "Street1");
-//        GarageCreateRequest garageRequest =
-//                GarageCreateRequest.builder().name("Garage1").address(addressRequest).build();
-//        String jsonRequest = objectMapper.writeValueAsString(garageRequest);
-//
-//        AddressDto addressDto = new AddressDto(5000L, "City1", "Code1", "Street1");
-//        GarageDto expectedResponse =
-//                GarageDto.builder().id(5000L).name("Garage1").address(addressDto).build();
-//
-//        UriComponentsBuilder url =
-//                UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/garages");
-//        ResponseEntity<GarageDto> response =
-//                REST_CLIENT
-//                        .post()
-//                        .uri(url.build().toUri())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtAdminToken)
-//                        .body(jsonRequest)
-//                        .retrieve()
-//                        .toEntity(GarageDto.class);
-//
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertEquals(
-//                "/v1/garages/" + expectedResponse.id(),
-//                Objects.requireNonNull(response.getHeaders().getLocation()).getPath());
-//        assertEquals(expectedResponse, response.getBody());
-//    }
+    @Test
+    @Order(3)
+    void shouldCreateVisit() throws JsonProcessingException {
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                                "http://localhost:" + port + "/v1/visits")
+                        .queryParam("catalog-offer-id", "1")
+                        .queryParam("date", "2100-03-03")
+                        .queryParam("start-hour", "08:00")
+                        .queryParam("vehicle-id", 1)
+                        .queryParam("garage-id", 1)
+                        .queryParam("repair-duration", 60);
+        Logger.getAnonymousLogger().info(url.toUriString());
+        ResponseEntity<VisitDto> response =
+                REST_CLIENT
+                        .post()
+                        .uri(url.build().toUri())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUserToken)
+                        .retrieve()
+                        .toEntity(VisitDto.class);
+        VisitDto responseDto = response.getBody();
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(responseDto);
+        assertEquals(
+                "/v1/visits/" + responseDto.id(),
+                Objects.requireNonNull(response.getHeaders().getLocation()).getPath());
+        assertEquals(LocalTime.of(8,0), responseDto.visitStartTime());
+        assertEquals(LocalDate.of(2100,3,3), responseDto.visitStartDate());
+        assertEquals(LocalTime.of(9,0), responseDto.visitEndTime());
+        assertEquals(LocalDate.of(2100,3,3), responseDto.visitEndDate());
+    }
 //
 //    @Test
 //    @Order(4)

@@ -17,5 +17,5 @@ import org.springframework.test.context.jdbc.Sql;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Sql(scripts = "classpath:init-admin.sql", executionPhase = BEFORE_TEST_CLASS)
 @Sql(scripts = "classpath:init-vehicle-integration.sql", executionPhase = BEFORE_TEST_CLASS)
-@Sql(scripts = "classpath:init-garage-and-schedule.sql", executionPhase = BEFORE_TEST_CLASS)
+@Sql(scripts = "classpath:init-garage-schedule-catalog-offer.sql", executionPhase = BEFORE_TEST_CLASS)
 public abstract class BaseIntegrationTest {}

@@ -55,7 +55,7 @@ public class Vehicle extends BaseEntityAudit {
     private EngineType engineType;
 
     @Column(name = "manufactured_year")
-    private int manufactured_year;
+    private Integer manufactured_year;
 
     @Column(name = "details", columnDefinition = "text")
     private String details;
@@ -65,17 +65,6 @@ public class Vehicle extends BaseEntityAudit {
             mappedBy = "vehicle",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private List<Visit> visits = new ArrayList<>();
-
-    public Vehicle(Long id, Model model, int manufactured_year) {
-        this.id = id;
-        this.model = model;
-        this.manufactured_year = manufactured_year;
-    }
-
-    public Vehicle(Model model, int manufactured_year) {
-        this.model = model;
-        this.manufactured_year = manufactured_year;
-    }
 
     public void updateFrom(Vehicle vehicle) {
         this.vin = vehicle.vin;

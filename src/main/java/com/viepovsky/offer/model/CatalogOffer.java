@@ -66,13 +66,4 @@ public class CatalogOffer extends BaseEntityAudit {
         this.price = price;
         this.probableRepairTime = probableRepairTime;
     }
-
-    public CatalogOffer(CatalogOffer availableCarRepair) {
-        this.id = availableCarRepair.getId();
-        this.name = availableCarRepair.getName();
-        this.description = availableCarRepair.getDescription();
-        this.price = availableCarRepair.getPrice();
-        this.probableRepairTime = availableCarRepair.getProbableRepairTime();
-        this.garage = availableCarRepair.getGarage();
-    }
 }
