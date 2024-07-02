@@ -80,7 +80,7 @@ class VisitController {
             @RequestParam(name = "start-hour") @NotNull @DateTimeFormat(pattern = "HH:mm")
                     LocalTime startHour,
             @RequestParam(name = "garage-id") @Min(1) Long garageId,
-            @RequestParam(name = "vehicleId") @Min(1) Long vehicleId,
+            @RequestParam(name = "vehicle-id") @Min(1) Long vehicleId,
             @RequestParam(name = "repair-duration") @NotNull int repairDuration) {
         VisitDto response =
                 visitFacade.createVisit(
