@@ -1,0 +1,8 @@
+INSERT INTO address (id, city, code, street) VALUES
+(1, 'Poznań', '50-500', 'Wrocławska Street');
+
+INSERT INTO garage (id, name, description, address_id) VALUES
+(1, 'Poznań', '50-500', 'Wrocławska Street');
+
+INSERT INTO garage_schedule (id, schedule_date, open_time, close_time, garage_id) VALUES
+(1, TO_DATE('2024-03-03', 'yyyy-mm-dd'), TIME '07:00:00', TIME '15:00:00', 1);
