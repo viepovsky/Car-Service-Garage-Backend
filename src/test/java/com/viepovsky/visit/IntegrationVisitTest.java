@@ -65,7 +65,7 @@ class IntegrationVisitTest extends BaseIntegrationTest {
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl(
                                 "http://localhost:" + port + "/v1/visits/new-offer-available-times")
-                        .queryParam("date", "2024-03-03")
+                        .queryParam("date", "2100-03-03")
                         .queryParam("repair-duration",60)
                         .queryParam("garage-id", 1);
         Logger.getAnonymousLogger().info(url.toUriString());
@@ -78,7 +78,7 @@ class IntegrationVisitTest extends BaseIntegrationTest {
                         .toEntity(new ParameterizedTypeReference<>() {});
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(70, response.getBody().size());
+        assertEquals(43, response.getBody().size()); //7:00 to 14:00 intervals 10minutes
     }
 
 //    @Test

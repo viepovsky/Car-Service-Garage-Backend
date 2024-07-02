@@ -5,4 +5,4 @@ INSERT INTO garage (id, name, description, address_id) VALUES
 (1, 'Fast Garage & Service', 'Short garage description', 1);
 
 INSERT INTO garage_schedule (id, schedule_date, open_time, close_time, garage_id) VALUES
-(1, '2024-03-03', TIME '07:00:00', TIME '15:00:00', 1);
+(1, '2100-03-03', TIME '07:00:00', TIME '15:00:00', 1);

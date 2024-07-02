@@ -106,7 +106,7 @@ public class VisitService {
             List<Visit> visitsOnDate, LocalDate date, int repairDuration, Schedule schedule) {
         LocalTime openTime = schedule.getOpenTime();
         LocalTime closeTime = schedule.getCloseTime();
-        if (isCloseTimeBeforeNow(closeTime)) {
+        if (isCloseTimeBeforeNow(date, closeTime)) {
             return new ArrayList<>();
         }
         List<Visit> visitsNotFinished =
@@ -123,7 +123,13 @@ public class VisitService {
         }
     }
 
-    private boolean isCloseTimeBeforeNow(LocalTime closeTime) {
+    private boolean isCloseTimeBeforeNow(LocalDate date, LocalTime closeTime) {
+        if (date.isBefore(LocalDate.now())) {
+            return true;
+        }
+        if (date.isAfter(LocalDate.now())) {
+            return false;
+        }
         return closeTime.isBefore(LocalTime.now());
     }
 
