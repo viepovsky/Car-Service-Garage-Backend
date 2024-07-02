@@ -33,10 +33,10 @@ public class Schedule extends BaseEntityAudit {
     @Column(name = "schedule_date", unique = true)
     private LocalDate date;
 
-    @Column(name = "start_hour")
+    @Column(name = "open_time")
     private LocalTime openTime;
 
-    @Column(name = "end_hour")
+    @Column(name = "close_time")
     private LocalTime closeTime;
 
     @ManyToOne
