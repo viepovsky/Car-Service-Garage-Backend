@@ -140,9 +140,9 @@ class IntegrationGarageTest extends BaseIntegrationTest {
     void shouldCreateSchedule() {
         ScheduleCreateRequest scheduleCreateRequest =
                 ScheduleCreateRequest.builder()
-                        .day(LocalDate.now())
-                        .openFrom(LocalTime.of(8, 0))
-                        .openTill(LocalTime.of(18, 0))
+                        .date(LocalDate.now())
+                        .openTime(LocalTime.of(8, 0))
+                        .closeTime(LocalTime.of(18, 0))
                         .build();
 
         Gson gson =
