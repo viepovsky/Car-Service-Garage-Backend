@@ -4,6 +4,7 @@ package com.viepovsky;
 //@MockBean(ApplicationScheduler.class)
 //@Transactional
 //@DisplayName("Booking Process Db Services Integration Test")
+@Deprecated
 public class BookingProcessDbServiceIntegrationTest {
 //    @Autowired
 //    private GarageDbService garageDbService;
