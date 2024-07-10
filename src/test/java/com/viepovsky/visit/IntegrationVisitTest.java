@@ -1,16 +1,16 @@
 package com.viepovsky.visit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializer;
 import com.viepovsky.BaseIntegrationTest;
-import com.viepovsky.garage.dto.*;
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.visit.dto.VisitDto;
+import com.viepovsky.visit.dto.VisitFullDetailDto;
+
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -22,16 +22,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class IntegrationVisitTest extends BaseIntegrationTest {
     private static final String TEST_USERNAME = "testuser";
@@ -61,7 +57,7 @@ class IntegrationVisitTest extends BaseIntegrationTest {
 
     @Test
     @Order(2)
-    void shouldGetAvailableTimes() throws JsonProcessingException {
+    void shouldGetAvailableTimes() {
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl(
                                 "http://localhost:" + port + "/v1/visits/new-offer-available-times")
@@ -82,7 +78,7 @@ class IntegrationVisitTest extends BaseIntegrationTest {
 
     @Test
     @Order(3)
-    void shouldCreateVisit() throws JsonProcessingException {
+    void shouldCreateVisit() {
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl(
                                 "http://localhost:" + port + "/v1/visits")
@@ -92,7 +88,7 @@ class IntegrationVisitTest extends BaseIntegrationTest {
                         .queryParam("vehicle-id", 1)
                         .queryParam("garage-id", 1)
                         .queryParam("repair-duration", 60);
-        Logger.getAnonymousLogger().info(url.toUriString());
+
         ResponseEntity<VisitDto> response =
                 REST_CLIENT
                         .post()
@@ -112,28 +108,39 @@ class IntegrationVisitTest extends BaseIntegrationTest {
         assertEquals(LocalTime.of(9,0), responseDto.visitEndTime());
         assertEquals(LocalDate.of(2100,3,3), responseDto.visitEndDate());
     }
-//
-//    @Test
-//    @Order(4)
-//    void shouldRetrieveGarage() {
-//        AddressDto addressDto = new AddressDto(5000L, "City1", "Code1", "Street1");
-//        GarageDto expectedResponse =
-//                GarageDto.builder().id(5000L).name("Garage1").address(addressDto).build();
-//
-//        UriComponentsBuilder url =
-//                UriComponentsBuilder.fromHttpUrl(
-//                        "http://localhost:" + port + "/v1/garages/" + expectedResponse.id());
-//        ResponseEntity<GarageDto> response =
-//                REST_CLIENT
-//                        .get()
-//                        .uri(url.build().toUri())
-//                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUserToken)
-//                        .retrieve()
-//                        .toEntity(GarageDto.class);
-//
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertEquals(expectedResponse, response.getBody());
-//    }
+
+    @Test
+    @Order(4)
+    void shouldRetrieveVisit() {
+        VisitFullDetailDto expectedResponse =
+                new VisitFullDetailDto(
+                        5000L,
+                        LocalDate.of(2100, 3, 3),
+                        LocalTime.of(8, 0, 0),
+                        LocalDate.of(2100, 3, 3),
+                        LocalTime.of(9, 0, 0),
+                        null,
+                        new BigDecimal("50.00"),
+                        "WAITING_FOR_CUSTOMER",
+                        List.of(5000L),
+                        1L,
+                        1L);
+        
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                                            "http://localhost:" + port + "/v1/visits/" + expectedResponse.id());
+        ResponseEntity<VisitFullDetailDto> response =
+                REST_CLIENT
+                        .get()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUserToken)
+                        .retrieve()
+                        .toEntity(VisitFullDetailDto.class);
+        VisitFullDetailDto responseDto = response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(responseDto);
+        assertEquals(expectedResponse, responseDto);
+    }
 //
 //    @Test
 //    @Order(5)
