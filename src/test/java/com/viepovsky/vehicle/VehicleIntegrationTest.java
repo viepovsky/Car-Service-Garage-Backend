@@ -28,7 +28,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-class IntegrationVehicleTest extends BaseIntegrationTest {
+class VehicleIntegrationTest extends BaseIntegrationTest {
     private static final VehicleTestData TEST_DATA = new VehicleTestData();
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final RestClient REST_CLIENT = RestClient.create();

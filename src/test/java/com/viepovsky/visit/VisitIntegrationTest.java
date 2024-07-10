@@ -29,7 +29,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
-class IntegrationVisitTest extends BaseIntegrationTest {
+class VisitIntegrationTest extends BaseIntegrationTest {
     private static final String TEST_USERNAME = "testuser";
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final RestClient REST_CLIENT = RestClient.create();

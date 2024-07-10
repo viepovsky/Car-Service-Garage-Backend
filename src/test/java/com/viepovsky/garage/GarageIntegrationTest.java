@@ -37,7 +37,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
-class IntegrationGarageTest extends BaseIntegrationTest {
+class GarageIntegrationTest extends BaseIntegrationTest {
     private static final String TEST_USERNAME = "testuser";
     private static final String TEST_ADMIN_USERNAME = "testadmin";
     private static final ObjectMapper objectMapper = new ObjectMapper();

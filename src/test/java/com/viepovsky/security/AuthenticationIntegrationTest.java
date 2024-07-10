@@ -22,7 +22,7 @@ import org.springframework.web.client.RestClient;
 import java.net.URI;
 import java.util.Objects;
 
-class IntegrationAuthTest extends BaseIntegrationTest {
+class AuthenticationIntegrationTest extends BaseIntegrationTest {
     private static final String TEST_USERNAME = "testuser22";
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final RestClient REST_CLIENT = RestClient.create();
@@ -30,7 +30,7 @@ class IntegrationAuthTest extends BaseIntegrationTest {
     @LocalServerPort private int port;
     private static UserService userService;
 
-    IntegrationAuthTest(@Autowired UserService service) {
+    AuthenticationIntegrationTest(@Autowired UserService service) {
         userService = service;
     }
 
