@@ -160,7 +160,38 @@ class VisitIntegrationTest extends BaseIntegrationTest {
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 
+    @Test
+    @Order(6)
+    void shouldRetrieveUpdatedVisit() {
+        VisitFullDetailDto expectedResponse =
+                new VisitFullDetailDto(
+                        5000L,
+                        LocalDate.of(2100, 4, 3),
+                        LocalTime.of(10, 0, 0),
+                        LocalDate.of(2100, 4, 3),
+                        LocalTime.of(11, 0, 0),
+                        null,
+                        new BigDecimal("50.00"),
+                        "WAITING_FOR_CUSTOMER",
+                        List.of(5000L),
+                        1L,
+                        1L);
 
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                        "http://localhost:" + port + "/v1/visits/" + expectedResponse.id());
+        ResponseEntity<VisitFullDetailDto> response =
+                REST_CLIENT
+                        .get()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUserToken)
+                        .retrieve()
+                        .toEntity(VisitFullDetailDto.class);
+        VisitFullDetailDto responseDto = response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(responseDto);
+        assertEquals(expectedResponse, responseDto);
+    }
 //
 //    @Test
 //    @Order(5)
