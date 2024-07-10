@@ -70,4 +70,4 @@ At the moment I am trying to change existing database schema to new one shown be
 Old database schema:
 ![Database schema screenshot](src/main/resources/screenshots/database_schema.png)
 
-![Test coverage screenshot](src/main/resources/screenshots/coverage.JPG)
+![Test coverage screenshot](src/main/resources/screenshots/coverage.png)
