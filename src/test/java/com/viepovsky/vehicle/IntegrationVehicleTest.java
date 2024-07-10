@@ -159,7 +159,7 @@ class IntegrationVehicleTest extends BaseIntegrationTest {
                         .retrieve()
                         .toEntity(new ParameterizedTypeReference<>() {});
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(2, Objects.requireNonNull(response.getBody()).size());
+        assertEquals(2 + 1, Objects.requireNonNull(response.getBody()).size()); //+1 initiated by SQL
     }
 
     @Test
@@ -180,7 +180,7 @@ class IntegrationVehicleTest extends BaseIntegrationTest {
 
     @Test
     @Order(8)
-    void shouldRetrieveOneVehicle() {
+    void shouldRetrieveLessVehicles() {
         UriComponentsBuilder url =
                 UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/v1/vehicles")
                         .queryParam("username", TEST_USERNAME);
@@ -192,6 +192,6 @@ class IntegrationVehicleTest extends BaseIntegrationTest {
                         .retrieve()
                         .toEntity(new ParameterizedTypeReference<>() {});
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(1, Objects.requireNonNull(response.getBody()).size());
+        assertEquals(2, Objects.requireNonNull(response.getBody()).size());
     }
 }

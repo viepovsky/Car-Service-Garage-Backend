@@ -12,5 +12,5 @@ public record VehicleDto(
         @NotEmpty String licensePlate,
         @NotNull ModelDto vehicleModel,
         String engineType,
-        int manufactured_year,
+        Integer manufactured_year,
         String details) {}

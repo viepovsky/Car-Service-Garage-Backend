@@ -34,7 +34,7 @@ public class VehicleMapper {
                 vehicle.getVin(),
                 vehicle.getLicensePlate(),
                 toModelDto(vehicle.getModel()),
-                vehicle.getEngineType().name(),
+                vehicle.getEngineType() != null ? vehicle.getEngineType().name() : null,
                 vehicle.getManufactured_year(),
                 vehicle.getDetails());
     }
