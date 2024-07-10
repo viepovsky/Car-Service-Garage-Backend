@@ -179,6 +179,7 @@ public class VisitService {
             visit.setVisitStartDate(date);
             visit.setVisitStartTime(startHour);
             visit.setVisitEndTime(startHour.plusMinutes(repairDuration));
+            visit.setVisitEndDate(date);
             visitRepository.save(visit);
             LOGGER.info("Updated visit with values, date: {}, time: {}", date, startHour);
         } else {

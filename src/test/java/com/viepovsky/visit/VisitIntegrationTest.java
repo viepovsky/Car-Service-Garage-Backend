@@ -141,6 +141,26 @@ class VisitIntegrationTest extends BaseIntegrationTest {
         assertNotNull(responseDto);
         assertEquals(expectedResponse, responseDto);
     }
+
+    @Test
+    @Order(5)
+    void shouldUpdateVisit() {
+        UriComponentsBuilder url =
+                UriComponentsBuilder.fromHttpUrl(
+                        "http://localhost:" + port + "/v1/visits/5000")
+                        .queryParam("date", "2100-04-03")
+                        .queryParam("start-hour", "10:00");
+        ResponseEntity<Void> response =
+                REST_CLIENT
+                        .put()
+                        .uri(url.build().toUri())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtUserToken)
+                        .retrieve()
+                        .toEntity(Void.class);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
+
+
 //
 //    @Test
 //    @Order(5)
