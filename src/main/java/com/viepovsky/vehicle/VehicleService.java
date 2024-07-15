@@ -64,7 +64,7 @@ public class VehicleService {
         return makeRepository.findAll();
     }
 
-    public List<Model> getModelsByMakeId(Long makeId) {
-        return modelRepository.findAllByMakeId(makeId);
+    public List<Model> getModelsByMakeId(String makeName) {
+        return modelRepository.findAllByMakeName(makeName);
     }
 }

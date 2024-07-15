@@ -71,7 +71,7 @@ class VehicleController {
     }
 
     @GetMapping(path = "models")
-    public ResponseEntity<List<ModelDto>> getVehicleModels(@RequestParam @Min(1) Long makeId) {
-        return ResponseEntity.ok(vehicleFacade.getModels(makeId));
+    public ResponseEntity<List<ModelDto>> getVehicleModels(@RequestParam(name = "make") @NotBlank String makeName) {
+        return ResponseEntity.ok(vehicleFacade.getModels(makeName));
     }
 }

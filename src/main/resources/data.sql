@@ -106,7 +106,10 @@ INSERT INTO app_user (id, first_name, last_name, email, mobile, username, passwo
 
 INSERT INTO model (id, name, make_id, type) VALUES
 (1, '3 Series', 5, 'SEDAN'),
-(2, 'XC60', 61, 'SUV');
+(2, 'XC60', 61, 'SUV'),
+(3, 'XC90', 61, 'SUV'),
+(4, '5 Series', 5, 'SEDAN'),
+(5, '7 Series', 5, 'SUV');
 
 INSERT INTO vehicle (id, license_plate, model_id, manufactured_year, engine_type, user_id) VALUES
 (1, 'PKN11111', 1, 2014, 'DIESEL', 1),

@@ -67,9 +67,9 @@ class VehicleFacade {
         return mapper.toMakeDtoList(makes);
     }
 
-    public List<ModelDto> getModels(Long makeId) {
-        LOGGER.info("Get models endpoint used for makeId:{}", makeId);
-        List<Model> models = vehicleService.getModelsByMakeId(makeId);
+    public List<ModelDto> getModels(String makeName) {
+        LOGGER.info("Get models endpoint used for make:{}", makeName);
+        List<Model> models = vehicleService.getModelsByMakeId(makeName);
         return mapper.toModelDtoList(models);
     }
 }

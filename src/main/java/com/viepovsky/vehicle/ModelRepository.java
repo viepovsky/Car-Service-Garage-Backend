@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 interface ModelRepository extends JpaRepository<Model, Long> {
-    List<Model> findAllByMakeId(Long makeId);
+    List<Model> findAllByMakeName(String makeName);
 }
