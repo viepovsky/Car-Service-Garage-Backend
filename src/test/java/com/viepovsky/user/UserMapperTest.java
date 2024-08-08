@@ -1,11 +1,15 @@
 package com.viepovsky.user;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.viepovsky.user.dto.UserDto;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.mappers.UserMapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class UserMapperTest {
@@ -15,33 +19,27 @@ class UserMapperTest {
     @Test
     void mapToUserDto() {
         //Given
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
         user.setFirstName("Test name");
         user.setLastName("Test last");
         user.setEmail("email");
-        user.setPhoneNumber("252352");
+        user.setMobile("252352");
         user.setUsername("username");
         //When
         UserDto mappedUser = userMapper.mapToUserDto(user);
         //Then
-        assertEquals(1L, mappedUser.getId());
-        assertEquals("Test name", mappedUser.getFirstName());
-        assertEquals("username", mappedUser.getUsername());
+        assertEquals(1L, mappedUser.id());
+        assertEquals("Test name", mappedUser.firstName());
+        assertEquals("username", mappedUser.username());
     }
 
     @Test
     void mapToUserLogin() {
         //Given
-        UserDto userDto = new UserDto();
-        userDto.setFirstName("Test name");
-        userDto.setLastName("Test last");
-        userDto.setEmail("email");
-        userDto.setPhoneNumber("252352");
-        userDto.setUsername("username");
-        userDto.setPassword("password");
+        UserDto userDto = new UserDto(null, "username", "Test name", "Test last", null, "email", "252352", "password", null, null);
         //When
-        User mappedUser = userMapper.mapToUserLogin(userDto);
+        AppUser mappedUser = userMapper.mapToUserLogin(userDto);
         //Then
         assertEquals("Test name", mappedUser.getFirstName());
         assertEquals("username", mappedUser.getUsername());
@@ -49,7 +47,7 @@ class UserMapperTest {
 
     @Test
     void mapToUserDtoLogin() {
-        User user = new User();
+        AppUser user = new AppUser();
         user.setId(1L);
         user.setUsername("username");
         user.setPassword("password");
@@ -57,7 +55,7 @@ class UserMapperTest {
         //When
         UserDto mappedUser = userMapper.mapToUserDtoLogin(user);
         //Then
-        assertEquals(1L, mappedUser.getId());
-        assertEquals("username", mappedUser.getUsername());
+        assertEquals(1L, mappedUser.id());
+        assertEquals("username", mappedUser.username());
     }
 }

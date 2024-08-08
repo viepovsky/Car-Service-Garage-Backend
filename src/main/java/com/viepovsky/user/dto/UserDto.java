@@ -1,63 +1,34 @@
 package com.viepovsky.user.dto;
 
-import com.viepovsky.user.Role;
+import com.viepovsky.user.model.Role;
+
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserDto {
-    private Long id;
-
-    @NotBlank
-    private String firstName;
-
-    @NotBlank
-    private String lastName;
-
-    @NotBlank
-    private String email;
-
-    @NotBlank
-    private String phoneNumber;
-
-    @NotBlank
-    private String username;
-
-    private String password;
-
-    private Role role;
-
-    private LocalDateTime createdDate;
-
-    public UserDto(Long id,
-                   String username,
-                   String password,
-                   Role role) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.role = role;
+public record UserDto(
+        Long id,
+        @NotBlank String username,
+        String firstName,
+        String lastName,
+        String companyName,
+        @NotBlank String email,
+        @NotBlank String mobile,
+        String password,
+        Role role,
+        LocalDateTime createdDate) {
+    public UserDto(Long id, String username, String password, Role role) {
+        this(id, username, null, null, null, null, null, password, role, null);
     }
 
-    public UserDto(Long id,
-                   String firstName,
-                   String lastName,
-                   String email,
-                   String phoneNumber,
-                   String username,
-                   LocalDateTime createdDate) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.username = username;
-        this.createdDate = createdDate;
+    public UserDto(
+            Long id,
+            String firstName,
+            String lastName,
+            String email,
+            String mobile,
+            String username,
+            LocalDateTime createdDate) {
+        this(id, username, firstName, lastName, null, email, mobile, null, null, createdDate);
     }
 }

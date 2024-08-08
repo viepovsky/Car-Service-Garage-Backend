@@ -1,6 +1,5 @@
 package com.viepovsky.security;
 
-
 import com.viepovsky.security.dto.AuthenticationResponse;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;
@@ -22,12 +21,14 @@ class AuthenticationController {
     private final AuthenticationFacade authenticationFacade;
 
     @PostMapping("/register")
-    ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterUserRequest request) {
+    ResponseEntity<AuthenticationResponse> register(
+            @RequestBody @Valid RegisterUserRequest request) {
         return ResponseEntity.ok(authenticationFacade.register(request));
     }
 
     @PostMapping("/authenticate")
-    ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationUserRequest request) {
+    ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody @Valid AuthenticationUserRequest request) {
         return ResponseEntity.ok(authenticationFacade.authenticate(request));
     }
 }
