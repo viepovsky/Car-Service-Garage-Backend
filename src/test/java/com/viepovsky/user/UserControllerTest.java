@@ -1,25 +1,17 @@
 package com.viepovsky.user;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.viepovsky.scheduler.ApplicationScheduler;
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
-import com.viepovsky.user.model.AppUser;
-import com.viepovsky.user.model.Role;
-import com.viepovsky.utility.scheduler.ApplicationScheduler;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +31,11 @@ import java.security.Key;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -60,8 +57,8 @@ class UserControllerTest {
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
-        var userInDb = AppUser.builder().username("Testusername").role(Role.ROLE_USER).build();
-        var adminInDb = AppUser.builder().username("Testadmin").role(Role.ROLE_ADMIN).build();
+        var userInDb = User.builder().username("Testusername").role(Role.ROLE_USER).build();
+        var adminInDb = User.builder().username("Testadmin").role(Role.ROLE_ADMIN).build();
         when(userDetailsService.loadUserByUsername("Testusername")).thenReturn(userInDb);
         when(userDetailsService.loadUserByUsername("Testadmin")).thenReturn(adminInDb);
         jwtTokenUser = generateToken("Testusername", secretKey);
@@ -73,7 +70,7 @@ class UserControllerTest {
                 .builder()
                 .setClaims(new HashMap<>())
                 .setSubject(username)
-                .setIssuer("garage-app.com")
+                .setIssuer("medical-app.com")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getSignInKey(secretKey), SignatureAlgorithm.HS256)
@@ -97,7 +94,7 @@ class UserControllerTest {
                         .header("Authorization", "Bearer " + jwtTokenUser))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.mobile", Matchers.is("25325235")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.phoneNumber", Matchers.is("25325235")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is("Testusername")));
     }
 
@@ -172,7 +169,7 @@ class UserControllerTest {
     @Test
     void testUpdateUser() throws Exception {
         //Given
-        var userDto = new UserDto(1L,"Testusername", "Testname", "Testlastname", "testcompany", "testmail@mail", "858585858558", "testpassword", Role.ROLE_USER, LocalDateTime.now());
+        var userDto = new UserDto(1L, "Testname", "Testlastname", "testmail@mail", "858585858558", "Testusername", "testpassword", Role.ROLE_USER, LocalDateTime.now());
         Gson gson = getGsonWithProperLocalDateTimeSetting();
         var jsonContent = gson.toJson(userDto);
 
@@ -190,7 +187,7 @@ class UserControllerTest {
     @Test
     void shouldNotUpdateIfUserDoesNotMatchGivenUsername() throws Exception {
         //Given
-        var userDto = new UserDto(1L, "testusername", "Testname", "Testlastname", "testcompany", "testmail@mail", "858585858558", "testpassword", Role.ROLE_USER, LocalDateTime.now());
+        var userDto = new UserDto(1L, "Testname", "Testlastname", "testmail@mail", "858585858558", "Testlogin", "testpassword", Role.ROLE_USER, LocalDateTime.now());
         Gson gson = getGsonWithProperLocalDateTimeSetting();
         var jsonContent = gson.toJson(userDto);
         //When & then

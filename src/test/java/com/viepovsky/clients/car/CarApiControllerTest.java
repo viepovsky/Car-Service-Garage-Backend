@@ -1,17 +1,12 @@
 package com.viepovsky.clients.car;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
-import com.viepovsky.user.model.AppUser;
-import com.viepovsky.user.model.Role;
-import com.viepovsky.utility.scheduler.ApplicationScheduler;
-
+import com.viepovsky.scheduler.ApplicationScheduler;
+import com.viepovsky.user.Role;
+import com.viepovsky.user.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +24,9 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -50,7 +48,7 @@ class CarApiControllerTest {
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
-        var userInDb = AppUser.builder().username("testuser").role(Role.ROLE_USER).build();
+        var userInDb = User.builder().username("testuser").role(Role.ROLE_USER).build();
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
         jwtToken = generateToken("testuser", secretKey);
     }
@@ -60,7 +58,7 @@ class CarApiControllerTest {
                 .builder()
                 .setClaims(new HashMap<>())
                 .setSubject(username)
-                .setIssuer("garage-app.com")
+                .setIssuer("medical-app.com")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getSignInKey(secretKey), SignatureAlgorithm.HS256)
@@ -70,6 +68,48 @@ class CarApiControllerTest {
     private static Key getSignInKey(String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    @Test
+    void testGetCarMakes() throws Exception {
+        //Given
+        List<String> makeList = List.of("AUDI", "BMW", "OPEL", "PEUGEOT");
+        when(service.getCarMakes()).thenReturn(makeList);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/car-api/makes")
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0]", Matchers.is("AUDI")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2]", Matchers.is("OPEL")));
+    }
+
+    @Test
+    void testGetCarTypes() throws Exception {
+        //Given
+        List<String> typeList = List.of("Sedan", "Suv", "Hatchback", "Coupe");
+        when(service.getCarTypes()).thenReturn(typeList);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/car-api/types")
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0]", Matchers.is("Sedan")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2]", Matchers.is("Hatchback")));
+    }
+
+    @Test
+    void testGetCarYears() throws Exception {
+        //Given
+        List<Integer> yearList = List.of(2022, 2021, 2020, 2019);
+        when(service.getCarYears()).thenReturn(yearList);
+        //When & then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/v1/car-api/years")
+                        .header("Authorization", "Bearer " + jwtToken))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0]", Matchers.is(2022)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2]", Matchers.is(2020)));
     }
 
     @Test

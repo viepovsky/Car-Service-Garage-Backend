@@ -1,12 +1,27 @@
 package com.viepovsky.clients.weather.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
-public record CityForecastDto(
-        LocalDate date,
-        String symbol,
-        String symbolPhrase,
-        int maxTemp,
-        int minTemp,
-        int maxWindSpeed,
-        String city) {}
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class CityForecastDto {
+
+    private LocalDate date;
+
+    private String symbol;
+
+    private String symbolPhrase;
+
+    private int maxTemp;
+
+    private int minTemp;
+
+    private int maxWindSpeed;
+
+    private String city;
+}

@@ -2,11 +2,7 @@ package com.viepovsky.user;
 
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
-import com.viepovsky.user.model.AppUser;
-import com.viepovsky.utility.mappers.UserMapper;
-
 import lombok.RequiredArgsConstructor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,13 +16,13 @@ class UserFacade {
 
     public UserDto getUserByUsername(String username) {
         LOGGER.info("Get user endpoint used with username:{}", username);
-        AppUser user = userService.getUser(username);
+        User user = userService.getUser(username);
         return mapper.mapToUserDto(user);
     }
 
     public UserDto getUserByUsernameToLogin(String username) {
         LOGGER.info("Get user for login endpoint used with username:{}", username);
-        AppUser user = userService.getUser(username);
+        User user = userService.getUser(username);
         return mapper.mapToUserDtoLogin(user);
     }
 
@@ -41,7 +37,7 @@ class UserFacade {
     }
 
     public void updateUser(UserDto userDto) {
-        LOGGER.info("Update user endpoint used with username:{}", userDto.username());
+        LOGGER.info("Update user endpoint used with username:{}", userDto.getUsername());
         userService.updateUser(mapper.mapToUserLogin(userDto));
     }
 }

@@ -2,14 +2,33 @@ package com.viepovsky.clients.weather.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record ForecastsDto(
-        @JsonProperty("date") LocalDate date,
-        @JsonProperty("symbol") String symbol,
-        @JsonProperty("symbolPhrase") String symbolPhrase,
-        @JsonProperty("maxTemp") int maxTemp,
-        @JsonProperty("minTemp") int minTemp,
-        @JsonProperty("maxWindSpeed") int maxWindSpeed) {}
+public class ForecastsDto {
+
+    @JsonProperty("date")
+    private LocalDate date;
+
+    @JsonProperty("symbol")
+    private String symbol;
+
+    @JsonProperty("symbolPhrase")
+    private String symbolPhrase;
+
+    @JsonProperty("maxTemp")
+    private int maxTemp;
+
+    @JsonProperty("minTemp")
+    private int minTemp;
+
+    @JsonProperty("maxWindSpeed")
+    private int maxWindSpeed;
+}

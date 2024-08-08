@@ -1,12 +1,6 @@
 package com.viepovsky.user;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import com.viepovsky.user.model.AppUser;
-import com.viepovsky.user.model.Role;
-import com.viepovsky.utility.exceptions.MyEntityNotFoundException;
-
+import com.viepovsky.exceptions.MyEntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,94 +8,91 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("User Db Service Test")
 class UserServiceTest {
 
-    @InjectMocks private UserService service;
+    @InjectMocks
+    private UserService service;
 
-    @Mock private UserRepository repository;
+    @Mock
+    private UserRepository repository;
 
     @Test
     void testGetUserByUsername() {
-        // Given
-        var user = new AppUser();
+        //Given
+        var user = new User();
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        // When
+        //When
         var retrievedUser = service.getUser("username");
-        // Then
+        //Then
         assertNotNull(retrievedUser);
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
     }
 
     @Test
     void testGetUserById() {
-        // Given
-        var user = new AppUser();
+        //Given
+        var user = new User();
         when(repository.findById(anyLong())).thenReturn(Optional.of(user));
-        // When
+        //When
         var retrievedUser = service.getUser(5L);
-        // Then
+        //Then
         assertNotNull(retrievedUser);
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
     }
 
     @Test
     void testIsUserInDatabase() {
-        // Given
-        var user = new AppUser();
+        //Given
+        var user = new User();
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        // When
+        //When
         boolean retrievedAnswer = service.isUserInDatabase("username");
-        // Then
+        //Then
         assertTrue(retrievedAnswer);
     }
 
     @Test
     void testGetUserPass() {
-        // Given
-        var user = new AppUser();
+        //Given
+        var user = new User();
         user.setPassword("1234");
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        // When
+        //When
         String retrievedPass = service.getUserPass("username");
-        // Then
+        //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
         assertEquals("1234", retrievedPass);
     }
 
     @Test
     void testSaveUser() {
-        // Given
-        var user = new AppUser();
+        //Given
+        var user = new User();
         when(repository.save(user)).thenReturn(user);
-        // When
+        //When
         service.saveUser(user);
-        // Then
+        //Then
         verify(repository, times(1)).save(user);
     }
 
     @Test
     void testUpdateUser() {
-        // Given
-        var user =
-                AppUser.builder()
-                        .firstName("Oskar")
-                        .lastName("Test")
-                        .email("testmail@gmail.com")
-                        .mobile("656")
-                        .username("testuser")
-                        .password("123")
-                        .role(Role.ROLE_USER)
-                        .build();
-        var userToUpdate = new AppUser();
+        //Given
+        var user = new User("test", "testlast", "email", "656", "testuser", "123", Role.ROLE_USER, new ArrayList<>(), new ArrayList<>());
+        var userToUpdate = new User();
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(userToUpdate));
         when(repository.save(userToUpdate)).thenReturn(userToUpdate);
-        // When
+        //When
         service.updateUser(user);
-        // Then
+        //Then
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + user.getUsername()));
         verify(repository, times(1)).save(userToUpdate);
         assertEquals("123", userToUpdate.getPassword());
@@ -109,14 +100,14 @@ class UserServiceTest {
 
     @Test
     void testDeleteUser() {
-        // Given
-        var user = new AppUser();
+        //Given
+        var user = new User();
         user.setId(1L);
         when(repository.findByUsername(anyString())).thenReturn(Optional.of(user));
         doNothing().when(repository).deleteById(anyLong());
-        // When
+        //When
         service.deleteUser("username");
-        // Then
+        //Then
         verify(repository, times(1)).deleteById(anyLong());
         assertDoesNotThrow(() -> new MyEntityNotFoundException("Username: " + "username"));
     }
