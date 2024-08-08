@@ -1,12 +1,9 @@
 package com.viepovsky.clients.weather;
 
 import com.viepovsky.clients.weather.dto.CityForecastDto;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.RequiredArgsConstructor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,8 +29,8 @@ class WeatherApiController {
     @GetMapping
     ResponseEntity<CityForecastDto> getForecastForCityAndDate(
             @RequestParam(name = "city") @NotBlank String city,
-            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd")
-                    LocalDate date) {
+            @RequestParam(name = "date") @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+    ) {
         LOGGER.info("GET Endpoint getForecastForCityAndDate used.");
         CityForecastDto cityForecastDto = weatherApiService.getForecastForCityAndDate(city, date);
         return ResponseEntity.ok(cityForecastDto);

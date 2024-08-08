@@ -1,12 +1,10 @@
 package com.viepovsky.security;
 
 import com.viepovsky.security.dto.AuthenticationResponse;
-import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.User;
 import com.viepovsky.user.UserService;
 import com.viepovsky.user.dto.AuthenticationUserRequest;
 import com.viepovsky.user.dto.RegisterUserRequest;
-import com.viepovsky.user.model.Role;
-import com.viepovsky.utility.exceptions.UsernameAlreadyTakenException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,30 +29,33 @@ class AuthenticationService {
 
     AuthenticationResponse register(RegisterUserRequest request) {
         LOGGER.info("Register request received.");
-        if (userService.isUserInDatabase(request.username())) {
-            throw new UsernameAlreadyTakenException("Username is already taken.");
-        }
-        var user =
-                AppUser.builder()
-                        .firstName(request.firstName())
-                        .lastName(request.lastName())
-                        .email(request.email())
-                        .mobile(request.phoneNumber())
-                        .username(request.username())
-                        .password(passwordEncoder.encode(request.password()))
-                        .role(Role.ROLE_USER)
-                        .build();
+        var user = User.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .phoneNumber(request.getPhoneNumber())
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .build();
         var createdUser = userService.saveUser(user);
         var jwtToken = jwtService.generateJwtToken(createdUser);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 
     AuthenticationResponse authenticate(AuthenticationUserRequest request) {
         LOGGER.info("Authenticate request received.");
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.username(), request.password()));
-        var user = userService.getUser(request.username());
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+        var user = userService.getUser(request.getUsername());
         var jwtToken = jwtService.generateJwtToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }

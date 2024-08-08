@@ -12,8 +12,6 @@ The backend version of the application provides all necessary components, includ
 This repository contains the backend of Car Service Garage.
 It can run as a standalone version, which can be tested with Postman. However, it is designed to run with the frontend version, which can be found here: [**GitHub**](https://github.com/viepovsky/Car-Service-Garage-Frontend).
 
-##### 08.08.2024 - frontend app does not support current version of backend, if you want to check frontend you must use old version of this application
-
 ## Technologies
 
 The backend uses popular frameworks, technologies such as:
@@ -67,9 +65,6 @@ In addition, the view will enable administrators to manage customer accounts and
 ~~Additionally, I will implement endpoint security, as currently only the frontend is secured.~~ ✅ Done.
 
 ## Database schema and test coverage:
-At the moment I am trying to change existing database schema to new one shown below:
-![New_database schema screenshot](src/main/resources/screenshots/new_database_schema.png)
-Old database schema:
-![Database schema screenshot](src/main/resources/screenshots/database_schema.png)
 
-![Test coverage screenshot](src/main/resources/screenshots/coverage.png)
+![Database schema screenshot](src/main/resources/screenshots/database_schema.png)
+![Test coverage screenshot](src/main/resources/screenshots/coverage.JPG)
