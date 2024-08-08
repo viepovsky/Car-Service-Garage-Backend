@@ -1,13 +1,18 @@
 package com.viepovsky.clients.weather;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import com.viepovsky.clients.weather.dto.CityForecastDto;
-import com.viepovsky.scheduler.ApplicationScheduler;
-import com.viepovsky.user.Role;
-import com.viepovsky.user.User;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.user.model.Role;
+import com.viepovsky.utility.scheduler.ApplicationScheduler;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,9 +30,6 @@ import java.security.Key;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -48,7 +50,7 @@ class WeatherApiControllerTest {
 
     @BeforeEach
     public void initializeUserAndGenerateTokenForUser() {
-        var userInDb = User.builder().username("testuser").role(Role.ROLE_USER).build();
+        var userInDb = AppUser.builder().username("testuser").role(Role.ROLE_USER).build();
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userInDb);
         jwtToken = generateToken("testuser", secretKey);
     }
@@ -58,7 +60,7 @@ class WeatherApiControllerTest {
                 .builder()
                 .setClaims(new HashMap<>())
                 .setSubject(username)
-                .setIssuer("medical-app.com")
+                .setIssuer("garage-app.com")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(getSignInKey(secretKey), SignatureAlgorithm.HS256)

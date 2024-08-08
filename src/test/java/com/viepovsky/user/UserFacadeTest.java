@@ -1,16 +1,19 @@
 package com.viepovsky.user;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import com.viepovsky.user.dto.PasswordDto;
 import com.viepovsky.user.dto.UserDto;
+import com.viepovsky.user.model.AppUser;
+import com.viepovsky.utility.mappers.UserMapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserFacadeTest {
@@ -26,7 +29,7 @@ class UserFacadeTest {
     @Test
     void shouldGetUserByUsername() {
         //Given
-        User mockedUser = Mockito.mock(User.class);
+        AppUser mockedUser = Mockito.mock(AppUser.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
         when(service.getUser("username")).thenReturn(mockedUser);
         when(mapper.mapToUserDto(mockedUser)).thenReturn(mockedUserDto);
@@ -39,7 +42,7 @@ class UserFacadeTest {
     @Test
     void shouldGetUserToLoginByUsername() {
         //Given
-        User mockedUser = Mockito.mock(User.class);
+        AppUser mockedUser = Mockito.mock(AppUser.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
         when(service.getUser("username")).thenReturn(mockedUser);
         when(mapper.mapToUserDtoLogin(mockedUser)).thenReturn(mockedUserDto);
@@ -67,13 +70,13 @@ class UserFacadeTest {
         PasswordDto passwordDto = facade.getUserPass("username");
         //Then
         assertNotNull(passwordDto);
-        assertEquals("encrypted password", passwordDto.getPassword());
+        assertEquals("encrypted password", passwordDto.password());
     }
 
     @Test
     void shouldUpdateUser() {
         //Given
-        User mockedUser = Mockito.mock(User.class);
+        AppUser mockedUser = Mockito.mock(AppUser.class);
         UserDto mockedUserDto = Mockito.mock(UserDto.class);
         when(mapper.mapToUserLogin(mockedUserDto)).thenReturn(mockedUser);
         doNothing().when(service).updateUser(mockedUser);

@@ -32,9 +32,11 @@ class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
@@ -46,11 +48,13 @@ class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             username = jwtService.extractUsername(jwt);
         } catch (MalformedJwtException exception) {
-            logger.error("MalformedJwtException thrown, exception message: " + exception.getMessage());
+            logger.error(
+                    "MalformedJwtException thrown, exception message: " + exception.getMessage());
             filterChain.doFilter(request, response);
             return;
         } catch (ExpiredJwtException exception) {
-            logger.error("ExpiredJwtException thrown, exception message: " + exception.getMessage());
+            logger.error(
+                    "ExpiredJwtException thrown, exception message: " + exception.getMessage());
             filterChain.doFilter(request, response);
             return;
         } catch (SignatureException exception) {
@@ -61,7 +65,9 @@ class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

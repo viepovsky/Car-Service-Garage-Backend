@@ -4,6 +4,7 @@ package com.viepovsky;
 //@MockBean(ApplicationScheduler.class)
 //@Transactional
 //@DisplayName("Booking Process Db Services Integration Test")
+@Deprecated
 public class BookingProcessDbServiceIntegrationTest {
 //    @Autowired
 //    private GarageDbService garageDbService;
@@ -163,7 +164,7 @@ public class BookingProcessDbServiceIntegrationTest {
 //            GarageWorkTime garageWorkTime = garageWorkTimeList.stream()
 //                    .filter(workTime -> workTime.getDay().toString().equals(finalDateForLoop.getDayOfWeek().toString()))
 //                    .findFirst()
-//                    .orElseThrow(() -> new WrongInputDataException("GarageWorkTime not found for day: " + finalDateForLoop.getDayOfWeek().toString()));
+//                    .orElseThrow(() -> new WrongInputDataException("GarageWorkTime not found for date: " + finalDateForLoop.getDayOfWeek().toString()));
 //            bookingDbService.saveBooking(date, garageWorkTime.getStartHour(), garageWorkTime.getEndHour(), garage.getId());
 //        }
 //    }

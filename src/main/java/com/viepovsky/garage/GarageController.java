@@ -1,8 +1,15 @@
 package com.viepovsky.garage;
 
+import com.viepovsky.garage.dto.GarageCreateRequest;
+import com.viepovsky.garage.dto.GarageDto;
+import com.viepovsky.garage.dto.ScheduleCreateRequest;
+import com.viepovsky.garage.dto.ScheduleDto;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,7 +36,7 @@ class GarageController {
     private final GarageFacade garageFacade;
 
     @GetMapping
-    ResponseEntity<List<GarageDto>> getGarages() {
+    ResponseEntity<List<GarageDto>> getAllGarages() {
         return ResponseEntity.ok(garageFacade.getAllGarages());
     }
 
@@ -40,15 +47,37 @@ class GarageController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<String> createGarage(@Valid @RequestBody GarageDto garageDto) {
-        var createdGarage = garageFacade.createGarage(garageDto);
-        return ResponseEntity.created(URI.create("/v1/garages/" + createdGarage.getId())).build();
+    ResponseEntity<GarageDto> createGarage(@Valid @RequestBody GarageCreateRequest request) {
+        var createdGarage = garageFacade.createGarage(request);
+        return ResponseEntity.created(URI.create("/v1/garages/" + createdGarage.id()))
+                .body(createdGarage);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{garageId}")
-    ResponseEntity<String> deleteGarage(@PathVariable @Min(1) Long garageId) {
+    ResponseEntity<Void> deleteGarage(@PathVariable @Min(1) Long garageId) {
         garageFacade.deleteGarage(garageId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/schedule/{garageId}")
+    ResponseEntity<List<ScheduleDto>> getGarageSchedules(@PathVariable @Min(1) Long garageId) {
+        return ResponseEntity.ok(garageFacade.getSchedulesFor(garageId));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/schedule/{garageId}")
+    ResponseEntity<ScheduleDto> createSchedule(
+            @Valid @RequestBody ScheduleCreateRequest request,
+            @PathVariable @Min(1) Long garageId) {
+        var createdSchedule = garageFacade.createSchedule(request, garageId);
+        return ResponseEntity.created(URI.create("/v1/garages/schedule/" + garageId)).body(createdSchedule);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(path = "/schedule/{scheduleId}")
+    ResponseEntity<Void> deleteGarageSchedule(@PathVariable @Min(1) Long scheduleId) {
+        garageFacade.deleteSchedule(scheduleId);
         return ResponseEntity.ok().build();
     }
 }
