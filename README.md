@@ -12,6 +12,8 @@ The backend version of the application provides all necessary components, includ
 This repository contains the backend of Car Service Garage.
 It can run as a standalone version, which can be tested with Postman. However, it is designed to run with the frontend version, which can be found here: [**GitHub**](https://github.com/viepovsky/Car-Service-Garage-Frontend).
 
+##### 08.08.2024 - frontend app does not support current version of backend, if you want to check frontend you must use old version of this application
+
 ## Technologies
 
 The backend uses popular frameworks, technologies such as:
