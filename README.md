@@ -67,7 +67,7 @@ In addition, the view will enable administrators to manage customer accounts and
 ~~Additionally, I will implement endpoint security, as currently only the frontend is secured.~~ ✅ Done.
 
 ## Database schema and test coverage:
-At the moment I am trying to change existing database schema to new one shown below:
+New database schema shown below:
 ![New_database schema screenshot](src/main/resources/screenshots/new_database_schema.png)
 Old database schema:
 ![Database schema screenshot](src/main/resources/screenshots/database_schema.png)
